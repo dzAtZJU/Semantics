@@ -73,14 +73,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
-
-extension UIViewController {
-    var appDelegate: AppDelegate {
-        return (UIApplication.shared.delegate as! AppDelegate)
-    }
-    
-    var managedObjectContext: NSManagedObjectContext {
-        return appDelegate.persistentContainer.viewContext
-    }
-}

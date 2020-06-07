@@ -13,6 +13,9 @@
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
 		892C63E02487934300208446 /* SWUISemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DF2487934300208446 /* SWUISemTextView.swift */; };
 		892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */; };
+		892C6410248A09C600208446 /* SemSetsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C640F248A09C600208446 /* SemSetsVC.swift */; };
+		892C6412248A0C2100208446 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6411248A0C2100208446 /* UIViewController+.swift */; };
+		892C6414248CCFE200208446 /* SemSetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6413248CCFE200208446 /* SemSetVC.swift */; };
 		89642175247250590081DC87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89642174247250590081DC87 /* AppDelegate.swift */; };
 		89642177247250590081DC87 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89642176247250590081DC87 /* SceneDelegate.swift */; };
 		8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 89642178247250590081DC87 /* Semantics.xcdatamodeld */; };
@@ -53,7 +56,7 @@
 		89D8F44924755ACB00D12F15 /* BadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F44824755ACB00D12F15 /* BadgeSymbol.swift */; };
 		89D8F44B24765A9C00D12F15 /* RotatedBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F44A24765A9B00D12F15 /* RotatedBadgeSymbol.swift */; };
 		89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F45024766CD300D12F15 /* TextOnCircle.swift */; };
-		89E93FC42479873D0039935D /* SemanticsSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E93FC32479873D0039935D /* SemanticsSetView.swift */; };
+		89E93FC42479873D0039935D /* SemSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E93FC32479873D0039935D /* SemSetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +76,9 @@
 		892C63DD24867F8700208446 /* SemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextView.swift; sourceTree = "<group>"; };
 		892C63DF2487934300208446 /* SWUISemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWUISemTextView.swift; sourceTree = "<group>"; };
 		892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString.Key+.swift"; sourceTree = "<group>"; };
+		892C640F248A09C600208446 /* SemSetsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetsVC.swift; sourceTree = "<group>"; };
+		892C6411248A0C2100208446 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
+		892C6413248CCFE200208446 /* SemSetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetVC.swift; sourceTree = "<group>"; };
 		89642171247250590081DC87 /* Semantics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Semantics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89642174247250590081DC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89642176247250590081DC87 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -118,7 +124,7 @@
 		89D8F44824755ACB00D12F15 /* BadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeSymbol.swift; sourceTree = "<group>"; };
 		89D8F44A24765A9B00D12F15 /* RotatedBadgeSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotatedBadgeSymbol.swift; sourceTree = "<group>"; };
 		89D8F45024766CD300D12F15 /* TextOnCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOnCircle.swift; sourceTree = "<group>"; };
-		89E93FC32479873D0039935D /* SemanticsSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemanticsSetView.swift; sourceTree = "<group>"; };
+		89E93FC32479873D0039935D /* SemSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,13 +161,24 @@
 			children = (
 				892C63D424866A1000208446 /* NSRange+.swift */,
 				892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */,
+				892C6411248A0C2100208446 /* UIViewController+.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		892C640E248A09B900208446 /* VCs */ = {
+			isa = PBXGroup;
+			children = (
+				892C640F248A09C600208446 /* SemSetsVC.swift */,
+				892C6413248CCFE200208446 /* SemSetVC.swift */,
+			);
+			path = VCs;
 			sourceTree = "<group>";
 		};
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				892C640E248A09B900208446 /* VCs */,
 				89642173247250590081DC87 /* Semantics */,
 				8964218D247250660081DC87 /* SemanticsTests */,
 				89642172247250590081DC87 /* Products */,
@@ -294,7 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				8964217B247250590081DC87 /* ContentView.swift */,
-				89E93FC32479873D0039935D /* SemanticsSetView.swift */,
+				89E93FC32479873D0039935D /* SemSetView.swift */,
 				89D8F45024766CD300D12F15 /* TextOnCircle.swift */,
 				8968B741247BB66600F746E2 /* TestView.swift */,
 				892C63DF2487934300208446 /* SWUISemTextView.swift */,
@@ -421,6 +438,7 @@
 				8968B742247BB66600F746E2 /* TestView.swift in Sources */,
 				89D8F44224754E4500D12F15 /* Badge.swift in Sources */,
 				89D8F3F72474F1BF00D12F15 /* MapView.swift in Sources */,
+				892C6410248A09C600208446 /* SemSetsVC.swift in Sources */,
 				89D8F4202475094E00D12F15 /* LandmarkList.swift in Sources */,
 				89D8F4012475050900D12F15 /* Data.swift in Sources */,
 				8964219B247250B10081DC87 /* Model.swift in Sources */,
@@ -434,6 +452,7 @@
 				89642175247250590081DC87 /* AppDelegate.swift in Sources */,
 				8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */,
 				8964217C247250590081DC87 /* ContentView.swift in Sources */,
+				892C6414248CCFE200208446 /* SemSetVC.swift in Sources */,
 				892C63D0248661D100208446 /* SemTextStorage.swift in Sources */,
 				89D8F44924755ACB00D12F15 /* BadgeSymbol.swift in Sources */,
 				89D8F3FF247504E500D12F15 /* Landmark.swift in Sources */,
@@ -443,8 +462,9 @@
 				89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				89D8F44B24765A9C00D12F15 /* RotatedBadgeSymbol.swift in Sources */,
+				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
 				89D8F44724755A8700D12F15 /* BadgeBackground.swift in Sources */,
-				89E93FC42479873D0039935D /* SemanticsSetView.swift in Sources */,
+				89E93FC42479873D0039935D /* SemSetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

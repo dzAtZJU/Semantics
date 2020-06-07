@@ -1,62 +1,23 @@
 //
-//  SemanticsSetView.swift
+//  SemSetVC.swift
 //  Semantics
 //
-//  Created by Zhou Wei Ran on 2020/5/24.
+//  Created by Zhou Wei Ran on 2020/6/7.
 //  Copyright © 2020 Paper Scratch. All rights reserved.
 //
-
+import UIKit
 import SwiftUI
 import CoreData
 
-struct SemanticsSetView: UIViewControllerRepresentable {
-    
-    let word: Word?
-    
-    @Environment(\.presentationMode) var presentationMode
-    
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(parent: self)
-    }
-    func updateUIViewController(_ uiViewController: SemanticsSetVC, context: Context) {
-    }
-    
-    func makeUIViewController(context: Context) -> SemanticsSetVC {
-        let vc = SemanticsSetVC()
-        vc.word = word
-        vc.delegate = context.coordinator
-        return vc
-    }
-    
-    class Coordinator: SemanticsSetVCDelegate {
-        let parent: SemanticsSetView
-        
-        init(parent: SemanticsSetView) {
-            self.parent = parent
-        }
-    }
-}
-
-//struct SemanticsSetView_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-//        let word = Word(context: context)
-//        word.name = "word"
-//        word.subWords = ["1", "23", "456"]
-//        return SemanticsSetView(word: word)
-//    }
-//}
-
 @objc
-protocol SemanticsSetVCDelegate {
+protocol SemSetVCDelegate {
     @objc optional func back()
 }
 
-class SemanticsSetVC: UIViewController {
+class SemSetVC: UIViewController {
     lazy var nameField: UITextField = {
         let tmp = UITextField()
-        tmp.text = word?.name
+        tmp.text = word.name
         tmp.backgroundColor = .lightGray
         tmp.textColor = .white
         tmp.attributedPlaceholder = NSAttributedString(string: "input name here", attributes:[.foregroundColor: UIColor.white])
@@ -79,17 +40,43 @@ class SemanticsSetVC: UIViewController {
         return temp
     }()
     
-    var delegate: SemanticsSetVCDelegate?
+    var delegate: SemSetVCDelegate?
     
-    var word: Word!
+    private var word: Word! = nil
+    
+    init(word word_: Word?, title: String?) {
+        super.init(nibName: nil, bundle: nil)
+        
+        if let word_ = word_ {
+            word = word_
+        } else if let title = title {
+            let request: NSFetchRequest<Word> = Word.fetchRequest()
+            request.predicate = NSPredicate(format: "name == %@", title)
+            let resutls = try! managedObjectContext.fetch(request)
+            word = resutls.first
+        }
+        
+        if word == nil {
+            word = Word(context: managedObjectContext)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        view = UIView()
+        view.backgroundColor = .black
+        view.addSubview(nameField)
+        view.addSubview(addButton)
+    }
     
     override func viewDidLoad() {
-        view.backgroundColor = .black
-        
         animator.addBehavior(gravity)
         animator.addBehavior(collision)
         
-        if word?.subWords != nil {
+        if word.subWords != nil {
             var index = 0
             Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
                 self.constructCircleTextView(self.word.subWords![index])
@@ -100,30 +87,26 @@ class SemanticsSetVC: UIViewController {
             }
         }
         
-        view.addSubview(nameField)
-        view.addSubview(addButton)
-        
-        if word == nil {
-            word = Word(context: managedObjectContext)
-        }
+        nameField.frame = .init(origin: .zero, size: CGSize(width: view.bounds.width, height: 50))
+        addButton.frame = .init(origin: CGPoint(x: view.bounds.width - 50, y: 0), size: CGSize(width: 50, height: 50))
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        nameField.frame = .init(origin: .zero, size: CGSize(width: view.bounds.width, height: 50))
-        addButton.frame = .init(origin: .init(x: view.bounds.width - 50, y: 0), size: CGSize(width: 50, height: 50))
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
         
-        super.viewWillAppear(animated)
+        nameField.frame = .init(origin: CGPoint(x: view.safeAreaInsets.left, y: view.safeAreaInsets.top), size: CGSize(width: view.bounds.width, height: 50))
+        addButton.frame = .init(origin: CGPoint(x: view.bounds.width - view.safeAreaInsets.right - 50, y: view.safeAreaInsets.top), size: CGSize(width: 50, height: 50))
     }
     
     @objc func addSubWord() {
         if word.subWords == nil {
             word.subWords = [String]()
         }
-
+        
         guard word.subWords!.count < 5 else {
             return
         }
-
+        
         word.subWords!.append("new item")
         constructCircleTextView("new item")
     }
@@ -145,7 +128,7 @@ class SemanticsSetVC: UIViewController {
     }
 }
 
-extension SemanticsSetVC: TextOnCircleDelegate {
+extension SemSetVC: TextOnCircleDelegate {
     func onCommit(oldText: String, newText: String) {
         if let index = word.subWords?.firstIndex(of: oldText) {
             word.subWords!.remove(at: index)
@@ -154,7 +137,7 @@ extension SemanticsSetVC: TextOnCircleDelegate {
     }
 }
 
-extension SemanticsSetVC: UITextFieldDelegate {
+extension SemSetVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         word.name = textField.text
     }

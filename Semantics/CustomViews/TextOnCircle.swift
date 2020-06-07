@@ -25,6 +25,8 @@ struct TextOnCircle: View {
     
     @State var isActive = false
     
+    @State var notelink = ""
+    
     init(_ text: String) {
         self.text = text
         _editedText = State(initialValue: text)
@@ -32,7 +34,7 @@ struct TextOnCircle: View {
     
     var body: some View {
         VStack {
-            NavigationLink(destination: SemanticsSetView(word: nil), isActive: $isActive) {
+            NavigationLink(destination: SemSetView(title: notelink), isActive: $isActive) {
                 Text("")
             }
             SWUISemTextView(editedText: $editedText,
@@ -40,6 +42,7 @@ struct TextOnCircle: View {
                             onCommit: { self.delegate?.onCommit(oldText: self.text, newText: self.editedText) },
                             onNotelinkTapped: { notelink in
                                 self.isActive = true
+                                self.notelink = notelink
             })
                 .padding()
                 .background(GeometryReader { geomegtry in
@@ -50,6 +53,7 @@ struct TextOnCircle: View {
                     
                 })
         }
+        .keyboardAdaptive()
     }
 }
 
