@@ -60,7 +60,7 @@ class SemTextStorage: NSTextStorage {
 
 extension SemTextStorage {
     func queryNoteLink(at location: Int) -> String? {
-        if let link = attribute(.notelink, at: location, effectiveRange: nil) as? String {
+        if length > location, let link = attribute(.notelink, at: location, effectiveRange: nil) as? String {
             return link
         }
 

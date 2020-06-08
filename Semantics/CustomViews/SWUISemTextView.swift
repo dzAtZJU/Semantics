@@ -41,6 +41,8 @@ struct SWUISemTextView: UIViewRepresentable {
     class Coordinator: NSObject, SemTextViewDelegate {
         let parent: SWUISemTextView
         
+        private var isFirstEditing = true
+        
         init(_ parent: SWUISemTextView) {
             self.parent = parent
         }
@@ -59,6 +61,11 @@ struct SWUISemTextView: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
+            if isFirstEditing {
+                textView.text = ""
+                isFirstEditing = false
+            }
+            
             parent.onEditingChanged(true)
         }
         

@@ -8,16 +8,12 @@
 
 import SwiftUI
 
-protocol TextOnCircleDelegate {
-    func onCommit(oldText: String, newText: String)
-}
-
 struct TextOnCircle: View {
     static let bgColor = Color.red
     
     let text: String
     
-    var delegate: TextOnCircleDelegate?
+    let onCommit: (String, String) -> Void
     
     @State var editedText: String
     
@@ -27,8 +23,9 @@ struct TextOnCircle: View {
     
     @State var notelink = ""
     
-    init(_ text: String) {
-        self.text = text
+    init(_ text_: String, onCommit onCommit_: @escaping (_ oldText: String, _ newText: String) -> Void) {
+        text = text_
+        onCommit = onCommit_
         _editedText = State(initialValue: text)
     }
     
@@ -39,7 +36,10 @@ struct TextOnCircle: View {
             }
             SWUISemTextView(editedText: $editedText,
                             onEditingChanged: { _ in },
-                            onCommit: { self.delegate?.onCommit(oldText: self.text, newText: self.editedText) },
+                            onCommit: {
+                                print("onCOmmit")
+                                self.onCommit(self.text, self.editedText)
+            },
                             onNotelinkTapped: { notelink in
                                 self.isActive = true
                                 self.notelink = notelink
@@ -61,6 +61,8 @@ struct TextOnCircle: View {
 
 struct TextOnCircle_Previews: PreviewProvider {
     static var previews: some View {
-        TextOnCircle("大招操作失误")
+        TextOnCircle("大招操作失误", onCommit: {_,_ in
+            
+        })
     }
 }
