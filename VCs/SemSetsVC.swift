@@ -37,6 +37,7 @@ class SemSetsVC: UIViewController {
         tabelView = UITableView()
         view.addSubview(tabelView)
         
+        tabBarItem = UITabBarItem(title: "Sets", image: UIImage(systemName: "printer"), selectedImage: UIImage(systemName: "printer.fill"))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(Self.rightBarButttonTapped))
     }
     

@@ -4,6 +4,16 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>SemContentFilter.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>SemFilterControl.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>Semantics.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +22,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>896234CC2491F3640000ABCD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>896234DD2491F4AE0000ABCD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>89642170247250590081DC87</key>
 		<dict>
 			<key>primary</key>

@@ -12,8 +12,13 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
-
+    
+    let semanticsScene: UITabBarController = {
+        let tab = UITabBarController()
+        tab.viewControllers = [UINavigationController(rootViewController: SemSetsVC()), ProfileVC()]
+        return tab
+    }()
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -31,7 +36,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             self.window = window
-            window.rootViewController = UINavigationController(rootViewController: SemSetsVC())
+           
+            window.rootViewController = semanticsScene
             window.makeKeyAndVisible()
         }
     }
@@ -68,7 +74,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext.transactionAuthor = nil
     }
-
-
 }
+
+//extension SceneDelegate: UIPageViewControllerDataSource {
+//    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+//        if viewController == semanticsScene {
+//            return contentFilterScene
+//        } else {
+//            return semanticsScene
+//        }
+//    }
+//
+//    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+//        if viewController == contentFilterScene {
+//            return semanticsScene
+//        } else {
+//            return contentFilterScene
+//        }
+//    }
+    
+//    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+//        return 2
+//    }
+//
+//    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+//        return 0
+//    }
+//}
 
