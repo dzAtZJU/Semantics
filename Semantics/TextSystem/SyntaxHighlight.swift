@@ -8,15 +8,33 @@
 import Foundation
 import UIKit
 
-struct SyntaxHighlight {
+struct SemTextProcessor {
+    static func oneCharTagInnerRange(in range: NSRange) -> NSRange {
+        return range.sidesCut(left: 1, right: 1)
+    }
     
+    static func twoCharsTagInnerRange(in range: NSRange) -> NSRange {
+        return range.sidesCut(left: 2, right: 2)
+    }
+}
+
+struct SyntaxHighlight {
     static let noteLinkRegx = {
            try! NSRegularExpression(pattern: "(\\[\\[)(.+?[\\[\\]]*)\\]\\]", options: [])
     }()
-    static func noteLinkInnerRange(in range: NSRange) -> NSRange {
-        return range.inner(leftOffset: 2, rightOffset: 2)
-    }
+    
     static let noteLinkColor = UIColor.orange
     static let noteLinkInnerColor = UIColor.green
-   
+}
+
+extension String {
+    func iconMarkuped() -> String {
+        ":\(self):"
+    }
+}
+
+struct SemanticReplacer {
+    static let iconRegx = {
+        try! NSRegularExpression(pattern: ":.+?:", options: [])
+    }()
 }

@@ -115,8 +115,8 @@ class SemSetVC: UIViewController {
             return
         }
 
-        word.subWords!.append("new item")
-        constructSubwordVC("new item")
+        word.subWords!.append(hintText)
+        constructSubwordVC(hintText)
     }
     
     func constructSubwordVC(_ text: String) {

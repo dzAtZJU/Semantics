@@ -9,7 +9,11 @@
 import Foundation
 
 extension NSRange {
-    func inner(leftOffset: Int, rightOffset: Int) -> NSRange {
-        return NSRange(location: location + leftOffset, length: length - leftOffset - rightOffset)
+    func sidesCut(left: Int, right: Int) -> NSRange {
+        NSRange(location: location + left, length: length - left - right)
+    }
+    
+    func offset(by: Int) -> NSRange {
+        NSRange(location: location + by, length: length)
     }
 }

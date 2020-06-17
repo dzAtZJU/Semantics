@@ -8,12 +8,14 @@
 
 import SwiftUI
 
+let hintText = "new item"
+
 struct SWUISemTextView: UIViewRepresentable {
     @Binding var editedText: String
     
     let onEditingChanged: (Bool) -> Void
     
-    let onCommit:() -> Void
+    let onCommit:(String) -> Void
     
     let onNotelinkTapped: (String) -> Void
     
@@ -24,8 +26,8 @@ struct SWUISemTextView: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let tmp = SemTextView(frame: .zero)
         
-        tmp.text = $editedText.wrappedValue
         tmp.font = .preferredFont(forTextStyle: .title2)
+        tmp.text = $editedText.wrappedValue
         tmp.backgroundColor = nil
         tmp.returnKeyType = .done
         tmp.delegate = context.coordinator
@@ -61,7 +63,7 @@ struct SWUISemTextView: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            if isFirstEditing {
+            if isFirstEditing && textView.text == hintText {
                 textView.text = ""
                 isFirstEditing = false
             }
@@ -70,7 +72,7 @@ struct SWUISemTextView: UIViewRepresentable {
         }
         
         func textViewDidEndEditing(_ textView: UITextView) {
-            parent.onCommit()
+            parent.onCommit((textView as! SemTextView).inlineText)
         }
         
         func semTextViewNotelinkTapped(_ semTextView: SemTextView, link: String) {

@@ -1,0 +1,6 @@
+framework module Pods_Semantics {
+  umbrella header "Pods-Semantics-umbrella.h"
+
+  export *
+  module * { export * }
+}

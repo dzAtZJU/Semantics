@@ -37,6 +37,10 @@ class SemTextView: UITextView {
         textStorage as! SemTextStorage
     }
     
+    var inlineText: String {
+        return semStorage.inlineText
+    }
+    
     init(frame: CGRect) {
         let container = NSTextContainer()
 

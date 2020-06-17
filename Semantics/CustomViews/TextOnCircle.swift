@@ -17,8 +17,6 @@ struct TextOnCircle: View {
     
     @State var editedText: String
     
-    @State var beforeAnyEdit = true
-    
     @State var isActive = false
     
     @State var notelink = ""
@@ -36,9 +34,9 @@ struct TextOnCircle: View {
             }
             SWUISemTextView(editedText: $editedText,
                             onEditingChanged: { _ in },
-                            onCommit: {
+                            onCommit: { inlineText in
                                 print("onCOmmit")
-                                self.onCommit(self.text, self.editedText)
+                                self.onCommit(self.text, inlineText)
             },
                             onNotelinkTapped: { notelink in
                                 self.isActive = true

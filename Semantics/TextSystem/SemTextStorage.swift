@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Iconic
 
 class SemTextStorage: NSTextStorage {
     private var defaultForegroundColor = UIColor.white
@@ -45,15 +46,50 @@ class SemTextStorage: NSTextStorage {
     func semProcessEditing() {
         let paragraphRange = mutableString.paragraphRange(for: editedRange)
         addAttribute(.foregroundColor, value: defaultForegroundColor, range: paragraphRange)
+        
         SyntaxHighlight.noteLinkRegx.enumerateMatches(in: string, options: [], range: paragraphRange) { (result, flags, stop) -> Void in
             let range = result!.range
-            
             addAttribute(.foregroundColor, value: SyntaxHighlight.noteLinkColor, range: range)
-            let innerRange = SyntaxHighlight.noteLinkInnerRange(in: range)
+            
+            let innerRange = SemTextProcessor.twoCharsTagInnerRange(in: range)
             addAttribute(.foregroundColor, value: SyntaxHighlight.noteLinkInnerColor, range: innerRange)
             
             let notetitle = storage.mutableString.substring(with: innerRange)
             addAttribute(.notelink, value: notetitle, range: range)
+        }
+        
+        var offset = 0
+        SemanticReplacer.iconRegx.enumerateMatches(in: string, options: [], range: paragraphRange) { (result, flags, stop) -> Void in
+            let matchedRange = result!.range.offset(by: offset)
+            let innerRange = SemTextProcessor.oneCharTagInnerRange(in: matchedRange)
+            let iconName = storage.mutableString.substring(with: innerRange)
+            let fontSize = ((attribute(.font, at: matchedRange.location, effectiveRange: nil) as! UIFont).fontDescriptor.fontAttributes[.size] as! NSNumber).floatValue
+            let iconAttriburedString = FontAwesomeIcon(named: iconName).attributedString(ofSize: CGFloat(fontSize), color: defaultForegroundColor)
+            replaceCharacters(in: matchedRange, with: iconAttriburedString)
+            addAttribute(.iconName, value: iconName, range: NSRange(location: matchedRange.location, length: iconAttriburedString.length))
+            
+            offset += iconAttriburedString.length - matchedRange.length
+        }
+    }
+}
+
+extension SemTextStorage {
+    var inlineText: String {
+        get {
+            let storedText = storage.mutableString.mutableCopy() as! NSMutableString
+            var offset = 0
+            
+            enumerateAttribute(.iconName, in: NSRange(location: 0, length: length)) {(value, matchedRange, _) in
+                guard let iconName = value as? String else {
+                    return
+                }
+                
+                let iconMarkup = iconName.iconMarkuped()
+                storedText.replaceCharacters(in: matchedRange.offset(by: offset), with: iconMarkup)
+                
+                offset += iconMarkup.count - matchedRange.length
+            }
+            return (storedText.copy() as! NSString) as String
         }
     }
 }

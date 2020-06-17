@@ -1,0 +1,21 @@
+PODS:
+  - Iconic (1.5)
+
+DEPENDENCIES:
+  - Iconic (from `https://github.com/home-assistant/Iconic.git`)
+
+EXTERNAL SOURCES:
+  Iconic:
+    :git: https://github.com/home-assistant/Iconic.git
+
+CHECKOUT OPTIONS:
+  Iconic:
+    :commit: 48b595d947e5fbb4a239340bd7cac176f053313c
+    :git: https://github.com/home-assistant/Iconic.git
+
+SPEC CHECKSUMS:
+  Iconic: da1d724e702e01d3737046b653bee69f38d148a0
+
+PODFILE CHECKSUM: e5ec58e7f029552571253835ee458e0fcb873de9
+
+COCOAPODS: 1.8.4
