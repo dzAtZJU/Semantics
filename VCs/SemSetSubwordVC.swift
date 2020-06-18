@@ -17,15 +17,15 @@ protocol SemSetSubwordVCDelegate: class {
 
 class SemSetSubwordVC: UIHostingController<TextOnCircle> {
     
-    weak var delegate: SemSetSubwordVCDelegate?
+    let delegate: SemSetSubwordVCDelegate
     
-    var dynamicItem: UIDynamicItem?
+    var dynamicItem: UIDynamicItem? = nil
     
-    init(text: String) {
-        super.init(rootView: TextOnCircle(text, onCommit: {_,_ in }))
-        rootView = TextOnCircle(text, onCommit: { (oldText, newText) in
-            self.delegate?.upadteSubword(oldText: oldText, newText: newText)
-        })
+    init(text: String, delegate delegate_: SemSetSubwordVCDelegate) {
+        delegate = delegate_
+        super.init(rootView: TextOnCircle(text, onCommit: { (oldText, newText) in
+            delegate_.upadteSubword(oldText: oldText, newText: newText)
+        }))
     }
     
     @objc required dynamic init?(coder aDecoder: NSCoder) {
@@ -44,7 +44,7 @@ class SemSetSubwordVC: UIHostingController<TextOnCircle> {
         UIView.animate(withDuration: 0.25, animations: {
             self.view.transform = CGAffineTransform(translationX: 0, y: -1000)
         }) { _ in
-            self.delegate?.removeIt(self, text: self.rootView.editedText)
+            self.delegate.removeIt(self, text: self.rootView.editedText)
         }
     }
 }

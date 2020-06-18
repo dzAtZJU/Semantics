@@ -11,7 +11,7 @@ import SwiftUI
 struct TextOnCircle: View {
     static let bgColor = Color.red
     
-    let text: String
+    @State private(set) var initialText: String
     
     let onCommit: (String, String) -> Void
     
@@ -21,8 +21,8 @@ struct TextOnCircle: View {
     
     @State var notelink = ""
     
-    init(_ text_: String, onCommit onCommit_: @escaping (_ oldText: String, _ newText: String) -> Void) {
-        text = text_
+    init(_ text: String, onCommit onCommit_: @escaping (_ oldText: String, _ newText: String) -> Void) {
+        _initialText = State(initialValue: text)
         onCommit = onCommit_
         _editedText = State(initialValue: text)
     }
@@ -35,8 +35,8 @@ struct TextOnCircle: View {
             SWUISemTextView(editedText: $editedText,
                             onEditingChanged: { _ in },
                             onCommit: { inlineText in
-                                print("onCOmmit")
-                                self.onCommit(self.text, inlineText)
+                                self.onCommit(self.initialText, inlineText)
+                                self.initialText = inlineText
             },
                             onNotelinkTapped: { notelink in
                                 self.isActive = true

@@ -120,8 +120,7 @@ class SemSetVC: UIViewController {
     }
     
     func constructSubwordVC(_ text: String) {
-        let vc = SemSetSubwordVC(text: text)
-        vc.delegate = self
+        let vc = SemSetSubwordVC(text: text, delegate: self)
         
         addChild(vc)
         vc.view.frame = .init(origin: .init(x: Int.random(in: 90...280), y: -180), size: .init(width: 180, height: 180))
