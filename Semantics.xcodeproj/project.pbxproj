@@ -33,6 +33,12 @@
 		8962350F24920E430000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
 		896344B224936E210060160B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 896344B124936E210060160B /* Kingfisher */; };
 		896344B424936E210060160B /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 896344B324936E210060160B /* KingfisherSwiftUI */; };
+		896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344B7249DD7F90060160B /* WordsGraphVC.swift */; };
+		896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344BA249F36FD0060160B /* CoreDataLayer1.swift */; };
+		896344BD249F570A0060160B /* CoreDataLayer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344BC249F570A0060160B /* CoreDataLayer2.swift */; };
+		896344BF249F8F240060160B /* TextLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344BE249F8F240060160B /* TextLoader.swift */; };
+		896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344C0249F94870060160B /* NSManagedObjectLayer.swift */; };
+		896344C324A1C5180060160B /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344C224A1C5180060160B /* String+.swift */; };
 		89642175247250590081DC87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89642174247250590081DC87 /* AppDelegate.swift */; };
 		89642177247250590081DC87 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89642176247250590081DC87 /* SceneDelegate.swift */; };
 		8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 89642178247250590081DC87 /* Semantics.xcdatamodeld */; };
@@ -146,6 +152,12 @@
 		8962350324920AE20000ABCD /* SemFilterControl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SemFilterControl.entitlements; sourceTree = "<group>"; };
 		8962350A24920B110000ABCD /* SemContentFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemContentFilterVC.swift; sourceTree = "<group>"; };
 		8962350C24920CF40000ABCD /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		896344B7249DD7F90060160B /* WordsGraphVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsGraphVC.swift; sourceTree = "<group>"; };
+		896344BA249F36FD0060160B /* CoreDataLayer1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLayer1.swift; sourceTree = "<group>"; };
+		896344BC249F570A0060160B /* CoreDataLayer2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLayer2.swift; sourceTree = "<group>"; };
+		896344BE249F8F240060160B /* TextLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLoader.swift; sourceTree = "<group>"; };
+		896344C0249F94870060160B /* NSManagedObjectLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectLayer.swift; sourceTree = "<group>"; };
+		896344C224A1C5180060160B /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		89642171247250590081DC87 /* Semantics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Semantics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89642174247250590081DC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89642176247250590081DC87 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -263,18 +275,20 @@
 				892C63CF248661D100208446 /* SemTextStorage.swift */,
 				892C63D12486630900208446 /* SyntaxHighlight.swift */,
 				892C63DD24867F8700208446 /* SemTextView.swift */,
+				896344BE249F8F240060160B /* TextLoader.swift */,
 			);
 			path = TextSystem;
 			sourceTree = "<group>";
 		};
-		892C63D3248669FF00208446 /* Extension */ = {
+		892C63D3248669FF00208446 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				892C63D424866A1000208446 /* NSRange+.swift */,
 				892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */,
 				892C6411248A0C2100208446 /* UIViewController+.swift */,
+				896344C224A1C5180060160B /* String+.swift */,
 			);
-			path = Extension;
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		892C640E248A09B900208446 /* VCs */ = {
@@ -285,6 +299,7 @@
 				892C6415248E1C1800208446 /* SemSetSubwordVC.swift */,
 				892C6417248E589500208446 /* ProfileVC.swift */,
 				8962350A24920B110000ABCD /* SemContentFilterVC.swift */,
+				896344B7249DD7F90060160B /* WordsGraphVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -318,9 +333,22 @@
 			path = SemFilterControl;
 			sourceTree = "<group>";
 		};
+		896344B9249F36AF0060160B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				896344BA249F36FD0060160B /* CoreDataLayer1.swift */,
+				896344BC249F570A0060160B /* CoreDataLayer2.swift */,
+				896344C0249F94870060160B /* NSManagedObjectLayer.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				892C63CE2486616F00208446 /* TextSystem */,
+				896344B9249F36AF0060160B /* Models */,
+				892C63D3248669FF00208446 /* Utils */,
 				896234C4248F99030000ABCD /* Infra */,
 				892C640E248A09B900208446 /* VCs */,
 				89642173247250590081DC87 /* Semantics */,
@@ -347,8 +375,6 @@
 		89642173247250590081DC87 /* Semantics */ = {
 			isa = PBXGroup;
 			children = (
-				892C63D3248669FF00208446 /* Extension */,
-				892C63CE2486616F00208446 /* TextSystem */,
 				8976AC67247BC79A00A7AD15 /* Utils */,
 				89D8F44F24766C7F00D12F15 /* CustomViews */,
 				89D8F44C2476639300D12F15 /* ListNavigation */,
@@ -783,14 +809,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D8F44524754EDB00D12F15 /* HexagonParameters.swift in Sources */,
+				896344C324A1C5180060160B /* String+.swift in Sources */,
 				8962350B24920B110000ABCD /* SemContentFilterVC.swift in Sources */,
 				89D8F43E24752A9D00D12F15 /* UserData.swift in Sources */,
+				896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */,
 				8968B742247BB66600F746E2 /* TestView.swift in Sources */,
 				89D8F44224754E4500D12F15 /* Badge.swift in Sources */,
 				89D8F3F72474F1BF00D12F15 /* MapView.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
 				892C6410248A09C600208446 /* SemSetsVC.swift in Sources */,
 				89D8F4202475094E00D12F15 /* LandmarkList.swift in Sources */,
+				896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */,
 				89D8F4012475050900D12F15 /* Data.swift in Sources */,
 				8964219B247250B10081DC87 /* Model.swift in Sources */,
 				892C63D22486630900208446 /* SyntaxHighlight.swift in Sources */,
@@ -805,6 +834,7 @@
 				8964217C247250590081DC87 /* ContentView.swift in Sources */,
 				892C6416248E1C1800208446 /* SemSetSubwordVC.swift in Sources */,
 				892C6414248CCFE200208446 /* SemSetVC.swift in Sources */,
+				896344BD249F570A0060160B /* CoreDataLayer2.swift in Sources */,
 				892C63D0248661D100208446 /* SemTextStorage.swift in Sources */,
 				89D8F44924755ACB00D12F15 /* BadgeSymbol.swift in Sources */,
 				89D8F3FF247504E500D12F15 /* Landmark.swift in Sources */,
@@ -814,10 +844,12 @@
 				89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				89D8F44B24765A9C00D12F15 /* RotatedBadgeSymbol.swift in Sources */,
+				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
 				892C6418248E589500208446 /* ProfileVC.swift in Sources */,
 				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
 				89D8F44724755A8700D12F15 /* BadgeBackground.swift in Sources */,
+				896344BF249F8F240060160B /* TextLoader.swift in Sources */,
 				89E93FC42479873D0039935D /* SemSetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -41,6 +41,9 @@ struct TextOnCircle: View {
                             onNotelinkTapped: { notelink in
                                 self.isActive = true
                                 self.notelink = notelink
+            },
+                            onNotelinksChanged: { (added, removed) in
+                                
             })
                 .padding()
                 .background(GeometryReader { geomegtry in
@@ -57,10 +60,10 @@ struct TextOnCircle: View {
 
 
 
-struct TextOnCircle_Previews: PreviewProvider {
-    static var previews: some View {
-        TextOnCircle("大招操作失误", onCommit: {_,_ in
-            
-        })
-    }
-}
+//struct TextOnCircle_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TextOnCircle("大招操作失误", onCommit: {_,_ in
+//
+//        }, )
+//    }
+//}

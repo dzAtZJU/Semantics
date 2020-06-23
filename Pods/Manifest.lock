@@ -1,8 +1,14 @@
 PODS:
+  - Highcharts (8.1.2)
   - Iconic (1.5)
 
 DEPENDENCIES:
+  - Highcharts (~> 8.1.2)
   - Iconic (from `https://github.com/home-assistant/Iconic.git`)
+
+SPEC REPOS:
+  trunk:
+    - Highcharts
 
 EXTERNAL SOURCES:
   Iconic:
@@ -14,8 +20,9 @@ CHECKOUT OPTIONS:
     :git: https://github.com/home-assistant/Iconic.git
 
 SPEC CHECKSUMS:
+  Highcharts: 795b5359af23d5af26da7529056da6a0f3e4d47f
   Iconic: da1d724e702e01d3737046b653bee69f38d148a0
 
-PODFILE CHECKSUM: e5ec58e7f029552571253835ee458e0fcb873de9
+PODFILE CHECKSUM: fb05cbf8728771d4620008bb181aa25a05b70401
 
 COCOAPODS: 1.8.4

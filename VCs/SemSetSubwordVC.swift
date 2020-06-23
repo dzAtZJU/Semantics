@@ -23,7 +23,8 @@ class SemSetSubwordVC: UIHostingController<TextOnCircle> {
     
     init(text: String, delegate delegate_: SemSetSubwordVCDelegate) {
         delegate = delegate_
-        super.init(rootView: TextOnCircle(text, onCommit: { (oldText, newText) in
+        super.init(rootView: TextOnCircle(text,
+                                          onCommit: { (oldText, newText) in
             delegate_.upadteSubword(oldText: oldText, newText: newText)
         }))
     }

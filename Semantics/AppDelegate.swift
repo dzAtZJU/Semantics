@@ -10,12 +10,17 @@ import UIKit
 import CoreData
 import Foundation
 import Iconic
+import Highcharts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         FontAwesomeIcon.register()
+        
+        HIChartView.preload()
+        
         return true
     }
 

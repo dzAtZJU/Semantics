@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-Semantics/Pods-Semantics-frameworks.sh
+${PODS_ROOT}/Highcharts/development/Highcharts.framework
 ${BUILT_PRODUCTS_DIR}/Iconic/Iconic.framework

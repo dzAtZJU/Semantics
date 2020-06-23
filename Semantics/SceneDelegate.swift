@@ -13,9 +13,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     
+    let testScene = WordsGraphVC()
+    
     let semanticsScene: UITabBarController = {
         let tab = UITabBarController()
-        tab.viewControllers = [UINavigationController(rootViewController: SemSetsVC()), ProfileVC()]
+        tab.viewControllers = [UINavigationController(rootViewController: SemSetsVC()), WordsGraphVC()]
         return tab
     }()
     

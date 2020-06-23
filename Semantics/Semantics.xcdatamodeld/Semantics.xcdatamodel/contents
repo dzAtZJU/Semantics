@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Feeling" representedClassName=".Feeling" syncable="YES" codeGenerationType="class">
+        <attribute name="attribute" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="Link" representedClassName="Link" syncable="YES" codeGenerationType="class">
+        <attribute name="annotation" attributeType="String" defaultValueString=""/>
+        <relationship name="words" optional="YES" toMany="YES" minCount="2" maxCount="2" deletionRule="Nullify" destinationEntity="Word" inverseName="links" inverseEntity="Word"/>
+    </entity>
     <entity name="Word" representedClassName="Word" syncable="YES" codeGenerationType="class">
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="subWords" optional="YES" attributeType="Transformable" valueTransformerName="" defaultValueString="" customClassName="[String]"/>
+        <relationship name="links" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Link" inverseName="words" inverseEntity="Link"/>
     </entity>
     <configuration name="Cloud" usedWithCloudKit="YES">
         <memberEntity name="Feeling"/>
     </configuration>
     <elements>
-        <element name="Feeling" positionX="-63" positionY="-18" width="128" height="58"/>
-        <element name="Word" positionX="-45" positionY="9" width="128" height="73"/>
+        <element name="Feeling" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="Link" positionX="-45" positionY="27" width="128" height="73"/>
+        <element name="Word" positionX="-45" positionY="9" width="128" height="88"/>
     </elements>
 </model>

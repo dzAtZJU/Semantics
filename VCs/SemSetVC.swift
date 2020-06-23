@@ -15,12 +15,15 @@ protocol SemSetVCDelegate {
 }
 
 class SemSetVC: UIViewController {
-    lazy var nameField: UITextField = {
-        let tmp = UITextField()
-        tmp.text = word.name
+    private var isFirstEditing = true
+    
+    lazy var nameField: SemTextView = {
+        let tmp = SemTextView(frame: .zero)
+        tmp.text = word.name?.appending(neighborWords: Set(word.neighborWordsName))
+        tmp.font = UIFont.preferredFont(forTextStyle: .title3)
+        
         tmp.backgroundColor = .lightGray
         tmp.textColor = .white
-        tmp.attributedPlaceholder = NSAttributedString(string: "input name here", attributes:[.foregroundColor: UIColor.white])
         tmp.autoresizingMask = [.flexibleBottomMargin, .flexibleWidth]
         tmp.delegate = self
         return tmp
@@ -115,8 +118,8 @@ class SemSetVC: UIViewController {
             return
         }
 
-        word.subWords!.append(hintText)
-        constructSubwordVC(hintText)
+        word.subWords!.append(Self.hintText)
+        constructSubwordVC(Self.hintText)
     }
     
     func constructSubwordVC(_ text: String) {
@@ -134,14 +137,37 @@ class SemSetVC: UIViewController {
     }
 }
 
-extension SemSetVC: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        word.name = textField.text
+extension SemSetVC: SemTextViewDelegate {
+    static private let hintText = "unset"
+    
+    func semTextView(_ semTextView: SemTextView, didTapNotelink link: String) {
+        
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+    func semTextView(_ semTextView: SemTextView, didAddNotelinks added: Set<String>, didRemoveNotelinks removed: Set<String>) {
+        CoreDataLayer1.shared.createLinks(oneEndWordName: word.name!, theOtherEndWordsName: added)
+        CoreDataLayer1.shared.deleteLinks(oneEndWordName: word.name!, theOtherEndWordsName: removed)
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder()
         return true
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if isFirstEditing && textView.text == Self.hintText {
+            textView.text = ""
+            isFirstEditing = false
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        word.name = textView.text.removingNeighborWords()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIApplication.shared.sendAction(#selector(UIApplication.resignFirstResponder), to: nil, from: nil, for: nil)
+        super.touchesBegan(touches, with: event)
     }
 }
 

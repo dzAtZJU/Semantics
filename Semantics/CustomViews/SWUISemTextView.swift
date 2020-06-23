@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-let hintText = "new item"
+
 
 struct SWUISemTextView: UIViewRepresentable {
     @Binding var editedText: String
@@ -18,6 +18,8 @@ struct SWUISemTextView: UIViewRepresentable {
     let onCommit:(String) -> Void
     
     let onNotelinkTapped: (String) -> Void
+    
+    let onNotelinksChanged: (Set<String>, Set<String>) -> Void
     
     func makeCoordinator() -> Coordinator {
         return Coordinator(self)
@@ -41,7 +43,9 @@ struct SWUISemTextView: UIViewRepresentable {
     }
     
     class Coordinator: NSObject, SemTextViewDelegate {
-        let parent: SWUISemTextView
+        private let parent: SWUISemTextView
+        
+        private static let hintText = "new item"
         
         private var isFirstEditing = true
         
@@ -63,7 +67,7 @@ struct SWUISemTextView: UIViewRepresentable {
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
-            if isFirstEditing && textView.text == hintText {
+            if isFirstEditing && textView.text == Self.hintText {
                 textView.text = ""
                 isFirstEditing = false
             }
@@ -75,8 +79,12 @@ struct SWUISemTextView: UIViewRepresentable {
             parent.onCommit((textView as! SemTextView).inlineText)
         }
         
-        func semTextViewNotelinkTapped(_ semTextView: SemTextView, link: String) {
+        func semTextView(_ semTextView: SemTextView, didTapNotelink link: String) {
             parent.onNotelinkTapped(link)
+        }
+        
+        func semTextView(_ semTextView: SemTextView, didAddNotelinks added: Set<String>, didRemoveNotelinks removed: Set<String>) {
+            parent.onNotelinksChanged(added, removed)
         }
     }
 }

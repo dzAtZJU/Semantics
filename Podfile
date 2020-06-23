@@ -7,7 +7,10 @@ target 'Semantics' do
 
   # Pods for Semantics
   pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
-
+  
+  # https://www.highcharts.com/ios/demo
+  # https://api.highcharts.com/ios/highcharts/
+  pod 'Highcharts', '~> 8.1.2'
 
   target 'SemanticsTests' do
     inherit! :search_paths

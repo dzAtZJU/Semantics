@@ -125,6 +125,7 @@ extension SemSetsVC: UITableViewDelegate {
 extension SemSetsVC: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tabelView.beginUpdates()
+        print("configure begin")
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
@@ -142,15 +143,19 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
+                print("configure new \(newIndexPath.row)")
                 tabelView.insertRows(at: [newIndexPath], with: .fade)
             }
         case .delete:
             tabelView.deleteRows(at: [indexPath!], with: .fade)
         case .update:
+            print("configure update \(indexPath!.row)")
             if let cell = tabelView.cellForRow(at: indexPath!) {
+                print("configure update \(indexPath!.row):\(cell.textLabel!.text)")
                 configureCell(cell, at: indexPath!)
             }
         case .move:
+            print("configure move \(indexPath!.row) \(newIndexPath!.row)")
             tabelView.deleteRows(at: [indexPath!], with: .fade)
             tabelView.insertRows(at: [newIndexPath!], with: .fade)
         default:
@@ -160,5 +165,6 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tabelView.endUpdates()
+        print("configure end")
     }
 }
