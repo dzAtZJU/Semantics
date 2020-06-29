@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import CoreData
+import Kingfisher
 
 @objc
 protocol SemSetVCDelegate {
@@ -15,7 +16,12 @@ protocol SemSetVCDelegate {
 }
 
 class SemSetVC: UIViewController {
-    private var isFirstEditing = true
+    lazy var background: UIImageView = {
+        let tmp = UIImageView()
+        tmp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        tmp.contentMode = .scaleAspectFill
+        return tmp
+    }()
     
     lazy var nameField: SemTextView = {
         let tmp = SemTextView(frame: .zero)
@@ -23,6 +29,7 @@ class SemSetVC: UIViewController {
         tmp.font = UIFont.preferredFont(forTextStyle: .title3)
         
         tmp.backgroundColor = .lightGray
+        tmp.alpha = 0.7
         tmp.textColor = .white
         tmp.autoresizingMask = [.flexibleBottomMargin, .flexibleWidth]
         tmp.delegate = self
@@ -30,22 +37,23 @@ class SemSetVC: UIViewController {
     }()
     
     lazy var addButton: UIButton = {
-        let temp = UIButton(type: .contactAdd)
-        temp.addTarget(self, action: #selector(Self.addSubWord), for: .touchUpInside)
-        return temp
+        let tmp = UIButton(type: .contactAdd)
+        tmp.addTarget(self, action: #selector(Self.addSubWord), for: .touchUpInside)
+        tmp.alpha = 0.7
+        return tmp
     }()
     
     lazy var animator = UIDynamicAnimator(referenceView: view)
     lazy var gravity = UIGravityBehavior()
-    lazy var collision: UICollisionBehavior = {
-        let temp = UICollisionBehavior()
-        temp.setTranslatesReferenceBoundsIntoBoundary(with: .init(top: -1000, left: 0, bottom: 0, right: 0))
-        return temp
-    }()
+    lazy var collision: UICollisionBehavior = UICollisionBehavior()
     
     var delegate: SemSetVCDelegate?
     
-    private var word: Word! = nil
+    private var isFirstEditing = true
+    
+    private var word: Word!
+    
+    private var task: URLSessionDataTask?
     
     init(word word_: Word?, title: String?) {
         super.init(nibName: nil, bundle: nil)
@@ -68,9 +76,13 @@ class SemSetVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        task?.cancel()
+    }
+   
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .black
+        view.addSubview(background)
         view.addSubview(nameField)
         view.addSubview(addButton)
     }
@@ -92,6 +104,8 @@ class SemSetVC: UIViewController {
         
         nameField.frame = .init(origin: .zero, size: CGSize(width: view.bounds.width, height: 50))
         addButton.frame = .init(origin: CGPoint(x: view.bounds.width - 50, y: 0), size: CGSize(width: 50, height: 50))
+        
+        updateBackground()
     }
     
     override func viewSafeAreaInsetsDidChange() {
@@ -99,6 +113,7 @@ class SemSetVC: UIViewController {
         
         nameField.frame = .init(origin: CGPoint(x: view.safeAreaInsets.left, y: view.safeAreaInsets.top), size: CGSize(width: view.bounds.width, height: 50))
         addButton.frame = .init(origin: CGPoint(x: view.bounds.width - view.safeAreaInsets.right - 50, y: view.safeAreaInsets.top), size: CGSize(width: 50, height: 50))
+        collision.setTranslatesReferenceBoundsIntoBoundary(with: UIEdgeInsets(top: -1000, left: 0, bottom: view.safeAreaInsets.bottom, right: 0))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -135,6 +150,25 @@ class SemSetVC: UIViewController {
         gravity.addItem(item)
         collision.addItem(item)
     }
+    
+    private func updateBackground() {
+        task?.cancel()
+        task = URLSession.shared.dataTask(with: NetworkSpace.bgImageQueryingURL(forWord: word.name!)) { [weak self] (data, response, error) in
+            if self == nil {
+                return
+            }
+
+            guard NetworkSpace.validate(error: error, response: response) else {
+                return
+            }
+            if let data = data, let imagePath = String(data: data, encoding: .utf8), let url = URL(string: imagePath) {
+                DispatchQueue.main.async {
+                    self?.background.kf.setImage(with: url)
+                }
+            }
+        }
+        task?.resume()
+    }
 }
 
 extension SemSetVC: SemTextViewDelegate {
@@ -163,6 +197,7 @@ extension SemSetVC: SemTextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         word.name = textView.text.removingNeighborWords()
+        updateBackground()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

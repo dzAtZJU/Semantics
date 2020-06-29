@@ -51,12 +51,12 @@ class SemTextStorage: NSTextStorage {
     }
     
     override func edited(_ editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        print("\(type(of: self)).\(#function)" + ": \(editedMask) \(editedRange) \(delta)")
+//        print("\(type(of: self)).\(#function)" + ": \(editedMask) \(editedRange) \(delta)")
         super.edited(editedMask, range: editedRange, changeInLength: delta)
     }
     
     override func processEditing() {
-        print("\(type(of: self)).\(#function)")
+//        print("\(type(of: self)).\(#function)")
         semProcessEditing()
         super.processEditing()
     }

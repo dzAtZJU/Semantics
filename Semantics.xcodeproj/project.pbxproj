@@ -52,6 +52,7 @@
 		8968B742247BB66600F746E2 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8968B741247BB66600F746E2 /* TestView.swift */; };
 		8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */; };
 		8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */; };
+		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
 		89D8F3F52474EBA000D12F15 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3F42474EBA000D12F15 /* CircleImage.swift */; };
 		89D8F3F72474F1BF00D12F15 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3F62474F1BF00D12F15 /* MapView.swift */; };
 		89D8F3FD247504AE00D12F15 /* LandmarkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3FC247504AE00D12F15 /* LandmarkRow.swift */; };
@@ -176,6 +177,7 @@
 		8968B741247BB66600F746E2 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseCollisionBoundsWrapper.swift; sourceTree = "<group>"; };
 		8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
+		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89D8F3F42474EBA000D12F15 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		89D8F3F62474F1BF00D12F15 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		89D8F3FC247504AE00D12F15 /* LandmarkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandmarkRow.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				89C2889124A34243002081FE /* Network */,
 				892C63CE2486616F00208446 /* TextSystem */,
 				896344B9249F36AF0060160B /* Models */,
 				892C63D3248669FF00208446 /* Utils */,
@@ -439,6 +442,14 @@
 				8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		89C2889124A34243002081FE /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				89C2889224A34308002081FE /* NetworkSpace.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		89D8F4022475061900D12F15 /* Resources */ = {
@@ -839,6 +850,7 @@
 				89D8F44924755ACB00D12F15 /* BadgeSymbol.swift in Sources */,
 				89D8F3FF247504E500D12F15 /* Landmark.swift in Sources */,
 				89642177247250590081DC87 /* SceneDelegate.swift in Sources */,
+				89C2889324A34308002081FE /* NetworkSpace.swift in Sources */,
 				89D8F3FD247504AE00D12F15 /* LandmarkRow.swift in Sources */,
 				89D8F3F52474EBA000D12F15 /* CircleImage.swift in Sources */,
 				89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */,
