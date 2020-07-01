@@ -19,12 +19,16 @@ struct SemTextProcessor {
 }
 
 struct SyntaxHighlight {
+    private static let noteLinkRegxStr = "\\[\\[[^\\[\\]]+\\]\\]"
+    private static let noteLinkAtEndRegxStr = noteLinkRegxStr + "$"
     static let noteLinkRegx = {
-           try! NSRegularExpression(pattern: "\\[\\[(.+?[\\[\\]]*)\\]\\]", options: [])
+           try! NSRegularExpression(pattern: noteLinkRegxStr, options: [])
     }()
-    
+    static let noteLinkRegxAtEnd = {
+        try! NSRegularExpression(pattern: noteLinkAtEndRegxStr, options: [])
+    }()
     static let noteLinkColor = UIColor.orange
-    static let noteLinkInnerColor = UIColor.green
+    static let noteLinkInnerColor = UIColor.systemGreen
 }
 
 extension String {

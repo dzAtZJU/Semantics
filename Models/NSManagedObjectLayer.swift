@@ -20,4 +20,8 @@ extension Word {
         
         return []
     }
+    
+    var hasNeighborWords: Bool {
+        links?.count ?? 0 > 0
+    }
 }

@@ -104,19 +104,20 @@ class SemGestureRecognizer: UIGestureRecognizer {
             }
         }
         
-        let touchedCharacterIndex = semTextView.layoutManager.characterIndex(for: trackedTouch!.location(in: view), in: semTextView.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
-        
-        let touchedGlyphIndex = semTextView.layoutManager.glyphIndex(for: trackedTouch!.location(in: view), in: semTextView.textContainer)
-        
-        let rect = semTextView.layoutManager.boundingRect(forGlyphRange: NSRange(location: touchedGlyphIndex, length: 1), in: semTextView.textContainer)
-        
-        if semTextView.semStorage.queryNoteLink(at: touchedCharacterIndex) != nil {
-            touchedNotelinkCharIndex = touchedCharacterIndex
-            state = .possible
-        } else {
-            state = .failed
+        let point = trackedTouch!.location(in: view)
+        let touchedGlyphIndex = semTextView.layoutManager.glyphIndex(for: point, in: semTextView.textContainer)
+        if semTextView.semStorage.queryNoteLink(at: touchedGlyphIndex) != nil {
+            let rect = semTextView.layoutManager.boundingRect(forGlyphRange: NSRange(location: touchedGlyphIndex, length: 1), in: semTextView.textContainer)
+            if rect.contains(point) {
+                touchedNotelinkCharIndex = touchedGlyphIndex
+                state = .possible
+                return
+            }
+            
+            
         }
         
+        state = .failed
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {

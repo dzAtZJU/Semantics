@@ -57,7 +57,7 @@ class WordsGraphVC: UIViewController {
         view.addSubview(chartView)
         
         
-        tabBarItem = UITabBarItem(title: "Graph", image: UIImage(systemName: "tortoise"), selectedImage: UIImage(systemName: "tortoise.fill"))
+        tabBarItem = UITabBarItem(title: "Graph", image: UIImage(named: "graph"), selectedImage: nil)
     }
     
     override func viewDidLayoutSubviews() {

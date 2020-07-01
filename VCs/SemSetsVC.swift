@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SwiftUI
+import Iconic
 
 struct SemSetsVCView: UIViewControllerRepresentable {
     
@@ -32,13 +33,16 @@ class SemSetsVC: UIViewController {
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
+    private lazy var menuInteraction = UIContextMenuInteraction(delegate: self)
+    
     override func loadView() {
-        view = UIView()
-        tabelView = UITableView()
-        view.addSubview(tabelView)
-        
-        tabBarItem = UITabBarItem(title: "Sets", image: UIImage(systemName: "printer"), selectedImage: UIImage(systemName: "printer.fill"))
+        tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(Self.rightBarButttonTapped))
+        navigationItem.title = "Dictionary"
+        
+        view = UIView()
+        tabelView = UITableView(frame: .zero, style: .insetGrouped)
+        view.addSubview(tabelView)
     }
     
     override func viewDidLoad() {
@@ -50,6 +54,7 @@ class SemSetsVC: UIViewController {
         
         tabelView.delegate = self
         tabelView.dataSource = self
+        tabelView.addInteraction(menuInteraction)
         fetchedResultsController.delegate = self
     }
     
@@ -64,6 +69,10 @@ class SemSetsVC: UIViewController {
         cell.accessoryType = .disclosureIndicator
         cell.showsReorderControl = true
         cell.textLabel!.text = word.name
+        cell.detailTextLabel?.text = ""
+        if word.hasNeighborWords {
+            cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: SyntaxHighlight.noteLinkInnerColor)
+        }
     }
     
     @objc private func rightBarButttonTapped() {
@@ -81,7 +90,7 @@ extension SemSetsVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tabelView.dequeueReusableCell(withIdentifier: Self.CellIdentifier) ?? UITableViewCell(style: .default, reuseIdentifier: Self.CellIdentifier)
+        let cell = tabelView.dequeueReusableCell(withIdentifier: Self.CellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: Self.CellIdentifier)
         configureCell(cell, at: indexPath)
         return cell
     }
@@ -158,5 +167,16 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tabelView.endUpdates()
+    }
+}
+
+extension SemSetsVC: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        UIContextMenuConfiguration(identifier: nil, previewProvider: { [weak self] () -> UIViewController? in
+            guard let indexPath = self?.tabelView.indexPathForRow(at: location) else {
+                return nil
+            }
+            return SemSetVC(word: self?.fetchedResultsController.object(at: indexPath), title: nil)
+        })
     }
 }

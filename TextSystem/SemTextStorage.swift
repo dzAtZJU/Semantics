@@ -32,6 +32,8 @@ class SemTextStorage: NSTextStorage {
     
     private let storage = NSMutableAttributedString()
     
+    // MARK: Manage Storage
+    
     override var string: String {
         return storage.string
     }
@@ -41,6 +43,22 @@ class SemTextStorage: NSTextStorage {
     }
     
     override func replaceCharacters(in range: NSRange, with str: String) {
+        // MARK: Notelink
+        if str.isEmpty {
+            let paragraphRange = mutableString.paragraphRange(for: range)
+            let result = SyntaxHighlight.noteLinkRegxAtEnd.rangeOfFirstMatch(in: string, options: [], range: paragraphRange)
+            if result.location != NSNotFound, range.length < result.length {
+                let innerRange = SemTextProcessor.twoCharsTagInnerRange(in: result)
+                let notetitle = storage.mutableString.substring(with: innerRange)
+                
+                storage.replaceCharacters(in: result, with: "")
+                edited(.editedCharacters, range: result, changeInLength: str.count - result.length)
+               
+                semDelegate?.textStorage(self, didAddNotelinks: [], didRemoveNotelinks: [notetitle])
+                return
+            }
+        }
+        
         storage.replaceCharacters(in: range, with: str)
         edited(.editedCharacters, range: range, changeInLength: str.count - range.length)
     }
@@ -50,33 +68,29 @@ class SemTextStorage: NSTextStorage {
         edited(.editedAttributes, range: range, changeInLength: 0)
     }
     
-    override func edited(_ editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-//        print("\(type(of: self)).\(#function)" + ": \(editedMask) \(editedRange) \(delta)")
-        super.edited(editedMask, range: editedRange, changeInLength: delta)
-    }
+    // MARK: Post-Process
     
     override func processEditing() {
-//        print("\(type(of: self)).\(#function)")
+        //        print("\(type(of: self)).\(#function)")
         semProcessEditing()
         super.processEditing()
     }
     
     func semProcessEditing() {
-        // Notelink
         let paragraphRange = mutableString.paragraphRange(for: editedRange)
         addAttribute(.foregroundColor, value: defaultForegroundColor, range: paragraphRange)
         
-        var removedNotelinks: Set<String> = []
+        // MARK: Notelink
+        var exsistingNotelinks: Set<String> = []
         enumerateAttribute(.notelink, in: paragraphRange, options: []) { value, range , _ in
             guard let value = value else {
                 return
             }
-            
             removeAttribute(.notelink, range: range)
-            removedNotelinks.insert(value as! String)
+            exsistingNotelinks.insert(value as! String)
         }
         
-        var addedNotelinks: Set<String> = []
+        var matchedNotelinks: Set<String> = []
         SyntaxHighlight.noteLinkRegx.enumerateMatches(in: string, options: [], range: paragraphRange) { (result, flags, stop) -> Void in
             let range = result!.range
             addAttribute(.foregroundColor, value: SyntaxHighlight.noteLinkColor, range: range)
@@ -86,14 +100,15 @@ class SemTextStorage: NSTextStorage {
             
             let notetitle = storage.mutableString.substring(with: innerRange)
             addAttribute(.notelink, value: notetitle, range: range)
-            addedNotelinks.insert(notetitle)
+            matchedNotelinks.insert(notetitle)
         }
         
-        if !removedNotelinks.isEmpty || !addedNotelinks.isEmpty {
-            semDelegate?.textStorage(self, didAddNotelinks: addedNotelinks.subtracting(removedNotelinks), didRemoveNotelinks: removedNotelinks.subtracting(addedNotelinks))
+        let newNotelinks = matchedNotelinks.subtracting(exsistingNotelinks)
+        if !newNotelinks.isEmpty {
+            semDelegate?.textStorage(self, didAddNotelinks: newNotelinks, didRemoveNotelinks: [])
         }
         
-        // Icon
+        // MARK: Icon
         var offset = 0
         SemanticReplacer.iconRegx.enumerateMatches(in: string, options: [], range: paragraphRange) { (result, flags, stop) -> Void in
             let matchedRange = result!.range.offset(by: offset)
