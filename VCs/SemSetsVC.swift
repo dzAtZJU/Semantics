@@ -33,7 +33,7 @@ class SemSetsVC: UIViewController {
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    private lazy var menuInteraction = UIContextMenuInteraction(delegate: self)
+    // MARK: VC
     
     override func loadView() {
         tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
@@ -54,7 +54,6 @@ class SemSetsVC: UIViewController {
         
         tabelView.delegate = self
         tabelView.dataSource = self
-        tabelView.addInteraction(menuInteraction)
         fetchedResultsController.delegate = self
     }
     
@@ -63,7 +62,9 @@ class SemSetsVC: UIViewController {
         tabelView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         super.viewWillAppear(animated)
     }
-    
+}
+
+extension SemSetsVC {
     private func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
         let word = fetchedResultsController.object(at: indexPath)
         cell.accessoryType = .disclosureIndicator
@@ -113,6 +114,29 @@ extension SemSetsVC: UITableViewDataSource {
             managedObjectContext.delete(self.fetchedResultsController.object(at: indexPath))
         default:
             fatalError()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let word = self.fetchedResultsController.object(at: indexPath)
+        guard let name = word.name else {
+            return nil
+        }
+        let size = tabelView.cellForRow(at: indexPath)!.frame.size
+        return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: { () -> UIViewController? in
+            let textView = SemTextView(frame: .init(origin: .zero, size: size))
+            textView.text = name.appending(neighborWords: Set(word.neighborWordsName))
+            let vc = UIViewController()
+            vc.view.addSubview(textView)
+            vc.preferredContentSize = size
+            return vc
+        })
+    }
+    
+    func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        if let indexPath = configuration.identifier as? NSIndexPath {
+           let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath as IndexPath), title: nil)
+            show(detailVC, sender: nil)
         }
     }
 }
@@ -167,16 +191,5 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tabelView.endUpdates()
-    }
-}
-
-extension SemSetsVC: UIContextMenuInteractionDelegate {
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        UIContextMenuConfiguration(identifier: nil, previewProvider: { [weak self] () -> UIViewController? in
-            guard let indexPath = self?.tabelView.indexPathForRow(at: location) else {
-                return nil
-            }
-            return SemSetVC(word: self?.fetchedResultsController.object(at: indexPath), title: nil)
-        })
     }
 }
