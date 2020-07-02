@@ -79,9 +79,10 @@ class SemSetVC: UIViewController {
     deinit {
         task?.cancel()
     }
-   
+    
     override func loadView() {
         view = UIView()
+        view.backgroundColor = .black
         view.addSubview(background)
         view.addSubview(nameField)
         view.addSubview(addButton)
@@ -94,7 +95,7 @@ class SemSetVC: UIViewController {
         if word.subWords != nil, word.subWords!.capacity > 0 {
             var index = 0
             Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
-                self.constructSubwordVC(self.word.subWords![index])
+                self.show(SemSetSubwordVC(text: self.word.subWords![index], delegate: self), sender: self)
                 index += 1
                 if index == self.word.subWords!.endIndex {
                     timer.invalidate()
@@ -122,33 +123,41 @@ class SemSetVC: UIViewController {
         appDelegate.saveContext()
     }
     
+    override func show(_ vc: UIViewController, sender: Any?) {
+        guard let subwordVC = vc as? SemSetSubwordVC else {
+            super.show(vc, sender: sender)
+            return
+        }
+        
+        addChild(subwordVC)
+        subwordVC.view.frame = .init(origin: .init(x: Int.random(in: 90...280), y: -180), size: .init(width: 180, height: 180))
+        view.addSubview(subwordVC.view)
+        subwordVC.didMove(toParent: self)
+        subwordVC.view.alpha = 0
+        
+        UIView.animate(withDuration: 2.5) {
+            subwordVC.view.alpha = 1
+        }
+        
+        let item = EclipseCollisionBoundsWrapper(subwordVC.view)
+        subwordVC.dynamicItem = item
+        gravity.addItem(item)
+        collision.addItem(item)
+    }
+    
     var push: UIPushBehavior!
     
     @objc func addSubWord() {
         if word.subWords == nil {
             word.subWords = [String]()
         }
-
+        
         guard word.subWords!.count < 5 else {
             return
         }
-
+        
         word.subWords!.append(Self.hintText)
-        constructSubwordVC(Self.hintText)
-    }
-    
-    func constructSubwordVC(_ text: String) {
-        let vc = SemSetSubwordVC(text: text, delegate: self)
-        
-        addChild(vc)
-        vc.view.frame = .init(origin: .init(x: Int.random(in: 90...280), y: -180), size: .init(width: 180, height: 180))
-        view.addSubview(vc.view)
-        vc.didMove(toParent: self)
-        
-        let item = EclipseCollisionBoundsWrapper(vc.view)
-        vc.dynamicItem = item
-        gravity.addItem(item)
-        collision.addItem(item)
+        show(SemSetSubwordVC(text: Self.hintText, delegate: self), sender: self)
     }
     
     private func updateBackground() {
@@ -157,7 +166,7 @@ class SemSetVC: UIViewController {
             if self == nil {
                 return
             }
-
+            
             guard NetworkSpace.validate(error: error, response: response) else {
                 return
             }

@@ -53,6 +53,7 @@
 		8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */; };
 		8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
+		89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */ = {isa = PBXBuildFile; productRef = 89C28CFD24ADC22E002081FE /* SwiftHEXColors */; };
 		89D8F3F52474EBA000D12F15 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3F42474EBA000D12F15 /* CircleImage.swift */; };
 		89D8F3F72474F1BF00D12F15 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3F62474F1BF00D12F15 /* MapView.swift */; };
 		89D8F3FD247504AE00D12F15 /* LandmarkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3FC247504AE00D12F15 /* LandmarkRow.swift */; };
@@ -237,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */,
 				896344B224936E210060160B /* Kingfisher in Frameworks */,
 				8964219F2472BF4D0081DC87 /* CloudKit.framework in Frameworks */,
 				896344B424936E210060160B /* KingfisherSwiftUI in Frameworks */,
@@ -570,6 +572,7 @@
 			packageProductDependencies = (
 				896344B124936E210060160B /* Kingfisher */,
 				896344B324936E210060160B /* KingfisherSwiftUI */,
+				89C28CFD24ADC22E002081FE /* SwiftHEXColors */,
 			);
 			productName = Semantics;
 			productReference = 89642171247250590081DC87 /* Semantics.app */;
@@ -630,6 +633,7 @@
 			mainGroup = 89642168247250590081DC87;
 			packageReferences = (
 				896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */,
 			);
 			productRefGroup = 89642172247250590081DC87 /* Products */;
 			projectDirPath = "";
@@ -1261,6 +1265,14 @@
 				minimumVersion = 5.14.0;
 			};
 		};
+		89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/thii/SwiftHEXColors.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1273,6 +1285,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
+		};
+		89C28CFD24ADC22E002081FE /* SwiftHEXColors */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */;
+			productName = SwiftHEXColors;
 		};
 /* End XCSwiftPackageProductDependency section */
 
