@@ -20,6 +20,16 @@ class SemSetVC: UIViewController {
         let tmp = UIImageView()
         tmp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tmp.contentMode = .scaleAspectFill
+        
+        let xMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
+        xMotionEffect.minimumRelativeValue = -10
+        xMotionEffect.maximumRelativeValue = 10
+        let yMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
+        yMotionEffect.minimumRelativeValue = -10
+        yMotionEffect.maximumRelativeValue = 10
+        let group = UIMotionEffectGroup()
+        group.motionEffects = [xMotionEffect, yMotionEffect]
+        tmp.addMotionEffect(group)
         return tmp
     }()
     
@@ -55,6 +65,10 @@ class SemSetVC: UIViewController {
     
     private var task: URLSessionDataTask?
     
+    lazy private var rootView2VC = [UIView: SemSetSubwordVC]()
+    
+    lazy private var runningAnimators = [UIViewPropertyAnimator]()
+    
     init(word word_: Word?, title: String?) {
         super.init(nibName: nil, bundle: nil)
         
@@ -80,6 +94,8 @@ class SemSetVC: UIViewController {
         task?.cancel()
     }
     
+    // MARK: Override
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = .black
@@ -95,7 +111,7 @@ class SemSetVC: UIViewController {
         if word.subWords != nil, word.subWords!.capacity > 0 {
             var index = 0
             Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
-                self.show(SemSetSubwordVC(text: self.word.subWords![index], delegate: self), sender: self)
+                self.addSubwordVC(SemSetSubwordVC(text: self.word.subWords![index], delegate: self))
                 index += 1
                 if index == self.word.subWords!.endIndex {
                     timer.invalidate()
@@ -129,24 +145,62 @@ class SemSetVC: UIViewController {
             return
         }
         
+        //
         addChild(subwordVC)
         subwordVC.view.frame = .init(origin: .init(x: Int.random(in: 90...280), y: -180), size: .init(width: 180, height: 180))
         view.addSubview(subwordVC.view)
         subwordVC.didMove(toParent: self)
-        subwordVC.view.alpha = 0
         
+        //
+        subwordVC.view.alpha = 0
         UIView.animate(withDuration: 2.5) {
             subwordVC.view.alpha = 1
         }
         
+        //
         let item = EclipseCollisionBoundsWrapper(subwordVC.view)
         subwordVC.dynamicItem = item
         gravity.addItem(item)
         collision.addItem(item)
+        
+        subwordVC.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(subwordPanned)))
+    }
+}
+
+// MARK: Manage
+extension SemSetVC {
+    private func addSubwordVC(_ semSetSubwordVC: SemSetSubwordVC) {
+        rootView2VC[semSetSubwordVC.view] = semSetSubwordVC
+        show(semSetSubwordVC, sender: self)
     }
     
-    var push: UIPushBehavior!
-    
+    private func removeSubwordVC(_ semSetSubwordVC: SemSetSubwordVC) {
+        rootView2VC[semSetSubwordVC.view] = nil
+        
+        semSetSubwordVC.willMove(toParent: nil)
+        
+        animator.behaviors.forEach {
+            switch $0 {
+            case let gravity as UIGravityBehavior:
+                gravity.removeItem(semSetSubwordVC.dynamicItem!)
+            case let collision as UICollisionBehavior:
+                collision.removeItem(semSetSubwordVC.dynamicItem!)
+            default:
+                fatalError()
+            }
+        }
+        
+        semSetSubwordVC.view.removeFromSuperview()
+        semSetSubwordVC.removeFromParent()
+        
+        word.subWords?.removeAll {
+            $0 == semSetSubwordVC.subwordName
+        }
+    }
+}
+
+// MARK: User Interaction
+extension SemSetVC {
     @objc func addSubWord() {
         if word.subWords == nil {
             word.subWords = [String]()
@@ -157,9 +211,50 @@ class SemSetVC: UIViewController {
         }
         
         word.subWords!.append(Self.hintText)
-        show(SemSetSubwordVC(text: Self.hintText, delegate: self), sender: self)
+        addSubwordVC(SemSetSubwordVC(text: Self.hintText, delegate: self))
     }
     
+    @objc func subwordPanned(gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            animate(gesture.view!)
+        case .changed:
+            let translation = gesture.translation(in: gesture.view!)
+            let fraction = abs(translation.y / view.bounds.height)
+            runningAnimators.forEach { animator in
+                animator.fractionComplete = fraction
+            }
+        case .ended:
+            print("v \(gesture.velocity(in: gesture.view!).y)")
+            let shouldReverse = gesture.velocity(in: gesture.view!).y > -2000 && gesture.translation(in: gesture.view!).y > -240
+            runningAnimators.forEach {
+                $0.isReversed = shouldReverse
+            }
+            runningAnimators.forEach { $0.continueAnimation(withTimingParameters: nil, durationFactor: 0) }
+
+        default:
+            return
+        }
+    }
+    
+    private func animate(_ rootView: UIView) {
+        let animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: nil)
+        let dynamicItem = rootView2VC[rootView]!.dynamicItem!
+        animator.addAnimations {
+            rootView.center.y = -200
+        }
+        animator.addCompletion { position in
+            if position == .end {
+                self.removeSubwordVC(self.rootView2VC[rootView]!)
+            }
+            self.runningAnimators.removeAll()
+        }
+        runningAnimators.append(animator)
+    }
+}
+
+// Mark: Network
+extension SemSetVC {
     private func updateBackground() {
         task?.cancel()
         task = URLSession.shared.dataTask(with: NetworkSpace.bgImageQueryingURL(forWord: word.name!)) { [weak self] (data, response, error) in
@@ -216,28 +311,6 @@ extension SemSetVC: SemTextViewDelegate {
 }
 
 extension SemSetVC: SemSetSubwordVCDelegate {
-    func removeIt(_ semSetSubwordVC: SemSetSubwordVC, text: String) {
-        semSetSubwordVC.willMove(toParent: nil)
-        
-        animator.behaviors.forEach {
-            switch $0 {
-            case let gravity as UIGravityBehavior:
-                gravity.removeItem(semSetSubwordVC.dynamicItem!)
-            case let collision as UICollisionBehavior:
-                collision.removeItem(semSetSubwordVC.dynamicItem!)
-            default:
-                fatalError()
-            }
-        }
-        
-        semSetSubwordVC.view.removeFromSuperview()
-        semSetSubwordVC.removeFromParent()
-        
-        word.subWords?.removeAll {
-            $0 == text
-        }
-    }
-    
     func upadteSubword(oldText: String, newText: String) {
         if let index = word.subWords?.firstIndex(of: oldText) {
             word.subWords?[index] = newText

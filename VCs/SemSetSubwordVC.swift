@@ -10,8 +10,6 @@ import SwiftUI
 import UIKit
 
 protocol SemSetSubwordVCDelegate: class {
-    func removeIt(_ semSetSubwordVC: SemSetSubwordVC, text: String)
-    
     func upadteSubword(oldText: String, newText: String)
 }
 
@@ -21,7 +19,12 @@ class SemSetSubwordVC: UIHostingController<TextOnCircle> {
     
     var dynamicItem: UIDynamicItem? = nil
     
+    var subwordName: String {
+        rootView.editedText
+    }
+    
     init(text: String, delegate delegate_: SemSetSubwordVCDelegate) {
+        
         delegate = delegate_
         super.init(rootView: TextOnCircle(text,
                                           onCommit: { (oldText, newText) in
@@ -35,17 +38,5 @@ class SemSetSubwordVC: UIHostingController<TextOnCircle> {
     
     override func viewWillAppear(_ animated: Bool) {
         view.backgroundColor = nil
-        
-        let swipe = UISwipeGestureRecognizer(target: self, action: #selector(Self.textOnCircleSwiped))
-        swipe.direction = .up
-        view.addGestureRecognizer(swipe)
-    }
-    
-    @objc func textOnCircleSwiped() {
-        UIView.animate(withDuration: 0.25, animations: {
-            self.view.transform = CGAffineTransform(translationX: 0, y: -1000)
-        }) { _ in
-            self.delegate.removeIt(self, text: self.rootView.editedText)
-        }
     }
 }
