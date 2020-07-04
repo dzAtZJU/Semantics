@@ -53,9 +53,11 @@ class SemSetVC: UIViewController {
         return tmp
     }()
     
-    lazy var animator = UIDynamicAnimator(referenceView: view)
-    lazy var gravity = UIGravityBehavior()
-    lazy var collision: UICollisionBehavior = UICollisionBehavior()
+    private lazy var animator = UIDynamicAnimator(referenceView: view)
+    private lazy var gravity = UIGravityBehavior()
+    private lazy var collision = UICollisionBehavior()
+    private var dynamic: UIDynamicItemBehavior!
+    private var attatchment: UIAttachmentBehavior!
     
     var delegate: SemSetVCDelegate?
     
@@ -186,7 +188,7 @@ extension SemSetVC {
             case let collision as UICollisionBehavior:
                 collision.removeItem(semSetSubwordVC.dynamicItem!)
             default:
-                fatalError()
+                break
             }
         }
         
@@ -217,39 +219,33 @@ extension SemSetVC {
     @objc func subwordPanned(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
-            animate(gesture.view!)
+            let dynamicItem = rootView2VC[gesture.view!]!.dynamicItem!
+            attatchment = UIAttachmentBehavior(item: dynamicItem, offsetFromCenter: .zero, attachedToAnchor: gesture.location(in: gesture.view!.superview!))
+            animator.addBehavior(attatchment)
         case .changed:
-            let translation = gesture.translation(in: gesture.view!)
-            let fraction = abs(translation.y / view.bounds.height)
-            runningAnimators.forEach { animator in
-                animator.fractionComplete = fraction
-            }
+            attatchment.anchorPoint = gesture.location(in: gesture.view!.superview!)
         case .ended:
-            print("v \(gesture.velocity(in: gesture.view!).y)")
-            let shouldReverse = gesture.velocity(in: gesture.view!).y > -2000 && gesture.translation(in: gesture.view!).y > -240
-            runningAnimators.forEach {
-                $0.isReversed = shouldReverse
+            animator.removeBehavior(attatchment)
+            let velocity = gesture.velocity(in: gesture.view!.superview!)
+            guard velocity.y < 0 else {
+                return
             }
-            runningAnimators.forEach { $0.continueAnimation(withTimingParameters: nil, durationFactor: 0) }
-
+            let dynamicItem = rootView2VC[gesture.view!]!.dynamicItem!
+            dynamic = UIDynamicItemBehavior(items: [dynamicItem])
+            dynamic.action = {
+                guard let superview = gesture.view!.superview else {
+                    return
+                }
+                if !superview.bounds.intersects(gesture.view!.frame) {
+                    self.animator.removeBehavior(self.dynamic)
+                    self.removeSubwordVC(self.rootView2VC[gesture.view!]!)
+                }
+            }
+            dynamic.addLinearVelocity(.init(x: 0, y: velocity.y), for: dynamicItem)
+            animator.addBehavior(dynamic)
         default:
             return
         }
-    }
-    
-    private func animate(_ rootView: UIView) {
-        let animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeInOut, animations: nil)
-        let dynamicItem = rootView2VC[rootView]!.dynamicItem!
-        animator.addAnimations {
-            rootView.center.y = -200
-        }
-        animator.addCompletion { position in
-            if position == .end {
-                self.removeSubwordVC(self.rootView2VC[rootView]!)
-            }
-            self.runningAnimators.removeAll()
-        }
-        runningAnimators.append(animator)
     }
 }
 
