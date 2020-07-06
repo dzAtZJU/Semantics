@@ -23,26 +23,41 @@ struct SemSetsVCView: UIViewControllerRepresentable {
 
 class SemSetsVC: UIViewController {
     
-    private var tabelView: UITableView!
+    private var table: UITableView!
     
     private static let CellIdentifier = "SemSetsVC.Cell"
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
+        request.predicate = NSPredicate(format: "isArchived == %@", NSNumber(booleanLiteral: false))
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.name, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
+    
+    private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarAddButttonTapped))
+    
+    private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(rightBarCancelButttonTapped))
+    
+    private lazy var actionBar: [UIBarButtonItem] = {
+        [UIBarButtonItem(title: "Archive", style: .done, target: self, action: #selector(archiveButtonTapped)),
+         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+         UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashButtonTapped))]
+    }()
+    
+    private var isInMultiSelection = false
     
     // MARK: VC
     
     override func loadView() {
         tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(Self.rightBarButttonTapped))
+        navigationItem.rightBarButtonItem = addButton
         navigationItem.title = "Dictionary"
         
         view = UIView()
-        tabelView = UITableView(frame: .zero, style: .insetGrouped)
-        view.addSubview(tabelView)
+        table = UITableView(frame: .zero, style: .insetGrouped)
+        table.allowsSelection = true
+        table.allowsMultipleSelectionDuringEditing = true
+        view.addSubview(table)
     }
     
     override func viewDidLoad() {
@@ -52,14 +67,14 @@ class SemSetsVC: UIViewController {
             fatalError("\(error)")
         }
         
-        tabelView.delegate = self
-        tabelView.dataSource = self
+        table.delegate = self
+        table.dataSource = self
         fetchedResultsController.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tabelView.frame = view.bounds
-        tabelView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        table.frame = view.bounds
+        table.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         super.viewWillAppear(animated)
     }
 }
@@ -68,16 +83,11 @@ extension SemSetsVC {
     private func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
         let word = fetchedResultsController.object(at: indexPath)
         cell.accessoryType = .disclosureIndicator
-        cell.showsReorderControl = true
         cell.textLabel!.text = word.name
         cell.detailTextLabel?.text = ""
         if word.hasNeighborWords {
             cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: SyntaxHighlight.noteLinkInnerColor)
         }
-    }
-    
-    @objc private func rightBarButttonTapped() {
-        show(SemSetVC(word: nil, title: nil), sender: nil)
     }
 }
 
@@ -91,7 +101,7 @@ extension SemSetsVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tabelView.dequeueReusableCell(withIdentifier: Self.CellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: Self.CellIdentifier)
+        let cell = table.dequeueReusableCell(withIdentifier: Self.CellIdentifier) ?? UITableViewCell(style: .value1, reuseIdentifier: Self.CellIdentifier)
         configureCell(cell, at: indexPath)
         return cell
     }
@@ -122,7 +132,7 @@ extension SemSetsVC: UITableViewDataSource {
         guard let name = word.name else {
             return nil
         }
-        let size = tabelView.cellForRow(at: indexPath)!.frame.size
+        let size = table.cellForRow(at: indexPath)!.frame.size
         return UIContextMenuConfiguration(identifier: indexPath as NSIndexPath, previewProvider: { () -> UIViewController? in
             let textView = SemTextView(frame: .init(origin: .zero, size: size))
             textView.text = name.appending(neighborWords: Set(word.neighborWordsName))
@@ -135,7 +145,7 @@ extension SemSetsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         if let indexPath = configuration.identifier as? NSIndexPath {
-           let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath as IndexPath), title: nil)
+            let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath as IndexPath), title: nil)
             show(detailVC, sender: nil)
         }
     }
@@ -143,8 +153,11 @@ extension SemSetsVC: UITableViewDataSource {
 
 extension SemSetsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath), title: nil)
-        show(detailVC, sender: nil)
+        guard isInMultiSelection else {
+            let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath), title: nil)
+            show(detailVC, sender: nil)
+            return
+        }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -153,19 +166,36 @@ extension SemSetsVC: UITableViewDelegate {
             completion(true)
         })])
     }
+    
+    func tableView(_ tableView: UITableView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        true
+    }
+    
+    func tableView(_ tableView: UITableView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        guard !isInMultiSelection else {
+            return
+        }
+        isInMultiSelection = true
+        
+        table.setEditing(true, animated: true)
+        
+        navigationItem.setRightBarButton(cancelButton, animated: true)
+        setToolbarItems(actionBar, animated: true)
+        navigationController!.setToolbarHidden(false, animated: true)
+    }
 }
 
 extension SemSetsVC: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tabelView.beginUpdates()
+        table.beginUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
         case .insert:
-            tabelView.insertSections(IndexSet([sectionIndex]), with: .fade)
+            table.insertSections(IndexSet([sectionIndex]), with: .fade)
         case .delete:
-            tabelView.deleteSections(IndexSet([sectionIndex]), with: .fade)
+            table.deleteSections(IndexSet([sectionIndex]), with: .fade)
         default:
             fatalError()
         }
@@ -175,21 +205,71 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
-                tabelView.insertRows(at: [newIndexPath], with: .fade)
+                table.insertRows(at: [newIndexPath], with: .fade)
             }
         case .delete:
-            tabelView.deleteRows(at: [indexPath!], with: .fade)
+            table.deleteRows(at: [indexPath!], with: .fade)
         case .update:
-            tabelView.reloadRows(at: [indexPath!], with: .automatic)
+            table.reloadRows(at: [indexPath!], with: .automatic)
         case .move:
-            tabelView.deleteRows(at: [indexPath!], with: .fade)
-            tabelView.insertRows(at: [newIndexPath!], with: .fade)
+            table.deleteRows(at: [indexPath!], with: .fade)
+            table.insertRows(at: [newIndexPath!], with: .fade)
         default:
             fatalError()
         }
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tabelView.endUpdates()
+        table.endUpdates()
+    }
+}
+
+// MARK: Interaction
+extension SemSetsVC {
+    @objc private func rightBarAddButttonTapped() {
+        show(SemSetVC(word: nil, title: nil), sender: nil)
+    }
+    
+    @objc private func rightBarCancelButttonTapped() {
+        endMultipleSelection()
+    }
+    
+    @objc private func archiveButtonTapped() {
+        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
+            self.fetchedResultsController.object(at: indexPath)
+        }) {
+            managedObjectContext.perform {
+                selectedWords.forEach {
+                    $0.isArchived = true
+                }
+            }
+            
+        }
+        
+        endMultipleSelection()
+    }
+    
+    @objc private func trashButtonTapped() {
+        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
+            self.fetchedResultsController.object(at: indexPath)
+        }) {
+            managedObjectContext.perform {
+                selectedWords.forEach {
+                    self.managedObjectContext.delete($0)
+                }
+            }
+            
+        }
+        
+        endMultipleSelection()
+    }
+    
+    private func endMultipleSelection() {
+        isInMultiSelection = false
+        table.setEditing(false, animated: true)
+        
+        navigationItem.setRightBarButton(addButton, animated: true)
+        setToolbarItems(nil, animated: true)
+        navigationController!.setToolbarHidden(true, animated: true)
     }
 }
