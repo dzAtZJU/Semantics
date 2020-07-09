@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CloudKit
 import Foundation
 import Iconic
 import Highcharts
@@ -78,5 +79,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    // MARK: CloudKit
+    
+//    lazy var publicContainer = CKContainer(identifier: "iCloud.ind.paper.semantics")
 
 }

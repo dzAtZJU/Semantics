@@ -11,9 +11,14 @@ import Highcharts
 
 class WordsGraphVC: UIViewController {
     
-    var chartView: HIChartView!
+    private var chartView: HIChartView!
+    
+    // MARK: VC
     
     override func loadView() {
+        view = UIView()
+        view.backgroundColor = .systemBackground
+        
         let chart = HIChart()
         chart.type = "networkgraph"
         chart.panning = HIPanning()
@@ -53,15 +58,11 @@ class WordsGraphVC: UIViewController {
         chartView.plugins = ["networkgraph"]
         chartView.options = options
         
-        view = UIView()
         view.addSubview(chartView)
         
         
         tabBarItem = UITabBarItem(title: "Graph", image: UIImage(named: "graph"), selectedImage: nil)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        chartView.frame = view.bounds
+        navigationItem.title = "Graph"
     }
     
     override func viewDidLoad() {
@@ -69,6 +70,22 @@ class WordsGraphVC: UIViewController {
         updateGraph()
     }
     
+    override func viewSafeAreaInsetsDidChange() {
+        chartView.frame = view.bounds.inset(by: view.safeAreaInsets)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.title = "Graph"
+        tabBarController?.navigationItem.title = "Graph"
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+}
+
+// MARK: Data
+extension WordsGraphVC {
     @objc private func updateGraph() {
         let graph = chartView.options.series.first! as! HINetworkgraph
         
@@ -82,9 +99,5 @@ class WordsGraphVC: UIViewController {
         } else {
             graph.setSeriesData(data, redraw: NSNumber(booleanLiteral: true))
         }
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 }

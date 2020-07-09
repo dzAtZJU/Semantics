@@ -11,16 +11,6 @@ import CoreData
 import SwiftUI
 import Iconic
 
-struct SemSetsVCView: UIViewControllerRepresentable {
-    
-    func updateUIViewController(_ uiViewController: SemSetsVC, context: Context) {
-    }
-    
-    func makeUIViewController(context: Context) -> SemSetsVC {
-        return SemSetsVC()
-    }
-}
-
 class SemSetsVC: UIViewController {
     
     private var table: UITableView!
@@ -29,7 +19,7 @@ class SemSetsVC: UIViewController {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSPredicate(format: "isArchived == %@", NSNumber(booleanLiteral: false))
+        request.predicate = NSPredicate(format: "isArchived == %@", NSNumber(booleanLiteral: isArchive))
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.name, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
@@ -39,25 +29,66 @@ class SemSetsVC: UIViewController {
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(rightBarCancelButttonTapped))
     
     private lazy var actionBar: [UIBarButtonItem] = {
-        [UIBarButtonItem(title: "Archive", style: .done, target: self, action: #selector(archiveButtonTapped)),
-         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-         UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(trashButtonTapped))]
+        var tmp = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(barButtonSystemItem: .trash, target: self, action:
+                #selector(trashButtonTapped))]
+        if !isArchive {
+            tmp.insert(UIBarButtonItem(title: "Archive", style: .done, target: self, action: #selector(archiveButtonTapped)), at: 0)
+        }
+        return tmp
+    }()
+    
+    private lazy var searchResultsVC: SearchResultsVC = {
+        let tmp = SearchResultsVC()
+        tmp.delegate = self
+        return tmp
+    }()
+    
+    private lazy var searchController: UISearchController = {
+        let tmp = UISearchController(searchResultsController: searchResultsVC)
+        tmp.delegate = self
+        tmp.searchResultsUpdater = self
+        tmp.searchBar.autocapitalizationType = .none
+        tmp.obscuresBackgroundDuringPresentation = false
+        tmp.searchBar.delegate = self
+        tmp.searchBar.scopeButtonTitles = []
+        
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        definesPresentationContext = true
+        
+        return tmp
     }()
     
     private var isInMultiSelection = false
     
+    private let isArchive: Bool
+    
+    init(isArchive isArchive_: Bool) {
+        isArchive = isArchive_
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: VC
     
     override func loadView() {
-        tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
-        navigationItem.rightBarButtonItem = addButton
-        navigationItem.title = "Dictionary"
-        
         view = UIView()
+        
         table = UITableView(frame: .zero, style: .insetGrouped)
         table.allowsSelection = true
         table.allowsMultipleSelectionDuringEditing = true
         view.addSubview(table)
+        
+        if !isArchive {
+            tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
+            navigationItem.rightBarButtonItem = addButton
+            navigationItem.title = "Dictionary"
+        }
     }
     
     override func viewDidLoad() {
@@ -70,11 +101,15 @@ class SemSetsVC: UIViewController {
         table.delegate = self
         table.dataSource = self
         fetchedResultsController.delegate = self
+        navigationItem.searchController = searchController
     }
     
     override func viewWillAppear(_ animated: Bool) {
         table.frame = view.bounds
         table.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        tabBarController?.title = "Dictionary"
+        
         super.viewWillAppear(animated)
     }
 }
@@ -271,5 +306,32 @@ extension SemSetsVC {
         navigationItem.setRightBarButton(addButton, animated: true)
         setToolbarItems(nil, animated: true)
         navigationController!.setToolbarHidden(true, animated: true)
+    }
+}
+
+// MARK: Search
+extension SemSetsVC: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, SearchResultsVCDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        let keys = searchController.searchBar.text!.trimmingCharacters(in: CharacterSet.whitespaces).components(separatedBy: " ") as [String]
+        let request: NSFetchRequest<Word> = Word.fetchRequest()
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates:
+            keys.map {
+                findMatches(key: $0)
+        })
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.name, ascending: true)]
+        do {
+            searchResultsVC.words = try managedObjectContext.fetch(request)
+        } catch {
+            fatalError()
+        }
+        
+    }
+    
+    func searchResultsVC(_ searchResultsVC: SearchResultsVC, didSelectWord word: Word) {
+        show(SemSetVC(word: word, title: nil), sender: self)
+    }
+    
+    private func findMatches(key: String) -> NSPredicate {
+        NSPredicate(format: "name CONTAINS %@", key)
     }
 }
