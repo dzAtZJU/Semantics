@@ -8,9 +8,9 @@
 
 import UIKit
 import UIKit.UIGestureRecognizerSubclass
-    
+
 protocol SemTextViewDelegate: UITextViewDelegate {
-        
+    
     func semTextView(_ semTextView: SemTextView, didTapNotelink link: String)
     
     func semTextView(_ semTextView: SemTextView, didAddNotelinks added: Set<String>, didRemoveNotelinks removed: Set<String>)
@@ -44,28 +44,56 @@ class SemTextView: UITextView {
     
     init(frame: CGRect) {
         let container = NSTextContainer()
-
-        let layoutManager = NSLayoutManager()
+        
+        let layoutManager = SemTextLayout()
         layoutManager.addTextContainer(container)
-
+        
         let storage = SemTextStorage()
         storage.addLayoutManager(layoutManager)
         
         super.init(frame: frame, textContainer: container)
         
+        layoutManager.delegate = self
         storage.delegate = self
         
         addGestureRecognizer(tap)
+        
+        inputAccessoryView  = {
+            let bullet = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(bulletTapped))
+            let verticalLine = UIBarButtonItem(image: UIImage(systemName: "increase.quotelevel"), style: .plain, target: self, action: #selector(verticalLineTapped))
+            let toolBar = UIToolbar()
+            toolBar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+            toolBar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), bullet, verticalLine]
+            return toolBar
+        }()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    @objc func tapped(sender: SemGestureRecognizer) {
-        if let touchedNotelinkCharIndex = sender.touchedNotelinkCharIndex, let link = semStorage.queryNoteLink(at: touchedNotelinkCharIndex) {
-            semDelegate?.semTextView(self, didTapNotelink: link)
+}
+
+extension SemTextView: NSLayoutManagerDelegate {
+    func layoutManager(_ layoutManager: NSLayoutManager, shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>, properties props: UnsafePointer<NSLayoutManager.GlyphProperty>, characterIndexes charIndexes: UnsafePointer<Int>, font aFont: UIFont, forGlyphRange glyphRange: NSRange) -> Int {
+        print("Glyph \(glyphRange)")
+        guard glyphRange.length >= 2 else {
+            return 0
         }
+        
+        if case let firstCharacter = textStorage.mutableString.character(at: charIndexes[0]),
+            firstCharacter == 0x3e || firstCharacter == 0x2a,
+            textStorage.mutableString.character(at: charIndexes[1]) == 0x20 {
+            var prop0 = props[0]
+            prop0.insert(.null)
+            var prop1 = props[1]
+            prop1.insert(.null)
+            [prop0, prop1].withUnsafeBufferPointer { pointer in
+                layoutManager.setGlyphs(glyphs, properties: pointer.baseAddress!, characterIndexes: charIndexes, font: aFont, forGlyphRange: NSRange(location: glyphRange.location, length: 2))
+            }
+            return 2
+        }
+        
+        return 0
     }
 }
 
@@ -78,92 +106,47 @@ extension SemTextView: SemTextStorageDelegate {
     }
 }
 
-class SemGestureRecognizer: UIGestureRecognizer {
-    private var trackedTouch : UITouch?
-    private(set) var touchedNotelinkCharIndex: Int?
-    
-    private var semTextView: SemTextView {
-        view as! SemTextView
+// MARK: Interaction
+extension SemTextView {
+    @objc func tapped(sender: SemGestureRecognizer) {
+        if let touchedNotelinkCharIndex = sender.touchedNotelinkCharIndex, let link = semStorage.queryNoteLink(at: touchedNotelinkCharIndex) {
+            semDelegate?.semTextView(self, didTapNotelink: link)
+        }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-        super.touchesBegan(touches, with: event)
-        
-        guard touches.count == 1 else {
-            state = .failed
+    @objc func bulletTapped() {
+        let paragraph = semStorage.mutableString.paragraphRange(for: selectedRange)
+        guard paragraph.length >= 2 else {
+            textStorage.replaceCharacters(in: paragraph.prefix(0), with: "* ")
             return
         }
         
-        if trackedTouch == nil {
-            trackedTouch = touches.first
-        } else {
-            touches.forEach {
-                if $0 != trackedTouch {
-                    ignore($0, for: event)
-                }
-            }
-        }
-        
-        let point = trackedTouch!.location(in: view)
-        let touchedGlyphIndex = semTextView.layoutManager.glyphIndex(for: point, in: semTextView.textContainer)
-        if semTextView.semStorage.queryNoteLink(at: touchedGlyphIndex) != nil {
-            let rect = semTextView.layoutManager.boundingRect(forGlyphRange: NSRange(location: touchedGlyphIndex, length: 1), in: semTextView.textContainer)
-            if rect.contains(point) {
-                touchedNotelinkCharIndex = touchedGlyphIndex
-                state = .possible
-                return
-            }
-            
-            
-        }
-        
-        state = .failed
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-        super.touchesMoved(touches, with: event)
-        
-        let newTouch = touches.first
-        guard newTouch == self.trackedTouch, touches.count == 1 else {
-           self.state = .failed
-           return
+        let headRange = paragraph.prefix(2)
+        switch semStorage.mutableString.substring(with: headRange) {
+        case "* ":
+            textStorage.replaceCharacters(in: headRange, with: "")
+        case "> ":
+            textStorage.replaceCharacters(in: headRange, with: "* ")
+        default:
+            textStorage.replaceCharacters(in: paragraph.prefix(0), with: "* ")
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-        super.touchesEnded(touches, with: event)
-        
-        guard state == .possible else {
-            state = .failed
+    @objc func verticalLineTapped() {
+        let paragraph = semStorage.mutableString.paragraphRange(for: selectedRange)
+        guard paragraph.length >= 2 else {
+            textStorage.replaceCharacters(in: paragraph.prefix(0), with: "> ")
             return
         }
         
-        let newTouch = touches.first
-        guard newTouch == self.trackedTouch, touches.count == 1 else {
-           self.state = .failed
-           return
+        let headRange = paragraph.prefix(2)
+        switch semStorage.mutableString.substring(with: headRange) {
+        case "> ":
+            textStorage.replaceCharacters(in: headRange, with: "")
+        case "* ":
+            textStorage.replaceCharacters(in: headRange, with: "> ")
+        default:
+            textStorage.replaceCharacters(in: paragraph.prefix(0), with: "> ")
         }
-        
-        let touchedCharacterIndex = semTextView.layoutManager.characterIndex(for: trackedTouch!.location(in: view), in: semTextView.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
-        if touchedCharacterIndex == touchedNotelinkCharIndex {
-            state = .recognized
-        } else {
-            state = .failed
-        }
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
-        super.touchesCancelled(touches, with: event)
-        
-        trackedTouch = nil
-        touchedNotelinkCharIndex = nil
-        state = .cancelled
-    }
-    
-    override func reset() {
-        super.reset()
-        
-        trackedTouch = nil
-        touchedNotelinkCharIndex = nil
     }
 }

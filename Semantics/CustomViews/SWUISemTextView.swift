@@ -31,7 +31,6 @@ struct SWUISemTextView: UIViewRepresentable {
         tmp.font = .preferredFont(forTextStyle: .title2)
         tmp.text = $editedText.wrappedValue
         tmp.backgroundColor = nil
-        tmp.returnKeyType = .done
         tmp.delegate = context.coordinator
         return tmp
     }
@@ -53,17 +52,26 @@ struct SWUISemTextView: UIViewRepresentable {
             self.parent = parent
         }
         
-        func textViewDidChange(_ textView: UITextView) {
-            parent.editedText = textView.text
-        }
-        
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            if text == "\n" {
-                textView.resignFirstResponder()
-                return true
+            guard text == "\n",
+                case let paragraph = textView.textStorage.mutableString.paragraphRange(for: range),
+                paragraph.length >= 2,
+                case let head = textView.textStorage.mutableString.substring(with: NSRange(location: paragraph.location, length: 2)),
+                head == "> " || head == "* " else {
+                    return true
             }
             
-            return true
+            if paragraph.length == 2 {
+                textView.textStorage.deleteCharacters(in: paragraph)
+            } else {
+                textView.insertText("\n")
+                textView.insertText(head)
+            }
+            return false
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            parent.editedText = textView.text
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {

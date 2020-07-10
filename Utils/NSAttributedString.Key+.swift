@@ -11,4 +11,6 @@ import Foundation
 extension NSAttributedString.Key {
     public static let notelink = NSAttributedString.Key(rawValue: "notlink")
     public static let iconName = NSAttributedString.Key(rawValue: "iconName")
+    public static let verticalLine = NSAttributedString.Key(rawValue: "verticalLine")
+    public static let bullet = NSAttributedString.Key(rawValue: "bullet")
 }

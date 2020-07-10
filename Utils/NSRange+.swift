@@ -16,4 +16,8 @@ extension NSRange {
     func offset(by: Int) -> NSRange {
         NSRange(location: location + by, length: length)
     }
+    
+    func prefix(_ len: Int) -> NSRange {
+        NSRange(location: location, length: len)
+    }
 }

@@ -11,7 +11,6 @@
 		66A40F737D45F299B37EE8AE /* Pods_Semantics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EB719F7E1C826A797E1EF6 /* Pods_Semantics.framework */; };
 		83F7BD526A39AE76A386B437 /* Pods_SemFilterControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */; };
 		892C63D0248661D100208446 /* SemTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63CF248661D100208446 /* SemTextStorage.swift */; };
-		892C63D22486630900208446 /* SyntaxHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SyntaxHighlight.swift */; };
 		892C63D524866A1000208446 /* NSRange+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D424866A1000208446 /* NSRange+.swift */; };
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
 		892C63E02487934300208446 /* SWUISemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DF2487934300208446 /* SWUISemTextView.swift */; };
@@ -54,6 +53,10 @@
 		8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */; };
 		8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAD924B3513200299595 /* SemFoldersVC.swift */; };
 		8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DADD24B45BE100299595 /* SearchResultsVC.swift */; };
+		8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE024B6F9BD00299595 /* SemTextLayout.swift */; };
+		8991DAE324B6FC7D00299595 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE224B6FC7D00299595 /* Theme.swift */; };
+		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
+		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
 		89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */ = {isa = PBXBuildFile; productRef = 89C28CFD24ADC22E002081FE /* SwiftHEXColors */; };
 		89D8F3F52474EBA000D12F15 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F3F42474EBA000D12F15 /* CircleImage.swift */; };
@@ -134,7 +137,7 @@
 		719DE19C61E5E26B128592F8 /* Pods-SemContentFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SemContentFilter.debug.xcconfig"; path = "Target Support Files/Pods-SemContentFilter/Pods-SemContentFilter.debug.xcconfig"; sourceTree = "<group>"; };
 		7A142CA0C9D80D637211EB83 /* Pods_SemContentFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemContentFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		892C63CF248661D100208446 /* SemTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextStorage.swift; sourceTree = "<group>"; };
-		892C63D12486630900208446 /* SyntaxHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlight.swift; sourceTree = "<group>"; };
+		892C63D12486630900208446 /* SemStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemStyle.swift; sourceTree = "<group>"; };
 		892C63D424866A1000208446 /* NSRange+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+.swift"; sourceTree = "<group>"; };
 		892C63DD24867F8700208446 /* SemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextView.swift; sourceTree = "<group>"; };
 		892C63DF2487934300208446 /* SWUISemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWUISemTextView.swift; sourceTree = "<group>"; };
@@ -182,6 +185,9 @@
 		8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		8991DAD924B3513200299595 /* SemFoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemFoldersVC.swift; sourceTree = "<group>"; };
 		8991DADD24B45BE100299595 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
+		8991DAE024B6F9BD00299595 /* SemTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextLayout.swift; sourceTree = "<group>"; };
+		8991DAE224B6FC7D00299595 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89D8F3F42474EBA000D12F15 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		89D8F3F62474F1BF00D12F15 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -281,9 +287,11 @@
 			isa = PBXGroup;
 			children = (
 				892C63CF248661D100208446 /* SemTextStorage.swift */,
-				892C63D12486630900208446 /* SyntaxHighlight.swift */,
+				8991DAE024B6F9BD00299595 /* SemTextLayout.swift */,
+				892C63D12486630900208446 /* SemStyle.swift */,
 				892C63DD24867F8700208446 /* SemTextView.swift */,
 				896344BE249F8F240060160B /* TextLoader.swift */,
+				89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */,
 			);
 			path = TextSystem;
 			sourceTree = "<group>";
@@ -291,6 +299,8 @@
 		892C63D3248669FF00208446 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */,
+				8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */,
 				892C63D424866A1000208446 /* NSRange+.swift */,
 				892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */,
 				892C6411248A0C2100208446 /* UIViewController+.swift */,
@@ -388,7 +398,6 @@
 		89642173247250590081DC87 /* Semantics */ = {
 			isa = PBXGroup;
 			children = (
-				8976AC67247BC79A00A7AD15 /* Utils */,
 				89D8F44F24766C7F00D12F15 /* CustomViews */,
 				89D8F44C2476639300D12F15 /* ListNavigation */,
 				89D8F44324754EBE00D12F15 /* Drawing */,
@@ -443,19 +452,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8976AC67247BC79A00A7AD15 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */,
-				8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
 		8991DADF24B5A77E00299595 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
 				89642185247250650081DC87 /* Info.plist */,
+				8991DAE224B6FC7D00299595 /* Theme.swift */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -837,7 +838,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89B953AC24B8568200472692 /* SemStyle.swift in Sources */,
 				89D8F44524754EDB00D12F15 /* HexagonParameters.swift in Sources */,
+				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				8962350B24920B110000ABCD /* SemContentFilterVC.swift in Sources */,
 				8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */,
@@ -846,13 +849,14 @@
 				8968B742247BB66600F746E2 /* TestView.swift in Sources */,
 				89D8F44224754E4500D12F15 /* Badge.swift in Sources */,
 				89D8F3F72474F1BF00D12F15 /* MapView.swift in Sources */,
+				8991DAE324B6FC7D00299595 /* Theme.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
 				892C6410248A09C600208446 /* SemSetsVC.swift in Sources */,
 				89D8F4202475094E00D12F15 /* LandmarkList.swift in Sources */,
 				896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */,
 				89D8F4012475050900D12F15 /* Data.swift in Sources */,
+				8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */,
 				8964219B247250B10081DC87 /* Model.swift in Sources */,
-				892C63D22486630900208446 /* SyntaxHighlight.swift in Sources */,
 				892C63E02487934300208446 /* SWUISemTextView.swift in Sources */,
 				8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,

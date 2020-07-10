@@ -1,5 +1,5 @@
 //
-//  SyntaxHighlight.swift
+//  SemStyle.swift
 //  Semantics
 //
 //  Created by Zhou Wei Ran on 2020/6/2.
@@ -29,8 +29,8 @@ struct SyntaxHighlight {
         try! NSRegularExpression(pattern: noteLinkAtEndRegxStr, options: [])
     }()
     // https://colorhunt.co/palette/196223
-    static let noteLinkColor = UIColor(hex: 0xf1c5c5)
-    static let noteLinkInnerColor = UIColor(hex: 0x8bcdcd)
+    static let noteLinkColor = UIColor(hex: 0xf1c5c5)!
+    static let noteLinkInnerColor = UIColor(hex: 0x8bcdcd)!
 }
 
 extension String {
@@ -42,5 +42,11 @@ extension String {
 struct SemanticReplacer {
     static let iconRegx = {
         try! NSRegularExpression(pattern: ":.+?:", options: [])
+    }()
+}
+
+struct SemStyle {
+    static let verticalLineOrBulletRegx = {
+        try! NSRegularExpression(pattern: "^(\\* )|(\\> )", options: [])
     }()
 }
