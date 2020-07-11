@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FontAwesomeIcon.register()
         
-        HIChartView.preload()
+//        HIChartView.preload()
         
         return true
     }

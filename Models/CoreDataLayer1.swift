@@ -115,4 +115,28 @@ struct CoreDataLayer1: CoreDataAccessor {
             deleteLink(oneEndWordName: oneEndWordName, theOtherEndWordName: theOtherEndWordName)
         }
     }
+    
+    func queryMinProximity() -> Int {
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.sortDescriptors = [NSSortDescriptor(key: "proximity", ascending: true)]
+        query.fetchLimit = 1
+        do {
+            let word = try managedObjectContext.fetch(query)
+            return Int(word.first?.proximity ?? 5)
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+    
+    func queryMaxProximity() -> Int {
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.sortDescriptors = [NSSortDescriptor(key: "proximity", ascending: false)]
+        query.fetchLimit = 1
+        do {
+            let word = try managedObjectContext.fetch(query)
+            return Int(word.first?.proximity ?? 5)
+        } catch {
+            fatalError("\(error)")
+        }
+    }
 }

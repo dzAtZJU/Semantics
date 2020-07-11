@@ -55,9 +55,9 @@ extension SemFoldersVC: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 0 {
 //            let tab = UITabBarController()
 //            tab.viewControllers = [SemSetsVC(isArchive: false), WordsGraphVC()]
-            show(SemSetsVC(isArchive: false), sender: self)
+            show(SemSetsVC(isArchive: false, proximity: 5), sender: self)
         } else if indexPath.row == 1 {
-            show(SemSetsVC(isArchive: true), sender: self)
+            show(SemSetsVC(isArchive: true, proximity: 5), sender: self)
         } else {
             fatalError()
         }

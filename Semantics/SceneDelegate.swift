@@ -13,7 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     
-    let testScene = WordsGraphVC()
+    private let closetVC = SemSetsVC(isArchive: false, proximity: CoreDataLayer1.shared.queryMinProximity())
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -33,10 +33,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             self.window = window
            
-//            window.rootViewController = semanticsScene
-            let nav = UINavigationController(rootViewController: SemFoldersVC())
-            nav.navigationBar.prefersLargeTitles = true
-            window.rootViewController = nav
+//            let nav = UINavigationController(rootViewController: SemFoldersVC())
+//            nav.navigationBar.prefersLargeTitles = true
+//            window.rootViewController = nav
+            
+//            window.rootViewController = SemSetVC(word: nil, title: nil)
+            
+            let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+            pageVC.setViewControllers([UINavigationController(rootViewController: closetVC)], direction: .forward, animated: false, completion: nil)
+            pageVC.dataSource = self
+            window.rootViewController = pageVC
+            
             window.makeKeyAndVisible()
         }
     }
@@ -75,29 +82,41 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-//extension SceneDelegate: UIPageViewControllerDataSource {
-//    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-//        if viewController == semanticsScene {
-//            return contentFilterScene
-//        } else {
-//            return semanticsScene
-//        }
-//    }
-//
-//    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-//        if viewController == contentFilterScene {
-//            return semanticsScene
-//        } else {
-//            return contentFilterScene
-//        }
-//    }
-    
-//    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-//        return 2
-//    }
-//
-//    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-//        return 0
-//    }
-//}
+extension SceneDelegate: UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        let origin = (viewController.children.first! as! SemSetsVC)
+        if let vcs = pageViewController.viewControllers, !vcs.isEmpty {
+            let first = vcs.first {
+                ($0.children.first as! SemSetsVC).proximity == origin.proximity - 1
+            }
+            if first != nil {
+                return first!
+            }
+        }
+        
+        if CoreDataLayer1.shared.queryMinProximity() < origin.proximity {
+            return UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: origin.proximity - 1))
+        }
+        
+        return nil
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        let origin = (viewController.children.first! as! SemSetsVC)
+       if let vcs = pageViewController.viewControllers, !vcs.isEmpty {
+           let first = vcs.first {
+            ($0.children.first as! SemSetsVC).proximity == origin.proximity + 1
+           }
+           if first != nil {
+               return first!
+           }
+       }
+       
+       if CoreDataLayer1.shared.queryMaxProximity() > origin.proximity {
+        return UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: origin.proximity + 1))
+       }
+       
+       return nil
+    }
+}
 

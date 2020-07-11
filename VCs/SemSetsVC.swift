@@ -19,7 +19,7 @@ class SemSetsVC: UIViewController {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSPredicate(format: "isArchived == %@", NSNumber(booleanLiteral: isArchive))
+        request.predicate = NSPredicate(format: "isArchived == %@ && proximity == %@", NSNumber(booleanLiteral: isArchive), NSNumber(integerLiteral: proximity))
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.name, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
@@ -65,8 +65,11 @@ class SemSetsVC: UIViewController {
     
     private let isArchive: Bool
     
-    init(isArchive isArchive_: Bool) {
+    let proximity: Int
+    
+    init(isArchive isArchive_: Bool, proximity proximity_: Int) {
         isArchive = isArchive_
+        proximity = proximity_
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -102,6 +105,19 @@ class SemSetsVC: UIViewController {
         table.dataSource = self
         fetchedResultsController.delegate = self
         navigationItem.searchController = searchController
+        
+        if let parent = parent?.parent as? UIPageViewController {
+            let scrollView = parent.view.subviews.first {
+                $0 is UIScrollView
+            } as! UIScrollView
+            table.gestureRecognizers?.forEach { recognizer in
+                let name = String(describing: type(of: recognizer))
+                guard name == "_UISwipeActionPanGestureRecognizer" else {
+                    return
+                }
+                scrollView.panGestureRecognizer.require(toFail: recognizer)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -195,9 +211,16 @@ extension SemSetsVC: UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Push", handler: { (_, _, completion) in
+            self.fetchedResultsController.object(at: indexPath).proximity += 1
+            completion(true)
+        })])
+    }
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        UISwipeActionsConfiguration(actions: [UIContextualAction(style: .destructive, title: "Delete", handler: { (_, _, completion) in
-            self.managedObjectContext.delete(self.fetchedResultsController.object(at: indexPath))
+        UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Pull", handler: { (_, _, completion) in
+            self.fetchedResultsController.object(at: indexPath).proximity -= 1
             completion(true)
         })])
     }
@@ -262,7 +285,8 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
 // MARK: Interaction
 extension SemSetsVC {
     @objc private func rightBarAddButttonTapped() {
-        show(SemSetVC(word: nil, title: nil), sender: nil)
+        let vc = SemSetVC(word: nil, title: nil, proximity: proximity)
+        show(vc, sender: nil)
     }
     
     @objc private func rightBarCancelButttonTapped() {

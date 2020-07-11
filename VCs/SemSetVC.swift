@@ -71,7 +71,7 @@ class SemSetVC: UIViewController {
     
     lazy private var runningAnimators = [UIViewPropertyAnimator]()
     
-    init(word word_: Word?, title: String?) {
+    init(word word_: Word?, title: String?, proximity: Int = 5) {
         super.init(nibName: nil, bundle: nil)
         
         if let word_ = word_ {
@@ -85,6 +85,7 @@ class SemSetVC: UIViewController {
         
         if word == nil {
             word = Word(context: managedObjectContext)
+            word.proximity = Int16(proximity)
         }
     }
     

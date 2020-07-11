@@ -9,5 +9,4 @@
 import UIKit
 import CoreData
 
-extension UIViewController: CoreDataAccessor {
-}
+extension UIViewController: CoreDataAccessor {}
