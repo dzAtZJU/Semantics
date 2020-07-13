@@ -16,6 +16,9 @@ protocol SemSetVCDelegate {
 }
 
 class SemSetVC: UIViewController {
+    private static let fallingDuration = 0.3
+    private static let fadeInDuration = 2.5
+    
     lazy var background: UIImageView = {
         let tmp = UIImageView()
         tmp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -38,9 +41,8 @@ class SemSetVC: UIViewController {
         tmp.text = word.name?.appending(neighborWords: Set(word.neighborWordsName))
         tmp.font = UIFont.preferredFont(forTextStyle: .title3)
         
-        tmp.backgroundColor = .lightGray
-        tmp.alpha = 0.7
-        tmp.textColor = .white
+        tmp.backgroundColor = .systemFill
+        tmp.textColor = .label
         tmp.autoresizingMask = [.flexibleBottomMargin, .flexibleWidth]
         tmp.delegate = self
         return tmp
@@ -101,7 +103,7 @@ class SemSetVC: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .systemBackground
         view.addSubview(background)
         view.addSubview(nameField)
         view.addSubview(addButton)
@@ -113,7 +115,7 @@ class SemSetVC: UIViewController {
         
         if word.subWords != nil, word.subWords!.capacity > 0 {
             var index = 0
-            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
+            Timer.scheduledTimer(withTimeInterval: Self.fallingDuration, repeats: true) { timer in
                 self.addSubwordVC(SemSetSubwordVC(text: self.word.subWords![index], delegate: self))
                 index += 1
                 if index == self.word.subWords!.endIndex {
@@ -156,7 +158,7 @@ class SemSetVC: UIViewController {
         
         //
         subwordVC.view.alpha = 0
-        UIView.animate(withDuration: 2.5) {
+        UIView.animate(withDuration: Self.fadeInDuration) {
             subwordVC.view.alpha = 1
         }
         
@@ -167,6 +169,42 @@ class SemSetVC: UIViewController {
         collision.addItem(item)
         
         subwordVC.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(subwordPanned)))
+    }
+}
+
+// Adaptive
+extension SemSetVC {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        animator.removeAllBehaviors()
+        coordinator.animate(alongsideTransition: { (context) in
+            self.rootView2VC.keys.forEach {
+                $0.center.y = size.height + 90
+                $0.alpha = 0
+            }
+        }, completion: { (context) in
+            self.animator.addBehavior(self.gravity)
+            self.animator.addBehavior(self.collision)
+            var index = self.gravity.items.count - 1
+            Timer.scheduledTimer(withTimeInterval: Self.fallingDuration, repeats: true) { (timer) in
+                guard index >= 0 else {
+                    timer.invalidate()
+                    return
+                }
+                
+                let item = self.gravity.items[index] as! EclipseCollisionBoundsWrapper
+                item.center = CGPoint(x: Int.random(in: 90...Int(size.width-90)), y: -180)
+                self.animator.updateItem(usingCurrentState: item)
+                UIView.animate(withDuration: Self.fadeInDuration) {
+                    item.view.alpha = 1
+                }
+                
+                index -= 1
+            }
+        })
     }
 }
 

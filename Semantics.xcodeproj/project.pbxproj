@@ -54,7 +54,6 @@
 		8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAD924B3513200299595 /* SemFoldersVC.swift */; };
 		8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DADD24B45BE100299595 /* SearchResultsVC.swift */; };
 		8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE024B6F9BD00299595 /* SemTextLayout.swift */; };
-		8991DAE324B6FC7D00299595 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE224B6FC7D00299595 /* Theme.swift */; };
 		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
@@ -186,7 +185,6 @@
 		8991DAD924B3513200299595 /* SemFoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemFoldersVC.swift; sourceTree = "<group>"; };
 		8991DADD24B45BE100299595 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
 		8991DAE024B6F9BD00299595 /* SemTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextLayout.swift; sourceTree = "<group>"; };
-		8991DAE224B6FC7D00299595 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89D8F3F42474EBA000D12F15 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
@@ -456,7 +454,6 @@
 			isa = PBXGroup;
 			children = (
 				89642185247250650081DC87 /* Info.plist */,
-				8991DAE224B6FC7D00299595 /* Theme.swift */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -849,7 +846,6 @@
 				8968B742247BB66600F746E2 /* TestView.swift in Sources */,
 				89D8F44224754E4500D12F15 /* Badge.swift in Sources */,
 				89D8F3F72474F1BF00D12F15 /* MapView.swift in Sources */,
-				8991DAE324B6FC7D00299595 /* Theme.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
 				892C6410248A09C600208446 /* SemSetsVC.swift in Sources */,
 				89D8F4202475094E00D12F15 /* LandmarkList.swift in Sources */,

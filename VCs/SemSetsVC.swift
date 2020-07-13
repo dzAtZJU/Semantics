@@ -130,15 +130,10 @@ class SemSetsVC: UIViewController {
     }
 }
 
+// Adaptive
 extension SemSetsVC {
-    private func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
-        let word = fetchedResultsController.object(at: indexPath)
-        cell.accessoryType = .disclosureIndicator
-        cell.textLabel!.text = word.name
-        cell.detailTextLabel?.text = ""
-        if word.hasNeighborWords {
-            cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: SyntaxHighlight.noteLinkInnerColor)
-        }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        
     }
 }
 
@@ -198,6 +193,16 @@ extension SemSetsVC: UITableViewDataSource {
         if let indexPath = configuration.identifier as? NSIndexPath {
             let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath as IndexPath), title: nil)
             show(detailVC, sender: nil)
+        }
+    }
+    
+    private func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
+        let word = fetchedResultsController.object(at: indexPath)
+        cell.accessoryType = .disclosureIndicator
+        cell.textLabel!.text = word.name
+        cell.detailTextLabel?.text = ""
+        if word.hasNeighborWords {
+            cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: .secondaryLabel)
         }
     }
 }

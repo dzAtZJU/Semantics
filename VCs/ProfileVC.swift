@@ -13,8 +13,6 @@ class ProfileVC: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .green
-        
         tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "tortoise"), selectedImage: UIImage(systemName: "tortoise.fill"))
     }
 }

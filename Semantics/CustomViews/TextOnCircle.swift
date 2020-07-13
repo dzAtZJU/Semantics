@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct TextOnCircle: View {
-    static let bgColor = Color.red
-    
     @State private(set) var initialText: String
     
     let onCommit: (String, String) -> Void
@@ -48,7 +46,7 @@ struct TextOnCircle: View {
                 .padding()
                 .background(GeometryReader { geomegtry in
                     Circle()
-                        .fill(Self.bgColor)
+                        .fill(Color(UIColor.quaternarySystemFill))
                         .aspectRatio(1, contentMode: .fill)
                         .frame(width: geomegtry.size.width)
                     

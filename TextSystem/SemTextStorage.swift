@@ -14,8 +14,6 @@ protocol SemTextStorageDelegate: NSTextStorageDelegate {
 }
 
 class SemTextStorage: NSTextStorage {
-    private var defaultForegroundColor = UIColor.white
-    
     var semDelegate: SemTextStorageDelegate? {
         return delegate as? SemTextStorageDelegate
     }
@@ -78,7 +76,7 @@ class SemTextStorage: NSTextStorage {
     
     func semProcessEditing() {
         let paragraphRange = mutableString.paragraphRange(for: editedRange)
-        addAttribute(.foregroundColor, value: defaultForegroundColor, range: paragraphRange)
+        addAttribute(.foregroundColor, value: UIColor.label, range: paragraphRange)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.headIndent = 10
         paragraphStyle.firstLineHeadIndent = 10
@@ -104,10 +102,10 @@ class SemTextStorage: NSTextStorage {
         var matchedNotelinks: Set<String> = []
         SyntaxHighlight.noteLinkRegx.enumerateMatches(in: string, options: [], range: paragraphRange) { (result, flags, stop) -> Void in
             let range = result!.range
-            addAttribute(.foregroundColor, value: SyntaxHighlight.noteLinkColor, range: range)
+            addAttribute(.foregroundColor, value: UIColor.quaternaryLabel, range: range)
             
             let innerRange = SemTextProcessor.twoCharsTagInnerRange(in: range)
-            addAttribute(.foregroundColor, value: SyntaxHighlight.noteLinkInnerColor, range: innerRange)
+            addAttribute(.foregroundColor, value: UIColor.secondaryLabel, range: innerRange)
             
             let notetitle = storage.mutableString.substring(with: innerRange)
             addAttribute(.notelink, value: notetitle, range: range)
@@ -126,7 +124,7 @@ class SemTextStorage: NSTextStorage {
             let innerRange = SemTextProcessor.oneCharTagInnerRange(in: matchedRange)
             let iconName = storage.mutableString.substring(with: innerRange)
             let fontSize = ((attribute(.font, at: matchedRange.location, effectiveRange: nil) as! UIFont).fontDescriptor.fontAttributes[.size] as! NSNumber).floatValue
-            let iconAttriburedString = FontAwesomeIcon(named: iconName).attributedString(ofSize: CGFloat(fontSize), color: defaultForegroundColor)
+            let iconAttriburedString = FontAwesomeIcon(named: iconName).attributedString(ofSize: CGFloat(fontSize), color: UIColor.label)
             replaceCharacters(in: matchedRange, with: iconAttriburedString)
             addAttribute(.iconName, value: iconName, range: NSRange(location: matchedRange.location, length: iconAttriburedString.length))
             

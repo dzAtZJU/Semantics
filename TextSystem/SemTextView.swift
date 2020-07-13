@@ -61,8 +61,8 @@ class SemTextView: UITextView {
         inputAccessoryView  = {
             let bullet = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(bulletTapped))
             let verticalLine = UIBarButtonItem(image: UIImage(systemName: "increase.quotelevel"), style: .plain, target: self, action: #selector(verticalLineTapped))
-            let toolBar = UIToolbar()
-            toolBar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+            let toolBar = UIToolbar(frame: .init(origin: .zero, size: .init(width: 300, height: 50)))
+            toolBar.autoresizingMask = [.flexibleHeight]
             toolBar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), bullet, verticalLine]
             return toolBar
         }()

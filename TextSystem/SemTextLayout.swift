@@ -18,10 +18,10 @@ class SemTextLayout: NSLayoutManager {
             
             switch self.textStorage!.mutableString.substring(with: NSRange(location: range.location, length: 2)) {
             case "> ":
-                Theme.Mark.verticalLine.set()
+                UIColor.quaternaryLabel.set()
                 UIBezierPath(rect: CGRect(origin: .init(x: rect.minX + 2.5, y: rect.minY), size: CGSize(width: 5, height: rect.height))).fill()
             case "* ":
-                Theme.Mark.bullet.set()
+                UIColor.quaternaryLabel.set()
                 UIBezierPath(ovalIn: CGRect(origin: .init(x: rect.minX, y: rect.midY), size: CGSize(width: 10, height: 10))).fill()
             default:
                 return

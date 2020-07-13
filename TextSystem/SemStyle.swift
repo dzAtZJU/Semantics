@@ -7,7 +7,6 @@
 //
 import Foundation
 import UIKit
-import SwiftHEXColors
 
 struct SemTextProcessor {
     static func oneCharTagInnerRange(in range: NSRange) -> NSRange {
@@ -28,9 +27,6 @@ struct SyntaxHighlight {
     static let noteLinkRegxAtEnd = {
         try! NSRegularExpression(pattern: noteLinkAtEndRegxStr, options: [])
     }()
-    // https://colorhunt.co/palette/196223
-    static let noteLinkColor = UIColor(hex: 0xf1c5c5)!
-    static let noteLinkInnerColor = UIColor(hex: 0x8bcdcd)!
 }
 
 extension String {

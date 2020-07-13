@@ -33,6 +33,8 @@ extension CoreDataAccessor {
 
 struct CoreDataLayer1: CoreDataAccessor {
     
+    static let defaultProximity = 5
+    
     static let shared = CoreDataLayer1()
     
     private init() {}
@@ -122,7 +124,52 @@ struct CoreDataLayer1: CoreDataAccessor {
         query.fetchLimit = 1
         do {
             let word = try managedObjectContext.fetch(query)
-            return Int(word.first?.proximity ?? 5)
+            return Int(word.first?.proximity ?? Int16(Self.defaultProximity))
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+    
+    func queryProximity(lessThan ceil: Int) -> Int? {
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.predicate = NSPredicate(format: "proximity < %@", NSNumber(integerLiteral: ceil))
+        query.sortDescriptors = [NSSortDescriptor(key: "proximity", ascending: false)]
+        query.fetchLimit = 1
+        do {
+            guard let word = try managedObjectContext.fetch(query).first else {
+                return nil
+            }
+            return Int(word.proximity)
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+    
+    func queryProximity(largerThan floor: Int) -> Int? {
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.predicate = NSPredicate(format: "proximity > %@", NSNumber(integerLiteral: floor))
+        query.sortDescriptors = [NSSortDescriptor(key: "proximity", ascending: true)]
+        query.fetchLimit = 1
+        do {
+            guard let word = try managedObjectContext.fetch(query).first else {
+                return nil
+            }
+            return Int(word.proximity)
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+    
+    func queryProximity(equalTo value: Int) -> Int? {
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.predicate = NSPredicate(format: "proximity = %@", NSNumber(integerLiteral: value))
+        query.sortDescriptors = [NSSortDescriptor(key: "proximity", ascending: true)]
+        query.fetchLimit = 1
+        do {
+            guard let word = try managedObjectContext.fetch(query).first else {
+                return nil
+            }
+            return Int(word.proximity)
         } catch {
             fatalError("\(error)")
         }
