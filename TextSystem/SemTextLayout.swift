@@ -9,14 +9,30 @@
 import UIKit
 
 class SemTextLayout: NSLayoutManager {
+    override init() {
+        super.init()
+        allowsNonContiguousLayout = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
         super.drawGlyphs(forGlyphRange: glyphsToShow, at: origin)
+        
         enumerateLineFragments(forGlyphRange: glyphsToShow) { (rect, _, _, range, _) -> Void in
-            guard range.length >= 2 else {
+            let paragraph = self.textStorage!.mutableString.paragraphRange(for: range)
+            guard paragraph.length >= 2 else {
                 return
             }
             
-            switch self.textStorage!.mutableString.substring(with: NSRange(location: range.location, length: 2)) {
+            guard range.location - paragraph.location <= 2 else {
+                return
+            }
+            
+            let head = self.textStorage!.mutableString.substring(with: paragraph.prefix(2))
+            switch head {
             case "> ":
                 UIColor.quaternaryLabel.set()
                 UIBezierPath(rect: CGRect(origin: .init(x: rect.minX + 2.5, y: rect.minY), size: CGSize(width: 5, height: rect.height))).fill()

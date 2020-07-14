@@ -34,12 +34,13 @@ class SemGestureRecognizer: UIGestureRecognizer {
             }
         }
         
+
         let point = trackedTouch!.location(in: view)
-        let touchedGlyphIndex = semTextView.layoutManager.glyphIndex(for: point, in: semTextView.textContainer)
-        if semTextView.semStorage.queryNoteLink(at: touchedGlyphIndex) != nil {
-            let rect = semTextView.layoutManager.boundingRect(forGlyphRange: NSRange(location: touchedGlyphIndex, length: 1), in: semTextView.textContainer)
+        let touchedCharacterIndex = semTextView.layoutManager.characterIndex(for: point, in: semTextView.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        if semTextView.semStorage.queryNoteLink(at: touchedCharacterIndex) != nil {
+            let rect = semTextView.layoutManager.boundingRect(forGlyphRange: NSRange(location: touchedCharacterIndex, length: 1), in: semTextView.textContainer)
             if rect.contains(point) {
-                touchedNotelinkCharIndex = touchedGlyphIndex
+                touchedNotelinkCharIndex = touchedCharacterIndex
                 state = .possible
                 return
             }

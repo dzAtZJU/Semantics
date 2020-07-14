@@ -39,12 +39,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
             //            nav.navigationBar.prefersLargeTitles = true
             //            window.rootViewController = nav
             
-            //            window.rootViewController = SemSetVC(word: nil, title: nil)
+                        window.rootViewController = SemSetVC(word: nil, title: nil)
             
-            pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-            pageVC.setViewControllers([UINavigationController(rootViewController: closetVC)], direction: .forward, animated: false, completion: nil)
-            pageVC.dataSource = self
-            window.rootViewController = pageVC
+//            pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+//            pageVC.setViewControllers([UINavigationController(rootViewController: closetVC)], direction: .forward, animated: false, completion: nil)
+//            pageVC.dataSource = self
+//            window.rootViewController = pageVC
             
             window.makeKeyAndVisible()
             
@@ -110,12 +110,12 @@ extension SceneDelegate: UIPageViewControllerDataSource {
 // Notification
 extension SceneDelegate {
     @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
-        let vc = pageVC.viewControllers!.first!.children.first! as! SemSetsVC
-        if CoreDataLayer1.shared.queryProximity(equalTo: vc.proximity) == nil {
-            let proximity = CoreDataLayer1.shared.queryProximity(lessThan: vc.proximity) ?? CoreDataLayer1.defaultProximity
-            pageVC.setViewControllers([UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: proximity))], direction: .reverse, animated: true, completion: nil)
-        } else {
-            pageVC.setViewControllers(pageVC.viewControllers!, direction: .reverse, animated: false, completion: nil)
-        }
+//        let vc = pageVC.viewControllers!.first!.children.first! as! SemSetsVC
+//        if CoreDataLayer1.shared.queryProximity(equalTo: vc.proximity) == nil {
+//            let proximity = CoreDataLayer1.shared.queryProximity(lessThan: vc.proximity) ?? CoreDataLayer1.defaultProximity
+//            pageVC.setViewControllers([UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: proximity))], direction: .reverse, animated: true, completion: nil)
+//        } else {
+//            pageVC.setViewControllers(pageVC.viewControllers!, direction: .reverse, animated: false, completion: nil)
+//        }
     }
 }

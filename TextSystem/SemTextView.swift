@@ -75,8 +75,8 @@ class SemTextView: UITextView {
 
 extension SemTextView: NSLayoutManagerDelegate {
     func layoutManager(_ layoutManager: NSLayoutManager, shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>, properties props: UnsafePointer<NSLayoutManager.GlyphProperty>, characterIndexes charIndexes: UnsafePointer<Int>, font aFont: UIFont, forGlyphRange glyphRange: NSRange) -> Int {
-        print("Glyph \(glyphRange)")
-        guard glyphRange.length >= 2 else {
+        let paragraph = textStorage.mutableString.paragraphRange(for: glyphRange)
+        guard glyphRange.location == paragraph.location, glyphRange.length >= 2 else {
             return 0
         }
         
@@ -92,8 +92,13 @@ extension SemTextView: NSLayoutManagerDelegate {
             }
             return 2
         }
-        
         return 0
+    }
+    
+    func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {
+        if layoutManager.numberOfGlyphs > 10 {
+            print("line \(layoutManager.range(ofNominallySpacedGlyphsContaining: 10))")
+        }
     }
 }
 
@@ -116,8 +121,10 @@ extension SemTextView {
     
     @objc func bulletTapped() {
         let paragraph = semStorage.mutableString.paragraphRange(for: selectedRange)
+        let oriSelectedRange = selectedRange
         guard paragraph.length >= 2 else {
             textStorage.replaceCharacters(in: paragraph.prefix(0), with: "* ")
+            selectedRange = oriSelectedRange.offset(by: 2)
             return
         }
         
@@ -125,17 +132,21 @@ extension SemTextView {
         switch semStorage.mutableString.substring(with: headRange) {
         case "* ":
             textStorage.replaceCharacters(in: headRange, with: "")
+            selectedRange = oriSelectedRange.offset(by: -2)
         case "> ":
             textStorage.replaceCharacters(in: headRange, with: "* ")
         default:
             textStorage.replaceCharacters(in: paragraph.prefix(0), with: "* ")
+            selectedRange = oriSelectedRange.offset(by: 2)
         }
     }
     
     @objc func verticalLineTapped() {
         let paragraph = semStorage.mutableString.paragraphRange(for: selectedRange)
+        let oriSelectedRange = selectedRange
         guard paragraph.length >= 2 else {
             textStorage.replaceCharacters(in: paragraph.prefix(0), with: "> ")
+            selectedRange = oriSelectedRange.offset(by: 2)
             return
         }
         
@@ -143,10 +154,12 @@ extension SemTextView {
         switch semStorage.mutableString.substring(with: headRange) {
         case "> ":
             textStorage.replaceCharacters(in: headRange, with: "")
+            selectedRange = oriSelectedRange.offset(by: -2)
         case "* ":
             textStorage.replaceCharacters(in: headRange, with: "> ")
         default:
             textStorage.replaceCharacters(in: paragraph.prefix(0), with: "> ")
+            selectedRange = oriSelectedRange.offset(by: 2)
         }
     }
 }
