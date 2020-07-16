@@ -12,6 +12,7 @@
         <attribute name="backgroundURL" optional="YES" attributeType="URI"/>
         <attribute name="isArchived" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="order" attributeType="Double" defaultValueString="5" usesScalarValueType="YES"/>
         <attribute name="proximity" attributeType="Integer 16" defaultValueString="5" usesScalarValueType="YES"/>
         <attribute name="subWords" optional="YES" attributeType="Transformable" valueTransformerName="" defaultValueString="" customClassName="[String]"/>
         <relationship name="links" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Link" inverseName="words" inverseEntity="Link"/>
@@ -22,6 +23,6 @@
     <elements>
         <element name="Feeling" positionX="-63" positionY="-18" width="128" height="73"/>
         <element name="Link" positionX="-45" positionY="27" width="128" height="73"/>
-        <element name="Word" positionX="-45" positionY="9" width="128" height="133"/>
+        <element name="Word" positionX="-45" positionY="9" width="128" height="148"/>
     </elements>
 </model>

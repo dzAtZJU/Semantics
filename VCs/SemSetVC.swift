@@ -17,7 +17,7 @@ protocol SemSetVCDelegate {
 
 class SemSetVC: UIViewController {
     private static let fallingDuration = 0.3
-    private static let fadeInDuration = 2.5
+    private static let fadeInDuration = 2.0
     
     lazy var background: UIImageView = {
         let tmp = UIImageView()
@@ -87,6 +87,7 @@ class SemSetVC: UIViewController {
         
         if word == nil {
             word = Word(context: managedObjectContext)
+            word.order = CoreDataLayer1.shared.queryMaxOrder()
             word.proximity = Int16(proximity)
         }
     }
@@ -121,7 +122,7 @@ class SemSetVC: UIViewController {
                 if index == self.word.subWords!.endIndex {
                     timer.invalidate()
                 }
-            }
+            }.fire()
         }
         
         nameField.frame = .init(origin: .zero, size: CGSize(width: view.bounds.width, height: 50))
@@ -203,7 +204,7 @@ extension SemSetVC {
                 }
                 
                 index -= 1
-            }
+            }.fire()
         })
     }
 }

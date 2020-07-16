@@ -186,4 +186,16 @@ struct CoreDataLayer1: CoreDataAccessor {
             fatalError("\(error)")
         }
     }
+    
+    func queryMaxOrder() -> Double {
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.sortDescriptors = [NSSortDescriptor(key: "order", ascending: false)]
+        query.fetchLimit = 1
+        do {
+            let word = try managedObjectContext.fetch(query)
+            return word.first?.order ?? 5.0
+        } catch {
+            fatalError("\(error)")
+        }
+    }
 }

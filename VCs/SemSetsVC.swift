@@ -20,19 +20,24 @@ class SemSetsVC: UIViewController {
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
         request.predicate = NSPredicate(format: "isArchived == %@ && proximity == %@", NSNumber(booleanLiteral: isArchive), NSNumber(integerLiteral: proximity))
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.name, ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.order, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarAddButttonTapped))
-    
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(rightBarCancelButttonTapped))
+    
+    private lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButttonTapped))
+    
+    private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarAddButttonTapped))
     
     private lazy var actionBar: [UIBarButtonItem] = {
         var tmp = [
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action:
-                #selector(trashButtonTapped))]
+                #selector(trashButtonTapped)),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(orgnizeButtonTapped))
+        ]
         if !isArchive {
             tmp.insert(UIBarButtonItem(title: "Archive", style: .done, target: self, action: #selector(archiveButtonTapped)), at: 0)
         }
@@ -63,6 +68,8 @@ class SemSetsVC: UIViewController {
     
     private var isInMultiSelection = false
     
+    private var isUserDrivenChange = false
+    
     private let isArchive: Bool
     
     let proximity: Int
@@ -89,7 +96,8 @@ class SemSetsVC: UIViewController {
         
         if !isArchive {
             tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
-            navigationItem.rightBarButtonItem = addButton
+            navigationItem.leftBarButtonItem = addButton
+            navigationItem.rightBarButtonItem = editButton
             navigationItem.title = "Dictionary"
         }
     }
@@ -109,7 +117,7 @@ class SemSetsVC: UIViewController {
         if let parent = parent?.parent as? UIPageViewController {
             let scrollView = parent.view.subviews.first {
                 $0 is UIScrollView
-            } as! UIScrollView
+                } as! UIScrollView
             table.gestureRecognizers?.forEach { recognizer in
                 let name = String(describing: type(of: recognizer))
                 guard name == "_UISwipeActionPanGestureRecognizer" else {
@@ -196,11 +204,30 @@ extension SemSetsVC: UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        isUserDrivenChange = true
+        defer {
+            isUserDrivenChange = false
+        }
+        guard var fetchedObjects = fetchedResultsController.fetchedObjects else {
+            return
+        }
+        let srcWord = fetchedResultsController.object(at: sourceIndexPath)
+        fetchedObjects.remove(at: sourceIndexPath.row)
+        fetchedObjects.insert(srcWord, at: destinationIndexPath.row)
+        for (i, o) in fetchedObjects.enumerated() {
+            o.order = Double(i)
+        }
+        appDelegate.saveContext()
+    }
+    
     private func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
         let word = fetchedResultsController.object(at: indexPath)
         cell.accessoryType = .disclosureIndicator
+        cell.showsReorderControl = true
         cell.textLabel!.text = word.name
         cell.detailTextLabel?.text = ""
+        print("cell \(word.name!) \(word.order)")
         if word.hasNeighborWords {
             cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: .secondaryLabel)
         }
@@ -218,14 +245,18 @@ extension SemSetsVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Push", handler: { (_, _, completion) in
-            self.fetchedResultsController.object(at: indexPath).proximity += 1
+            let word = self.fetchedResultsController.object(at: indexPath)
+            word.proximity += 1
+            word.order = CoreDataLayer1.shared.queryMaxOrder() + 1
             completion(true)
         })])
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Pull", handler: { (_, _, completion) in
-            self.fetchedResultsController.object(at: indexPath).proximity -= 1
+            let word = self.fetchedResultsController.object(at: indexPath)
+            word.proximity -= 1
+            word.order = CoreDataLayer1.shared.queryMaxOrder() + 1
             completion(true)
         })])
     }
@@ -250,10 +281,16 @@ extension SemSetsVC: UITableViewDelegate {
 
 extension SemSetsVC: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard !isUserDrivenChange else {
+            return
+        }
         table.beginUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        guard !isUserDrivenChange else {
+            return
+        }
         switch type {
         case .insert:
             table.insertSections(IndexSet([sectionIndex]), with: .fade)
@@ -265,6 +302,9 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard !isUserDrivenChange else {
+            return
+        }
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
@@ -283,6 +323,9 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard !isUserDrivenChange else {
+            return
+        }
         table.endUpdates()
     }
 }
@@ -292,6 +335,11 @@ extension SemSetsVC {
     @objc private func rightBarAddButttonTapped() {
         let vc = SemSetVC(word: nil, title: nil, proximity: proximity)
         show(vc, sender: nil)
+    }
+    
+    @objc private func editButttonTapped() {
+        table.setEditing(true, animated: false)
+        navigationItem.setRightBarButton(cancelButton, animated: true)
     }
     
     @objc private func rightBarCancelButttonTapped() {
@@ -328,11 +376,28 @@ extension SemSetsVC {
         endMultipleSelection()
     }
     
+    @objc private func orgnizeButtonTapped() {
+        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
+            self.fetchedResultsController.object(at: indexPath)
+        }) {
+            selectedWords.last!.subWords = Array(selectedWords.compactMap {
+                $0.subWords
+            }.joined())
+            managedObjectContext.performAndWait {
+                selectedWords.prefix(selectedWords.count - 1).forEach {
+                    self.managedObjectContext.delete($0)
+                }
+            }
+            show(SemSetVC(word: selectedWords.last!, title: nil), sender: self)
+        }
+        endMultipleSelection()
+    }
+    
     private func endMultipleSelection() {
         isInMultiSelection = false
         table.setEditing(false, animated: true)
         
-        navigationItem.setRightBarButton(addButton, animated: true)
+        navigationItem.setRightBarButton(editButton, animated: true)
         setToolbarItems(nil, animated: true)
         navigationController!.setToolbarHidden(true, animated: true)
     }

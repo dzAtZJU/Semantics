@@ -15,7 +15,7 @@ class SemTextLayout: NSLayoutManager {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(ycoder:) has not been implemented")
     }
     
     override func drawGlyphs(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
