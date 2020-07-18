@@ -57,6 +57,11 @@
 		8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAD924B3513200299595 /* SemFoldersVC.swift */; };
 		8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DADD24B45BE100299595 /* SearchResultsVC.swift */; };
 		8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE024B6F9BD00299595 /* SemTextLayout.swift */; };
+		89988ADB24C2D3040005580B /* BarrierVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADA24C2D3040005580B /* BarrierVC.swift */; };
+		89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADC24C2D8FF0005580B /* SemSectorVC.swift */; };
+		89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */; };
+		89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988AE024C2F7EB0005580B /* SectorDataLayer.swift */; };
+		89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */; };
 		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
@@ -190,6 +195,11 @@
 		8991DAD924B3513200299595 /* SemFoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemFoldersVC.swift; sourceTree = "<group>"; };
 		8991DADD24B45BE100299595 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
 		8991DAE024B6F9BD00299595 /* SemTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextLayout.swift; sourceTree = "<group>"; };
+		89988ADA24C2D3040005580B /* BarrierVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarrierVC.swift; sourceTree = "<group>"; };
+		89988ADC24C2D8FF0005580B /* SemSectorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSectorVC.swift; sourceTree = "<group>"; };
+		89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSectorsVC.swift; sourceTree = "<group>"; };
+		89988AE024C2F7EB0005580B /* SectorDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorDataLayer.swift; sourceTree = "<group>"; };
+		89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanLayerDataLayer.swift; sourceTree = "<group>"; };
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89D8F3F42474EBA000D12F15 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
@@ -325,6 +335,9 @@
 				896344B7249DD7F90060160B /* WordsGraphVC.swift */,
 				8991DAD924B3513200299595 /* SemFoldersVC.swift */,
 				8991DADD24B45BE100299595 /* SearchResultsVC.swift */,
+				89988ADA24C2D3040005580B /* BarrierVC.swift */,
+				89988ADC24C2D8FF0005580B /* SemSectorVC.swift */,
+				89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -365,6 +378,8 @@
 				896344BC249F570A0060160B /* CoreDataLayer2.swift */,
 				896344C0249F94870060160B /* NSManagedObjectLayer.swift */,
 				89642178247250590081DC87 /* Semantics.xcdatamodeld */,
+				89988AE024C2F7EB0005580B /* SectorDataLayer.swift */,
+				89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -372,6 +387,7 @@
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				89988AD924C2D0210005580B /* Resources */,
 				8991DADF24B5A77E00299595 /* Configs */,
 				89C2889124A34243002081FE /* Network */,
 				892C63CE2486616F00208446 /* TextSystem */,
@@ -410,7 +426,6 @@
 				89642174247250590081DC87 /* AppDelegate.swift */,
 				89642176247250590081DC87 /* SceneDelegate.swift */,
 				89E93FC32479873D0039935D /* SemSetView.swift */,
-				8964217D247250650081DC87 /* Assets.xcassets */,
 				89642182247250650081DC87 /* LaunchScreen.storyboard */,
 				8964217F247250650081DC87 /* Preview Content */,
 			);
@@ -464,6 +479,14 @@
 				8911386724C1984C00CBEBB5 /* Theme.swift */,
 			);
 			path = Configs;
+			sourceTree = "<group>";
+		};
+		89988AD924C2D0210005580B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8964217D247250650081DC87 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		89C2889124A34243002081FE /* Network */ = {
@@ -846,6 +869,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89B953AC24B8568200472692 /* SemStyle.swift in Sources */,
+				89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */,
 				89D8F44524754EDB00D12F15 /* HexagonParameters.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
@@ -869,9 +893,11 @@
 				89D8F4222475199000D12F15 /* LandmarkDetail.swift in Sources */,
 				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
+				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
 				89642175247250590081DC87 /* AppDelegate.swift in Sources */,
 				8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */,
+				89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */,
 				8964217C247250590081DC87 /* ContentView.swift in Sources */,
 				892C6416248E1C1800208446 /* SemSetSubwordVC.swift in Sources */,
 				892C6414248CCFE200208446 /* SemSetVC.swift in Sources */,
@@ -890,9 +916,11 @@
 				89D8F44B24765A9C00D12F15 /* RotatedBadgeSymbol.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
+				89988ADB24C2D3040005580B /* BarrierVC.swift in Sources */,
 				892C6418248E589500208446 /* ProfileVC.swift in Sources */,
 				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
 				89D8F44724755A8700D12F15 /* BadgeBackground.swift in Sources */,
+				89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */,
 				896344BF249F8F240060160B /* TextLoader.swift in Sources */,
 				89E93FC42479873D0039935D /* SemSetView.swift in Sources */,
 			);
@@ -1157,7 +1185,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics;
+				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1181,7 +1209,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics;
+				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

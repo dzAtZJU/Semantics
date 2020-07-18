@@ -8,14 +8,25 @@
         <attribute name="annotation" attributeType="String" defaultValueString=""/>
         <relationship name="words" optional="YES" toMany="YES" minCount="2" maxCount="2" deletionRule="Nullify" destinationEntity="Word" inverseName="links" inverseEntity="Word"/>
     </entity>
+    <entity name="OceanLayer" representedClassName="OceanLayer" syncable="YES" codeGenerationType="class">
+        <attribute name="proximity" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="sector" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Sector" inverseName="oceanLayers" inverseEntity="Sector"/>
+        <relationship name="words" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Word" inverseName="oceanLayer" inverseEntity="Word"/>
+    </entity>
+    <entity name="Sector" representedClassName="Sector" syncable="YES" codeGenerationType="class">
+        <attribute name="displayOrder" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="oceanLayers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="OceanLayer" inverseName="sector" inverseEntity="OceanLayer"/>
+    </entity>
     <entity name="Word" representedClassName="Word" syncable="YES" codeGenerationType="class">
         <attribute name="backgroundURL" optional="YES" attributeType="URI"/>
+        <attribute name="displayOrder" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="isArchived" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
-        <attribute name="order" attributeType="Double" defaultValueString="5" usesScalarValueType="YES"/>
-        <attribute name="proximity" attributeType="Integer 16" defaultValueString="5" usesScalarValueType="YES"/>
+        <attribute name="order" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="proximity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="subWords" optional="YES" attributeType="Transformable" valueTransformerName="" defaultValueString="" customClassName="[String]"/>
         <relationship name="links" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Link" inverseName="words" inverseEntity="Link"/>
+        <relationship name="oceanLayer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OceanLayer" inverseName="words" inverseEntity="OceanLayer"/>
     </entity>
     <configuration name="Cloud" usedWithCloudKit="YES">
         <memberEntity name="Feeling"/>
@@ -23,6 +34,8 @@
     <elements>
         <element name="Feeling" positionX="-63" positionY="-18" width="128" height="73"/>
         <element name="Link" positionX="-45" positionY="27" width="128" height="73"/>
-        <element name="Word" positionX="-45" positionY="9" width="128" height="148"/>
+        <element name="OceanLayer" positionX="-36" positionY="63" width="128" height="88"/>
+        <element name="Sector" positionX="-45" positionY="54" width="128" height="73"/>
+        <element name="Word" positionX="-45" positionY="9" width="128" height="178"/>
     </elements>
 </model>

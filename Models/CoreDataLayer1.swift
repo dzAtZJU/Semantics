@@ -9,7 +9,20 @@
 import CoreData
 import UIKit
 
+enum Operator: String {
+    case equal = "="
+    case less = "<"
+    case larger = ">"
+}
+
+enum Ending {
+    case min
+    case max
+}
+
 protocol CoreDataAccessor {
+    
+    
     var appDelegate: AppDelegate {
         get
     }
@@ -213,4 +226,6 @@ struct CoreDataLayer1: CoreDataAccessor {
             fatalError("\(error)")
         }
     }
+    
+    
 }

@@ -88,12 +88,6 @@ class SemSetVC: UIViewController {
             let resutls = try! managedObjectContext.fetch(request)
             word = resutls.first
         }
-        
-        if word == nil {
-            word = Word(context: managedObjectContext)
-            word.order = CoreDataLayer1.shared.queryMaxOrder()
-            word.proximity = Int16(proximity)
-        }
     }
     
     required init?(coder: NSCoder) {

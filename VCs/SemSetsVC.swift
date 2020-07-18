@@ -14,14 +14,16 @@ import SwifterSwift
 
 class SemSetsVC: UIViewController {
     
+    var oceanLayer: OceanLayer!
+    
     private var table: UITableView!
     
     private static let CellIdentifier = "SemSetsVC.Cell"
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSPredicate(format: "isArchived == %@ && proximity == %@", NSNumber(booleanLiteral: isArchive), NSNumber(integerLiteral: proximity))
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.order, ascending: true)]
+        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@", NSNumber(booleanLiteral: isArchive), oceanLayer)
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.displayOrder, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
@@ -41,6 +43,7 @@ class SemSetsVC: UIViewController {
     
     private lazy var actionBar: [UIBarButtonItem] = {
         var tmp = [
+            UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action:
                 #selector(trashButtonTapped)),
@@ -83,7 +86,7 @@ class SemSetsVC: UIViewController {
     
     private lazy var bgLayer: CAGradientLayer = {
         let tmp = CAGradientLayer()
-        tmp.colors = Theme.color(forProximity: CoreDataLayer1.shared.queryProximityOrder(proximity: proximity))
+        tmp.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
         tmp.startPoint = .init(x: 0, y: 0)
         tmp.endPoint = .init(x: 1, y: 0)
         return tmp
@@ -99,6 +102,13 @@ class SemSetsVC: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(oceanLayer oceanLayer_: OceanLayer, isArchive isArchive_: Bool = false) {
+        isArchive = isArchive_
+        oceanLayer = oceanLayer_
+        proximity = 0
+        super.init(nibName:  nil, bundle: nil)
     }
     
     // MARK: VC
@@ -279,8 +289,14 @@ extension SemSetsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Push", handler: { (_, _, completion) in
             let word = self.fetchedResultsController.object(at: indexPath)
-            word.proximity += 1
-            word.order = CoreDataLayer1.shared.queryMaxOrder() + 1
+            var nextOceanLayer = OceanLayerDataLayer.shared.queryByProximity(self.oceanLayer.proximity, operator: .larger, in: self.oceanLayer.sector!)
+            if nextOceanLayer == nil {
+                nextOceanLayer = OceanLayer(context: self.managedObjectContext)
+                nextOceanLayer?.sector = self.oceanLayer.sector
+                nextOceanLayer!.proximity = nextOceanLayer!.proximity + 1
+            }
+            word.oceanLayer = nextOceanLayer
+            word.displayOrder = Int16(nextOceanLayer!.words?.count ?? 0)
             completion(true)
         })])
     }
@@ -288,8 +304,14 @@ extension SemSetsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Pull", handler: { (_, _, completion) in
             let word = self.fetchedResultsController.object(at: indexPath)
-            word.proximity -= 1
-            word.order = CoreDataLayer1.shared.queryMaxOrder() + 1
+            var previousOceanLayer = OceanLayerDataLayer.shared.queryByProximity(self.oceanLayer.proximity, operator: .less, in: self.oceanLayer.sector!)
+            if previousOceanLayer == nil {
+                previousOceanLayer = OceanLayer(context: self.managedObjectContext)
+                previousOceanLayer?.sector = self.oceanLayer.sector
+                previousOceanLayer!.proximity = self.oceanLayer!.proximity - 1
+            }
+            word.oceanLayer = previousOceanLayer
+            word.displayOrder = Int16(previousOceanLayer!.words?.count ?? 0)
             completion(true)
         })])
     }
@@ -366,13 +388,21 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
 // MARK: Interaction
 extension SemSetsVC {
     @objc private func addButttonTapped() {
-        let vc = SemSetVC(word: nil, title: nil, proximity: proximity)
+        let newWord = Word(context: managedObjectContext)
+        newWord.oceanLayer = oceanLayer
+        newWord.displayOrder = Int16(fetchedResultsController.fetchedObjects!.count)
+        
+        let vc = SemSetVC(word: newWord, title: nil, proximity: proximity)
         show(vc, sender: nil)
     }
     
     @objc private func editButttonTapped() {
+        isInMultiSelection = true
         table.setEditing(true, animated: false)
         navigationItem.setRightBarButton(cancelButton, animated: true)
+        
+        setToolbarItems(actionBar, animated: true)
+        navigationController!.setToolbarHidden(false, animated: true)
     }
     
     @objc private func rightBarCancelButttonTapped() {
@@ -423,6 +453,30 @@ extension SemSetsVC {
             }
             show(SemSetVC(word: selectedWords.last!, title: nil), sender: self)
         }
+        endMultipleSelection()
+    }
+    
+    @objc private func saveButtonTapped() {
+        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
+            self.fetchedResultsController.object(at: indexPath)
+        }) {
+            var nextSector = SectorDataLayer.shared.queryByDisplayOrder(Int(oceanLayer.sector!.displayOrder), operator: .larger)
+            if nextSector == nil {
+                nextSector = Sector(context: managedObjectContext)
+                nextSector!.displayOrder = SectorDataLayer.shared.queryByDisplayOrderEnding(.max) + 1
+            }
+            var oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.min, in: nextSector!)
+            if oceanLayer == nil {
+                oceanLayer = OceanLayer(context: managedObjectContext)
+                oceanLayer?.sector = nextSector
+            }
+            let displayOrder = ((oceanLayer!.words as? Set<Word>)?.sorted(by: \.displayOrder).last?.displayOrder ?? -1) + 1
+            for (i, w) in selectedWords.enumerated() {
+                w.oceanLayer = oceanLayer
+                w.displayOrder = displayOrder + Int16(i)
+            }
+        }
+        
         endMultipleSelection()
     }
     

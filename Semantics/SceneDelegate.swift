@@ -13,10 +13,6 @@ import CoreData
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     var window: UIWindow?
     
-    private var pageVC: UIPageViewController!
-    
-    private let closetVC = SemSetsVC(isArchive: false, proximity: CoreDataLayer1.shared.queryMinProximity())
-    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -41,14 +37,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
             
 //                        window.rootViewController = SemSetVC(word: nil, title: nil)
             
-            pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
-            pageVC.setViewControllers([UINavigationController(rootViewController: closetVC)], direction: .forward, animated: false, completion: nil)
-            pageVC.dataSource = self
-            window.rootViewController = pageVC
-            
+             let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: managedObjectContext)
+            window.rootViewController = SemSectorsVC(firstSector: firstSector)
             window.makeKeyAndVisible()
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
         }
     }
     
@@ -84,38 +75,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext.transactionAuthor = "scene enter background"
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
         (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext.transactionAuthor = nil
-    }
-}
-
-extension SceneDelegate: UIPageViewControllerDataSource {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let origin = (viewController.children.first! as! SemSetsVC)
-        if let lesser = CoreDataLayer1.shared.queryProximity(lessThan: origin.proximity) {
-            return UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: lesser))
-        }
-        
-        return nil
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let origin = (viewController.children.first! as! SemSetsVC)
-        if let larger = CoreDataLayer1.shared.queryProximity(largerThan: origin.proximity) {
-            return UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: larger))
-        }
-        
-        return nil
-    }
-}
-
-// Notification
-extension SceneDelegate {
-    @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
-//        let vc = pageVC.viewControllers!.first!.children.first! as! SemSetsVC
-//        if CoreDataLayer1.shared.queryProximity(equalTo: vc.proximity) == nil {
-//            let proximity = CoreDataLayer1.shared.queryProximity(lessThan: vc.proximity) ?? CoreDataLayer1.defaultProximity
-//            pageVC.setViewControllers([UINavigationController(rootViewController: SemSetsVC(isArchive: false, proximity: proximity))], direction: .reverse, animated: true, completion: nil)
-//        } else {
-//            pageVC.setViewControllers(pageVC.viewControllers!, direction: .reverse, animated: false, completion: nil)
-//        }
     }
 }
