@@ -187,6 +187,21 @@ struct CoreDataLayer1: CoreDataAccessor {
         }
     }
     
+    func queryProximityOrder(proximity: Int) -> Int {
+        let query = NSFetchRequest<NSFetchRequestResult>(entityName: "Word")
+        query.predicate = NSPredicate(format: "proximity < %@", NSNumber(integerLiteral: proximity))
+        query.resultType = .dictionaryResultType
+        query.propertiesToFetch = ["proximity"]
+        query.returnsDistinctResults = true
+        do {
+            let order = try managedObjectContext.fetch(query).count
+            print("order \(order) \(proximity)")
+            return order
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+    
     func queryMaxOrder() -> Double {
         let query: NSFetchRequest<Word> = Word.fetchRequest()
         query.sortDescriptors = [NSSortDescriptor(key: "order", ascending: false)]

@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 import CoreData
 import Kingfisher
+import SwifterSwift
 
 @objc
 protocol SemSetVCDelegate {
@@ -48,10 +49,13 @@ class SemSetVC: UIViewController {
         return tmp
     }()
     
-    lazy var addButton: UIButton = {
+    private lazy var addButton: UIButton = {
         let tmp = UIButton(type: .contactAdd)
-        tmp.addTarget(self, action: #selector(Self.addSubWord), for: .touchUpInside)
-        tmp.alpha = 0.7
+        tmp.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
+        tmp.frame.size = .init(width: 40, height: 40)
+        tmp.contentVerticalAlignment = .fill
+        tmp.contentHorizontalAlignment = .fill
+        tmp.addTarget(self, action: #selector(addSubWord), for: .touchUpInside)
         return tmp
     }()
     
@@ -135,7 +139,9 @@ class SemSetVC: UIViewController {
         super.viewSafeAreaInsetsDidChange()
         
         nameField.frame = .init(origin: CGPoint(x: view.safeAreaInsets.left, y: view.safeAreaInsets.top), size: CGSize(width: view.bounds.width, height: 50))
-        addButton.frame = .init(origin: CGPoint(x: view.bounds.width - view.safeAreaInsets.right - 50, y: view.safeAreaInsets.top), size: CGSize(width: 50, height: 50))
+        addButton.center = view.bounds.inset(by:
+            view.safeAreaInsets).bottomRight - CGPoint(x: 40, y: 40)
+        addButton.bounds.size = CGSize(width: 40, height: 40)
         collision.setTranslatesReferenceBoundsIntoBoundary(with: UIEdgeInsets(top: -1000, left: 0, bottom: view.safeAreaInsets.bottom, right: 0))
     }
     

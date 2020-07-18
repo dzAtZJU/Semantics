@@ -10,6 +10,9 @@
 		0B90FE90F55ECAC3B9ABE61B /* Pods_SemanticsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */; };
 		66A40F737D45F299B37EE8AE /* Pods_Semantics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EB719F7E1C826A797E1EF6 /* Pods_Semantics.framework */; };
 		83F7BD526A39AE76A386B437 /* Pods_SemFilterControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */; };
+		8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386224C1644A00CBEBB5 /* CGRect+.swift */; };
+		8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8911386524C1672000CBEBB5 /* SwifterSwift */; };
+		8911386824C1984C00CBEBB5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386724C1984C00CBEBB5 /* Theme.swift */; };
 		892C63D0248661D100208446 /* SemTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63CF248661D100208446 /* SemTextStorage.swift */; };
 		892C63D524866A1000208446 /* NSRange+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D424866A1000208446 /* NSRange+.swift */; };
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
@@ -135,6 +138,8 @@
 		56EB719F7E1C826A797E1EF6 /* Pods_Semantics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Semantics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		719DE19C61E5E26B128592F8 /* Pods-SemContentFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SemContentFilter.debug.xcconfig"; path = "Target Support Files/Pods-SemContentFilter/Pods-SemContentFilter.debug.xcconfig"; sourceTree = "<group>"; };
 		7A142CA0C9D80D637211EB83 /* Pods_SemContentFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemContentFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8911386224C1644A00CBEBB5 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
+		8911386724C1984C00CBEBB5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		892C63CF248661D100208446 /* SemTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextStorage.swift; sourceTree = "<group>"; };
 		892C63D12486630900208446 /* SemStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemStyle.swift; sourceTree = "<group>"; };
 		892C63D424866A1000208446 /* NSRange+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+.swift"; sourceTree = "<group>"; };
@@ -246,6 +251,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */,
 				89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */,
 				896344B224936E210060160B /* Kingfisher in Frameworks */,
 				8964219F2472BF4D0081DC87 /* CloudKit.framework in Frameworks */,
@@ -303,6 +309,7 @@
 				892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */,
 				892C6411248A0C2100208446 /* UIViewController+.swift */,
 				896344C224A1C5180060160B /* String+.swift */,
+				8911386224C1644A00CBEBB5 /* CGRect+.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -454,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				89642185247250650081DC87 /* Info.plist */,
+				8911386724C1984C00CBEBB5 /* Theme.swift */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -585,6 +593,7 @@
 				896344B124936E210060160B /* Kingfisher */,
 				896344B324936E210060160B /* KingfisherSwiftUI */,
 				89C28CFD24ADC22E002081FE /* SwiftHEXColors */,
+				8911386524C1672000CBEBB5 /* SwifterSwift */,
 			);
 			productName = Semantics;
 			productReference = 89642171247250590081DC87 /* Semantics.app */;
@@ -646,6 +655,7 @@
 			packageReferences = (
 				896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */,
+				8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */,
 			);
 			productRefGroup = 89642172247250590081DC87 /* Products */;
 			projectDirPath = "";
@@ -857,6 +867,7 @@
 				8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
 				89D8F4222475199000D12F15 /* LandmarkDetail.swift in Sources */,
+				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
 				89642175247250590081DC87 /* AppDelegate.swift in Sources */,
@@ -871,6 +882,7 @@
 				89642177247250590081DC87 /* SceneDelegate.swift in Sources */,
 				89C2889324A34308002081FE /* NetworkSpace.swift in Sources */,
 				8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */,
+				8911386824C1984C00CBEBB5 /* Theme.swift in Sources */,
 				89D8F3FD247504AE00D12F15 /* LandmarkRow.swift in Sources */,
 				89D8F3F52474EBA000D12F15 /* CircleImage.swift in Sources */,
 				89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */,
@@ -1273,6 +1285,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwifterSwift/SwifterSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
 		896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -1292,6 +1312,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8911386524C1672000CBEBB5 /* SwifterSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */;
+			productName = SwifterSwift;
+		};
 		896344B124936E210060160B /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */;

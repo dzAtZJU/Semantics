@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import SwiftUI
 import Iconic
+import SwifterSwift
 
 class SemSetsVC: UIViewController {
     
@@ -28,7 +29,15 @@ class SemSetsVC: UIViewController {
     
     private lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButttonTapped))
     
-    private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarAddButttonTapped))
+    private lazy var addButton: UIButton = {
+        let tmp = UIButton(type: .contactAdd)
+        tmp.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
+        tmp.frame.size = .init(width: 40, height: 40)
+        tmp.contentVerticalAlignment = .fill
+        tmp.contentHorizontalAlignment = .fill
+        tmp.addTarget(self, action: #selector(addButttonTapped), for: .touchUpInside)
+        return tmp
+    }()
     
     private lazy var actionBar: [UIBarButtonItem] = {
         var tmp = [
@@ -72,6 +81,14 @@ class SemSetsVC: UIViewController {
     
     private let isArchive: Bool
     
+    private lazy var bgLayer: CAGradientLayer = {
+        let tmp = CAGradientLayer()
+        tmp.colors = Theme.color(forProximity: CoreDataLayer1.shared.queryProximityOrder(proximity: proximity))
+        tmp.startPoint = .init(x: 0, y: 0)
+        tmp.endPoint = .init(x: 1, y: 0)
+        return tmp
+    }()
+    
     let proximity: Int
     
     init(isArchive isArchive_: Bool, proximity proximity_: Int) {
@@ -89,14 +106,18 @@ class SemSetsVC: UIViewController {
     override func loadView() {
         view = UIView()
         
+        view.layer.insertSublayer(bgLayer, at: 0)
+        
         table = UITableView(frame: .zero, style: .insetGrouped)
+        table.backgroundColor = .clear
         table.allowsSelection = true
         table.allowsMultipleSelectionDuringEditing = true
         view.addSubview(table)
         
+        view.addSubview(addButton)
+        
         if !isArchive {
             tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
-            navigationItem.leftBarButtonItem = addButton
             navigationItem.rightBarButtonItem = editButton
             navigationItem.title = "Dictionary"
         }
@@ -133,15 +154,27 @@ class SemSetsVC: UIViewController {
         table.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
         tabBarController?.title = "Dictionary"
-        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        extendedLayoutIncludesOpaqueBars = true
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        bgLayer.frame = view.bounds
+    }
+    
+    override func viewSafeAreaInsetsDidChange() {
+        addButton.center = view.bounds.inset(by: view.safeAreaInsets).bottomRight - CGPoint(x: 40, y: 40)
     }
 }
 
 // Adaptive
 extension SemSetsVC {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        
+        if previousTraitCollection!.hasDifferentColorAppearance(comparedTo: traitCollection) {
+            bgLayer.colors = Theme.color(forProximity: CoreDataLayer1.shared.queryProximityOrder(proximity: proximity))
+        }
     }
 }
 
@@ -332,7 +365,7 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
 
 // MARK: Interaction
 extension SemSetsVC {
-    @objc private func rightBarAddButttonTapped() {
+    @objc private func addButttonTapped() {
         let vc = SemSetVC(word: nil, title: nil, proximity: proximity)
         show(vc, sender: nil)
     }
