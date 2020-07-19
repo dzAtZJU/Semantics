@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0B90FE90F55ECAC3B9ABE61B /* Pods_SemanticsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */; };
 		66A40F737D45F299B37EE8AE /* Pods_Semantics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EB719F7E1C826A797E1EF6 /* Pods_Semantics.framework */; };
-		83F7BD526A39AE76A386B437 /* Pods_SemFilterControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */; };
 		8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386224C1644A00CBEBB5 /* CGRect+.swift */; };
 		8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8911386524C1672000CBEBB5 /* SwifterSwift */; };
 		8911386824C1984C00CBEBB5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386724C1984C00CBEBB5 /* Theme.swift */; };
@@ -25,14 +24,8 @@
 		892C6418248E589500208446 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6417248E589500208446 /* ProfileVC.swift */; };
 		896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C5248F99330000ABCD /* Graphiccontent.swift */; };
 		896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C7248FA7A20000ABCD /* Concurrency.swift */; };
-		896234E12491F4AE0000ABCD /* FilterDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234E02491F4AE0000ABCD /* FilterDataProvider.swift */; };
-		896234E62491F4AE0000ABCD /* SemContentFilter.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 896234DE2491F4AE0000ABCD /* SemContentFilter.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		8962350124920AE20000ABCD /* FilterControlProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8962350024920AE20000ABCD /* FilterControlProvider.swift */; };
-		8962350624920AE20000ABCD /* SemFilterControl.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 896234FE24920AE20000ABCD /* SemFilterControl.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8962350B24920B110000ABCD /* SemContentFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8962350A24920B110000ABCD /* SemContentFilterVC.swift */; };
 		8962350D24920CF40000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
-		8962350E24920E300000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
-		8962350F24920E430000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
 		896344B224936E210060160B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 896344B124936E210060160B /* Kingfisher */; };
 		896344B424936E210060160B /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 896344B324936E210060160B /* KingfisherSwiftUI */; };
 		896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896344B7249DD7F90060160B /* WordsGraphVC.swift */; };
@@ -94,24 +87,9 @@
 		89D8F44B24765A9C00D12F15 /* RotatedBadgeSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F44A24765A9B00D12F15 /* RotatedBadgeSymbol.swift */; };
 		89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F45024766CD300D12F15 /* TextOnCircle.swift */; };
 		89E93FC42479873D0039935D /* SemSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E93FC32479873D0039935D /* SemSetView.swift */; };
-		932E1A193EA911BD80AD6B8A /* Pods_SemContentFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A142CA0C9D80D637211EB83 /* Pods_SemContentFilter.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		896234E42491F4AE0000ABCD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 89642169247250590081DC87 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 896234DD2491F4AE0000ABCD;
-			remoteInfo = SemContentFilter;
-		};
-		8962350424920AE20000ABCD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 89642169247250590081DC87 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 896234FD24920AE20000ABCD;
-			remoteInfo = SemFilterControl;
-		};
 		8964218B247250660081DC87 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 89642169247250590081DC87 /* Project object */;
@@ -128,8 +106,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				8962350624920AE20000ABCD /* SemFilterControl.appex in Embed App Extensions */,
-				896234E62491F4AE0000ABCD /* SemContentFilter.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,11 +134,9 @@
 		892C6417248E589500208446 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		896234C5248F99330000ABCD /* Graphiccontent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphiccontent.swift; sourceTree = "<group>"; };
 		896234C7248FA7A20000ABCD /* Concurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concurrency.swift; sourceTree = "<group>"; };
-		896234DE2491F4AE0000ABCD /* SemContentFilter.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SemContentFilter.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		896234E02491F4AE0000ABCD /* FilterDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterDataProvider.swift; sourceTree = "<group>"; };
 		896234E22491F4AE0000ABCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		896234E32491F4AE0000ABCD /* SemContentFilter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SemContentFilter.entitlements; sourceTree = "<group>"; };
-		896234FE24920AE20000ABCD /* SemFilterControl.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SemFilterControl.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8962350024920AE20000ABCD /* FilterControlProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterControlProvider.swift; sourceTree = "<group>"; };
 		8962350224920AE20000ABCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8962350324920AE20000ABCD /* SemFilterControl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SemFilterControl.entitlements; sourceTree = "<group>"; };
@@ -239,24 +213,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		896234DB2491F4AE0000ABCD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8962350F24920E430000ABCD /* NetworkExtension.framework in Frameworks */,
-				932E1A193EA911BD80AD6B8A /* Pods_SemContentFilter.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		896234FB24920AE20000ABCD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8962350E24920E300000ABCD /* NetworkExtension.framework in Frameworks */,
-				83F7BD526A39AE76A386B437 /* Pods_SemFilterControl.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8964216E247250590081DC87 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -410,8 +366,6 @@
 			children = (
 				89642171247250590081DC87 /* Semantics.app */,
 				8964218A247250660081DC87 /* SemanticsTests.xctest */,
-				896234DE2491F4AE0000ABCD /* SemContentFilter.appex */,
-				896234FE24920AE20000ABCD /* SemFilterControl.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -558,42 +512,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		896234DD2491F4AE0000ABCD /* SemContentFilter */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 896234E72491F4AE0000ABCD /* Build configuration list for PBXNativeTarget "SemContentFilter" */;
-			buildPhases = (
-				A09A18BC97AFC1B99ED4D84A /* [CP] Check Pods Manifest.lock */,
-				896234DA2491F4AE0000ABCD /* Sources */,
-				896234DB2491F4AE0000ABCD /* Frameworks */,
-				896234DC2491F4AE0000ABCD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SemContentFilter;
-			productName = SemContentFilter;
-			productReference = 896234DE2491F4AE0000ABCD /* SemContentFilter.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		896234FD24920AE20000ABCD /* SemFilterControl */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8962350724920AE20000ABCD /* Build configuration list for PBXNativeTarget "SemFilterControl" */;
-			buildPhases = (
-				7B858689F994D416C30F2B9C /* [CP] Check Pods Manifest.lock */,
-				896234FA24920AE20000ABCD /* Sources */,
-				896234FB24920AE20000ABCD /* Frameworks */,
-				896234FC24920AE20000ABCD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SemFilterControl;
-			productName = SemFilterControl;
-			productReference = 896234FE24920AE20000ABCD /* SemFilterControl.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		89642170247250590081DC87 /* Semantics */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 89642193247250660081DC87 /* Build configuration list for PBXNativeTarget "Semantics" */;
@@ -608,8 +526,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				896234E52491F4AE0000ABCD /* PBXTargetDependency */,
-				8962350524920AE20000ABCD /* PBXTargetDependency */,
 			);
 			name = Semantics;
 			packageProductDependencies = (
@@ -651,12 +567,6 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "Paper Scratch";
 				TargetAttributes = {
-					896234DD2491F4AE0000ABCD = {
-						CreatedOnToolsVersion = 11.5;
-					};
-					896234FD24920AE20000ABCD = {
-						CreatedOnToolsVersion = 11.5;
-					};
 					89642170247250590081DC87 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
@@ -686,27 +596,11 @@
 			targets = (
 				89642170247250590081DC87 /* Semantics */,
 				89642189247250660081DC87 /* SemanticsTests */,
-				896234DD2491F4AE0000ABCD /* SemContentFilter */,
-				896234FD24920AE20000ABCD /* SemFilterControl */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		896234DC2491F4AE0000ABCD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		896234FC24920AE20000ABCD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8964216F247250590081DC87 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -779,50 +673,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7B858689F994D416C30F2B9C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SemFilterControl-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A09A18BC97AFC1B99ED4D84A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SemContentFilter-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C0FF979F572DAE76D33E461A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -848,22 +698,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		896234DA2491F4AE0000ABCD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				896234E12491F4AE0000ABCD /* FilterDataProvider.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		896234FA24920AE20000ABCD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8962350124920AE20000ABCD /* FilterControlProvider.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8964216D247250590081DC87 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -937,16 +771,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		896234E52491F4AE0000ABCD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 896234DD2491F4AE0000ABCD /* SemContentFilter */;
-			targetProxy = 896234E42491F4AE0000ABCD /* PBXContainerItemProxy */;
-		};
-		8962350524920AE20000ABCD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 896234FD24920AE20000ABCD /* SemFilterControl */;
-			targetProxy = 8962350424920AE20000ABCD /* PBXContainerItemProxy */;
-		};
 		8964218C247250660081DC87 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 89642170247250590081DC87 /* Semantics */;
@@ -966,94 +790,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		896234E82491F4AE0000ABCD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 719DE19C61E5E26B128592F8 /* Pods-SemContentFilter.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = SemContentFilter/SemContentFilter.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HTG5RPJ6QF;
-				INFOPLIST_FILE = SemContentFilter/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.SemContentFilter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		896234E92491F4AE0000ABCD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 35926C0BAFDDB0FC3DC53E11 /* Pods-SemContentFilter.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = SemContentFilter/SemContentFilter.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HTG5RPJ6QF;
-				INFOPLIST_FILE = SemContentFilter/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.SemContentFilter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		8962350824920AE20000ABCD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1CE70680BC6B643E2B4DF9B0 /* Pods-SemFilterControl.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = SemFilterControl/SemFilterControl.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HTG5RPJ6QF;
-				INFOPLIST_FILE = SemFilterControl/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.SemFilterControl;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		8962350924920AE20000ABCD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F22CC5BB9BDF6083EC38BE54 /* Pods-SemFilterControl.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = SemFilterControl/SemFilterControl.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = HTG5RPJ6QF;
-				INFOPLIST_FILE = SemFilterControl/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.SemFilterControl;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		89642191247250660081DC87 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1185,7 +921,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.1;
+				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.Branch1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1209,7 +945,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.1;
+				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.Branch1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1265,24 +1001,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		896234E72491F4AE0000ABCD /* Build configuration list for PBXNativeTarget "SemContentFilter" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				896234E82491F4AE0000ABCD /* Debug */,
-				896234E92491F4AE0000ABCD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8962350724920AE20000ABCD /* Build configuration list for PBXNativeTarget "SemFilterControl" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8962350824920AE20000ABCD /* Debug */,
-				8962350924920AE20000ABCD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		8964216C247250590081DC87 /* Build configuration list for PBXProject "Semantics" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
