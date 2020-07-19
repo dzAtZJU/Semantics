@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_SemContentFilterVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_SemContentFilterVersionString[];
+FOUNDATION_EXPORT double KRPullLoaderVersionNumber;
+FOUNDATION_EXPORT const unsigned char KRPullLoaderVersionString[];
 

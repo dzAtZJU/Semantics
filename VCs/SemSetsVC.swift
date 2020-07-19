@@ -11,14 +11,11 @@ import CoreData
 import SwiftUI
 import Iconic
 import SwifterSwift
+import KRPullLoader
 
 class SemSetsVC: UIViewController {
     
     var oceanLayer: OceanLayer!
-    
-    private var table: UITableView!
-    
-    private static let CellIdentifier = "SemSetsVC.Cell"
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
@@ -26,6 +23,10 @@ class SemSetsVC: UIViewController {
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.displayOrder, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
+    
+    private var table: UITableView!
+    
+    private static let CellIdentifier = "SemSetsVC.Cell"
     
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(rightBarCancelButttonTapped))
     
@@ -38,6 +39,12 @@ class SemSetsVC: UIViewController {
         tmp.contentVerticalAlignment = .fill
         tmp.contentHorizontalAlignment = .fill
         tmp.addTarget(self, action: #selector(addButttonTapped), for: .touchUpInside)
+        return tmp
+    }()
+    
+    private lazy var pullUpControl: KRPullLoadView = {
+        let tmp = KRPullLoadView()
+        tmp.delegate = self
         return tmp
     }()
     
@@ -157,6 +164,10 @@ class SemSetsVC: UIViewController {
                 scrollView.panGestureRecognizer.require(toFail: recognizer)
             }
         }
+        
+        table.addPullLoadableView(pullUpControl, type: .loadMore)
+        table.contentInset.top = 50
+        table.contentInset.bottom = 50
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -293,7 +304,7 @@ extension SemSetsVC: UITableViewDelegate {
             if nextOceanLayer == nil {
                 nextOceanLayer = OceanLayer(context: self.managedObjectContext)
                 nextOceanLayer?.sector = self.oceanLayer.sector
-                nextOceanLayer!.proximity = nextOceanLayer!.proximity + 1
+                nextOceanLayer!.proximity = self.oceanLayer.proximity + 1
             }
             word.oceanLayer = nextOceanLayer
             word.displayOrder = Int16(nextOceanLayer!.words?.count ?? 0)
@@ -306,9 +317,12 @@ extension SemSetsVC: UITableViewDelegate {
             let word = self.fetchedResultsController.object(at: indexPath)
             var previousOceanLayer = OceanLayerDataLayer.shared.queryByProximity(self.oceanLayer.proximity, operator: .less, in: self.oceanLayer.sector!)
             if previousOceanLayer == nil {
+                for (i, l) in (self.oceanLayer.sector!.oceanLayers as! Set<OceanLayer>).sorted(by: \.proximity).enumerated() {
+                    l.proximity = Int16(i + 1)
+                }
                 previousOceanLayer = OceanLayer(context: self.managedObjectContext)
                 previousOceanLayer?.sector = self.oceanLayer.sector
-                previousOceanLayer!.proximity = self.oceanLayer!.proximity - 1
+                previousOceanLayer!.proximity = 0
             }
             word.oceanLayer = previousOceanLayer
             word.displayOrder = Int16(previousOceanLayer!.words?.count ?? 0)
@@ -386,7 +400,19 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
 }
 
 // MARK: Interaction
-extension SemSetsVC {
+extension SemSetsVC: KRPullLoadViewDelegate {
+    func pullLoadView(_ pullLoadView: KRPullLoadView, didChangeState state: KRPullLoaderState, viewType type: KRPullLoaderType) {
+        switch state {
+        case let .loading(completionHandler):
+            let page = parent!.parent!.parent as! UIPageViewController
+            let next = page.dataSource!.pageViewController(page, viewControllerAfter: parent!.parent!)!
+            page.setViewControllers([next], direction: .forward, animated: true, completion: nil)
+            completionHandler()
+        default:
+            break
+        }
+    }
+    
     @objc private func addButttonTapped() {
         let newWord = Word(context: managedObjectContext)
         newWord.oceanLayer = oceanLayer

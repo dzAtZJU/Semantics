@@ -8,6 +8,8 @@ target 'Semantics' do
   # Pods for Semantics
   pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
   
+  pod "KRPullLoader"
+  
   # https://www.highcharts.com/ios/demo
   # https://api.highcharts.com/ios/highcharts/
   pod 'Highcharts', '~> 8.1.2'
@@ -16,21 +18,5 @@ target 'Semantics' do
     inherit! :search_paths
     # Pods for testing
   end
-
-end
-
-target 'SemContentFilter' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for SemContentFilter
-
-end
-
-target 'SemFilterControl' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for SemFilterControl
 
 end

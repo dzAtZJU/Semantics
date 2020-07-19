@@ -15,6 +15,8 @@ class SemSectorsVC: UIPageViewController {
         
         dataSource = self
         setViewControllers([SemSectorVC(sector: firstSector)], direction: .forward, animated: false, completion: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }
     
     required init?(coder: NSCoder) {
@@ -39,5 +41,11 @@ extension SemSectorsVC: UIPageViewControllerDataSource {
         }
 
         return SemSectorVC(sector: nextSector)
+    }
+}
+
+extension SemSectorsVC {
+    @objc func managedObjectContextObjectsDidChange() {
+        setViewControllers(viewControllers, direction: .reverse, animated: false, completion: nil)
     }
 }
