@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SemSectorsVC: UIPageViewController {
     
@@ -45,7 +46,22 @@ extension SemSectorsVC: UIPageViewControllerDataSource {
 }
 
 extension SemSectorsVC {
-    @objc func managedObjectContextObjectsDidChange() {
-        setViewControllers(viewControllers, direction: .reverse, animated: false, completion: nil)
+    @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
+        let sectorVC = viewControllers!.first as! SemSectorVC
+        
+        if let deleted = notification.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>, deleted.count > 0, deleted.contains(sectorVC.sector) {
+            if let prev = pageViewController(self, viewControllerBefore: viewControllers!.first!) {
+                setViewControllers([prev], direction: .reverse, animated: true, completion: nil)
+                return
+            }
+            
+            if let next = pageViewController(self, viewControllerAfter: viewControllers!.first!) {
+                setViewControllers([next], direction: .forward, animated: true, completion: nil)
+                return
+            }
+            setViewControllers([SemSectorVC(sector: Sector(context: managedObjectContext))], direction: .forward, animated: true, completion: nil)
+        } else {
+            setViewControllers(viewControllers!, direction: .reverse, animated: false, completion: nil)
+        }
     }
 }

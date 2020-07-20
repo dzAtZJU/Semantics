@@ -15,7 +15,7 @@ import KRPullLoader
 
 class SemSetsVC: UIViewController {
     
-    var oceanLayer: OceanLayer!
+    var oceanLayer: OceanLayer
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
@@ -24,7 +24,14 @@ class SemSetsVC: UIViewController {
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
     
-    private var table: UITableView!
+    private lazy var table: UITableView = {
+        let tmp = OneFingerTableView(frame: .zero, style: .insetGrouped)
+        tmp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        tmp.backgroundColor = .clear
+        tmp.allowsSelection = true
+        tmp.allowsMultipleSelectionDuringEditing = true
+        return tmp
+    }()
     
     private static let CellIdentifier = "SemSetsVC.Cell"
     
@@ -42,23 +49,18 @@ class SemSetsVC: UIViewController {
         return tmp
     }()
     
-    private lazy var pullUpControl: KRPullLoadView = {
-        let tmp = KRPullLoadView()
-        tmp.delegate = self
-        return tmp
-    }()
-    
     private lazy var actionBar: [UIBarButtonItem] = {
         var tmp = [
-            UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action:
-                #selector(trashButtonTapped)),
+            #selector(trashButtonTapped)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(orgnizeButtonTapped))
+            UIBarButtonItem(title: "ReAssign", style: .plain, target: self, action: #selector(reAssignButtonTapped)),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title:"Merge", style: .plain, target: self, action: #selector(mergeButtonTapped))
         ]
         if !isArchive {
-            tmp.insert(UIBarButtonItem(title: "Archive", style: .done, target: self, action: #selector(archiveButtonTapped)), at: 0)
+            tmp.insert(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), at: 1)
+            tmp.insert(UIBarButtonItem(title: "Archive", style: .plain, target: self, action: #selector(archiveButtonTapped)), at: 2)
         }
         return tmp
     }()
@@ -101,12 +103,6 @@ class SemSetsVC: UIViewController {
     
     let proximity: Int
     
-    init(isArchive isArchive_: Bool, proximity proximity_: Int) {
-        isArchive = isArchive_
-        proximity = proximity_
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -124,13 +120,7 @@ class SemSetsVC: UIViewController {
         view = UIView()
         
         view.layer.insertSublayer(bgLayer, at: 0)
-        
-        table = UITableView(frame: .zero, style: .insetGrouped)
-        table.backgroundColor = .clear
-        table.allowsSelection = true
-        table.allowsMultipleSelectionDuringEditing = true
         view.addSubview(table)
-        
         view.addSubview(addButton)
         
         if !isArchive {
@@ -165,15 +155,10 @@ class SemSetsVC: UIViewController {
             }
         }
         
-        table.addPullLoadableView(pullUpControl, type: .loadMore)
-        table.contentInset.top = 50
-        table.contentInset.bottom = 50
+        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        table.frame = view.bounds
-        table.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
         tabBarController?.title = "Dictionary"
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -186,7 +171,13 @@ class SemSetsVC: UIViewController {
     }
     
     override func viewSafeAreaInsetsDidChange() {
+        table.frame = view.bounds.inset(by: view.safeAreaInsets)
         addButton.center = view.bounds.inset(by: view.safeAreaInsets).bottomRight - CGPoint(x: 40, y: 40)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("table \(table.contentOffset) \(table.contentInset)")
     }
 }
 
@@ -194,7 +185,7 @@ class SemSetsVC: UIViewController {
 extension SemSetsVC {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if previousTraitCollection!.hasDifferentColorAppearance(comparedTo: traitCollection) {
-            bgLayer.colors = Theme.color(forProximity: CoreDataLayer1.shared.queryProximityOrder(proximity: proximity))
+            bgLayer.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
         }
     }
 }
@@ -302,9 +293,7 @@ extension SemSetsVC: UITableViewDelegate {
             let word = self.fetchedResultsController.object(at: indexPath)
             var nextOceanLayer = OceanLayerDataLayer.shared.queryByProximity(self.oceanLayer.proximity, operator: .larger, in: self.oceanLayer.sector!)
             if nextOceanLayer == nil {
-                nextOceanLayer = OceanLayer(context: self.managedObjectContext)
-                nextOceanLayer?.sector = self.oceanLayer.sector
-                nextOceanLayer!.proximity = self.oceanLayer.proximity + 1
+                nextOceanLayer = OceanLayer(context: self.managedObjectContext, sector: self.oceanLayer.sector!, proximity: self.oceanLayer.proximity + 1)
             }
             word.oceanLayer = nextOceanLayer
             word.displayOrder = Int16(nextOceanLayer!.words?.count ?? 0)
@@ -320,9 +309,7 @@ extension SemSetsVC: UITableViewDelegate {
                 for (i, l) in (self.oceanLayer.sector!.oceanLayers as! Set<OceanLayer>).sorted(by: \.proximity).enumerated() {
                     l.proximity = Int16(i + 1)
                 }
-                previousOceanLayer = OceanLayer(context: self.managedObjectContext)
-                previousOceanLayer?.sector = self.oceanLayer.sector
-                previousOceanLayer!.proximity = 0
+                previousOceanLayer = OceanLayer(context: self.managedObjectContext, sector: self.oceanLayer.sector!, proximity: 0)
             }
             word.oceanLayer = previousOceanLayer
             word.displayOrder = Int16(previousOceanLayer!.words?.count ?? 0)
@@ -402,14 +389,26 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
 // MARK: Interaction
 extension SemSetsVC: KRPullLoadViewDelegate {
     func pullLoadView(_ pullLoadView: KRPullLoadView, didChangeState state: KRPullLoaderState, viewType type: KRPullLoaderType) {
-        switch state {
-        case let .loading(completionHandler):
-            let page = parent!.parent!.parent as! UIPageViewController
-            let next = page.dataSource!.pageViewController(page, viewControllerAfter: parent!.parent!)!
-            page.setViewControllers([next], direction: .forward, animated: true, completion: nil)
-            completionHandler()
-        default:
-            break
+        switch type {
+        case .refresh:
+            if case let KRPullLoaderState.loading(completionHandler) = state {
+                let page = parent!.parent!.parent as! UIPageViewController
+                if let pre = page.dataSource!.pageViewController(page, viewControllerBefore: parent!.parent!) {
+                    page.setViewControllers([pre], direction: .reverse, animated: true, completion: nil)
+                }
+                completionHandler()
+            }
+        case .loadMore:
+            if case let KRPullLoaderState.loading(completionHandler) = state {
+                let page = parent!.parent!.parent as! UIPageViewController
+                if let pre = page.dataSource!.pageViewController(page, viewControllerAfter: parent!.parent!) {
+                    page.setViewControllers([pre], direction: .forward, animated: true, completion: nil)
+                }
+                completionHandler()
+            }
+            if case let KRPullLoaderState.pulling(offset, threshold) = state {
+                print("pull \(offset) \(threshold)")
+            }
         }
     }
     
@@ -465,7 +464,7 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         endMultipleSelection()
     }
     
-    @objc private func orgnizeButtonTapped() {
+    @objc private func mergeButtonTapped() {
         if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
             self.fetchedResultsController.object(at: indexPath)
         }) {
@@ -482,7 +481,7 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         endMultipleSelection()
     }
     
-    @objc private func saveButtonTapped() {
+    @objc private func reAssignButtonTapped() {
         if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
             self.fetchedResultsController.object(at: indexPath)
         }) {
@@ -540,5 +539,16 @@ extension SemSetsVC: UISearchControllerDelegate, UISearchResultsUpdating, UISear
     
     private func findMatches(key: String) -> NSPredicate {
         NSPredicate(format: "name CONTAINS %@", key)
+    }
+}
+
+// Notification
+extension SemSetsVC {
+    @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
+         if let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updated.count > 0, updated.contains(oceanLayer) {
+            if let old = oceanLayer.changedValuesForCurrentEvent()["proximity"], old as! Int16 != oceanLayer.proximity {
+                bgLayer.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
+            }
+        }
     }
 }

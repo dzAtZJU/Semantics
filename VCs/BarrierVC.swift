@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 class BarrierVC: UIViewController {
     private let imgView: UIImageView = {
@@ -17,13 +18,36 @@ class BarrierVC: UIViewController {
         return tmp
     }()
     
+    private lazy var deleteButton: UIButton = {
+        let tmp = UIButton()
+        tmp.translatesAutoresizingMaskIntoConstraints = false
+        tmp.setImage(UIImage(systemName: "trash"), for: .normal)
+        tmp.setTitle("Delete Sector", for: .normal)
+        tmp.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        return tmp
+    }()
+    
     override func loadView() {
         view = UIView()
         
         view.addSubview(imgView)
+        
+        view.addSubview(deleteButton)
+        deleteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        deleteButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
     }
     
     override func viewDidLoad() {
         imgView.frame = view.bounds
+    }
+}
+
+extension BarrierVC {
+    @objc func deleteButtonTapped() {
+        guard let sectorVC = parent as? SemSectorVC else {
+            return
+        }
+        
+        managedObjectContext.delete(sectorVC.sector)
     }
 }

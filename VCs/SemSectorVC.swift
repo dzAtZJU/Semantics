@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SemSectorVC: UIPageViewController {
     
@@ -21,8 +22,7 @@ class SemSectorVC: UIPageViewController {
         
         var firstOceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.min, in: sector)
         if firstOceanLayer == nil {
-            firstOceanLayer = OceanLayer(context: managedObjectContext)
-            firstOceanLayer?.sector = sector
+            firstOceanLayer = OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
         }
         
         setViewControllers([UINavigationController(rootViewController: SemSetsVC(oceanLayer: firstOceanLayer!))], direction: .forward, animated: false, completion: nil)
@@ -42,8 +42,9 @@ class SemSectorVC: UIPageViewController {
 
 extension SemSectorVC: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        print("contextcheck \(sector.managedObjectContext == nil)")
         guard !(viewController is BarrierVC) else {
-            let oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.max, in: sector) ?? OceanLayer(context: managedObjectContext)
+            let oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.max, in: sector) ?? OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
             return UINavigationController(rootViewController: SemSetsVC(oceanLayer: oceanLayer))
         }
 
@@ -75,6 +76,18 @@ extension SemSectorVC {
         guard let semSetsVC = viewControllers!.first!.children.first as? SemSetsVC else {
             return
         }
-        setViewControllers(viewControllers!, direction: .reverse, animated: false, completion: nil)
+        
+        if let deleted = notification.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>, deleted.count > 0, deleted.contains(semSetsVC.oceanLayer) {
+            
+            if let prev = pageViewController(self, viewControllerBefore: viewControllers!.first!) {
+                setViewControllers([prev], direction: .reverse, animated: true, completion: nil)
+                return
+            }
+            
+            let next = pageViewController(self, viewControllerAfter: viewControllers!.first!)!
+            setViewControllers([next], direction: .forward, animated: true, completion: nil)
+        } else {
+            setViewControllers(viewControllers!, direction: .reverse, animated: false, completion: nil)
+        }
     }
 }

@@ -55,6 +55,9 @@
 		89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */; };
 		89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988AE024C2F7EB0005580B /* SectorDataLayer.swift */; };
 		89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */; };
+		89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413CF24C567E0003FD435 /* OneFingerTableView.swift */; };
+		89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413D124C56E0B003FD435 /* OceanLayer+.swift */; };
+		89A413D424C57215003FD435 /* Word+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413D324C57215003FD435 /* Word+.swift */; };
 		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
@@ -174,6 +177,9 @@
 		89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSectorsVC.swift; sourceTree = "<group>"; };
 		89988AE024C2F7EB0005580B /* SectorDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorDataLayer.swift; sourceTree = "<group>"; };
 		89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanLayerDataLayer.swift; sourceTree = "<group>"; };
+		89A413CF24C567E0003FD435 /* OneFingerTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneFingerTableView.swift; sourceTree = "<group>"; };
+		89A413D124C56E0B003FD435 /* OceanLayer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OceanLayer+.swift"; sourceTree = "<group>"; };
+		89A413D324C57215003FD435 /* Word+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+.swift"; sourceTree = "<group>"; };
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89D8F3F42474EBA000D12F15 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
@@ -276,6 +282,7 @@
 				892C6411248A0C2100208446 /* UIViewController+.swift */,
 				896344C224A1C5180060160B /* String+.swift */,
 				8911386224C1644A00CBEBB5 /* CGRect+.swift */,
+				89A413CF24C567E0003FD435 /* OneFingerTableView.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -336,6 +343,8 @@
 				89642178247250590081DC87 /* Semantics.xcdatamodeld */,
 				89988AE024C2F7EB0005580B /* SectorDataLayer.swift */,
 				89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */,
+				89A413D124C56E0B003FD435 /* OceanLayer+.swift */,
+				89A413D324C57215003FD435 /* Word+.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -729,6 +738,7 @@
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
 				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
+				89A413D424C57215003FD435 /* Word+.swift in Sources */,
 				89642175247250590081DC87 /* AppDelegate.swift in Sources */,
 				8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */,
 				89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */,
@@ -745,8 +755,10 @@
 				8911386824C1984C00CBEBB5 /* Theme.swift in Sources */,
 				89D8F3FD247504AE00D12F15 /* LandmarkRow.swift in Sources */,
 				89D8F3F52474EBA000D12F15 /* CircleImage.swift in Sources */,
+				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
 				89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
+				89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */,
 				89D8F44B24765A9C00D12F15 /* RotatedBadgeSymbol.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
