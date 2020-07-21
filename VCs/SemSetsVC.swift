@@ -19,7 +19,7 @@ class SemSetsVC: UIViewController {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@", NSNumber(booleanLiteral: isArchive), oceanLayer)
+        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, Creature.none.rawValue)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.displayOrder, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
@@ -52,7 +52,7 @@ class SemSetsVC: UIViewController {
     private lazy var actionBar: [UIBarButtonItem] = {
         var tmp = [
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action:
-            #selector(trashButtonTapped)),
+                #selector(trashButtonTapped)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: "ReAssign", style: .plain, target: self, action: #selector(reAssignButtonTapped)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
@@ -177,7 +177,20 @@ class SemSetsVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("table \(table.contentOffset) \(table.contentInset)")
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
+            let ani = CABasicAnimation(keyPath: "opacity")
+            ani.toValue = 0
+            ani.autoreverses = true
+            ani.repeatCount = .infinity
+            self.bgLayer.add(ani, forKey: nil)
+        }
+        
+        playCreature(.Inspiration)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        bgLayer.removeAllAnimations()
     }
 }
 
@@ -261,7 +274,7 @@ extension SemSetsVC: UITableViewDataSource {
         fetchedObjects.remove(at: sourceIndexPath.row)
         fetchedObjects.insert(srcWord, at: destinationIndexPath.row)
         for (i, o) in fetchedObjects.enumerated() {
-            o.order = Double(i)
+            o.displayOrder = Int16(i)
         }
         appDelegate.saveContext()
     }
@@ -272,7 +285,6 @@ extension SemSetsVC: UITableViewDataSource {
         cell.showsReorderControl = true
         cell.textLabel!.text = word.name
         cell.detailTextLabel?.text = ""
-        print("cell \(word.name!) \(word.order)")
         if word.hasNeighborWords {
             cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: .secondaryLabel)
         }
@@ -417,6 +429,8 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         newWord.oceanLayer = oceanLayer
         newWord.displayOrder = Int16(fetchedResultsController.fetchedObjects!.count)
         
+        newWord.creature = Int16(Creature.Inspiration.rawValue)
+        
         let vc = SemSetVC(word: newWord, title: nil, proximity: proximity)
         show(vc, sender: nil)
     }
@@ -513,6 +527,37 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         setToolbarItems(nil, animated: true)
         navigationController!.setToolbarHidden(true, animated: true)
     }
+    
+    func playCreature(_ creature: Creature) {
+        precondition(creature == .Inspiration)
+        
+        let query: NSFetchRequest<Word> = Word.fetchRequest()
+        query.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, NSNumber(integerLiteral: Creature.Inspiration.rawValue))
+        do {
+            let inspirations = try managedObjectContext.fetch(query)
+            if inspirations.count > 0 {
+                var index = 0
+                Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
+                    let inspiration = inspirations[index]
+                    let inspirationView = InspriationView(text: inspiration.name!)
+                    inspirationView.frame.origin = CGPoint(x: CGFloat.random(in: 0...(self.view.width - inspirationView.width)), y: self.view.height + inspirationView.height)
+                    self.view.addSubview(inspirationView)
+                    UIView.animate(withDuration: 10.0, animations: {
+                        inspirationView.y = -inspirationView.height
+                    }) { (finished: Bool) in
+                        inspirationView.removeFromSuperview()
+                    }
+                    index += 1
+                    if index == inspirations.endIndex {
+                        timer.invalidate()
+                    }
+                }.fire()
+            }
+        } catch {
+            fatalError()
+        }
+        
+    }
 }
 
 // MARK: Search
@@ -545,7 +590,7 @@ extension SemSetsVC: UISearchControllerDelegate, UISearchResultsUpdating, UISear
 // Notification
 extension SemSetsVC {
     @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
-         if let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updated.count > 0, updated.contains(oceanLayer) {
+        if let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updated.count > 0, updated.contains(oceanLayer) {
             if let old = oceanLayer.changedValuesForCurrentEvent()["proximity"], old as! Int16 != oceanLayer.proximity {
                 bgLayer.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
             }
