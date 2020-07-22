@@ -19,7 +19,7 @@ class SemSetsVC: UIViewController {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, Creature.none.rawValue)
+        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, NSNumber(integerLiteral: Creature.none.rawValue))
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.displayOrder, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
@@ -56,7 +56,9 @@ class SemSetsVC: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: "ReAssign", style: .plain, target: self, action: #selector(reAssignButtonTapped)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title:"Merge", style: .plain, target: self, action: #selector(mergeButtonTapped))
+            UIBarButtonItem(title:"Merge", style: .plain, target: self, action: #selector(mergeButtonTapped)),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "tortoise")!, style: .plain, target: self, action: #selector(creatureButtonTapped))
         ]
         if !isArchive {
             tmp.insert(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), at: 1)
@@ -87,11 +89,19 @@ class SemSetsVC: UIViewController {
         return tmp
     }()
     
+    private lazy var playButton: UIBarButtonItem = {
+        .init(barButtonSystemItem: .play, target: self, action: #selector(playButtonTapped))
+    }()
+    
+    private lazy var callAttentionButton = UIBarButtonItem(image: UIImage(systemName: "flashlight.off.fill"), style: .plain, target: self, action: #selector(callAttentionButtonTapped))
+    
     private var isInMultiSelection = false
     
     private var isUserDrivenChange = false
     
     private let isArchive: Bool
+    
+    private lazy var animators = [UIViewPropertyAnimator]()
     
     private lazy var bgLayer: CAGradientLayer = {
         let tmp = CAGradientLayer()
@@ -102,6 +112,8 @@ class SemSetsVC: UIViewController {
     }()
     
     let proximity: Int
+    
+    private var creatureTimer: Timer?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -128,6 +140,11 @@ class SemSetsVC: UIViewController {
             navigationItem.rightBarButtonItem = editButton
             navigationItem.title = "Dictionary"
         }
+        
+        navigationItem.leftBarButtonItems = [
+            playButton,
+            callAttentionButton
+        ]
     }
     
     override func viewDidLoad() {
@@ -175,22 +192,15 @@ class SemSetsVC: UIViewController {
         addButton.center = view.bounds.inset(by: view.safeAreaInsets).bottomRight - CGPoint(x: 40, y: 40)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
-            let ani = CABasicAnimation(keyPath: "opacity")
-            ani.toValue = 0
-            ani.autoreverses = true
-            ani.repeatCount = .infinity
-            self.bgLayer.add(ani, forKey: nil)
-        }
-        
-        playCreature(.Inspiration)
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         bgLayer.removeAllAnimations()
+        creatureTimer?.invalidate()
+        playButton.isEnabled = true
+        animators.forEach {
+            $0.stopAnimation(false)
+            $0.finishAnimation(at: .current)
+        }
+        animators.removeAll()
     }
 }
 
@@ -429,8 +439,6 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         newWord.oceanLayer = oceanLayer
         newWord.displayOrder = Int16(fetchedResultsController.fetchedObjects!.count)
         
-        newWord.creature = Int16(Creature.Inspiration.rawValue)
-        
         let vc = SemSetVC(word: newWord, title: nil, proximity: proximity)
         show(vc, sender: nil)
     }
@@ -495,6 +503,21 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         endMultipleSelection()
     }
     
+    @objc private func creatureButtonTapped() {
+        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
+            self.fetchedResultsController.object(at: indexPath)
+        }) {
+            managedObjectContext.perform {
+                selectedWords.forEach {
+                    $0.creature = Int16(Creature.Inspiration.rawValue)
+                }
+            }
+            
+        }
+        
+        endMultipleSelection()
+    }
+    
     @objc private func reAssignButtonTapped() {
         if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
             self.fetchedResultsController.object(at: indexPath)
@@ -519,6 +542,30 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         endMultipleSelection()
     }
     
+    @objc private func playButtonTapped() {
+        playButton.isEnabled = false
+        playCreature(.Inspiration)
+    }
+    
+    @objc private func callAttentionButtonTapped(sender: UIBarButtonItem) {
+        switch sender.style {
+        case .plain:
+            sender.style = .done
+            sender.image = UIImage(systemName: "flashlight.on.fill")
+            let ani = CABasicAnimation(keyPath: "opacity")
+            ani.toValue = 0
+            ani.autoreverses = true
+            ani.repeatCount = .infinity
+            self.bgLayer.add(ani, forKey: nil)
+        case .done:
+            sender.style = .plain
+            sender.image = UIImage(systemName: "flashlight.off.fill")
+            self.bgLayer.removeAllAnimations()
+        default:
+            break
+        }
+    }
+    
     private func endMultipleSelection() {
         isInMultiSelection = false
         table.setEditing(false, animated: true)
@@ -535,24 +582,34 @@ extension SemSetsVC: KRPullLoadViewDelegate {
         query.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, NSNumber(integerLiteral: Creature.Inspiration.rawValue))
         do {
             let inspirations = try managedObjectContext.fetch(query)
-            if inspirations.count > 0 {
-                var index = 0
-                Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
-                    let inspiration = inspirations[index]
-                    let inspirationView = InspriationView(text: inspiration.name!)
-                    inspirationView.frame.origin = CGPoint(x: CGFloat.random(in: 0...(self.view.width - inspirationView.width)), y: self.view.height + inspirationView.height)
-                    self.view.addSubview(inspirationView)
-                    UIView.animate(withDuration: 10.0, animations: {
-                        inspirationView.y = -inspirationView.height
-                    }) { (finished: Bool) in
-                        inspirationView.removeFromSuperview()
-                    }
-                    index += 1
-                    if index == inspirations.endIndex {
-                        timer.invalidate()
-                    }
-                }.fire()
+            guard inspirations.count > 0 else {
+                playButton.isEnabled = true
+                return
             }
+            
+            var index = 0
+            creatureTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
+                let inspiration = inspirations[index]
+                let inspirationView = InspriationView(text: inspiration.name!)
+                inspirationView.frame.origin = CGPoint(x: CGFloat.random(in: 0...(self.view.width - inspirationView.width)), y: self.view.height)
+                self.view.addSubview(inspirationView)
+                let animator = UIViewPropertyAnimator(duration: 5, curve: .easeIn) {
+                    inspirationView.y = -inspirationView.height
+                }
+                animator.addCompletion { _ in
+                    inspirationView.removeFromSuperview()
+                    self.animators.removeAll(animator)
+                    print("animator remove \(inspiration.name)")
+                }
+                self.animators.append(animator)
+                animator.startAnimation()
+                index += 1
+                if index == inspirations.endIndex {
+                    timer.invalidate()
+                    self.playButton.isEnabled = true
+                }
+            }
+            creatureTimer?.fire()
         } catch {
             fatalError()
         }
