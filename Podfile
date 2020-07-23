@@ -5,6 +5,8 @@ target 'Semantics' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  pod 'Jelly', '~> 2.2.2'
+  
   # Pods for Semantics
   pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
   

@@ -27,21 +27,29 @@ class SemSectorsVC: UIPageViewController {
 
 extension SemSectorsVC: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let sectorVC = viewController as! SemSectorVC
-        guard let nextSector = SectorDataLayer.shared.queryByDisplayOrder(Int(sectorVC.sector.displayOrder), operator: .less) else {
+        if viewController is OrganVC {
             return nil
         }
+        
+        let sectorVC = viewController as! SemSectorVC
+        if let nextSector = SectorDataLayer.shared.queryByDisplayOrder(Int(sectorVC.sector.displayOrder), operator: .less) {
+            return SemSectorVC(sector: nextSector)
+        }
 
-        return SemSectorVC(sector: nextSector)
+        return OrganVC()
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if viewController is OrganVC {
+            return SemSectorVC(sector: SectorDataLayer.shared.queryByDisplayOrderEnding(.min) ?? Sector(context: managedObjectContext))
+        }
+        
         let sectorVC = viewController as! SemSectorVC
-        guard let nextSector = SectorDataLayer.shared.queryByDisplayOrder(Int(sectorVC.sector.displayOrder), operator: .larger) else {
-            return nil
+        if let nextSector = SectorDataLayer.shared.queryByDisplayOrder(Int(sectorVC.sector.displayOrder), operator: .larger) {
+            return SemSectorVC(sector: nextSector)
         }
 
-        return SemSectorVC(sector: nextSector)
+        return OrganVC()
     }
 }
 

@@ -17,7 +17,7 @@
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
 		892C63E02487934300208446 /* SWUISemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DF2487934300208446 /* SWUISemTextView.swift */; };
 		892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */; };
-		892C6410248A09C600208446 /* SemSetsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C640F248A09C600208446 /* SemSetsVC.swift */; };
+		892C6410248A09C600208446 /* OceanLayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C640F248A09C600208446 /* OceanLayerVC.swift */; };
 		892C6412248A0C2100208446 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6411248A0C2100208446 /* UIViewController+.swift */; };
 		892C6414248CCFE200208446 /* SemSetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6413248CCFE200208446 /* SemSetVC.swift */; };
 		892C6416248E1C1800208446 /* SemSetSubwordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6415248E1C1800208446 /* SemSetSubwordVC.swift */; };
@@ -52,6 +52,9 @@
 		89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */; };
 		89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988AE024C2F7EB0005580B /* SectorDataLayer.swift */; };
 		89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */; };
+		899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247124C9BCEF00F8259B /* OrganVC.swift */; };
+		899C247424C9C57300F8259B /* SemSetsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247324C9C57300F8259B /* SemSetsVC.swift */; };
+		899C247624C9CAE100F8259B /* Sector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247524C9CAE100F8259B /* Sector+.swift */; };
 		89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413CF24C567E0003FD435 /* OneFingerTableView.swift */; };
 		89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413D124C56E0B003FD435 /* OceanLayer+.swift */; };
 		89A413D424C57215003FD435 /* Word+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413D324C57215003FD435 /* Word+.swift */; };
@@ -105,7 +108,7 @@
 		892C63DD24867F8700208446 /* SemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextView.swift; sourceTree = "<group>"; };
 		892C63DF2487934300208446 /* SWUISemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWUISemTextView.swift; sourceTree = "<group>"; };
 		892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString.Key+.swift"; sourceTree = "<group>"; };
-		892C640F248A09C600208446 /* SemSetsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetsVC.swift; sourceTree = "<group>"; };
+		892C640F248A09C600208446 /* OceanLayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanLayerVC.swift; sourceTree = "<group>"; };
 		892C6411248A0C2100208446 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		892C6413248CCFE200208446 /* SemSetVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetVC.swift; sourceTree = "<group>"; };
 		892C6415248E1C1800208446 /* SemSetSubwordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetSubwordVC.swift; sourceTree = "<group>"; };
@@ -120,7 +123,7 @@
 		896344BE249F8F240060160B /* TextLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLoader.swift; sourceTree = "<group>"; };
 		896344C0249F94870060160B /* NSManagedObjectLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectLayer.swift; sourceTree = "<group>"; };
 		896344C224A1C5180060160B /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
-		89642171247250590081DC87 /* Semantics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Semantics.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		89642171247250590081DC87 /* SemanticsB1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SemanticsB1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89642174247250590081DC87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89642176247250590081DC87 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		89642179247250590081DC87 /* Semantics.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Semantics.xcdatamodel; sourceTree = "<group>"; };
@@ -143,6 +146,9 @@
 		89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSectorsVC.swift; sourceTree = "<group>"; };
 		89988AE024C2F7EB0005580B /* SectorDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectorDataLayer.swift; sourceTree = "<group>"; };
 		89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanLayerDataLayer.swift; sourceTree = "<group>"; };
+		899C247124C9BCEF00F8259B /* OrganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganVC.swift; sourceTree = "<group>"; };
+		899C247324C9C57300F8259B /* SemSetsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetsVC.swift; sourceTree = "<group>"; };
+		899C247524C9CAE100F8259B /* Sector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sector+.swift"; sourceTree = "<group>"; };
 		89A413CF24C567E0003FD435 /* OneFingerTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneFingerTableView.swift; sourceTree = "<group>"; };
 		89A413D124C56E0B003FD435 /* OceanLayer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OceanLayer+.swift"; sourceTree = "<group>"; };
 		89A413D324C57215003FD435 /* Word+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+.swift"; sourceTree = "<group>"; };
@@ -234,7 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				89E93FC32479873D0039935D /* SemSetView.swift */,
-				892C640F248A09C600208446 /* SemSetsVC.swift */,
+				892C640F248A09C600208446 /* OceanLayerVC.swift */,
 				892C6413248CCFE200208446 /* SemSetVC.swift */,
 				892C6415248E1C1800208446 /* SemSetSubwordVC.swift */,
 				892C6417248E589500208446 /* ProfileVC.swift */,
@@ -245,6 +251,8 @@
 				89988ADA24C2D3040005580B /* BarrierVC.swift */,
 				89988ADC24C2D8FF0005580B /* SemSectorVC.swift */,
 				89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */,
+				899C247124C9BCEF00F8259B /* OrganVC.swift */,
+				899C247324C9C57300F8259B /* SemSetsVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -269,6 +277,7 @@
 				89988AE224C2FD8C0005580B /* OceanLayerDataLayer.swift */,
 				89A413D124C56E0B003FD435 /* OceanLayer+.swift */,
 				89A413D324C57215003FD435 /* Word+.swift */,
+				899C247524C9CAE100F8259B /* Sector+.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -298,7 +307,7 @@
 		89642172247250590081DC87 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				89642171247250590081DC87 /* Semantics.app */,
+				89642171247250590081DC87 /* SemanticsB1.app */,
 				8964218A247250660081DC87 /* SemanticsTests.xctest */,
 			);
 			name = Products;
@@ -423,7 +432,7 @@
 				8911386524C1672000CBEBB5 /* SwifterSwift */,
 			);
 			productName = Semantics;
-			productReference = 89642171247250590081DC87 /* Semantics.app */;
+			productReference = 89642171247250590081DC87 /* SemanticsB1.app */;
 			productType = "com.apple.product-type.application";
 		};
 		89642189247250660081DC87 /* SemanticsTests */ = {
@@ -580,19 +589,22 @@
 				89A413DC24C6F201003FD435 /* TestVC.swift in Sources */,
 				89B953AC24B8568200472692 /* SemStyle.swift in Sources */,
 				89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */,
+				899C247624C9CAE100F8259B /* Sector+.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				8962350B24920B110000ABCD /* SemContentFilterVC.swift in Sources */,
 				8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */,
 				896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
-				892C6410248A09C600208446 /* SemSetsVC.swift in Sources */,
+				892C6410248A09C600208446 /* OceanLayerVC.swift in Sources */,
 				896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */,
 				8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */,
+				899C247424C9C57300F8259B /* SemSetsVC.swift in Sources */,
 				892C63E02487934300208446 /* SWUISemTextView.swift in Sources */,
 				8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
 				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
+				899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */,
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
 				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
 				89A413D724C6F041003FD435 /* Bubble.swift in Sources */,
@@ -789,7 +801,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.Branch1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SemanticsB1;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -815,7 +827,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.Branch1;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SemanticsB1;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

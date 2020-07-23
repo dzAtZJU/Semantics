@@ -2,7 +2,7 @@
 //  SemSetsVC.swift
 //  Semantics
 //
-//  Created by Zhou Wei Ran on 2020/6/5.
+//  Created by Zhou Wei Ran on 2020/7/23.
 //  Copyright © 2020 Paper Scratch. All rights reserved.
 //
 
@@ -11,15 +11,25 @@ import CoreData
 import SwiftUI
 import Iconic
 import SwifterSwift
-import KRPullLoader
 
 class SemSetsVC: UIViewController {
     
     var oceanLayer: OceanLayer
     
+    var isArchive = false
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(oceanLayer oceanLayer_: OceanLayer) {
+        oceanLayer = oceanLayer_
+        super.init(nibName:  nil, bundle: nil)
+    }
+    
     private lazy var fetchedResultsController: NSFetchedResultsController<Word> = {
         let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, NSNumber(integerLiteral: Creature.none.rawValue))
+        request.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature != %@", NSNumber(booleanLiteral: isArchive), oceanLayer, NSNumber(integerLiteral: Creature.Inspiration.rawValue))
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.displayOrder, ascending: true)]
         return NSFetchedResultsController(fetchRequest: request, managedObjectContext: managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
     }()
@@ -35,116 +45,12 @@ class SemSetsVC: UIViewController {
     
     private static let CellIdentifier = "SemSetsVC.Cell"
     
-    private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(rightBarCancelButttonTapped))
-    
-    private lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButttonTapped))
-    
-    private lazy var addButton: UIButton = {
-        let tmp = UIButton(type: .contactAdd)
-        tmp.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
-        tmp.frame.size = .init(width: 40, height: 40)
-        tmp.contentVerticalAlignment = .fill
-        tmp.contentHorizontalAlignment = .fill
-        tmp.addTarget(self, action: #selector(addButttonTapped), for: .touchUpInside)
-        return tmp
-    }()
-    
-    private lazy var actionBar: [UIBarButtonItem] = {
-        var tmp = [
-            UIBarButtonItem(barButtonSystemItem: .trash, target: self, action:
-                #selector(trashButtonTapped)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: "ReAssign", style: .plain, target: self, action: #selector(reAssignButtonTapped)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title:"Merge", style: .plain, target: self, action: #selector(mergeButtonTapped)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(image: UIImage(systemName: "tortoise")!, style: .plain, target: self, action: #selector(creatureButtonTapped))
-        ]
-        if !isArchive {
-            tmp.insert(UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), at: 1)
-            tmp.insert(UIBarButtonItem(title: "Archive", style: .plain, target: self, action: #selector(archiveButtonTapped)), at: 2)
-        }
-        return tmp
-    }()
-    
-    private lazy var searchResultsVC: SearchResultsVC = {
-        let tmp = SearchResultsVC()
-        tmp.delegate = self
-        return tmp
-    }()
-    
-    private lazy var searchController: UISearchController = {
-        let tmp = UISearchController(searchResultsController: searchResultsVC)
-        tmp.delegate = self
-        tmp.searchResultsUpdater = self
-        tmp.searchBar.autocapitalizationType = .none
-        tmp.obscuresBackgroundDuringPresentation = false
-        tmp.searchBar.delegate = self
-        tmp.searchBar.scopeButtonTitles = []
-        
-        navigationItem.hidesSearchBarWhenScrolling = false
-        
-        definesPresentationContext = true
-        
-        return tmp
-    }()
-    
-    private lazy var playButton: UIBarButtonItem = {
-        .init(barButtonSystemItem: .play, target: self, action: #selector(playButtonTapped))
-    }()
-    
-    private lazy var callAttentionButton = UIBarButtonItem(image: UIImage(systemName: "flashlight.off.fill"), style: .plain, target: self, action: #selector(callAttentionButtonTapped))
-    
-    private var isInMultiSelection = false
-    
-    private var isUserDrivenChange = false
-    
-    private let isArchive: Bool
-    
-    private lazy var animators = [UIViewPropertyAnimator]()
-    
-    private lazy var bgLayer: CAGradientLayer = {
-        let tmp = CAGradientLayer()
-        tmp.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
-        tmp.startPoint = .init(x: 0, y: 0)
-        tmp.endPoint = .init(x: 1, y: 0)
-        return tmp
-    }()
-    
-    let proximity: Int
-    
-    private var creatureTimer: Timer?
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    init(oceanLayer oceanLayer_: OceanLayer, isArchive isArchive_: Bool = false) {
-        isArchive = isArchive_
-        oceanLayer = oceanLayer_
-        proximity = 0
-        super.init(nibName:  nil, bundle: nil)
-    }
-    
     // MARK: VC
     
     override func loadView() {
         view = UIView()
         
-        view.layer.insertSublayer(bgLayer, at: 0)
         view.addSubview(table)
-        view.addSubview(addButton)
-        
-        if !isArchive {
-            tabBarItem = UITabBarItem(title: "Dictionary", image: UIImage(systemName: "tray.full"), selectedImage: nil)
-            navigationItem.rightBarButtonItem = editButton
-            navigationItem.title = "Dictionary"
-        }
-        
-        navigationItem.leftBarButtonItems = [
-            playButton,
-            callAttentionButton
-        ]
     }
     
     override func viewDidLoad() {
@@ -157,7 +63,6 @@ class SemSetsVC: UIViewController {
         table.delegate = self
         table.dataSource = self
         fetchedResultsController.delegate = self
-        navigationItem.searchController = searchController
         
         if let parent = parent?.parent as? UIPageViewController {
             let scrollView = parent.view.subviews.first {
@@ -171,8 +76,6 @@ class SemSetsVC: UIViewController {
                 scrollView.panGestureRecognizer.require(toFail: recognizer)
             }
         }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -182,34 +85,10 @@ class SemSetsVC: UIViewController {
         extendedLayoutIncludesOpaqueBars = true
         super.viewWillAppear(animated)
     }
-    
-    override func viewDidLayoutSubviews() {
-        bgLayer.frame = view.bounds
-    }
+  
     
     override func viewSafeAreaInsetsDidChange() {
         table.frame = view.bounds.inset(by: view.safeAreaInsets)
-        addButton.center = view.bounds.inset(by: view.safeAreaInsets).bottomRight - CGPoint(x: 40, y: 40)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        bgLayer.removeAllAnimations()
-        creatureTimer?.invalidate()
-        playButton.isEnabled = true
-        animators.forEach {
-            $0.stopAnimation(false)
-            $0.finishAnimation(at: .current)
-        }
-        animators.removeAll()
-    }
-}
-
-// Adaptive
-extension SemSetsVC {
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        if previousTraitCollection!.hasDifferentColorAppearance(comparedTo: traitCollection) {
-            bgLayer.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
-        }
     }
 }
 
@@ -240,15 +119,6 @@ extension SemSetsVC: UITableViewDataSource {
         fetchedResultsController.section(forSectionIndexTitle: title, at: index)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        switch editingStyle {
-        case .delete:
-            managedObjectContext.delete(self.fetchedResultsController.object(at: indexPath))
-        default:
-            fatalError()
-        }
-    }
-    
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let word = self.fetchedResultsController.object(at: indexPath)
         guard let name = word.name else {
@@ -272,23 +142,6 @@ extension SemSetsVC: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        isUserDrivenChange = true
-        defer {
-            isUserDrivenChange = false
-        }
-        guard var fetchedObjects = fetchedResultsController.fetchedObjects else {
-            return
-        }
-        let srcWord = fetchedResultsController.object(at: sourceIndexPath)
-        fetchedObjects.remove(at: sourceIndexPath.row)
-        fetchedObjects.insert(srcWord, at: destinationIndexPath.row)
-        for (i, o) in fetchedObjects.enumerated() {
-            o.displayOrder = Int16(i)
-        }
-        appDelegate.saveContext()
-    }
-    
     private func configureCell(_ cell: UITableViewCell, at indexPath: IndexPath) {
         let word = fetchedResultsController.object(at: indexPath)
         cell.accessoryType = .disclosureIndicator
@@ -303,72 +156,17 @@ extension SemSetsVC: UITableViewDataSource {
 
 extension SemSetsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard isInMultiSelection else {
-            let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath), title: nil)
-            show(detailVC, sender: nil)
-            return
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Push", handler: { (_, _, completion) in
-            let word = self.fetchedResultsController.object(at: indexPath)
-            var nextOceanLayer = OceanLayerDataLayer.shared.queryByProximity(self.oceanLayer.proximity, operator: .larger, in: self.oceanLayer.sector!)
-            if nextOceanLayer == nil {
-                nextOceanLayer = OceanLayer(context: self.managedObjectContext, sector: self.oceanLayer.sector!, proximity: self.oceanLayer.proximity + 1)
-            }
-            word.oceanLayer = nextOceanLayer
-            word.displayOrder = Int16(nextOceanLayer!.words?.count ?? 0)
-            completion(true)
-        })])
-    }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        UISwipeActionsConfiguration(actions: [UIContextualAction(style: .normal, title: "Pull", handler: { (_, _, completion) in
-            let word = self.fetchedResultsController.object(at: indexPath)
-            var previousOceanLayer = OceanLayerDataLayer.shared.queryByProximity(self.oceanLayer.proximity, operator: .less, in: self.oceanLayer.sector!)
-            if previousOceanLayer == nil {
-                for (i, l) in (self.oceanLayer.sector!.oceanLayers as! Set<OceanLayer>).sorted(by: \.proximity).enumerated() {
-                    l.proximity = Int16(i + 1)
-                }
-                previousOceanLayer = OceanLayer(context: self.managedObjectContext, sector: self.oceanLayer.sector!, proximity: 0)
-            }
-            word.oceanLayer = previousOceanLayer
-            word.displayOrder = Int16(previousOceanLayer!.words?.count ?? 0)
-            completion(true)
-        })])
-    }
-    
-    func tableView(_ tableView: UITableView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
-        true
-    }
-    
-    func tableView(_ tableView: UITableView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
-        guard !isInMultiSelection else {
-            return
-        }
-        isInMultiSelection = true
-        
-        table.setEditing(true, animated: true)
-        
-        navigationItem.setRightBarButton(cancelButton, animated: true)
-        setToolbarItems(actionBar, animated: true)
-        navigationController!.setToolbarHidden(false, animated: true)
+        let detailVC = SemSetVC(word: fetchedResultsController.object(at: indexPath), title: nil)
+        show(detailVC, sender: nil)
     }
 }
 
 extension SemSetsVC: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard !isUserDrivenChange else {
-            return
-        }
         table.beginUpdates()
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-        guard !isUserDrivenChange else {
-            return
-        }
         switch type {
         case .insert:
             table.insertSections(IndexSet([sectionIndex]), with: .fade)
@@ -380,9 +178,6 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard !isUserDrivenChange else {
-            return
-        }
         switch type {
         case .insert:
             if let newIndexPath = newIndexPath {
@@ -401,256 +196,6 @@ extension SemSetsVC: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard !isUserDrivenChange else {
-            return
-        }
         table.endUpdates()
-    }
-}
-
-// MARK: Interaction
-extension SemSetsVC: KRPullLoadViewDelegate {
-    func pullLoadView(_ pullLoadView: KRPullLoadView, didChangeState state: KRPullLoaderState, viewType type: KRPullLoaderType) {
-        switch type {
-        case .refresh:
-            if case let KRPullLoaderState.loading(completionHandler) = state {
-                let page = parent!.parent!.parent as! UIPageViewController
-                if let pre = page.dataSource!.pageViewController(page, viewControllerBefore: parent!.parent!) {
-                    page.setViewControllers([pre], direction: .reverse, animated: true, completion: nil)
-                }
-                completionHandler()
-            }
-        case .loadMore:
-            if case let KRPullLoaderState.loading(completionHandler) = state {
-                let page = parent!.parent!.parent as! UIPageViewController
-                if let pre = page.dataSource!.pageViewController(page, viewControllerAfter: parent!.parent!) {
-                    page.setViewControllers([pre], direction: .forward, animated: true, completion: nil)
-                }
-                completionHandler()
-            }
-            if case let KRPullLoaderState.pulling(offset, threshold) = state {
-                print("pull \(offset) \(threshold)")
-            }
-        }
-    }
-    
-    @objc private func addButttonTapped() {
-        let newWord = Word(context: managedObjectContext)
-        newWord.oceanLayer = oceanLayer
-        newWord.displayOrder = Int16(fetchedResultsController.fetchedObjects!.count)
-        
-        let vc = SemSetVC(word: newWord, title: nil, proximity: proximity)
-        show(vc, sender: nil)
-    }
-    
-    @objc private func editButttonTapped() {
-        isInMultiSelection = true
-        table.setEditing(true, animated: false)
-        navigationItem.setRightBarButton(cancelButton, animated: true)
-        
-        setToolbarItems(actionBar, animated: true)
-        navigationController!.setToolbarHidden(false, animated: true)
-    }
-    
-    @objc private func rightBarCancelButttonTapped() {
-        endMultipleSelection()
-    }
-    
-    @objc private func archiveButtonTapped() {
-        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
-            self.fetchedResultsController.object(at: indexPath)
-        }) {
-            managedObjectContext.perform {
-                selectedWords.forEach {
-                    $0.isArchived = true
-                }
-            }
-            
-        }
-        
-        endMultipleSelection()
-    }
-    
-    @objc private func trashButtonTapped() {
-        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
-            self.fetchedResultsController.object(at: indexPath)
-        }) {
-            managedObjectContext.perform {
-                selectedWords.forEach {
-                    self.managedObjectContext.delete($0)
-                }
-            }
-            
-        }
-        
-        endMultipleSelection()
-    }
-    
-    @objc private func mergeButtonTapped() {
-        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
-            self.fetchedResultsController.object(at: indexPath)
-        }) {
-            selectedWords.last!.subWords = Array(selectedWords.compactMap {
-                $0.subWords
-            }.joined())
-            managedObjectContext.performAndWait {
-                selectedWords.prefix(selectedWords.count - 1).forEach {
-                    self.managedObjectContext.delete($0)
-                }
-            }
-            show(SemSetVC(word: selectedWords.last!, title: nil), sender: self)
-        }
-        endMultipleSelection()
-    }
-    
-    @objc private func creatureButtonTapped() {
-        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
-            self.fetchedResultsController.object(at: indexPath)
-        }) {
-            managedObjectContext.perform {
-                selectedWords.forEach {
-                    $0.creature = Int16(Creature.Inspiration.rawValue)
-                }
-            }
-            
-        }
-        
-        endMultipleSelection()
-    }
-    
-    @objc private func reAssignButtonTapped() {
-        if let selectedWords = table.indexPathsForSelectedRows?.map({ (indexPath) -> Word in
-            self.fetchedResultsController.object(at: indexPath)
-        }) {
-            var nextSector = SectorDataLayer.shared.queryByDisplayOrder(Int(oceanLayer.sector!.displayOrder), operator: .larger)
-            if nextSector == nil {
-                nextSector = Sector(context: managedObjectContext)
-                nextSector!.displayOrder = SectorDataLayer.shared.queryByDisplayOrderEnding(.max) + 1
-            }
-            var oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.min, in: nextSector!)
-            if oceanLayer == nil {
-                oceanLayer = OceanLayer(context: managedObjectContext)
-                oceanLayer?.sector = nextSector
-            }
-            let displayOrder = ((oceanLayer!.words as? Set<Word>)?.sorted(by: \.displayOrder).last?.displayOrder ?? -1) + 1
-            for (i, w) in selectedWords.enumerated() {
-                w.oceanLayer = oceanLayer
-                w.displayOrder = displayOrder + Int16(i)
-            }
-        }
-        
-        endMultipleSelection()
-    }
-    
-    @objc private func playButtonTapped() {
-        playButton.isEnabled = false
-        playCreature(.Inspiration)
-    }
-    
-    @objc private func callAttentionButtonTapped(sender: UIBarButtonItem) {
-        switch sender.style {
-        case .plain:
-            sender.style = .done
-            sender.image = UIImage(systemName: "flashlight.on.fill")
-            let ani = CABasicAnimation(keyPath: "opacity")
-            ani.toValue = 0
-            ani.autoreverses = true
-            ani.repeatCount = .infinity
-            self.bgLayer.add(ani, forKey: nil)
-        case .done:
-            sender.style = .plain
-            sender.image = UIImage(systemName: "flashlight.off.fill")
-            self.bgLayer.removeAllAnimations()
-        default:
-            break
-        }
-    }
-    
-    private func endMultipleSelection() {
-        isInMultiSelection = false
-        table.setEditing(false, animated: true)
-        
-        navigationItem.setRightBarButton(editButton, animated: true)
-        setToolbarItems(nil, animated: true)
-        navigationController!.setToolbarHidden(true, animated: true)
-    }
-    
-    func playCreature(_ creature: Creature) {
-        precondition(creature == .Inspiration)
-        
-        let query: NSFetchRequest<Word> = Word.fetchRequest()
-        query.predicate = NSPredicate(format: "isArchived == %@ && oceanLayer == %@ && creature == %@", NSNumber(booleanLiteral: isArchive), oceanLayer, NSNumber(integerLiteral: Creature.Inspiration.rawValue))
-        do {
-            let inspirations = try managedObjectContext.fetch(query)
-            guard inspirations.count > 0 else {
-                playButton.isEnabled = true
-                return
-            }
-            
-            var index = 0
-            creatureTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
-                let inspiration = inspirations[index]
-                let inspirationView = InspriationView(text: inspiration.name!)
-                inspirationView.frame.origin = CGPoint(x: CGFloat.random(in: 0...(self.view.width - inspirationView.width)), y: self.view.height)
-                self.view.addSubview(inspirationView)
-                let animator = UIViewPropertyAnimator(duration: 5, curve: .easeIn) {
-                    inspirationView.y = -inspirationView.height
-                }
-                animator.addCompletion { _ in
-                    inspirationView.removeFromSuperview()
-                    self.animators.removeAll(animator)
-                    print("animator remove \(inspiration.name)")
-                }
-                self.animators.append(animator)
-                animator.startAnimation()
-                index += 1
-                if index == inspirations.endIndex {
-                    timer.invalidate()
-                    self.playButton.isEnabled = true
-                }
-            }
-            creatureTimer?.fire()
-        } catch {
-            fatalError()
-        }
-        
-    }
-}
-
-// MARK: Search
-extension SemSetsVC: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, SearchResultsVCDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
-        let keys = searchController.searchBar.text!.trimmingCharacters(in: CharacterSet.whitespaces).components(separatedBy: " ") as [String]
-        let request: NSFetchRequest<Word> = Word.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates:
-            keys.map {
-                findMatches(key: $0)
-        })
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Word.name, ascending: true)]
-        do {
-            searchResultsVC.words = try managedObjectContext.fetch(request)
-        } catch {
-            fatalError()
-        }
-        
-    }
-    
-    func searchResultsVC(_ searchResultsVC: SearchResultsVC, didSelectWord word: Word) {
-        show(SemSetVC(word: word, title: nil), sender: self)
-    }
-    
-    private func findMatches(key: String) -> NSPredicate {
-        NSPredicate(format: "name CONTAINS %@", key)
-    }
-}
-
-// Notification
-extension SemSetsVC {
-    @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
-        if let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updated.count > 0, updated.contains(oceanLayer) {
-            if let old = oceanLayer.changedValuesForCurrentEvent()["proximity"], old as! Int16 != oceanLayer.proximity {
-                bgLayer.colors = Theme.color(forProximity: Int(oceanLayer.proximity))
-            }
-        }
     }
 }

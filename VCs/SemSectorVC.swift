@@ -25,7 +25,7 @@ class SemSectorVC: UIPageViewController {
             firstOceanLayer = OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
         }
         
-        setViewControllers([UINavigationController(rootViewController: SemSetsVC(oceanLayer: firstOceanLayer!))], direction: .forward, animated: false, completion: nil)
+        setViewControllers([UINavigationController(rootViewController: OceanLayerVC(oceanLayer: firstOceanLayer!))], direction: .forward, animated: false, completion: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: managedObjectContext)
     }
@@ -42,28 +42,36 @@ class SemSectorVC: UIPageViewController {
 
 extension SemSectorVC: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        print("contextcheck \(sector.managedObjectContext == nil)")
-        guard !(viewController is BarrierVC) else {
-            let oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.max, in: sector) ?? OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
-            return UINavigationController(rootViewController: SemSetsVC(oceanLayer: oceanLayer))
-        }
-
-        let origin = (viewController.children.first! as! SemSetsVC)
-        if let lesser = OceanLayerDataLayer.shared.queryByProximity(origin.oceanLayer.proximity, operator: .less, in: sector) {
-            return UINavigationController(rootViewController: SemSetsVC(oceanLayer: lesser))
+        if viewController is OrganVC {
+            return nil
         }
         
-        return nil
+        if viewController is BarrierVC {
+            let oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.max, in: sector) ?? OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
+            return UINavigationController(rootViewController: OceanLayerVC(oceanLayer: oceanLayer))
+        }
+
+        let origin = (viewController.children.first! as! OceanLayerVC)
+        if let lesser = OceanLayerDataLayer.shared.queryByProximity(origin.oceanLayer.proximity, operator: .less, in: sector) {
+            return UINavigationController(rootViewController: OceanLayerVC(oceanLayer: lesser))
+        }
+        
+        return OrganVC()
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard !(viewController is BarrierVC) else {
+        if viewController is BarrierVC {
             return nil
         }
+        
+        if viewController is OrganVC {
+            let oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.min, in: sector) ?? OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
+            return UINavigationController(rootViewController: OceanLayerVC(oceanLayer: oceanLayer))
+        }
 
-        let origin = (viewController.children.first! as! SemSetsVC)
+        let origin = (viewController.children.first! as! OceanLayerVC)
         if let larger = OceanLayerDataLayer.shared.queryByProximity(origin.oceanLayer.proximity, operator: .larger, in: sector) {
-            return UINavigationController(rootViewController: SemSetsVC(oceanLayer: larger))
+            return UINavigationController(rootViewController: OceanLayerVC(oceanLayer: larger))
         }
 
         return BarrierVC()
@@ -73,7 +81,7 @@ extension SemSectorVC: UIPageViewControllerDataSource {
 // Notification
 extension SemSectorVC {
     @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
-        guard let semSetsVC = viewControllers!.first!.children.first as? SemSetsVC else {
+        guard let semSetsVC = viewControllers!.first!.children.first as? OceanLayerVC else {
             return
         }
         

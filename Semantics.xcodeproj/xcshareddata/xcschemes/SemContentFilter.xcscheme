@@ -30,7 +30,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "89642170247250590081DC87"
-               BuildableName = "Semantics.app"
+               BuildableName = "SemanticsB1.app"
                BlueprintName = "Semantics"
                ReferencedContainer = "container:Semantics.xcodeproj">
             </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89642170247250590081DC87"
-            BuildableName = "Semantics.app"
+            BuildableName = "SemanticsB1.app"
             BlueprintName = "Semantics"
             ReferencedContainer = "container:Semantics.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89642170247250590081DC87"
-            BuildableName = "Semantics.app"
+            BuildableName = "SemanticsB1.app"
             BlueprintName = "Semantics"
             ReferencedContainer = "container:Semantics.xcodeproj">
          </BuildableReference>

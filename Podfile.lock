@@ -1,16 +1,19 @@
 PODS:
   - Highcharts (8.1.2)
   - Iconic (1.5)
+  - Jelly (2.2.2)
   - KRPullLoader (1.3.0)
 
 DEPENDENCIES:
   - Highcharts (~> 8.1.2)
   - Iconic (from `https://github.com/home-assistant/Iconic.git`)
+  - Jelly (~> 2.2.2)
   - KRPullLoader
 
 SPEC REPOS:
   trunk:
     - Highcharts
+    - Jelly
     - KRPullLoader
 
 EXTERNAL SOURCES:
@@ -25,8 +28,9 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Highcharts: 795b5359af23d5af26da7529056da6a0f3e4d47f
   Iconic: da1d724e702e01d3737046b653bee69f38d148a0
+  Jelly: 0576a8fd3b3bea78f6c2d952acdc30b0835dda71
   KRPullLoader: c81594d578c90f46c1fe539b8d9a6a581ce3bdb0
 
-PODFILE CHECKSUM: 178041d14cc18729db737d488972616338d92d35
+PODFILE CHECKSUM: ff985a1677f08b606c17fe822c03dea744658fcb
 
 COCOAPODS: 1.8.4

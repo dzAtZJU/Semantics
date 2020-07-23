@@ -19,28 +19,86 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		018B6DB601AF1D792FFCDD042C6E2611 /* PresentationHeightProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C7BA1F3F5D1DBF61B8111EF36FCA2E /* PresentationHeightProvider.swift */; };
+		02835740D1DD84B3B9D14D3764D243E3 /* Direction+EdgeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5377BC538A69CA47DBE12381C580A487 /* Direction+EdgeHelper.swift */; };
 		0525A8991FE8C812CA5719D0FD7FAB5D /* Pods-SemanticsTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E2A2FDF98D8C84F73EDBBA6436E949B7 /* Pods-SemanticsTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29589D19650C2FD07C9CFFBAF31A83FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23621862A99429490F9C983069F078BB /* Foundation.framework */; };
-		4F13F32E615068DE1932FCF0BA3A0D53 /* KRPullLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E5A10F7DEEC82B5B86076E4F281E82 /* KRPullLoader.swift */; };
-		6B5D87825A3567844699EA0A9F14A92E /* KRPullLoader-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F43F59175998A4AB2BA858D39614C548 /* KRPullLoader-dummy.m */; };
+		099EFD131B34A1AB02498EA2169160CC /* LiveUpdateError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1607023F2715E6AAC5D2569A240167 /* LiveUpdateError.swift */; };
+		1061EA6DE63E32A8BE5E76EE4F3E1034 /* CoverPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C9B02A57DA4315D820F9591ACD76E /* CoverPresentation.swift */; };
+		1374CC08B7211642C5DB07B27B16B9A5 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD2628D74848AD132E554A890E92E3 /* Constants.swift */; };
+		1A2F72DC9F98DE309DD1E4CE08B7D7F1 /* Direction+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B1603690ACC1023CB44F03FBBE760BE /* Direction+Orientation.swift */; };
+		1C7D7465288FD03AA7EEFBD860E9F0C4 /* PresentationSpringProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 391BCFE94E14699A994976428DA251C1 /* PresentationSpringProvider.swift */; };
+		233E58947C96FD650A67E1EB92D2B71A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23621862A99429490F9C983069F078BB /* Foundation.framework */; };
+		259F4C3CA297BB6D0186FC02532DE15A /* ViewControllerSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735AF18FA1B37444E84DA01340660E0B /* ViewControllerSizeCalculator.swift */; };
+		264E2BEA5D358F275A1DF8CAE0A6358B /* InteractionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A9B93AF63A7B78569784C453AA2952 /* InteractionMode.swift */; };
+		2B84BDD12BADEC730F37739204DB58EA /* PresentationDirectionShowProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26722A0F673CC9BAB07B051EA3A558E /* PresentationDirectionShowProvider.swift */; };
+		30BE4A8DC25CAE01EEB5269C6663E02B /* BackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B3C12B146629DB0ED3F0ACF8532CDC /* BackgroundStyle.swift */; };
+		3701310CDC01E249B73B87A9D7F0D8CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 032F67321D34EE01369F5810E71B7660 /* UIKit.framework */; };
+		427F26B79F6B3A2D539BB98E81BADE00 /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72D4C96B3EFB282C4B7E9D9646CA45C1 /* FadeAnimator.swift */; };
+		4473247E6A1970D13D94ECF12A09BB40 /* Presentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A254F1CEEB7B71B934A6BBF31BD2FE96 /* Presentation.swift */; };
+		4567049120A041E76C176A5FF3B27B12 /* HorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586C557C9557556B8483D2C59AE09033 /* HorizontalAlignment.swift */; };
+		4AACDB0E1596962BBD1F5C168252F847 /* PresentationUIConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B0C804DB1C035E75752BA0ADC2F181 /* PresentationUIConfigurationProvider.swift */; };
+		4B9B02B30BA7A1B55961B03AFB2D86C4 /* PresentationSingleSizeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB3E2A69978D3A3BEFD2E47E49A9E19 /* PresentationSingleSizeProvider.swift */; };
+		4F13F32E615068DE1932FCF0BA3A0D53 /* KRPullLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8163B2F8B51563BE862065EF68B453F /* KRPullLoader.swift */; };
+		53BC410A7DDAD941CF7CD2C36E8E8B9E /* Spring+Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7986B812B284154DA6A1F6EE5466F09C /* Spring+Values.swift */; };
+		5938D5CF84487DE2E35F8CF299147B08 /* PresentationDirectionDismissProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2666C4097F9E6B203EBEED8C481B02 /* PresentationDirectionDismissProvider.swift */; };
+		593C6E775EF88F79415CEC3E64085C09 /* PresentationTimingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE00FB2CAA9E69089944F6627E63D722 /* PresentationTimingProtocol.swift */; };
+		5BDC66E27FF256A61DA23BF2AFFA9ACC /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C263B56DF8C3CC620021378927740E65 /* Direction.swift */; };
+		5BE227CB09BE25B53E25FCC3AE5FA071 /* PresentationUIConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012DAEF3D02393D5A6B4DCEF689F8C7A /* PresentationUIConfiguration.swift */; };
+		5D2C34B918A4F7C9D71FF43206106468 /* PresentationMarginGuardsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D27C07CB8562D9089B1827181ECBB0 /* PresentationMarginGuardsProvider.swift */; };
+		5DB5B29EFF8BB31D06C5900A577875AF /* InteractionConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B48C229F55F15B13489B65E9829C7A2 /* InteractionConfiguration.swift */; };
+		66B8076331E07CC8F187E652B90F32DE /* PresentationInteractiveAnimatorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320E78F01731D4E1306DA97767A1E4E9 /* PresentationInteractiveAnimatorProvider.swift */; };
+		6B445BD12C277C71C349F732696CF48C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23621862A99429490F9C983069F078BB /* Foundation.framework */; };
+		6B5D87825A3567844699EA0A9F14A92E /* KRPullLoader-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A132E0A470F77FDAE30A90B821AF0E53 /* KRPullLoader-dummy.m */; };
 		6DB33D7298944397DC18F38D843FFB2B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 032F67321D34EE01369F5810E71B7660 /* UIKit.framework */; };
-		6F7DE2B56525BA9325E62A987907266E /* KRPullLoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA154188C1B0CDB14F72317D1F17A84 /* KRPullLoadView.swift */; };
+		6E16DC7D06156F9ACC93C495506CA347 /* Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5EF9B39D2CB4DEED48018E68B3913A /* Spring.swift */; };
+		6E87018351159D554258B91599C410AA /* PresentationSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A50A6A7E5AD507E5A7E497612678EA /* PresentationSize.swift */; };
+		6F7DE2B56525BA9325E62A987907266E /* KRPullLoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0526CAE136E056E922651E8E2B9E8 /* KRPullLoadView.swift */; };
+		78760FB13D3C2592E4D45EE86CBCAC7D /* CombinedTimingCurveProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88E85BBE479F91FAD16FCA9C6874306F /* CombinedTimingCurveProvider.swift */; };
+		7A0DEAF5CF4E89A718D34B7C3370558D /* PresentationAnimatorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325C6AD36A302D3A0C658101AFB0A1BA /* PresentationAnimatorProvider.swift */; };
+		7C590EF4FFF9F97970C9D3B89DA50C7D /* PresentationSizeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC34A8236AD56AF3E05FF38AAA846AB8 /* PresentationSizeProvider.swift */; };
+		7DCF4048BB358DD47120BEADAB9D73D6 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87879FFA59947BF2A4751AB950A1618C /* Orientation.swift */; };
 		7E74A2CFC2AF9EF82C13C936B49D0910 /* Pods-SemanticsTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DEEAF30076098E69923C09654BF86CFB /* Pods-SemanticsTests-dummy.m */; };
-		8C70BE737082228BF5B371AE4B93D886 /* IconDrawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D7665BE37DE257024951E22BE16987 /* IconDrawable.swift */; };
+		7E764DACBEDE6AADBD392E5ADA6FA95A /* CoverAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9189F7C6FA2A5B60B42CDCEADC1596A /* CoverAnimator.swift */; };
+		7FC1D95F995705A8D6ABC997C17C1219 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C7334685A63092358732F3A95E6E17 /* Animator.swift */; };
+		86DCB9C34610D4AE81BEC5C4B39B5146 /* Pods-Semantics-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 713BE038500FE41DAA1FF2917F5B712C /* Pods-Semantics-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C70BE737082228BF5B371AE4B93D886 /* IconDrawable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D50864E7CF037A9E6667A27B69AF9 /* IconDrawable.swift */; };
 		8EDAA34C0294E09A55579CFE3DC5E3E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23621862A99429490F9C983069F078BB /* Foundation.framework */; };
-		8F0BAE91365903769A831BE26A47074D /* FontAwesomeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181D6BC596DBB00E442C6A8CCEAF2C6D /* FontAwesomeIcon.swift */; };
+		8F0BAE91365903769A831BE26A47074D /* FontAwesomeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4DEA617A99F4B7E6100D9014DA129B /* FontAwesomeIcon.swift */; };
 		93C583AFEFF77A0CA2DE356325303CD6 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C9A0B672B6CDCA33D84AB895D938167 /* CoreText.framework */; };
-		B22F9D6B076968AF7C6803AC8C2E0EAC /* Pods-Semantics-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C52C409905CD59F2F0543D47B047F318 /* Pods-Semantics-dummy.m */; };
-		B466CB68E55E96683B4FA163CB99D9E1 /* IconImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9E1E1380A5E7CC51519CAFBFCA0092 /* IconImageView.swift */; };
-		BB0537316AF71743063FA6365DB4DE2A /* Iconic-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2825C30C12E0B93FEB4889322BD1BDEA /* Iconic-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		99BA7546A0F0ACD56D93C5BB14B18F7B /* Jelly-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 61CB0A1AD4CA287A05187935A2E44CF8 /* Jelly-dummy.m */; };
+		9EEAC295F62773F4D5726577ED3F797E /* Pods-Semantics-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C52C409905CD59F2F0543D47B047F318 /* Pods-Semantics-dummy.m */; };
+		A2924744AD2626DD45DFBFD89D5E54EA /* AnimationCurve+AnimationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933A48003ED2CB11279176DC80DE5FEA /* AnimationCurve+AnimationOptions.swift */; };
+		A67A4FCF83601B11F8F079276B93A72F /* PresentationAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5D557A0EEF624466BC60113AAA392D /* PresentationAlignment.swift */; };
+		A9FC87DE36349C9786E6F47C109C00D7 /* PresentationTiming.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6468F52E2ECFEE6992320AA37EE5D5 /* PresentationTiming.swift */; };
+		B3C0EE8960CA65E5A34B5E7E01138687 /* InteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099BA99E43F20E9F96351D557DB6AEA2 /* InteractionController.swift */; };
+		B466CB68E55E96683B4FA163CB99D9E1 /* IconImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A4C07370570A8F8C945794776D149B /* IconImageView.swift */; };
+		B568A360D231993A2B26352731AC73CE /* DragMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B302EA4FBE360DBFC11CECF2D1BD3236 /* DragMode.swift */; };
+		B8628EF0977C169B75AC7560E95AFFC1 /* PresentationSizeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64E5490B800408446C2CC7C7D72AC2F /* PresentationSizeProtocol.swift */; };
+		B9D9B4B863A53DA0689A3DC2B3BA2720 /* VerticalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A670DEB77E4FDEF45BC1B0D1F637F58 /* VerticalAlignment.swift */; };
+		BB0537316AF71743063FA6365DB4DE2A /* Iconic-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E3F28509DC8CC874A4D39ACEFA28F900 /* Iconic-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BB6969314C8310964E1A96F1E5D2C68D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23621862A99429490F9C983069F078BB /* Foundation.framework */; };
-		C13688DAAC8774DCCA6EE3C45A2F1F9A /* Iconic-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293198A5E92E7EBA535D67667B3F81B /* Iconic-dummy.m */; };
-		D455C4DF4A655BF00074B26532AEE8AD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = F2B3E07BAE9798EF3BF86060D5878C48 /* FontAwesome.otf */; };
-		DDFA0D08A40F326409B2FDCF108D91C7 /* Pods-Semantics-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 713BE038500FE41DAA1FF2917F5B712C /* Pods-Semantics-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C125FF5601160D5512F94A493C0082F0 /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9120953493733899454D53014B36F466 /* Size.swift */; };
+		C13688DAAC8774DCCA6EE3C45A2F1F9A /* Iconic-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 00CED44FC87ECE281DE622D19EAB8610 /* Iconic-dummy.m */; };
+		C8E5C4238E968D7A7B6F8461CB434AE7 /* UIView+RoundCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA146CB172E6FF5FF51A9FFE1D139B75 /* UIView+RoundCorners.swift */; };
+		CD3F5314B4BE48FD4127F710CBAB4736 /* PresentationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C627F16DAEA7A3A24E2AF8374CA15FCF /* PresentationType.swift */; };
+		CEB7B8D3B040C98CF240C7621AD98BC8 /* UIViewControllerAnimatedTransitioning+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1C4F4AE37095265AFAABE50BDD88F6 /* UIViewControllerAnimatedTransitioning+Convenience.swift */; };
+		D1C2F6B54C081C3C8D96CCCA95CC69A4 /* Jelly-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 346DDB317DD22D08752576361543BC9E /* Jelly-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D455C4DF4A655BF00074B26532AEE8AD /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5882B6D43C21B86417EC75C57D10CEC /* FontAwesome.otf */; };
+		D79639E4A0FBCD42C91DF50D2A2AED53 /* SlidePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94913485D96D27AE9762D892E969DD7A /* SlidePresentation.swift */; };
+		DCE0A9F223840B14A6B94F7FD8DE66AE /* Deprecation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB41236D1B673F3A38952CC958FBEC5 /* Deprecation.swift */; };
+		DD6E24EF68DFDFC1DAE64E3855D8D917 /* PresentationTimingInformationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711F814B8983F877F81221D5745CFA78 /* PresentationTimingInformationProvider.swift */; };
+		E06E97B97EDA85667F49FA896ACA3ADC /* PresentationAlignmentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75A199119C3B5E4599B7D54A2EDEFA3 /* PresentationAlignmentProvider.swift */; };
+		E286EE5128E43B67A979C848F6BA08C6 /* Size+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F7F43F2EAE0C74F51EFD13F08F2D08 /* Size+Equatable.swift */; };
+		E45D45BE66882F4E7DBF3CE1A04697D7 /* PresentationWidthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E0A3F74496390218D1468D46B63AB8 /* PresentationWidthProvider.swift */; };
 		EF6D4F8CEA1D749F805C55356F99916E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23621862A99429490F9C983069F078BB /* Foundation.framework */; };
-		F089C12BFA7E9B04FD7376EC05C3E867 /* NSLayoutConstraintExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9C184A322235DECC9A0320E14BEDB8 /* NSLayoutConstraintExtensions.swift */; };
-		F6CA743083068315BF441E8D74448AB3 /* KRPullLoader-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 473360353A8A481C3DE684A74C0B8D9D /* KRPullLoader-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FF961505961CBF2E19CB0743CC4FD32F /* UIScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AD5642DCD0D68CCCB394E476E0465F /* UIScrollViewExtensions.swift */; };
+		F05BEFFFC951502B1C6400CC99E01F2D /* SlideAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B13B63DFF892629403F140C09F4DD0 /* SlideAnimator.swift */; };
+		F089C12BFA7E9B04FD7376EC05C3E867 /* NSLayoutConstraintExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513FB4D63DB8EF262263054B517558A6 /* NSLayoutConstraintExtensions.swift */; };
+		F098726052C92D72FB059A848E307DF3 /* Duration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413FB8B5C82BA410946FE08DF845C5DC /* Duration.swift */; };
+		F6CA743083068315BF441E8D74448AB3 /* KRPullLoader-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A97F3D47FBDC72395C2B0141793E2D2 /* KRPullLoader-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA40541A946416DE40AAFAE6D918CFE9 /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A534D21AC44D980D88EA9BB511D7E86 /* PresentationController.swift */; };
+		FB3AFCF9422194E379C1A86B62A9B8F6 /* FadePresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A89F362E541CF7F9C3413B51EE0FDF /* FadePresentation.swift */; };
+		FD86860E9F9EDEAEC2EB9DAF938CE136 /* InteractionConfigurationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57462CD60E7BF99549251AF93C86950B /* InteractionConfigurationProvider.swift */; };
+		FF961505961CBF2E19CB0743CC4FD32F /* UIScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0448FD21CD4CD2B76F2E3770521CD3D9 /* UIScrollViewExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,21 +109,28 @@
 			remoteGlobalIDString = 43613375E7E65915B5076FF4D8EDEA97;
 			remoteInfo = "Pods-Semantics";
 		};
-		4D04238DD96FDC21E5655050059D0B3E /* PBXContainerItemProxy */ = {
+		1C695696DABB684427B0DE4D07314D99 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = B381C46EF0E7B84139B01C577293179D;
 			remoteInfo = KRPullLoader;
 		};
-		D3AA8C541DB2303813BDA8657E24C83E /* PBXContainerItemProxy */ = {
+		60C2099054D6AD74C6D381E6EF81CA2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54C60F9B0F9BE0BE289A04A9AA3B6BB0;
+			remoteInfo = Jelly;
+		};
+		AC08C99ACD25C54039E340CCAD88C945 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = DE253FFF71532979EAEFDFB5BE8947F7;
 			remoteInfo = Highcharts;
 		};
-		D609D6F11F443D4089AC02CC42DE1951 /* PBXContainerItemProxy */ = {
+		ACECB1E9E4F566FA1955D46FAAE8D860 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -75,64 +140,117 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00CED44FC87ECE281DE622D19EAB8610 /* Iconic-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Iconic-dummy.m"; sourceTree = "<group>"; };
+		012DAEF3D02393D5A6B4DCEF689F8C7A /* PresentationUIConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationUIConfiguration.swift; path = Jelly/Classes/public/Models/Configuration/Presentation/PresentationUIConfiguration.swift; sourceTree = "<group>"; };
 		032F67321D34EE01369F5810E71B7660 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		0448FD21CD4CD2B76F2E3770521CD3D9 /* UIScrollViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIScrollViewExtensions.swift; path = KRPullLoader/Classes/UIScrollViewExtensions.swift; sourceTree = "<group>"; };
+		099BA99E43F20E9F96351D557DB6AEA2 /* InteractionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteractionController.swift; path = "Jelly/Classes/private/Animators/Interaction Controllers/InteractionController.swift"; sourceTree = "<group>"; };
 		0B7D3D8A34B506E09DFF05F49BD06411 /* Pods-SemanticsTests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SemanticsTests-Info.plist"; sourceTree = "<group>"; };
 		0C9A0B672B6CDCA33D84AB895D938167 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
+		0F5D557A0EEF624466BC60113AAA392D /* PresentationAlignment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationAlignment.swift; path = Jelly/Classes/public/Models/Configuration/Presentation/PresentationAlignment.swift; sourceTree = "<group>"; };
+		0F8B993BF745C43F2BC3759BAC760DE0 /* Iconic.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Iconic.xcconfig; sourceTree = "<group>"; };
+		0FCADCAA257CD20739575E3384436CC2 /* Highcharts.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Highcharts.xcconfig; sourceTree = "<group>"; };
 		10946642FB88F02C8F5F9087F80764F1 /* Pods-Semantics-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Semantics-acknowledgements.markdown"; sourceTree = "<group>"; };
+		10D27C07CB8562D9089B1827181ECBB0 /* PresentationMarginGuardsProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationMarginGuardsProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationMarginGuardsProvider.swift; sourceTree = "<group>"; };
 		14AB6914080C559BB60E69FC5EDE8B44 /* Pods-SemanticsTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SemanticsTests.modulemap"; sourceTree = "<group>"; };
-		17AD5642DCD0D68CCCB394E476E0465F /* UIScrollViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIScrollViewExtensions.swift; path = KRPullLoader/Classes/UIScrollViewExtensions.swift; sourceTree = "<group>"; };
-		181D6BC596DBB00E442C6A8CCEAF2C6D /* FontAwesomeIcon.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FontAwesomeIcon.swift; path = Source/FontAwesomeIcon.swift; sourceTree = "<group>"; };
-		19B9E7B9DA20D861371D7CCA0A0F1F50 /* Iconic.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Iconic.modulemap; sourceTree = "<group>"; };
-		22218A486E8406696B322711B3A2302A /* Highcharts.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Highcharts.xcconfig; sourceTree = "<group>"; };
+		16AD5C2EE2F3CDDE256D45F84D8A3166 /* KRPullLoader.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = KRPullLoader.modulemap; sourceTree = "<group>"; };
+		1A97F3D47FBDC72395C2B0141793E2D2 /* KRPullLoader-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KRPullLoader-umbrella.h"; sourceTree = "<group>"; };
+		1AB3E2A69978D3A3BEFD2E47E49A9E19 /* PresentationSingleSizeProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationSingleSizeProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationSingleSizeProvider.swift; sourceTree = "<group>"; };
+		1E5EF9B39D2CB4DEED48018E68B3913A /* Spring.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Spring.swift; path = Jelly/Classes/public/Models/Configuration/Spring.swift; sourceTree = "<group>"; };
 		23621862A99429490F9C983069F078BB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		2825C30C12E0B93FEB4889322BD1BDEA /* Iconic-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Iconic-umbrella.h"; sourceTree = "<group>"; };
-		33E5A10F7DEEC82B5B86076E4F281E82 /* KRPullLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KRPullLoader.swift; path = KRPullLoader/Classes/KRPullLoader.swift; sourceTree = "<group>"; };
+		29A4C07370570A8F8C945794776D149B /* IconImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IconImageView.swift; path = Source/IconImageView.swift; sourceTree = "<group>"; };
+		320E78F01731D4E1306DA97767A1E4E9 /* PresentationInteractiveAnimatorProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationInteractiveAnimatorProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationInteractiveAnimatorProvider.swift; sourceTree = "<group>"; };
+		325C6AD36A302D3A0C658101AFB0A1BA /* PresentationAnimatorProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationAnimatorProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationAnimatorProvider.swift; sourceTree = "<group>"; };
+		346DDB317DD22D08752576361543BC9E /* Jelly-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jelly-umbrella.h"; sourceTree = "<group>"; };
 		366FF374AE18ECF144A122ED39AB1DD8 /* Pods-Semantics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Semantics.debug.xcconfig"; sourceTree = "<group>"; };
 		37103D2195B96A84961F72E5DC156ACD /* Pods_Semantics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Semantics.framework; path = "Pods-Semantics.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4586765AE3F8E5039C8920F254EE987B /* KRPullLoader-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KRPullLoader-prefix.pch"; sourceTree = "<group>"; };
-		473360353A8A481C3DE684A74C0B8D9D /* KRPullLoader-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KRPullLoader-umbrella.h"; sourceTree = "<group>"; };
+		391BCFE94E14699A994976428DA251C1 /* PresentationSpringProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationSpringProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationSpringProvider.swift; sourceTree = "<group>"; };
+		3C4DEA617A99F4B7E6100D9014DA129B /* FontAwesomeIcon.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FontAwesomeIcon.swift; path = Source/FontAwesomeIcon.swift; sourceTree = "<group>"; };
+		413FB8B5C82BA410946FE08DF845C5DC /* Duration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Duration.swift; path = Jelly/Classes/public/Models/Configuration/Duration.swift; sourceTree = "<group>"; };
 		475EEEB3382593096532E97FE42DF516 /* Pods-Semantics-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Semantics-Info.plist"; sourceTree = "<group>"; };
+		4B1603690ACC1023CB44F03FBBE760BE /* Direction+Orientation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Direction+Orientation.swift"; path = "Jelly/Classes/private/Extensions/Direction+Orientation.swift"; sourceTree = "<group>"; };
+		4B37DC0FD26182A7A7829609186CEB9E /* Iconic-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Iconic-prefix.pch"; sourceTree = "<group>"; };
+		50B3C12B146629DB0ED3F0ACF8532CDC /* BackgroundStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BackgroundStyle.swift; path = Jelly/Classes/public/Models/Configuration/BackgroundStyle.swift; sourceTree = "<group>"; };
+		513FB4D63DB8EF262263054B517558A6 /* NSLayoutConstraintExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NSLayoutConstraintExtensions.swift; path = KRPullLoader/Classes/NSLayoutConstraintExtensions.swift; sourceTree = "<group>"; };
+		52C7BA1F3F5D1DBF61B8111EF36FCA2E /* PresentationHeightProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationHeightProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationHeightProvider.swift; sourceTree = "<group>"; };
 		53511366497C4BEB2E4D653A1D1DF6BF /* Iconic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Iconic.framework; path = Iconic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5377BC538A69CA47DBE12381C580A487 /* Direction+EdgeHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Direction+EdgeHelper.swift"; path = "Jelly/Classes/private/Extensions/Direction+EdgeHelper.swift"; sourceTree = "<group>"; };
+		57462CD60E7BF99549251AF93C86950B /* InteractionConfigurationProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteractionConfigurationProvider.swift; path = Jelly/Classes/public/Models/Protocols/InteractionConfigurationProvider.swift; sourceTree = "<group>"; };
+		586C557C9557556B8483D2C59AE09033 /* HorizontalAlignment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HorizontalAlignment.swift; path = Jelly/Classes/public/Models/Configuration/HorizontalAlignment.swift; sourceTree = "<group>"; };
 		5976BF204DAEC74219F5B1ABD0DE399C /* Pods-SemanticsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SemanticsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5A534D21AC44D980D88EA9BB511D7E86 /* PresentationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationController.swift; path = Jelly/Classes/private/PresentationController.swift; sourceTree = "<group>"; };
+		5B48C229F55F15B13489B65E9829C7A2 /* InteractionConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteractionConfiguration.swift; path = Jelly/Classes/public/Models/Configuration/Presentation/InteractionConfiguration.swift; sourceTree = "<group>"; };
+		61CB0A1AD4CA287A05187935A2E44CF8 /* Jelly-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Jelly-dummy.m"; sourceTree = "<group>"; };
 		63C03DA6C03A6AC96DC4103A2FAD2F5E /* Pods-Semantics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Semantics.release.xcconfig"; sourceTree = "<group>"; };
-		67C2D7F05F2F045E891B984308ADBD02 /* Iconic.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Iconic.xcconfig; sourceTree = "<group>"; };
-		6953D3AC59E39E453B32BEA93013CF6D /* Highcharts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Highcharts.framework; path = development/Highcharts.framework; sourceTree = "<group>"; };
-		6C57E64B3D3D859E3E021566BD25A958 /* Iconic-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Iconic-prefix.pch"; sourceTree = "<group>"; };
+		652781276D4669129DAB7FCA34905A2E /* Jelly-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Jelly-prefix.pch"; sourceTree = "<group>"; };
+		70F28C2F41B6DB80F7D012D74F664317 /* Jelly-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Jelly-Info.plist"; sourceTree = "<group>"; };
+		711F814B8983F877F81221D5745CFA78 /* PresentationTimingInformationProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationTimingInformationProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationTimingInformationProvider.swift; sourceTree = "<group>"; };
 		713BE038500FE41DAA1FF2917F5B712C /* Pods-Semantics-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Semantics-umbrella.h"; sourceTree = "<group>"; };
-		7293198A5E92E7EBA535D67667B3F81B /* Iconic-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Iconic-dummy.m"; sourceTree = "<group>"; };
-		7A6F2C1FF69A03F342BEF837A18A23DA /* Iconic-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Iconic-Info.plist"; sourceTree = "<group>"; };
-		7C9C184A322235DECC9A0320E14BEDB8 /* NSLayoutConstraintExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NSLayoutConstraintExtensions.swift; path = KRPullLoader/Classes/NSLayoutConstraintExtensions.swift; sourceTree = "<group>"; };
+		72D4C96B3EFB282C4B7E9D9646CA45C1 /* FadeAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FadeAnimator.swift; path = "Jelly/Classes/private/Animators/Animated Animators/FadeAnimator.swift"; sourceTree = "<group>"; };
+		735AF18FA1B37444E84DA01340660E0B /* ViewControllerSizeCalculator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ViewControllerSizeCalculator.swift; path = Jelly/Classes/private/ViewControllerSizeCalculator.swift; sourceTree = "<group>"; };
+		7986B812B284154DA6A1F6EE5466F09C /* Spring+Values.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Spring+Values.swift"; path = "Jelly/Classes/private/Extensions/Spring+Values.swift"; sourceTree = "<group>"; };
+		7A1607023F2715E6AAC5D2569A240167 /* LiveUpdateError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LiveUpdateError.swift; path = Jelly/Classes/public/LiveUpdateError.swift; sourceTree = "<group>"; };
 		7CDDAF3CA5CBEC18682AF9F5E5A867BB /* Pods-SemanticsTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SemanticsTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		7DE0526CAE136E056E922651E8E2B9E8 /* KRPullLoadView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KRPullLoadView.swift; path = KRPullLoader/Classes/KRPullLoadView.swift; sourceTree = "<group>"; };
+		7FB41236D1B673F3A38952CC958FBEC5 /* Deprecation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Deprecation.swift; path = Jelly/Classes/public/Deprecation.swift; sourceTree = "<group>"; };
+		87879FFA59947BF2A4751AB950A1618C /* Orientation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Orientation.swift; path = Jelly/Classes/public/Models/Configuration/Orientation.swift; sourceTree = "<group>"; };
+		88E85BBE479F91FAD16FCA9C6874306F /* CombinedTimingCurveProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CombinedTimingCurveProvider.swift; path = Jelly/Classes/private/Models/CombinedTimingCurveProvider.swift; sourceTree = "<group>"; };
+		8A670DEB77E4FDEF45BC1B0D1F637F58 /* VerticalAlignment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VerticalAlignment.swift; path = Jelly/Classes/public/Models/Configuration/VerticalAlignment.swift; sourceTree = "<group>"; };
+		8A7709F347CC4FF8530D187DDB517D16 /* Iconic-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Iconic-Info.plist"; sourceTree = "<group>"; };
 		8B9E409AC37341809D45FFC61447DFC3 /* Pods-SemanticsTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SemanticsTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		8C1C9B02A57DA4315D820F9591ACD76E /* CoverPresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoverPresentation.swift; path = Jelly/Classes/public/Models/Presentations/CoverPresentation.swift; sourceTree = "<group>"; };
+		90B0C804DB1C035E75752BA0ADC2F181 /* PresentationUIConfigurationProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationUIConfigurationProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationUIConfigurationProvider.swift; sourceTree = "<group>"; };
+		9120953493733899454D53014B36F466 /* Size.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Size.swift; path = Jelly/Classes/public/Models/Configuration/Size.swift; sourceTree = "<group>"; };
+		92A50A6A7E5AD507E5A7E497612678EA /* PresentationSize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationSize.swift; path = Jelly/Classes/public/Models/Configuration/Presentation/PresentationSize.swift; sourceTree = "<group>"; };
+		92E0A3F74496390218D1468D46B63AB8 /* PresentationWidthProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationWidthProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationWidthProvider.swift; sourceTree = "<group>"; };
+		933A48003ED2CB11279176DC80DE5FEA /* AnimationCurve+AnimationOptions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "AnimationCurve+AnimationOptions.swift"; path = "Jelly/Classes/private/Extensions/AnimationCurve+AnimationOptions.swift"; sourceTree = "<group>"; };
+		94913485D96D27AE9762D892E969DD7A /* SlidePresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SlidePresentation.swift; path = Jelly/Classes/public/Models/Presentations/SlidePresentation.swift; sourceTree = "<group>"; };
+		950FCB2BD3FF032E945C0D6AA7A99CAB /* Jelly.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Jelly.xcconfig; sourceTree = "<group>"; };
+		96A89F362E541CF7F9C3413B51EE0FDF /* FadePresentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FadePresentation.swift; path = Jelly/Classes/public/Models/Presentations/FadePresentation.swift; sourceTree = "<group>"; };
+		9A0B4C466C8DD549255C4C2BF02479FC /* Highcharts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Highcharts.framework; path = development/Highcharts.framework; sourceTree = "<group>"; };
+		9ABF3E9D0D0999EC6D0E49081674C770 /* Jelly.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Jelly.modulemap; sourceTree = "<group>"; };
 		9C99CF2CE00A49EAAD23CC18CBF43228 /* Pods-SemanticsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SemanticsTests.release.xcconfig"; sourceTree = "<group>"; };
+		9D6821D4EF2F6751F35B1DBF6109A5A3 /* KRPullLoader-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "KRPullLoader-Info.plist"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A6002133D3C3B273CA31C65983056868 /* KRPullLoader.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = KRPullLoader.xcconfig; sourceTree = "<group>"; };
-		B02FA30F19016CA3A619FF4E19B3EF00 /* KRPullLoader.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = KRPullLoader.modulemap; sourceTree = "<group>"; };
+		A132E0A470F77FDAE30A90B821AF0E53 /* KRPullLoader-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "KRPullLoader-dummy.m"; sourceTree = "<group>"; };
+		A1D583893056F2F90F51DEB35CAD2C22 /* Iconic.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Iconic.modulemap; sourceTree = "<group>"; };
+		A254F1CEEB7B71B934A6BBF31BD2FE96 /* Presentation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Presentation.swift; path = Jelly/Classes/public/Models/Protocols/Presentation.swift; sourceTree = "<group>"; };
+		A75A199119C3B5E4599B7D54A2EDEFA3 /* PresentationAlignmentProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationAlignmentProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationAlignmentProvider.swift; sourceTree = "<group>"; };
+		AA6468F52E2ECFEE6992320AA37EE5D5 /* PresentationTiming.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationTiming.swift; path = Jelly/Classes/public/Models/Configuration/Presentation/PresentationTiming.swift; sourceTree = "<group>"; };
+		B26722A0F673CC9BAB07B051EA3A558E /* PresentationDirectionShowProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationDirectionShowProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationDirectionShowProvider.swift; sourceTree = "<group>"; };
+		B302EA4FBE360DBFC11CECF2D1BD3236 /* DragMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DragMode.swift; path = Jelly/Classes/public/Models/Configuration/DragMode.swift; sourceTree = "<group>"; };
+		B9189F7C6FA2A5B60B42CDCEADC1596A /* CoverAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoverAnimator.swift; path = "Jelly/Classes/private/Animators/Animated Animators/CoverAnimator.swift"; sourceTree = "<group>"; };
 		B95A2D83A1FAEAF47A67CD0B628D364B /* Pods_SemanticsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_SemanticsTests.framework; path = "Pods-SemanticsTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFA154188C1B0CDB14F72317D1F17A84 /* KRPullLoadView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KRPullLoadView.swift; path = KRPullLoader/Classes/KRPullLoadView.swift; sourceTree = "<group>"; };
+		B9A9B93AF63A7B78569784C453AA2952 /* InteractionMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteractionMode.swift; path = Jelly/Classes/public/Models/Configuration/Presentation/InteractionMode.swift; sourceTree = "<group>"; };
+		BA146CB172E6FF5FF51A9FFE1D139B75 /* UIView+RoundCorners.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIView+RoundCorners.swift"; path = "Jelly/Classes/private/Extensions/UIView+RoundCorners.swift"; sourceTree = "<group>"; };
+		C1C7334685A63092358732F3A95E6E17 /* Animator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Animator.swift; path = Jelly/Classes/public/Animator.swift; sourceTree = "<group>"; };
+		C263B56DF8C3CC620021378927740E65 /* Direction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Direction.swift; path = Jelly/Classes/public/Models/Configuration/Direction.swift; sourceTree = "<group>"; };
 		C52C409905CD59F2F0543D47B047F318 /* Pods-Semantics-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Semantics-dummy.m"; sourceTree = "<group>"; };
 		C5324D21FC4ABB9C2D48AD14E00E4643 /* Pods-Semantics.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Semantics.modulemap"; sourceTree = "<group>"; };
-		C9D7665BE37DE257024951E22BE16987 /* IconDrawable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IconDrawable.swift; path = Source/IconDrawable.swift; sourceTree = "<group>"; };
+		C5F55A830BC472F79B8C84E441D05F02 /* KRPullLoader.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = KRPullLoader.xcconfig; sourceTree = "<group>"; };
+		C627F16DAEA7A3A24E2AF8374CA15FCF /* PresentationType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationType.swift; path = Jelly/Classes/private/Models/PresentationType.swift; sourceTree = "<group>"; };
+		C8163B2F8B51563BE862065EF68B453F /* KRPullLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KRPullLoader.swift; path = KRPullLoader/Classes/KRPullLoader.swift; sourceTree = "<group>"; };
+		CE00FB2CAA9E69089944F6627E63D722 /* PresentationTimingProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationTimingProtocol.swift; path = Jelly/Classes/public/Models/Protocols/PresentationTimingProtocol.swift; sourceTree = "<group>"; };
 		D5A02A1D46763C854F2604FAAC530339 /* KRPullLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = KRPullLoader.framework; path = KRPullLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D832C677B7FA82E587B3CCC8F0C4EBB7 /* KRPullLoader-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "KRPullLoader-Info.plist"; sourceTree = "<group>"; };
+		D64E5490B800408446C2CC7C7D72AC2F /* PresentationSizeProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationSizeProtocol.swift; path = Jelly/Classes/public/Models/Protocols/PresentationSizeProtocol.swift; sourceTree = "<group>"; };
 		D92DF37052EB963F65C38FEFC61638F7 /* Pods-Semantics-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Semantics-frameworks.sh"; sourceTree = "<group>"; };
 		DC61536850CA2ABEA1709BD6814DC2B3 /* Pods-Semantics-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Semantics-acknowledgements.plist"; sourceTree = "<group>"; };
+		DC92C1FC85E5C390B26BC924D4E1E138 /* KRPullLoader-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KRPullLoader-prefix.pch"; sourceTree = "<group>"; };
+		DD9D50864E7CF037A9E6667A27B69AF9 /* IconDrawable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IconDrawable.swift; path = Source/IconDrawable.swift; sourceTree = "<group>"; };
 		DEEAF30076098E69923C09654BF86CFB /* Pods-SemanticsTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SemanticsTests-dummy.m"; sourceTree = "<group>"; };
 		E2A2FDF98D8C84F73EDBBA6436E949B7 /* Pods-SemanticsTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SemanticsTests-umbrella.h"; sourceTree = "<group>"; };
-		F2B3E07BAE9798EF3BF86060D5878C48 /* FontAwesome.otf */ = {isa = PBXFileReference; includeInIndex = 1; name = FontAwesome.otf; path = Source/Catalog/FontAwesome.otf; sourceTree = "<group>"; };
-		F43F59175998A4AB2BA858D39614C548 /* KRPullLoader-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "KRPullLoader-dummy.m"; sourceTree = "<group>"; };
-		FE9E1E1380A5E7CC51519CAFBFCA0092 /* IconImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IconImageView.swift; path = Source/IconImageView.swift; sourceTree = "<group>"; };
+		E3F28509DC8CC874A4D39ACEFA28F900 /* Iconic-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Iconic-umbrella.h"; sourceTree = "<group>"; };
+		E3F7F43F2EAE0C74F51EFD13F08F2D08 /* Size+Equatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Size+Equatable.swift"; path = "Jelly/Classes/public/Extensions/Size+Equatable.swift"; sourceTree = "<group>"; };
+		E5882B6D43C21B86417EC75C57D10CEC /* FontAwesome.otf */ = {isa = PBXFileReference; includeInIndex = 1; name = FontAwesome.otf; path = Source/Catalog/FontAwesome.otf; sourceTree = "<group>"; };
+		E8CD2628D74848AD132E554A890E92E3 /* Constants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Jelly/Classes/public/Constants.swift; sourceTree = "<group>"; };
+		ED2666C4097F9E6B203EBEED8C481B02 /* PresentationDirectionDismissProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationDirectionDismissProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationDirectionDismissProvider.swift; sourceTree = "<group>"; };
+		EEDBC68DA4231AD41DD66C44FAB069B7 /* Jelly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Jelly.framework; path = Jelly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8B13B63DFF892629403F140C09F4DD0 /* SlideAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SlideAnimator.swift; path = "Jelly/Classes/private/Animators/Animated Animators/SlideAnimator.swift"; sourceTree = "<group>"; };
+		FC34A8236AD56AF3E05FF38AAA846AB8 /* PresentationSizeProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PresentationSizeProvider.swift; path = Jelly/Classes/public/Models/Protocols/PresentationSizeProvider.swift; sourceTree = "<group>"; };
+		FE1C4F4AE37095265AFAABE50BDD88F6 /* UIViewControllerAnimatedTransitioning+Convenience.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIViewControllerAnimatedTransitioning+Convenience.swift"; path = "Jelly/Classes/private/Extensions/UIViewControllerAnimatedTransitioning+Convenience.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		06A3F21D92B45B00C8B41F470EEB1FE0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				29589D19650C2FD07C9CFFBAF31A83FB /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		50E796161D5D68BBC0BDA11C1452A6E6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -156,6 +274,23 @@
 				93C583AFEFF77A0CA2DE356325303CD6 /* CoreText.framework in Frameworks */,
 				8EDAA34C0294E09A55579CFE3DC5E3E2 /* Foundation.framework in Frameworks */,
 				6DB33D7298944397DC18F38D843FFB2B /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3B5C803210DEDFFAFA510346184AEA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				233E58947C96FD650A67E1EB92D2B71A /* Foundation.framework in Frameworks */,
+				3701310CDC01E249B73B87A9D7F0D8CB /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EEDC3ABC873332616EF7C6953CC642DF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B445BD12C277C71C349F732696CF48C /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,61 +331,22 @@
 			path = "Target Support Files/Pods-SemanticsTests";
 			sourceTree = "<group>";
 		};
-		1555EF3BC45F2D602722093F9711D7AB /* Frameworks */ = {
+		13DA82D09B8C1A2052651E9506F685C5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6953D3AC59E39E453B32BEA93013CF6D /* Highcharts.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		21FB30D342924B38578F08FF173407DB /* Highcharts */ = {
-			isa = PBXGroup;
-			children = (
-				1555EF3BC45F2D602722093F9711D7AB /* Frameworks */,
-				EE8587EA9C3F5B38EAE0C41205EE2D8C /* Support Files */,
-			);
-			name = Highcharts;
-			path = Highcharts;
-			sourceTree = "<group>";
-		};
-		288B74AADA766058A53AD7C23920EF21 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				53511366497C4BEB2E4D653A1D1DF6BF /* Iconic.framework */,
-				D5A02A1D46763C854F2604FAAC530339 /* KRPullLoader.framework */,
-				37103D2195B96A84961F72E5DC156ACD /* Pods_Semantics.framework */,
-				B95A2D83A1FAEAF47A67CD0B628D364B /* Pods_SemanticsTests.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		35E0DEA7E7DBB0B608876CCF01C5ED25 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				F2B3E07BAE9798EF3BF86060D5878C48 /* FontAwesome.otf */,
+				E5882B6D43C21B86417EC75C57D10CEC /* FontAwesome.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		4B7ED707092AD690EAB484F06390E0D6 /* Pods */ = {
+		2412CF59AD7404C961BE06B1EC0D00AE /* Iconic */ = {
 			isa = PBXGroup;
 			children = (
-				21FB30D342924B38578F08FF173407DB /* Highcharts */,
-				613F63EF8F23C20DAA269A38DEA99FD1 /* Iconic */,
-				DD958DB44485AC3BEDEF3DE715505392 /* KRPullLoader */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		613F63EF8F23C20DAA269A38DEA99FD1 /* Iconic */ = {
-			isa = PBXGroup;
-			children = (
-				181D6BC596DBB00E442C6A8CCEAF2C6D /* FontAwesomeIcon.swift */,
-				C9D7665BE37DE257024951E22BE16987 /* IconDrawable.swift */,
-				FE9E1E1380A5E7CC51519CAFBFCA0092 /* IconImageView.swift */,
-				35E0DEA7E7DBB0B608876CCF01C5ED25 /* Resources */,
-				CA3C54C05759EFDAB9F5DF1303CDA39E /* Support Files */,
+				3C4DEA617A99F4B7E6100D9014DA129B /* FontAwesomeIcon.swift */,
+				DD9D50864E7CF037A9E6667A27B69AF9 /* IconDrawable.swift */,
+				29A4C07370570A8F8C945794776D149B /* IconImageView.swift */,
+				13DA82D09B8C1A2052651E9506F685C5 /* Resources */,
+				90D02100D4E64AF702B8E06833526A71 /* Support Files */,
 			);
 			name = Iconic;
 			path = Iconic;
@@ -273,32 +369,136 @@
 			path = "Target Support Files/Pods-Semantics";
 			sourceTree = "<group>";
 		};
-		9B44243EBCE483FBFCE4BDF5B395144D /* Support Files */ = {
+		652DA0C4072C60A45121DEBC475B136F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B02FA30F19016CA3A619FF4E19B3EF00 /* KRPullLoader.modulemap */,
-				A6002133D3C3B273CA31C65983056868 /* KRPullLoader.xcconfig */,
-				F43F59175998A4AB2BA858D39614C548 /* KRPullLoader-dummy.m */,
-				D832C677B7FA82E587B3CCC8F0C4EBB7 /* KRPullLoader-Info.plist */,
-				4586765AE3F8E5039C8920F254EE987B /* KRPullLoader-prefix.pch */,
-				473360353A8A481C3DE684A74C0B8D9D /* KRPullLoader-umbrella.h */,
+				53511366497C4BEB2E4D653A1D1DF6BF /* Iconic.framework */,
+				EEDBC68DA4231AD41DD66C44FAB069B7 /* Jelly.framework */,
+				D5A02A1D46763C854F2604FAAC530339 /* KRPullLoader.framework */,
+				37103D2195B96A84961F72E5DC156ACD /* Pods_Semantics.framework */,
+				B95A2D83A1FAEAF47A67CD0B628D364B /* Pods_SemanticsTests.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		848DD257E15EA0EBF3E18B618F298627 /* Jelly */ = {
+			isa = PBXGroup;
+			children = (
+				933A48003ED2CB11279176DC80DE5FEA /* AnimationCurve+AnimationOptions.swift */,
+				C1C7334685A63092358732F3A95E6E17 /* Animator.swift */,
+				50B3C12B146629DB0ED3F0ACF8532CDC /* BackgroundStyle.swift */,
+				88E85BBE479F91FAD16FCA9C6874306F /* CombinedTimingCurveProvider.swift */,
+				E8CD2628D74848AD132E554A890E92E3 /* Constants.swift */,
+				B9189F7C6FA2A5B60B42CDCEADC1596A /* CoverAnimator.swift */,
+				8C1C9B02A57DA4315D820F9591ACD76E /* CoverPresentation.swift */,
+				7FB41236D1B673F3A38952CC958FBEC5 /* Deprecation.swift */,
+				C263B56DF8C3CC620021378927740E65 /* Direction.swift */,
+				5377BC538A69CA47DBE12381C580A487 /* Direction+EdgeHelper.swift */,
+				4B1603690ACC1023CB44F03FBBE760BE /* Direction+Orientation.swift */,
+				B302EA4FBE360DBFC11CECF2D1BD3236 /* DragMode.swift */,
+				413FB8B5C82BA410946FE08DF845C5DC /* Duration.swift */,
+				72D4C96B3EFB282C4B7E9D9646CA45C1 /* FadeAnimator.swift */,
+				96A89F362E541CF7F9C3413B51EE0FDF /* FadePresentation.swift */,
+				586C557C9557556B8483D2C59AE09033 /* HorizontalAlignment.swift */,
+				5B48C229F55F15B13489B65E9829C7A2 /* InteractionConfiguration.swift */,
+				57462CD60E7BF99549251AF93C86950B /* InteractionConfigurationProvider.swift */,
+				099BA99E43F20E9F96351D557DB6AEA2 /* InteractionController.swift */,
+				B9A9B93AF63A7B78569784C453AA2952 /* InteractionMode.swift */,
+				7A1607023F2715E6AAC5D2569A240167 /* LiveUpdateError.swift */,
+				87879FFA59947BF2A4751AB950A1618C /* Orientation.swift */,
+				A254F1CEEB7B71B934A6BBF31BD2FE96 /* Presentation.swift */,
+				0F5D557A0EEF624466BC60113AAA392D /* PresentationAlignment.swift */,
+				A75A199119C3B5E4599B7D54A2EDEFA3 /* PresentationAlignmentProvider.swift */,
+				325C6AD36A302D3A0C658101AFB0A1BA /* PresentationAnimatorProvider.swift */,
+				5A534D21AC44D980D88EA9BB511D7E86 /* PresentationController.swift */,
+				ED2666C4097F9E6B203EBEED8C481B02 /* PresentationDirectionDismissProvider.swift */,
+				B26722A0F673CC9BAB07B051EA3A558E /* PresentationDirectionShowProvider.swift */,
+				52C7BA1F3F5D1DBF61B8111EF36FCA2E /* PresentationHeightProvider.swift */,
+				320E78F01731D4E1306DA97767A1E4E9 /* PresentationInteractiveAnimatorProvider.swift */,
+				10D27C07CB8562D9089B1827181ECBB0 /* PresentationMarginGuardsProvider.swift */,
+				1AB3E2A69978D3A3BEFD2E47E49A9E19 /* PresentationSingleSizeProvider.swift */,
+				92A50A6A7E5AD507E5A7E497612678EA /* PresentationSize.swift */,
+				D64E5490B800408446C2CC7C7D72AC2F /* PresentationSizeProtocol.swift */,
+				FC34A8236AD56AF3E05FF38AAA846AB8 /* PresentationSizeProvider.swift */,
+				391BCFE94E14699A994976428DA251C1 /* PresentationSpringProvider.swift */,
+				AA6468F52E2ECFEE6992320AA37EE5D5 /* PresentationTiming.swift */,
+				711F814B8983F877F81221D5745CFA78 /* PresentationTimingInformationProvider.swift */,
+				CE00FB2CAA9E69089944F6627E63D722 /* PresentationTimingProtocol.swift */,
+				C627F16DAEA7A3A24E2AF8374CA15FCF /* PresentationType.swift */,
+				012DAEF3D02393D5A6B4DCEF689F8C7A /* PresentationUIConfiguration.swift */,
+				90B0C804DB1C035E75752BA0ADC2F181 /* PresentationUIConfigurationProvider.swift */,
+				92E0A3F74496390218D1468D46B63AB8 /* PresentationWidthProvider.swift */,
+				9120953493733899454D53014B36F466 /* Size.swift */,
+				E3F7F43F2EAE0C74F51EFD13F08F2D08 /* Size+Equatable.swift */,
+				F8B13B63DFF892629403F140C09F4DD0 /* SlideAnimator.swift */,
+				94913485D96D27AE9762D892E969DD7A /* SlidePresentation.swift */,
+				1E5EF9B39D2CB4DEED48018E68B3913A /* Spring.swift */,
+				7986B812B284154DA6A1F6EE5466F09C /* Spring+Values.swift */,
+				BA146CB172E6FF5FF51A9FFE1D139B75 /* UIView+RoundCorners.swift */,
+				FE1C4F4AE37095265AFAABE50BDD88F6 /* UIViewControllerAnimatedTransitioning+Convenience.swift */,
+				8A670DEB77E4FDEF45BC1B0D1F637F58 /* VerticalAlignment.swift */,
+				735AF18FA1B37444E84DA01340660E0B /* ViewControllerSizeCalculator.swift */,
+				FE7AF04B176334D9B7642FD2F19F8EC7 /* Support Files */,
+			);
+			name = Jelly;
+			path = Jelly;
+			sourceTree = "<group>";
+		};
+		90D02100D4E64AF702B8E06833526A71 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A1D583893056F2F90F51DEB35CAD2C22 /* Iconic.modulemap */,
+				0F8B993BF745C43F2BC3759BAC760DE0 /* Iconic.xcconfig */,
+				00CED44FC87ECE281DE622D19EAB8610 /* Iconic-dummy.m */,
+				8A7709F347CC4FF8530D187DDB517D16 /* Iconic-Info.plist */,
+				4B37DC0FD26182A7A7829609186CEB9E /* Iconic-prefix.pch */,
+				E3F28509DC8CC874A4D39ACEFA28F900 /* Iconic-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Iconic";
+			sourceTree = "<group>";
+		};
+		98A80DD6954F8D1B1F691F9E19CE1C58 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9973CCC30DF92420F7B08C86111B0937 /* Highcharts */,
+				2412CF59AD7404C961BE06B1EC0D00AE /* Iconic */,
+				848DD257E15EA0EBF3E18B618F298627 /* Jelly */,
+				E699A5A4215E7A77950D9505F097832A /* KRPullLoader */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9973CCC30DF92420F7B08C86111B0937 /* Highcharts */ = {
+			isa = PBXGroup;
+			children = (
+				C42DED1DB397071FE192EC874F1F935A /* Frameworks */,
+				D2302F7C8E0EE413BD8C135FC573D224 /* Support Files */,
+			);
+			name = Highcharts;
+			path = Highcharts;
+			sourceTree = "<group>";
+		};
+		BA79DD2CD1F913B3C93E84B3A386A6FD /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				16AD5C2EE2F3CDDE256D45F84D8A3166 /* KRPullLoader.modulemap */,
+				C5F55A830BC472F79B8C84E441D05F02 /* KRPullLoader.xcconfig */,
+				A132E0A470F77FDAE30A90B821AF0E53 /* KRPullLoader-dummy.m */,
+				9D6821D4EF2F6751F35B1DBF6109A5A3 /* KRPullLoader-Info.plist */,
+				DC92C1FC85E5C390B26BC924D4E1E138 /* KRPullLoader-prefix.pch */,
+				1A97F3D47FBDC72395C2B0141793E2D2 /* KRPullLoader-umbrella.h */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/KRPullLoader";
 			sourceTree = "<group>";
 		};
-		CA3C54C05759EFDAB9F5DF1303CDA39E /* Support Files */ = {
+		C42DED1DB397071FE192EC874F1F935A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				19B9E7B9DA20D861371D7CCA0A0F1F50 /* Iconic.modulemap */,
-				67C2D7F05F2F045E891B984308ADBD02 /* Iconic.xcconfig */,
-				7293198A5E92E7EBA535D67667B3F81B /* Iconic-dummy.m */,
-				7A6F2C1FF69A03F342BEF837A18A23DA /* Iconic-Info.plist */,
-				6C57E64B3D3D859E3E021566BD25A958 /* Iconic-prefix.pch */,
-				2825C30C12E0B93FEB4889322BD1BDEA /* Iconic-umbrella.h */,
+				9A0B4C466C8DD549255C4C2BF02479FC /* Highcharts.framework */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/Iconic";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -306,10 +506,19 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				03C5C200A0787E300053CFA8F53CA094 /* Frameworks */,
-				4B7ED707092AD690EAB484F06390E0D6 /* Pods */,
-				288B74AADA766058A53AD7C23920EF21 /* Products */,
+				98A80DD6954F8D1B1F691F9E19CE1C58 /* Pods */,
+				652DA0C4072C60A45121DEBC475B136F /* Products */,
 				D40BC8214EA1BAF935E628048D5AFBB3 /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		D2302F7C8E0EE413BD8C135FC573D224 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				0FCADCAA257CD20739575E3384436CC2 /* Highcharts.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Highcharts";
 			sourceTree = "<group>";
 		};
 		D40BC8214EA1BAF935E628048D5AFBB3 /* Targets Support Files */ = {
@@ -321,26 +530,31 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		DD958DB44485AC3BEDEF3DE715505392 /* KRPullLoader */ = {
+		E699A5A4215E7A77950D9505F097832A /* KRPullLoader */ = {
 			isa = PBXGroup;
 			children = (
-				33E5A10F7DEEC82B5B86076E4F281E82 /* KRPullLoader.swift */,
-				BFA154188C1B0CDB14F72317D1F17A84 /* KRPullLoadView.swift */,
-				7C9C184A322235DECC9A0320E14BEDB8 /* NSLayoutConstraintExtensions.swift */,
-				17AD5642DCD0D68CCCB394E476E0465F /* UIScrollViewExtensions.swift */,
-				9B44243EBCE483FBFCE4BDF5B395144D /* Support Files */,
+				C8163B2F8B51563BE862065EF68B453F /* KRPullLoader.swift */,
+				7DE0526CAE136E056E922651E8E2B9E8 /* KRPullLoadView.swift */,
+				513FB4D63DB8EF262263054B517558A6 /* NSLayoutConstraintExtensions.swift */,
+				0448FD21CD4CD2B76F2E3770521CD3D9 /* UIScrollViewExtensions.swift */,
+				BA79DD2CD1F913B3C93E84B3A386A6FD /* Support Files */,
 			);
 			name = KRPullLoader;
 			path = KRPullLoader;
 			sourceTree = "<group>";
 		};
-		EE8587EA9C3F5B38EAE0C41205EE2D8C /* Support Files */ = {
+		FE7AF04B176334D9B7642FD2F19F8EC7 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				22218A486E8406696B322711B3A2302A /* Highcharts.xcconfig */,
+				9ABF3E9D0D0999EC6D0E49081674C770 /* Jelly.modulemap */,
+				950FCB2BD3FF032E945C0D6AA7A99CAB /* Jelly.xcconfig */,
+				61CB0A1AD4CA287A05187935A2E44CF8 /* Jelly-dummy.m */,
+				70F28C2F41B6DB80F7D012D74F664317 /* Jelly-Info.plist */,
+				652781276D4669129DAB7FCA34905A2E /* Jelly-prefix.pch */,
+				346DDB317DD22D08752576361543BC9E /* Jelly-umbrella.h */,
 			);
 			name = "Support Files";
-			path = "../Target Support Files/Highcharts";
+			path = "../Target Support Files/Jelly";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,6 +576,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C4A10CC20B76777A4DBCD9012A3E0E7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D1C2F6B54C081C3C8D96CCCA95CC69A4 /* Jelly-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9C5953A3162BD1CDF1057A41D76EB9ED /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86DCB9C34610D4AE81BEC5C4B39B5146 /* Pods-Semantics-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B117724EF75EF8B703F036C9F880CAFB /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -370,36 +600,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E77CECC82E6FE60B7760C764871FF3E2 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DDFA0D08A40F326409B2FDCF108D91C7 /* Pods-Semantics-umbrella.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		43613375E7E65915B5076FF4D8EDEA97 /* Pods-Semantics */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EF57C58F3C2E4ED8E21E230FDC95CCBE /* Build configuration list for PBXNativeTarget "Pods-Semantics" */;
+			buildConfigurationList = 522507B97A6FC6895947A46AE84FC3E5 /* Build configuration list for PBXNativeTarget "Pods-Semantics" */;
 			buildPhases = (
-				E77CECC82E6FE60B7760C764871FF3E2 /* Headers */,
-				F3B026E1C20A92DA86FB3A75CAC25251 /* Sources */,
-				06A3F21D92B45B00C8B41F470EEB1FE0 /* Frameworks */,
-				F68D646EE5BAF06A7C6E54F4C73FEBF9 /* Resources */,
+				9C5953A3162BD1CDF1057A41D76EB9ED /* Headers */,
+				E7E87085AEF0C7C166108334720D3DE9 /* Sources */,
+				EEDC3ABC873332616EF7C6953CC642DF /* Frameworks */,
+				85096DC50F55FE86655F56C5242CAAB7 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				08AB82AB42EFC8109C2DBF0AA137ADBC /* PBXTargetDependency */,
-				EFB130584AD0DBAF5F1D9B10F7CA5390 /* PBXTargetDependency */,
-				5372304F4362C430389F1C8DBBE033E0 /* PBXTargetDependency */,
+				C263811400B7C9789534180C08722F9E /* PBXTargetDependency */,
+				C45391D158DF7664A4D83AD2A89F10DF /* PBXTargetDependency */,
+				B6180AC41F4C4CF8017FE4B64574CD77 /* PBXTargetDependency */,
+				D4ED92DA897D234546D4773AB614097E /* PBXTargetDependency */,
 			);
 			name = "Pods-Semantics";
 			productName = "Pods-Semantics";
 			productReference = 37103D2195B96A84961F72E5DC156ACD /* Pods_Semantics.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		54C60F9B0F9BE0BE289A04A9AA3B6BB0 /* Jelly */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23DB00E78B5FED39E491F70A67841567 /* Build configuration list for PBXNativeTarget "Jelly" */;
+			buildPhases = (
+				8C4A10CC20B76777A4DBCD9012A3E0E7 /* Headers */,
+				502CEF3D179EC781E672F8589049A446 /* Sources */,
+				D3B5C803210DEDFFAFA510346184AEA8 /* Frameworks */,
+				A1A84CC45AA423F07A22692B1DFAAD75 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Jelly;
+			productName = Jelly;
+			productReference = EEDBC68DA4231AD41DD66C44FAB069B7 /* Jelly.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		8CD222B8C7334FB0B0195DA3E8C16DAE /* Pods-SemanticsTests */ = {
@@ -475,12 +716,13 @@
 				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = 288B74AADA766058A53AD7C23920EF21 /* Products */;
+			productRefGroup = 652DA0C4072C60A45121DEBC475B136F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				DE253FFF71532979EAEFDFB5BE8947F7 /* Highcharts */,
 				A4AA59C5E17B2E2CF6FF4DE5681AA851 /* Iconic */,
+				54C60F9B0F9BE0BE289A04A9AA3B6BB0 /* Jelly */,
 				B381C46EF0E7B84139B01C577293179D /* KRPullLoader */,
 				43613375E7E65915B5076FF4D8EDEA97 /* Pods-Semantics */,
 				8CD222B8C7334FB0B0195DA3E8C16DAE /* Pods-SemanticsTests */,
@@ -503,6 +745,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		85096DC50F55FE86655F56C5242CAAB7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9763207596F439857BD6FCF33B42E0CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -511,7 +760,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F68D646EE5BAF06A7C6E54F4C73FEBF9 /* Resources */ = {
+		A1A84CC45AA423F07A22692B1DFAAD75 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -526,6 +775,68 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E74A2CFC2AF9EF82C13C936B49D0910 /* Pods-SemanticsTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		502CEF3D179EC781E672F8589049A446 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2924744AD2626DD45DFBFD89D5E54EA /* AnimationCurve+AnimationOptions.swift in Sources */,
+				7FC1D95F995705A8D6ABC997C17C1219 /* Animator.swift in Sources */,
+				30BE4A8DC25CAE01EEB5269C6663E02B /* BackgroundStyle.swift in Sources */,
+				78760FB13D3C2592E4D45EE86CBCAC7D /* CombinedTimingCurveProvider.swift in Sources */,
+				1374CC08B7211642C5DB07B27B16B9A5 /* Constants.swift in Sources */,
+				7E764DACBEDE6AADBD392E5ADA6FA95A /* CoverAnimator.swift in Sources */,
+				1061EA6DE63E32A8BE5E76EE4F3E1034 /* CoverPresentation.swift in Sources */,
+				DCE0A9F223840B14A6B94F7FD8DE66AE /* Deprecation.swift in Sources */,
+				02835740D1DD84B3B9D14D3764D243E3 /* Direction+EdgeHelper.swift in Sources */,
+				1A2F72DC9F98DE309DD1E4CE08B7D7F1 /* Direction+Orientation.swift in Sources */,
+				5BDC66E27FF256A61DA23BF2AFFA9ACC /* Direction.swift in Sources */,
+				B568A360D231993A2B26352731AC73CE /* DragMode.swift in Sources */,
+				F098726052C92D72FB059A848E307DF3 /* Duration.swift in Sources */,
+				427F26B79F6B3A2D539BB98E81BADE00 /* FadeAnimator.swift in Sources */,
+				FB3AFCF9422194E379C1A86B62A9B8F6 /* FadePresentation.swift in Sources */,
+				4567049120A041E76C176A5FF3B27B12 /* HorizontalAlignment.swift in Sources */,
+				5DB5B29EFF8BB31D06C5900A577875AF /* InteractionConfiguration.swift in Sources */,
+				FD86860E9F9EDEAEC2EB9DAF938CE136 /* InteractionConfigurationProvider.swift in Sources */,
+				B3C0EE8960CA65E5A34B5E7E01138687 /* InteractionController.swift in Sources */,
+				264E2BEA5D358F275A1DF8CAE0A6358B /* InteractionMode.swift in Sources */,
+				99BA7546A0F0ACD56D93C5BB14B18F7B /* Jelly-dummy.m in Sources */,
+				099EFD131B34A1AB02498EA2169160CC /* LiveUpdateError.swift in Sources */,
+				7DCF4048BB358DD47120BEADAB9D73D6 /* Orientation.swift in Sources */,
+				4473247E6A1970D13D94ECF12A09BB40 /* Presentation.swift in Sources */,
+				A67A4FCF83601B11F8F079276B93A72F /* PresentationAlignment.swift in Sources */,
+				E06E97B97EDA85667F49FA896ACA3ADC /* PresentationAlignmentProvider.swift in Sources */,
+				7A0DEAF5CF4E89A718D34B7C3370558D /* PresentationAnimatorProvider.swift in Sources */,
+				FA40541A946416DE40AAFAE6D918CFE9 /* PresentationController.swift in Sources */,
+				5938D5CF84487DE2E35F8CF299147B08 /* PresentationDirectionDismissProvider.swift in Sources */,
+				2B84BDD12BADEC730F37739204DB58EA /* PresentationDirectionShowProvider.swift in Sources */,
+				018B6DB601AF1D792FFCDD042C6E2611 /* PresentationHeightProvider.swift in Sources */,
+				66B8076331E07CC8F187E652B90F32DE /* PresentationInteractiveAnimatorProvider.swift in Sources */,
+				5D2C34B918A4F7C9D71FF43206106468 /* PresentationMarginGuardsProvider.swift in Sources */,
+				4B9B02B30BA7A1B55961B03AFB2D86C4 /* PresentationSingleSizeProvider.swift in Sources */,
+				6E87018351159D554258B91599C410AA /* PresentationSize.swift in Sources */,
+				B8628EF0977C169B75AC7560E95AFFC1 /* PresentationSizeProtocol.swift in Sources */,
+				7C590EF4FFF9F97970C9D3B89DA50C7D /* PresentationSizeProvider.swift in Sources */,
+				1C7D7465288FD03AA7EEFBD860E9F0C4 /* PresentationSpringProvider.swift in Sources */,
+				A9FC87DE36349C9786E6F47C109C00D7 /* PresentationTiming.swift in Sources */,
+				DD6E24EF68DFDFC1DAE64E3855D8D917 /* PresentationTimingInformationProvider.swift in Sources */,
+				593C6E775EF88F79415CEC3E64085C09 /* PresentationTimingProtocol.swift in Sources */,
+				CD3F5314B4BE48FD4127F710CBAB4736 /* PresentationType.swift in Sources */,
+				5BE227CB09BE25B53E25FCC3AE5FA071 /* PresentationUIConfiguration.swift in Sources */,
+				4AACDB0E1596962BBD1F5C168252F847 /* PresentationUIConfigurationProvider.swift in Sources */,
+				E45D45BE66882F4E7DBF3CE1A04697D7 /* PresentationWidthProvider.swift in Sources */,
+				E286EE5128E43B67A979C848F6BA08C6 /* Size+Equatable.swift in Sources */,
+				C125FF5601160D5512F94A493C0082F0 /* Size.swift in Sources */,
+				F05BEFFFC951502B1C6400CC99E01F2D /* SlideAnimator.swift in Sources */,
+				D79639E4A0FBCD42C91DF50D2A2AED53 /* SlidePresentation.swift in Sources */,
+				53BC410A7DDAD941CF7CD2C36E8E8B9E /* Spring+Values.swift in Sources */,
+				6E16DC7D06156F9ACC93C495506CA347 /* Spring.swift in Sources */,
+				C8E5C4238E968D7A7B6F8461CB434AE7 /* UIView+RoundCorners.swift in Sources */,
+				CEB7B8D3B040C98CF240C7621AD98BC8 /* UIViewControllerAnimatedTransitioning+Convenience.swift in Sources */,
+				B9D9B4B863A53DA0689A3DC2B3BA2720 /* VerticalAlignment.swift in Sources */,
+				259F4C3CA297BB6D0186FC02532DE15A /* ViewControllerSizeCalculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,34 +863,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F3B026E1C20A92DA86FB3A75CAC25251 /* Sources */ = {
+		E7E87085AEF0C7C166108334720D3DE9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B22F9D6B076968AF7C6803AC8C2E0EAC /* Pods-Semantics-dummy.m in Sources */,
+				9EEAC295F62773F4D5726577ED3F797E /* Pods-Semantics-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		08AB82AB42EFC8109C2DBF0AA137ADBC /* PBXTargetDependency */ = {
+		B6180AC41F4C4CF8017FE4B64574CD77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Jelly;
+			target = 54C60F9B0F9BE0BE289A04A9AA3B6BB0 /* Jelly */;
+			targetProxy = 60C2099054D6AD74C6D381E6EF81CA2A /* PBXContainerItemProxy */;
+		};
+		C263811400B7C9789534180C08722F9E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Highcharts;
 			target = DE253FFF71532979EAEFDFB5BE8947F7 /* Highcharts */;
-			targetProxy = D3AA8C541DB2303813BDA8657E24C83E /* PBXContainerItemProxy */;
+			targetProxy = AC08C99ACD25C54039E340CCAD88C945 /* PBXContainerItemProxy */;
 		};
-		5372304F4362C430389F1C8DBBE033E0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = KRPullLoader;
-			target = B381C46EF0E7B84139B01C577293179D /* KRPullLoader */;
-			targetProxy = 4D04238DD96FDC21E5655050059D0B3E /* PBXContainerItemProxy */;
-		};
-		EFB130584AD0DBAF5F1D9B10F7CA5390 /* PBXTargetDependency */ = {
+		C45391D158DF7664A4D83AD2A89F10DF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Iconic;
 			target = A4AA59C5E17B2E2CF6FF4DE5681AA851 /* Iconic */;
-			targetProxy = D609D6F11F443D4089AC02CC42DE1951 /* PBXContainerItemProxy */;
+			targetProxy = ACECB1E9E4F566FA1955D46FAAE8D860 /* PBXContainerItemProxy */;
+		};
+		D4ED92DA897D234546D4773AB614097E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = KRPullLoader;
+			target = B381C46EF0E7B84139B01C577293179D /* KRPullLoader */;
+			targetProxy = 1C695696DABB684427B0DE4D07314D99 /* PBXContainerItemProxy */;
 		};
 		F5A16DD6E67487D17AD2262E547FE285 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -652,7 +969,7 @@
 		};
 		216A6C305A68758B1C001D6072681842 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6002133D3C3B273CA31C65983056868 /* KRPullLoader.xcconfig */;
+			baseConfigurationReference = C5F55A830BC472F79B8C84E441D05F02 /* KRPullLoader.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -685,9 +1002,45 @@
 			};
 			name = Debug;
 		};
+		21CBA8FB7DF0DEAAB0C6E93C169A5B0E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 950FCB2BD3FF032E945C0D6AA7A99CAB /* Jelly.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Jelly/Jelly-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Jelly/Jelly-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/Jelly/Jelly.modulemap";
+				PRODUCT_MODULE_NAME = Jelly;
+				PRODUCT_NAME = Jelly;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		3B8CA710A7E889AA756A36EF54CCC832 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6002133D3C3B273CA31C65983056868 /* KRPullLoader.xcconfig */;
+			baseConfigurationReference = C5F55A830BC472F79B8C84E441D05F02 /* KRPullLoader.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -721,9 +1074,47 @@
 			};
 			name = Release;
 		};
+		5A8AC50E60DE93505424C58EA0823984 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 366FF374AE18ECF144A122ED39AB1DD8 /* Pods-Semantics.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Semantics/Pods-Semantics-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Semantics/Pods-Semantics.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 		6A7D660BCC11B67F9DE001F6E9311926 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 67C2D7F05F2F045E891B984308ADBD02 /* Iconic.xcconfig */;
+			baseConfigurationReference = 0F8B993BF745C43F2BC3759BAC760DE0 /* Iconic.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -758,7 +1149,7 @@
 		};
 		8C727059E1A8D6E7FD9FC0E8C7592279 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 67C2D7F05F2F045E891B984308ADBD02 /* Iconic.xcconfig */;
+			baseConfigurationReference = 0F8B993BF745C43F2BC3759BAC760DE0 /* Iconic.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -794,7 +1185,7 @@
 		};
 		8EA081DDD1CF8A9F65F0CFDF0BFEA10D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22218A486E8406696B322711B3A2302A /* Highcharts.xcconfig */;
+			baseConfigurationReference = 0FCADCAA257CD20739575E3384436CC2 /* Highcharts.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -846,45 +1237,6 @@
 			};
 			name = Debug;
 		};
-		B4C5C1CC97AEF3CB9646535A23C72B65 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 63C03DA6C03A6AC96DC4103A2FAD2F5E /* Pods-Semantics.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Semantics/Pods-Semantics-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Semantics/Pods-Semantics.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		C3A9CA54C4CE46204EB32B9D60784BE2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9C99CF2CE00A49EAAD23CC18CBF43228 /* Pods-SemanticsTests.release.xcconfig */;
@@ -924,9 +1276,9 @@
 			};
 			name = Release;
 		};
-		D9F815982C1797930C77A76DFF413258 /* Debug */ = {
+		DCAF5C952E9E66BD6B23629FFCF64491 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 366FF374AE18ECF144A122ED39AB1DD8 /* Pods-Semantics.debug.xcconfig */;
+			baseConfigurationReference = 63C03DA6C03A6AC96DC4103A2FAD2F5E /* Pods-Semantics.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -957,10 +1309,11 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		ED7888FA6713EABBF66D26A8003AD1CA /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1026,9 +1379,46 @@
 			};
 			name = Debug;
 		};
+		F7F46AE227EBEF7EC60FCC9CDB94833B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 950FCB2BD3FF032E945C0D6AA7A99CAB /* Jelly.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/Jelly/Jelly-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Jelly/Jelly-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/Jelly/Jelly.modulemap";
+				PRODUCT_MODULE_NAME = Jelly;
+				PRODUCT_NAME = Jelly;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		FB0590C26FE8B31DA2CC4CA24FD3D991 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22218A486E8406696B322711B3A2302A /* Highcharts.xcconfig */;
+			baseConfigurationReference = 0FCADCAA257CD20739575E3384436CC2 /* Highcharts.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1055,11 +1445,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		23DB00E78B5FED39E491F70A67841567 /* Build configuration list for PBXNativeTarget "Jelly" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21CBA8FB7DF0DEAAB0C6E93C169A5B0E /* Debug */,
+				F7F46AE227EBEF7EC60FCC9CDB94833B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				ED7888FA6713EABBF66D26A8003AD1CA /* Debug */,
 				1422B121EAEAEA11307496903FA623C6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		522507B97A6FC6895947A46AE84FC3E5 /* Build configuration list for PBXNativeTarget "Pods-Semantics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A8AC50E60DE93505424C58EA0823984 /* Debug */,
+				DCAF5C952E9E66BD6B23629FFCF64491 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1087,15 +1495,6 @@
 			buildConfigurations = (
 				901AC671788A40408749887B8CD7F674 /* Debug */,
 				C3A9CA54C4CE46204EB32B9D60784BE2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EF57C58F3C2E4ED8E21E230FDC95CCBE /* Build configuration list for PBXNativeTarget "Pods-Semantics" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D9F815982C1797930C77A76DFF413258 /* Debug */,
-				B4C5C1CC97AEF3CB9646535A23C72B65 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -39,6 +39,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
             
              let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: managedObjectContext)
             window.rootViewController = SemSectorsVC(firstSector: firstSector)
+            
+//            window.rootViewController = TestVC()
             window.makeKeyAndVisible()
         }
     }

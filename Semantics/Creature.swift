@@ -9,4 +9,5 @@
 enum Creature: Int {
     case none = 0
     case Inspiration = 1
+    case Organ = 2
 }
