@@ -13,6 +13,8 @@ class SemSectorVC: UIPageViewController {
     
     let sector: Sector
     
+    private let organVC = UINavigationController(rootViewController: OrganVC())
+    
     init(sector sector_: Sector) {
         sector = sector_
         
@@ -42,7 +44,7 @@ class SemSectorVC: UIPageViewController {
 
 extension SemSectorVC: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if viewController is OrganVC {
+        if viewController == organVC {
             return nil
         }
         
@@ -56,7 +58,7 @@ extension SemSectorVC: UIPageViewControllerDataSource {
             return UINavigationController(rootViewController: OceanLayerVC(oceanLayer: lesser))
         }
         
-        return OrganVC()
+        return organVC
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
@@ -64,7 +66,7 @@ extension SemSectorVC: UIPageViewControllerDataSource {
             return nil
         }
         
-        if viewController is OrganVC {
+        if viewController == organVC {
             let oceanLayer = OceanLayerDataLayer.shared.queryByProximityEnding(.min, in: sector) ?? OceanLayer(context: managedObjectContext, sector: sector, proximity: 0)
             return UINavigationController(rootViewController: OceanLayerVC(oceanLayer: oceanLayer))
         }

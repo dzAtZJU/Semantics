@@ -18,15 +18,38 @@ class OrganVC: SemSetsVC {
         return tmp
     }()
     
+    init() {
+        let oceanLayer = SectorDataLayer.shared.queryOrganSector().oceanLayers!.anyObject()! as! OceanLayer
+        super.init(oceanLayer: oceanLayer)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
-        view = UIView()
+        super.loadView()
         
-        view.addSubview(imgView)
+        view.insertSubview(imgView, at: 0)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         imgView.frame = view.bounds
+        
+        if let sectorVC = parent?.parent as? UIPageViewController, let sectorsVC = sectorVC.parent as? UIPageViewController {
+            let pan = UIPanGestureRecognizer()
+            view.addGestureRecognizer(pan)
+            let scrollView = sectorVC.view.subviews.first {
+                $0 is UIScrollView
+                } as! UIScrollView
+            pan.require(toFail: scrollView.panGestureRecognizer)
+            let nextScrollView = sectorsVC.view.subviews.first {
+                $0 is UIScrollView
+                } as! UIScrollView
+            nextScrollView.panGestureRecognizer.require(toFail: pan)
+        }
     }
 }
 

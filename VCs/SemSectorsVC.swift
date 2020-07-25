@@ -11,6 +11,10 @@ import CoreData
 
 class SemSectorsVC: UIPageViewController {
     
+    private let topOrganVC = UINavigationController(rootViewController: OrganVC())
+    
+    private let bottomOrganVC = UINavigationController(rootViewController: OrganVC())
+    
     init(firstSector: Sector) {
         super.init(transitionStyle: .scroll, navigationOrientation: .vertical)
         
@@ -27,8 +31,12 @@ class SemSectorsVC: UIPageViewController {
 
 extension SemSectorsVC: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        if viewController is OrganVC {
+        if viewController == topOrganVC {
             return nil
+        }
+        
+        if viewController == bottomOrganVC {
+            return SemSectorVC(sector: SectorDataLayer.shared.queryByDisplayOrderEnding(.max) ?? Sector(context: managedObjectContext))
         }
         
         let sectorVC = viewController as! SemSectorVC
@@ -36,11 +44,15 @@ extension SemSectorsVC: UIPageViewControllerDataSource {
             return SemSectorVC(sector: nextSector)
         }
 
-        return OrganVC()
+        return topOrganVC
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if viewController is OrganVC {
+        if viewController == bottomOrganVC {
+            return nil
+        }
+        
+        if viewController == topOrganVC {
             return SemSectorVC(sector: SectorDataLayer.shared.queryByDisplayOrderEnding(.min) ?? Sector(context: managedObjectContext))
         }
         
@@ -49,13 +61,15 @@ extension SemSectorsVC: UIPageViewControllerDataSource {
             return SemSectorVC(sector: nextSector)
         }
 
-        return OrganVC()
+        return bottomOrganVC
     }
 }
 
 extension SemSectorsVC {
     @objc func managedObjectContextObjectsDidChange(notification: NSNotification) {
-        let sectorVC = viewControllers!.first as! SemSectorVC
+        guard let sectorVC = viewControllers!.first as? SemSectorVC else {
+            return
+        }
         
         if let deleted = notification.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>, deleted.count > 0, deleted.contains(sectorVC.sector) {
             if let prev = pageViewController(self, viewControllerBefore: viewControllers!.first!) {

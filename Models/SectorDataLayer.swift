@@ -50,7 +50,7 @@ struct SectorDataLayer: CoreDataAccessor {
         }
     }
     
-    func queryOrganOceanLayer() -> Sector {
+    func queryOrganSector() -> Sector {
         let query: NSFetchRequest<Sector> = Sector.fetchRequest()
         query.predicate = NSPredicate(format: "displayOrder == %@", NSNumber(integerLiteral: Sector.organDisplayOrder))
         do {

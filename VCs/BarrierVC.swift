@@ -39,6 +39,21 @@ class BarrierVC: UIViewController {
     
     override func viewDidLoad() {
         imgView.frame = view.bounds
+        
+        let pan = UIPanGestureRecognizer()
+        view.addGestureRecognizer(pan)
+        if let parent = parent as? UIPageViewController {
+            let scrollView = parent.view.subviews.first {
+                               $0 is UIScrollView
+                               } as! UIScrollView
+            pan.require(toFail: scrollView.panGestureRecognizer)
+            if let nextParent = parent.parent as? UIPageViewController {
+                let scrollView = nextParent.view.subviews.first {
+                    $0 is UIScrollView
+                    } as! UIScrollView
+                scrollView.panGestureRecognizer.require(toFail: pan)
+            }
+        }
     }
 }
 
