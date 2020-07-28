@@ -52,7 +52,7 @@ struct TextOnCircle: View {
                     
                 })
         }
-        .keyboardAdaptive()
+//        .keyboardAdaptive()
     }
 }
 

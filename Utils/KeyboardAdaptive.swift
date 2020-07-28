@@ -44,24 +44,3 @@ extension UIResponder {
         return view.superview?.convert(view.frame, to: nil)
     }
 }
-
-struct KeyboardAdaptive: ViewModifier {
-    @State private var yOffset: CGFloat = 0
-    
-    func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            content
-                .offset(x: 0, y: -self.yOffset)
-                .onReceive(Publishers.keyboardMinY) { keyboardMinY in
-                    let focusedTextInputBottom = UIResponder.currentFirsrResponder?.globalFrame?.maxY ?? 0
-                    self.yOffset = max(0, focusedTextInputBottom - keyboardMinY)
-            }
-        }
-    }
-}
-
-extension View {
-    func keyboardAdaptive() -> some View {
-        ModifiedContent(content: self, modifier: KeyboardAdaptive())
-    }
-}

@@ -66,6 +66,10 @@ class SemTextView: UITextView {
             toolBar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), bullet, verticalLine]
             return toolBar
         }()
+        
+        autocapitalizationType = .none
+        autocorrectionType = .no
+        spellCheckingType = .no
     }
     
     required init?(coder: NSCoder) {
@@ -75,24 +79,28 @@ class SemTextView: UITextView {
 
 extension SemTextView: NSLayoutManagerDelegate {
     func layoutManager(_ layoutManager: NSLayoutManager, shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>, properties props: UnsafePointer<NSLayoutManager.GlyphProperty>, characterIndexes charIndexes: UnsafePointer<Int>, font aFont: UIFont, forGlyphRange glyphRange: NSRange) -> Int {
-        let paragraph = textStorage.mutableString.paragraphRange(for: glyphRange)
-        guard glyphRange.location == paragraph.location, glyphRange.length >= 2 else {
+        let characterRange = NSRange(lower: charIndexes[0], includedUpper: charIndexes[glyphRange.length - 1])
+        let hiddenRanges = SemStyle.verticalLineOrBulletRegx.matches(in: text, range: characterRange).map(by: \.range)
+        guard !hiddenRanges.isEmpty else {
             return 0
         }
+
         
-        if case let firstCharacter = textStorage.mutableString.character(at: charIndexes[0]),
-            firstCharacter == 0x3e || firstCharacter == 0x2a,
-            textStorage.mutableString.character(at: charIndexes[1]) == 0x20 {
-            var prop0 = props[0]
-            prop0.insert(.null)
-            var prop1 = props[1]
-            prop1.insert(.null)
-            [prop0, prop1].withUnsafeBufferPointer { pointer in
-                layoutManager.setGlyphs(glyphs, properties: pointer.baseAddress!, characterIndexes: charIndexes, font: aFont, forGlyphRange: NSRange(location: glyphRange.location, length: 2))
+        var propsCopy = [NSLayoutManager.GlyphProperty]()
+        for i in 0..<glyphRange.length {
+            let charIndex = charIndexes[i]
+            var prop = props[i]
+            if hiddenRanges.firstIndex(where: {
+                $0.contains(charIndex)
+            }) != nil {
+                prop.insert(.null)
             }
-            return 2
+            propsCopy.append(prop)
         }
-        return 0
+        propsCopy.withUnsafeBufferPointer { bufferPointer in
+            layoutManager.setGlyphs(glyphs, properties: bufferPointer.baseAddress!, characterIndexes: charIndexes, font: aFont, forGlyphRange: glyphRange)
+        }
+        return glyphRange.length
     }
     
     func layoutManager(_ layoutManager: NSLayoutManager, didCompleteLayoutFor textContainer: NSTextContainer?, atEnd layoutFinishedFlag: Bool) {

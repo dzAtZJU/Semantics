@@ -18,6 +18,7 @@ protocol SemSetVCDelegate {
 
 class SemSetVC: UIViewController {
     private static let fallingDuration = 0.3
+    
     private static let fadeInDuration = 2.0
     
     lazy var background: UIImageView = {
@@ -95,6 +96,7 @@ class SemSetVC: UIViewController {
     }
     
     deinit {
+        NotificationCenter.default.removeObserver(self)
         task?.cancel()
     }
     
@@ -127,6 +129,10 @@ class SemSetVC: UIViewController {
         addButton.frame = .init(origin: CGPoint(x: view.bounds.width - 50, y: 0), size: CGSize(width: 50, height: 50))
         
         updateBackground()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewSafeAreaInsetsDidChange() {
@@ -154,7 +160,7 @@ class SemSetVC: UIViewController {
         //
         addChild(subwordVC)
         subwordVC.view.frame = .init(origin: .init(x: Int.random(in: 90...280), y: -180), size: .init(width: 180, height: 180))
-        view.addSubview(subwordVC.view)
+        view.insertSubview(subwordVC.view, belowSubview: addButton)
         subwordVC.didMove(toParent: self)
         
         //
@@ -351,5 +357,20 @@ extension SemSetVC: SemSetSubwordVCDelegate {
         if let index = word.subWords?.firstIndex(of: oldText) {
             word.subWords?[index] = newText
         }
+    }
+}
+
+extension SemSetVC {
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let kbFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect)
+        let frFrame = UIResponder.currentFirsrResponder!.globalFrame!
+        print("kb: \(kbFrame) \(frFrame)")
+        if frFrame.intersects(kbFrame) {
+            view.bounds.origin.y += kbFrame.height
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        view.bounds.origin.y = 0
     }
 }

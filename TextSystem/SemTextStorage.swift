@@ -82,13 +82,6 @@ class SemTextStorage: NSTextStorage {
         paragraphStyle.firstLineHeadIndent = 10
         addAttribute(.paragraphStyle, value: paragraphStyle, range: paragraphRange)
         
-        // MARK: VerticalLine, Bullet
-//        if let _ = SemStyle.verticalLineOrBulletRegx.firstMatch(in: mutableString.substring(with: paragraphRange), options: [], range: NSRange(location: 0, length: paragraphRange.length)) {
-//            paragraphStyle.headIndent = 0
-//            paragraphStyle.firstLineHeadIndent = 0
-//            addAttributes([.paragraphStyle: paragraphStyle], range: paragraphRange)
-//        }
-
         // MARK: Notelink
         var exsistingNotelinks: Set<String> = []
         enumerateAttribute(.notelink, in: paragraphRange, options: []) { value, range , _ in

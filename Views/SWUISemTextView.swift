@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-
-
 struct SWUISemTextView: UIViewRepresentable {
     @Binding var editedText: String
     
@@ -50,6 +48,7 @@ struct SWUISemTextView: UIViewRepresentable {
         
         init(_ parent: SWUISemTextView) {
             self.parent = parent
+            super.init()
         }
         
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

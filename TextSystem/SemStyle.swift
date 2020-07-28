@@ -43,6 +43,6 @@ struct SemanticReplacer {
 
 struct SemStyle {
     static let verticalLineOrBulletRegx = {
-        try! NSRegularExpression(pattern: "^(\\* )|(\\> )", options: [])
+        try! NSRegularExpression(pattern: "^(\\* )|(\\> )", options: [.anchorsMatchLines])
     }()
 }
