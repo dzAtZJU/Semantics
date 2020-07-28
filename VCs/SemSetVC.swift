@@ -202,6 +202,7 @@ extension SemSetVC {
         }, completion: { (context) in
             self.animator.addBehavior(self.gravity)
             self.animator.addBehavior(self.collision)
+            self.animator.addBehavior(self.dynamicBahav)
             var index = self.gravity.items.count - 1
             Timer.scheduledTimer(withTimeInterval: Self.fallingDuration, repeats: true) { (timer) in
                 guard index >= 0 else {
@@ -209,11 +210,11 @@ extension SemSetVC {
                     return
                 }
                 
-                let item = self.gravity.items[index] as! EclipseCollisionBoundsWrapper
+                let item = self.gravity.items[index] as! UIView
                 item.center = CGPoint(x: Int.random(in: 90...Int(size.width-90)), y: -180)
                 self.animator.updateItem(usingCurrentState: item)
                 UIView.animate(withDuration: Self.fadeInDuration) {
-                    item.view.alpha = 1
+                    item.alpha = 1
                 }
                 
                 index -= 1
