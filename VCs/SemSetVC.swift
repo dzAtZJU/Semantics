@@ -17,9 +17,11 @@ protocol SemSetVCDelegate {
 }
 
 class SemSetVC: UIViewController {
-    private static let fallingDuration = 0.3
+    private static let fallingDuration = 0.4
     
     private static let fadeInDuration = 2.0
+    
+    private var activeFirstResponder: UIResponder?
     
     lazy var background: UIImageView = {
         let tmp = UIImageView()
@@ -63,7 +65,11 @@ class SemSetVC: UIViewController {
     private lazy var animator = UIDynamicAnimator(referenceView: view)
     private lazy var gravity = UIGravityBehavior()
     private lazy var collision = UICollisionBehavior()
-    private var dynamic: UIDynamicItemBehavior!
+    private var dynamicBahav: UIDynamicItemBehavior = {
+        let r = UIDynamicItemBehavior()
+        r.allowsRotation = false
+        return r
+    }()
     private var attatchment: UIAttachmentBehavior!
     
     var delegate: SemSetVCDelegate?
@@ -113,6 +119,7 @@ class SemSetVC: UIViewController {
     override func viewDidLoad() {
         animator.addBehavior(gravity)
         animator.addBehavior(collision)
+        animator.addBehavior(dynamicBahav)
         
         if word.subWords != nil, word.subWords!.capacity > 0 {
             var index = 0
@@ -130,7 +137,7 @@ class SemSetVC: UIViewController {
         
         updateBackground()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -159,7 +166,7 @@ class SemSetVC: UIViewController {
         
         //
         addChild(subwordVC)
-        subwordVC.view.frame = .init(origin: .init(x: Int.random(in: 90...280), y: -180), size: .init(width: 180, height: 180))
+        subwordVC.view.frame = .init(origin: .init(x: Int.random(in: 75...300), y: -150), size: .init(width: 150, height: 150))
         view.insertSubview(subwordVC.view, belowSubview: addButton)
         subwordVC.didMove(toParent: self)
         
@@ -170,10 +177,10 @@ class SemSetVC: UIViewController {
         }
         
         //
-        let item = EclipseCollisionBoundsWrapper(subwordVC.view)
-        subwordVC.dynamicItem = item
-        gravity.addItem(item)
-        collision.addItem(item)
+        subwordVC.dynamicItem = subwordVC.view
+        gravity.addItem(subwordVC.view)
+        collision.addItem(subwordVC.view)
+        dynamicBahav.addItem(subwordVC.view)
         
         subwordVC.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(subwordPanned)))
     }
@@ -277,18 +284,15 @@ extension SemSetVC {
                 return
             }
             let dynamicItem = rootView2VC[gesture.view!]!.dynamicItem!
-            dynamic = UIDynamicItemBehavior(items: [dynamicItem])
-            dynamic.action = {
+            dynamicBahav.action = {
                 guard let superview = gesture.view!.superview else {
                     return
                 }
                 if !superview.bounds.intersects(gesture.view!.frame) {
-                    self.animator.removeBehavior(self.dynamic)
                     self.removeSubwordVC(self.rootView2VC[gesture.view!]!)
                 }
             }
-            dynamic.addLinearVelocity(.init(x: 0, y: velocity.y), for: dynamicItem)
-            animator.addBehavior(dynamic)
+            dynamicBahav.addLinearVelocity(.init(x: 0, y: velocity.y), for: dynamicItem)
         default:
             return
         }
@@ -353,6 +357,15 @@ extension SemSetVC: SemTextViewDelegate {
 }
 
 extension SemSetVC: SemSetSubwordVCDelegate {
+    func didChangeFirstResponderState(semSetSubwordVC: SemSetSubwordVC, to: Bool) {
+        guard to else {
+            activeFirstResponder = nil
+            return
+        }
+        
+        activeFirstResponder = semSetSubwordVC.textView
+    }
+    
     func upadteSubword(oldText: String, newText: String) {
         if let index = word.subWords?.firstIndex(of: oldText) {
             word.subWords?[index] = newText
@@ -361,16 +374,28 @@ extension SemSetVC: SemSetSubwordVCDelegate {
 }
 
 extension SemSetVC {
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardDidShow(notification: NSNotification) {
+        guard let activeFirstResponder = activeFirstResponder else {
+            return
+        }
+        
         let kbFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect)
-        let frFrame = UIResponder.currentFirsrResponder!.globalFrame!
+        let frFrame = activeFirstResponder.globalFrame!
         print("kb: \(kbFrame) \(frFrame)")
         if frFrame.intersects(kbFrame) {
-            view.bounds.origin.y += kbFrame.height
+            animator.removeAllBehaviors()
+            UIView.animate(withDuration: 0.25) {
+                self.view.bounds.origin.y += kbFrame.height
+            }
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        view.bounds.origin.y = 0
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.bounds.origin.y = 0
+        }) { _ in
+            self.animator.addBehavior(self.gravity)
+            self.animator.addBehavior(self.collision)
+        }
     }
 }

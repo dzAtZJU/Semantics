@@ -15,7 +15,6 @@
 		892C63D0248661D100208446 /* SemTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63CF248661D100208446 /* SemTextStorage.swift */; };
 		892C63D524866A1000208446 /* NSRange+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D424866A1000208446 /* NSRange+.swift */; };
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
-		892C63E02487934300208446 /* SWUISemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DF2487934300208446 /* SWUISemTextView.swift */; };
 		892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */; };
 		892C6410248A09C600208446 /* OceanLayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C640F248A09C600208446 /* OceanLayerVC.swift */; };
 		892C6412248A0C2100208446 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6411248A0C2100208446 /* UIViewController+.swift */; };
@@ -66,7 +65,6 @@
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
 		89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */ = {isa = PBXBuildFile; productRef = 89C28CFD24ADC22E002081FE /* SwiftHEXColors */; };
-		89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D8F45024766CD300D12F15 /* TextOnCircle.swift */; };
 		89E93FC42479873D0039935D /* SemSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E93FC32479873D0039935D /* SemSetView.swift */; };
 /* End PBXBuildFile section */
 
@@ -106,7 +104,6 @@
 		892C63D12486630900208446 /* SemStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemStyle.swift; sourceTree = "<group>"; };
 		892C63D424866A1000208446 /* NSRange+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+.swift"; sourceTree = "<group>"; };
 		892C63DD24867F8700208446 /* SemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextView.swift; sourceTree = "<group>"; };
-		892C63DF2487934300208446 /* SWUISemTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWUISemTextView.swift; sourceTree = "<group>"; };
 		892C63E12487BA6500208446 /* NSAttributedString.Key+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString.Key+.swift"; sourceTree = "<group>"; };
 		892C640F248A09C600208446 /* OceanLayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanLayerVC.swift; sourceTree = "<group>"; };
 		892C6411248A0C2100208446 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
@@ -157,7 +154,6 @@
 		89A413DF24C70AEB003FD435 /* Creature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Creature.swift; sourceTree = "<group>"; };
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
-		89D8F45024766CD300D12F15 /* TextOnCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOnCircle.swift; sourceTree = "<group>"; };
 		89E93FC32479873D0039935D /* SemSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSetView.swift; sourceTree = "<group>"; };
 		8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemanticsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemFilterControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -286,7 +282,6 @@
 			isa = PBXGroup;
 			children = (
 				89A413DE24C70A82003FD435 /* LifeCycles */,
-				89A413DD24C709F7003FD435 /* Views */,
 				89A413D524C6F016003FD435 /* ArtStyles */,
 				89988AD924C2D0210005580B /* Resources */,
 				8991DADF24B5A77E00299595 /* Configs */,
@@ -378,15 +373,6 @@
 				89A413DA24C6F19F003FD435 /* TestVC.swift */,
 			);
 			path = ArtStyles;
-			sourceTree = "<group>";
-		};
-		89A413DD24C709F7003FD435 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				89D8F45024766CD300D12F15 /* TextOnCircle.swift */,
-				892C63DF2487934300208446 /* SWUISemTextView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		89A413DE24C70A82003FD435 /* LifeCycles */ = {
@@ -600,7 +586,6 @@
 				896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */,
 				8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */,
 				899C247424C9C57300F8259B /* SemSetsVC.swift in Sources */,
-				892C63E02487934300208446 /* SWUISemTextView.swift in Sources */,
 				8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
 				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
@@ -622,7 +607,6 @@
 				8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */,
 				8911386824C1984C00CBEBB5 /* Theme.swift in Sources */,
 				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
-				89D8F45124766CD300D12F15 /* TextOnCircle.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,

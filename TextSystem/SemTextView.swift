@@ -9,11 +9,12 @@
 import UIKit
 import UIKit.UIGestureRecognizerSubclass
 
-protocol SemTextViewDelegate: UITextViewDelegate {
+@objc
+protocol SemTextViewDelegate: NSObjectProtocol, UITextViewDelegate {
     
-    func semTextView(_ semTextView: SemTextView, didTapNotelink link: String)
+    @objc optional func semTextView(_ semTextView: SemTextView, didTapNotelink link: String)
     
-    func semTextView(_ semTextView: SemTextView, didAddNotelinks added: Set<String>, didRemoveNotelinks removed: Set<String>)
+    @objc optional func semTextView(_ semTextView: SemTextView, didAddNotelinks added: Set<String>, didRemoveNotelinks removed: Set<String>)
 }
 
 class SemTextView: UITextView {
@@ -52,6 +53,9 @@ class SemTextView: UITextView {
         storage.addLayoutManager(layoutManager)
         
         super.init(frame: frame, textContainer: container)
+        
+        font = .preferredFont(forTextStyle: .title2)
+        backgroundColor = UIColor.secondarySystemBackground
         
         layoutManager.delegate = self
         storage.delegate = self
@@ -114,7 +118,7 @@ extension SemTextView: SemTextStorageDelegate {
     func textStorage(_ textStorage: NSTextStorage, didAddNotelinks addded: Set<String>, didRemoveNotelinks removed: Set<String>) {
         semDelegate?.textViewDidEndEditing?(self)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1) {
-            self.semDelegate?.semTextView(self, didAddNotelinks: addded, didRemoveNotelinks: removed)
+//            self.semDelegate?.semTextView(self, didAddNotelinks: addded, didRemoveNotelinks: removed)
         }
     }
 }
@@ -123,7 +127,7 @@ extension SemTextView: SemTextStorageDelegate {
 extension SemTextView {
     @objc func tapped(sender: SemGestureRecognizer) {
         if let touchedNotelinkCharIndex = sender.touchedNotelinkCharIndex, let link = semStorage.queryNoteLink(at: touchedNotelinkCharIndex) {
-            semDelegate?.semTextView(self, didTapNotelink: link)
+//            semDelegate?.semTextView(self, didTapNotelink: link)
         }
     }
     
