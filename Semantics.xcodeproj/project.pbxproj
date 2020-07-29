@@ -784,7 +784,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.Branch1;
+				PRODUCT_BUNDLE_IDENTIFIER = ind.paper.semantics.v2;
 				PRODUCT_NAME = SemanticsB1;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -810,7 +810,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ind.sh.paper.Semantics.Branch1;
+				PRODUCT_BUNDLE_IDENTIFIER = ind.paper.semantics.v2;
 				PRODUCT_NAME = SemanticsB1;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

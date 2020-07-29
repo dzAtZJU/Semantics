@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
         let container = NSPersistentCloudKitContainer(name: "Semantics")
+        
         let storeDescription = container.persistentStoreDescriptions.first
         storeDescription?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         storeDescription?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)

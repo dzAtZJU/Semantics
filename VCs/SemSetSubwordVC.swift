@@ -20,7 +20,7 @@ class SemSetSubwordVC: UIViewController {
     private let firstText: String
     private var isFirstEditing = true
     
-    private var initialText = ""
+    private var oldText: String
     
     let delegate: SemSetSubwordVCDelegate
     
@@ -42,6 +42,7 @@ class SemSetSubwordVC: UIViewController {
     init(text: String, delegate delegate_: SemSetSubwordVCDelegate) {
         delegate = delegate_
         firstText = text
+        oldText = firstText
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -95,7 +96,7 @@ extension SemSetSubwordVC: SemTextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         delegate.didChangeFirstResponderState(semSetSubwordVC: self, to: false)
         let newText = (textView as! SemTextView).inlineText
-        delegate.upadteSubword(oldText: initialText, newText: newText)
-        initialText = newText
+        delegate.upadteSubword(oldText: oldText, newText: newText)
+        oldText = newText
     }
 }
