@@ -56,11 +56,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
-            //            do {
-            //                try container.initializeCloudKitSchema()
-            //            } catch {
-            //                fatalError("Unresolved error \(error)")
-            //            }
+//            //https://stackoverflow.com/questions/60247412/how-to-make-cloudkit-on-watchos-work-with-nspersistentcloudkitcontainer/63150243#63150243
+//            do {
+//                try container.initializeCloudKitSchema()
+//            } catch {
+//                fatalError("Unresolved error \(error)")
+//            }
             container.viewContext.name = "semantics context"
         })
         
@@ -84,8 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // MARK: CloudKit
-    
-    //    lazy var publicContainer = CKContainer(identifier: "iCloud.ind.paper.semantics")
+    lazy var publicContainer = CKContainer(identifier: "iCloud.ind.paper.semantics.v3")
     
 }
 
