@@ -32,15 +32,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
             let window = UIWindow(windowScene: windowScene)
             self.window = window
             
-            //            let nav = UINavigationController(rootViewController: SemFoldersVC())
+            //            let nav = UINavigationController(rootViewController: SemFo    ldersVC())
             //            nav.navigationBar.prefersLargeTitles = true
             //            window.rootViewController = nav
             
 //                        window.rootViewController = WordVC(word: nil, title: nil)
             
-             let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
-            window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
-            
+//             let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
+//            window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
+            window.rootViewController = MapVC(vm: MapVM())
 //            window.rootViewController = TestVC()
             window.makeKeyAndVisible()
         }

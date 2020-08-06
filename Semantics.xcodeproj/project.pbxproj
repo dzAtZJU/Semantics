@@ -57,6 +57,7 @@
 		899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE17A24DAC2F000C0EB17 /* Bundle.swift */; };
 		899AE18024DACAF100C0EB17 /* CoreDataSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE17F24DACAF100C0EB17 /* CoreDataSpace.swift */; };
 		899AE18324DAD5A800C0EB17 /* CloudKitSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE18224DAD5A800C0EB17 /* CloudKitSpace.swift */; };
+		899AE18624DC255D00C0EB17 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE18524DC255D00C0EB17 /* MapVC.swift */; };
 		899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247124C9BCEF00F8259B /* OrganVC.swift */; };
 		899C247424C9C57300F8259B /* WordsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247324C9C57300F8259B /* WordsVC.swift */; };
 		899C247624C9CAE100F8259B /* Sector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247524C9CAE100F8259B /* Sector+.swift */; };
@@ -163,6 +164,7 @@
 		899AE17A24DAC2F000C0EB17 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		899AE17F24DACAF100C0EB17 /* CoreDataSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSpace.swift; sourceTree = "<group>"; };
 		899AE18224DAD5A800C0EB17 /* CloudKitSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSpace.swift; sourceTree = "<group>"; };
+		899AE18524DC255D00C0EB17 /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		899C247124C9BCEF00F8259B /* OrganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganVC.swift; sourceTree = "<group>"; };
 		899C247324C9C57300F8259B /* WordsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsVC.swift; sourceTree = "<group>"; };
 		899C247524C9CAE100F8259B /* Sector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sector+.swift"; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				899AE18424DC254C00C0EB17 /* MapSystem */,
 				89A666CE24D6BC0F00851EDF /* MVVM */,
 				89A413DE24C70A82003FD435 /* LifeCycles */,
 				89A413D524C6F016003FD435 /* ArtStyles */,
@@ -434,6 +437,14 @@
 				899AE18224DAD5A800C0EB17 /* CloudKitSpace.swift */,
 			);
 			path = CloudKitSpace;
+			sourceTree = "<group>";
+		};
+		899AE18424DC254C00C0EB17 /* MapSystem */ = {
+			isa = PBXGroup;
+			children = (
+				899AE18524DC255D00C0EB17 /* MapVC.swift */,
+			);
+			path = MapSystem;
 			sourceTree = "<group>";
 		};
 		89A413D524C6F016003FD435 /* ArtStyles */ = {
@@ -724,6 +735,7 @@
 				89A666DE24D94EDA00851EDF /* NSNotification+.swift in Sources */,
 				899AE17224DAA14200C0EB17 /* CKDatabase+CloudKitShare.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
+				899AE18624DC255D00C0EB17 /* MapVC.swift in Sources */,
 				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
 				899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */,
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
