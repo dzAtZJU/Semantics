@@ -14,15 +14,25 @@ import Iconic
 import Highcharts
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        CoreDataSpace.shared
+        CloukitSpace.shared
         FontAwesomeIcon.register()
+        
+        CloudSync.default.loadLastToken()
         
         //        HIChartView.preload()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: persistentContainer.viewContext)
+        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: CoreDataSpace.shared.persistentContainer.viewContext)
+        
+        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+//            guard status == .granted, error == nil else {
+//                   fatalError("\(error)")
+//            }
+        }
         return true
     }
     
@@ -40,53 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
         NotificationCenter.default.removeObserver(self)
     }
-    
-    // MARK: - Core Data stack
-    
-    lazy var persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "Semantics")
-        
-        let storeDescription = container.persistentStoreDescriptions.first
-        storeDescription?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        storeDescription?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-        container.viewContext.mergePolicy = NSMergePolicy.overwrite
-        container.viewContext.undoManager = UndoManager()
-        
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-//            //https://stackoverflow.com/questions/60247412/how-to-make-cloudkit-on-watchos-work-with-nspersistentcloudkitcontainer/63150243#63150243
-//            do {
-//                try container.initializeCloudKitSchema()
-//            } catch {
-//                fatalError("Unresolved error \(error)")
-//            }
-            container.viewContext.name = "semantics context"
-        })
-        
-        return container
-    }()
-    
-    // MARK: - Core Data Saving support
-    
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-    
-    // MARK: CloudKit
-    lazy var publicContainer = CKContainer(identifier: "iCloud.ind.paper.semantics.v3")
-    
 }
 
 // Notification
@@ -99,7 +62,7 @@ extension AppDelegate {
                         return
                     }
                     if oceanLayer.words == nil || oceanLayer.words!.count == 0 {
-                        persistentContainer.viewContext.delete(oceanLayer)
+                        CoreDataSpace.shared.persistentContainer.viewContext.delete(oceanLayer)
                         if let oceanLayers = (oceanLayer.sector!.oceanLayers as? Set<OceanLayer>)?.filter({
                             !$0.isDeleted
                         }) {

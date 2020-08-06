@@ -9,6 +9,7 @@
 import UIKit
 import SwiftUI
 import CoreData
+import CloudKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     var window: UIWindow?
@@ -35,10 +36,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
             //            nav.navigationBar.prefersLargeTitles = true
             //            window.rootViewController = nav
             
-//                        window.rootViewController = SemSetVC(word: nil, title: nil)
+//                        window.rootViewController = WordVC(word: nil, title: nil)
             
-             let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: managedObjectContext)
-            window.rootViewController = SemSectorsVC(firstSector: firstSector)
+             let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
+            window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
             
 //            window.rootViewController = TestVC()
             window.makeKeyAndVisible()
@@ -74,8 +75,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         // to restore the scene back to its current state.
         
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext.transactionAuthor = "scene enter background"
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
-        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext.transactionAuthor = nil
+        CoreDataSpace.shared.saveContext()
+    }
+    
+    func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
+        let acceptSharesOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
+        acceptSharesOperation.acceptSharesCompletionBlock = { error in
+            guard error == nil else {
+                fatalError("\(error)")
+            }
+
+            let rootRecordID = cloudKitShareMetadata.rootRecordID
+            let op = CKFetchRecordsOperation(recordIDs: [rootRecordID])
+            op.fetchRecordsCompletionBlock = {  recordsByRecordID, error in
+                guard error == nil, let rootRecord = recordsByRecordID?[rootRecordID] else {
+                    fatalError("\(error)")
+                }
+                DispatchQueue.main.async {
+                    let vc = WordVC1(word: CKWordVM(word: rootRecord))
+                    (self.window!.rootViewController as! FloatContainerVC).setVC(vc)
+                    
+                }
+            }
+            
+            CloukitSpace.shared.container.sharedCloudDatabase.add(op)
+        }
+        
+        CloukitSpace.shared.container.add(acceptSharesOperation)
     }
 }
