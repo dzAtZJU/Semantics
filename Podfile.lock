@@ -2,19 +2,24 @@ PODS:
   - Highcharts (8.1.2)
   - Iconic (1.5)
   - Jelly (2.2.2)
-  - KRPullLoader (1.3.0)
+  - Realm (10.0.0-beta.2):
+    - Realm/Headers (= 10.0.0-beta.2)
+  - Realm/Headers (10.0.0-beta.2)
+  - RealmSwift (10.0.0-beta.2):
+    - Realm (= 10.0.0-beta.2)
 
 DEPENDENCIES:
   - Highcharts (~> 8.1.2)
   - Iconic (from `https://github.com/home-assistant/Iconic.git`)
   - Jelly (~> 2.2.2)
-  - KRPullLoader
+  - RealmSwift (= 10.0.0-beta.2)
 
 SPEC REPOS:
   trunk:
     - Highcharts
     - Jelly
-    - KRPullLoader
+    - Realm
+    - RealmSwift
 
 EXTERNAL SOURCES:
   Iconic:
@@ -29,8 +34,9 @@ SPEC CHECKSUMS:
   Highcharts: 795b5359af23d5af26da7529056da6a0f3e4d47f
   Iconic: da1d724e702e01d3737046b653bee69f38d148a0
   Jelly: 0576a8fd3b3bea78f6c2d952acdc30b0835dda71
-  KRPullLoader: c81594d578c90f46c1fe539b8d9a6a581ce3bdb0
+  Realm: 211e32e680c354c9b1a2bdc0e3aeb01c25849641
+  RealmSwift: f9043abf9b6821ad5c3032c2a36b5ddfc90b4ce3
 
-PODFILE CHECKSUM: ff985a1677f08b606c17fe822c03dea744658fcb
+PODFILE CHECKSUM: 1860a14863ee9f74849609d892306afb3d5a600c
 
 COCOAPODS: 1.8.4

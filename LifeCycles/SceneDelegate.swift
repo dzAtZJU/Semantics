@@ -40,8 +40,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
             
 //             let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
 //            window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
-            window.rootViewController = MapVC(vm: MapVM())
+//            let vm = MapVM()
+//            vm.loadVisitedPlaces()
+//            window.rootViewController = MapVC(vm: vm)
+            
 //            window.rootViewController = TestVC()
+            
+            window.rootViewController = LoginVC()
             window.makeKeyAndVisible()
         }
     }

@@ -12,27 +12,41 @@ import CloudKit
 import Foundation
 import Iconic
 import Highcharts
+import AuthenticationServices
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        CoreDataSpace.shared
-        CloukitSpace.shared
-        FontAwesomeIcon.register()
-        
-        CloudSync.default.loadLastToken()
-        
-        //        HIChartView.preload()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: CoreDataSpace.shared.persistentContainer.viewContext)
-        
-        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
-//            guard status == .granted, error == nil else {
-//                   fatalError("\(error)")
+//        let appleIDProvider = ASAuthorizationAppleIDProvider()
+//        appleIDProvider.getCredentialState(forUserID: KeychainItem.currentUserIdentifier) { (credentialState, error) in
+//            switch credentialState {
+//            case .authorized:
+//                SemWorldDataLayer.loadRealms()
+//            case .revoked, .notFound:
+//                // The Apple ID credential is either revoked or was not found, so show the sign-in UI.
+//                DispatchQueue.main.async {
+//                    UIApplication.shared.windows[0].rootViewController!.present(LoginVC(), animated: true, completion: nil)
+//                }
+//            default:
+//                break
 //            }
-        }
+//        }
+//        _ = CoreDataSpace.shared
+//        _ = CloukitSpace.shared
+//        FontAwesomeIcon.register()
+//        
+//        CloudSync.default.loadLastToken()
+//        
+//        //        HIChartView.preload()
+//        
+//        NotificationCenter.default.addObserver(self, selector: #selector(managedObjectContextObjectsDidChange), name: .NSManagedObjectContextObjectsDidChange, object: CoreDataSpace.shared.persistentContainer.viewContext)
+//        
+//        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+////            guard status == .granted, error == nil else {
+////                   fatalError("\(error)")
+////            }
+//        }
         return true
     }
     
@@ -49,6 +63,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
+            guard let url = userActivity.webpageURL else {
+                return false
+            }
+            print("userActivity \(url)")
+            return true
+        }
+        return false
     }
 }
 

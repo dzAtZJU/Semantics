@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDCondition" representedClassName="CDCondition" syncable="YES" codeGenerationType="class">
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="preferenceSequences" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDConditionPreference" inverseName="condition" inverseEntity="CDConditionPreference"/>
+    </entity>
+    <entity name="CDConditionPreference" representedClassName="CDConditionPreference" syncable="YES" codeGenerationType="class">
+        <relationship name="condition" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCondition" inverseName="preferenceSequences" inverseEntity="CDCondition"/>
+        <relationship name="individual" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDIndividual" inverseName="conditionPreferences" inverseEntity="CDIndividual"/>
+        <relationship name="placeScores" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDPlaceScore" inverseName="conditionPreferences" inverseEntity="CDPlaceScore"/>
+    </entity>
+    <entity name="CDIndividual" representedClassName="CDIndividual" syncable="YES" codeGenerationType="class">
+        <relationship name="conditionPreferences" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDConditionPreference" inverseName="individual" inverseEntity="CDConditionPreference"/>
+    </entity>
+    <entity name="CDPlace" representedClassName="CDPlace" syncable="YES" codeGenerationType="class">
+        <relationship name="scores" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDPlaceScore" inverseName="place" inverseEntity="CDPlaceScore"/>
+    </entity>
+    <entity name="CDPlaceScore" representedClassName="CDPlaceScore" syncable="YES" codeGenerationType="class">
+        <attribute name="score" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="conditionPreferences" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDConditionPreference" inverseName="placeScores" inverseEntity="CDConditionPreference"/>
+        <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDPlace" inverseName="scores" inverseEntity="CDPlace"/>
+    </entity>
+    <elements>
+        <element name="CDIndividual" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="CDPlace" positionX="-54" positionY="-9" width="128" height="58"/>
+        <element name="CDConditionPreference" positionX="-36" positionY="9" width="128" height="88"/>
+        <element name="CDCondition" positionX="-18" positionY="45" width="128" height="73"/>
+        <element name="CDPlaceScore" positionX="0" positionY="72" width="128" height="88"/>
+    </elements>
+</model>

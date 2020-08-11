@@ -164,13 +164,15 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_ROOT}/Highcharts/development/Highcharts.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Iconic/Iconic.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Jelly/Jelly.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/KRPullLoader/KRPullLoader.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Realm/Realm.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${PODS_ROOT}/Highcharts/development/Highcharts.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Iconic/Iconic.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Jelly/Jelly.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/KRPullLoader/KRPullLoader.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Realm/Realm.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

@@ -9,9 +9,9 @@
 import UIKit
 
 extension UIButton {
-    convenience init(systemName: String, scale: UIImage.SymbolScale) {
+    convenience init(systemName: String, textStyle: UIFont.TextStyle = .title1) {
         self.init()
         translatesAutoresizingMaskIntoConstraints = false
-        setImage(UIImage(systemName: systemName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 40)), for: .normal)
+        setImage(UIImage(systemName: systemName, withConfiguration: UIImage.SymbolConfiguration(textStyle: textStyle)), for: .normal)
     }
 }

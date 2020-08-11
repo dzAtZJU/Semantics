@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "HTG5RPJ6QF.ind.paper.semantics.v3",
+                "paths": [ "*"]
+            }
+        ]
+    }
+}

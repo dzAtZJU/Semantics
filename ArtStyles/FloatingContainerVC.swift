@@ -60,7 +60,7 @@ class FloatContainerVC: UIViewController {
             self.view.addSubview(vc.view)
         }) { _ in
             vc.didMove(toParent: self)
-            self.floatButton = UIButton(systemName: "smallcircle.circle", scale: .large)
+            self.floatButton = UIButton(systemName: "smallcircle.circle")
             self.floatButton.addTarget(self, action: #selector(self.floatButtonTapped), for: .touchUpInside)
             UIView.transition(with: self.view, duration: 0.25, options: .transitionCrossDissolve, animations: {
                 self.view.addSubview(self.floatButton)

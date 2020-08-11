@@ -1,6 +1,0 @@
-framework module KRPullLoader {
-  umbrella header "KRPullLoader-umbrella.h"
-
-  export *
-  module * { export * }
-}

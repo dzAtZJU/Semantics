@@ -39,13 +39,17 @@ extension CoreDataAccessor {
 
 class CoreDataSpace {
     
-    private init() {}
+    let name: String
+    private init(name name_: String) {
+        name = name_
+    }
     
-    static let shared = CoreDataSpace()
+    static let world = CoreDataSpace(name: "SemWorld")
+    static let shared = CoreDataSpace(name: "Semantics")
     
     // MARK: - Core Data stack
-    let persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "Semantics")
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        let container = NSPersistentCloudKitContainer(name: name)
         
         let storeDescription = container.persistentStoreDescriptions.first
         storeDescription?.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)

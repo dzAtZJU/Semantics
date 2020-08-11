@@ -12,6 +12,12 @@
 		8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386224C1644A00CBEBB5 /* CGRect+.swift */; };
 		8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8911386524C1672000CBEBB5 /* SwifterSwift */; };
 		8911386824C1984C00CBEBB5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386724C1984C00CBEBB5 /* Theme.swift */; };
+		89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */; };
+		89290D4824E13B5600F0A862 /* apple-app-site-association in Resources */ = {isa = PBXBuildFile; fileRef = 89290D4724E13B5600F0A862 /* apple-app-site-association */; };
+		89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */; };
+		89290D4D24E185CA00F0A862 /* RealmObjs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4C24E185CA00F0A862 /* RealmObjs.swift */; };
+		89290D5024E2A71900F0A862 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4F24E2A71900F0A862 /* LoginVC.swift */; };
+		89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5124E2ADCB00F0A862 /* KeychainItem.swift */; };
 		892C63D0248661D100208446 /* SemTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63CF248661D100208446 /* SemTextStorage.swift */; };
 		892C63D524866A1000208446 /* NSRange+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D424866A1000208446 /* NSRange+.swift */; };
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
@@ -39,6 +45,10 @@
 		89642184247250650081DC87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89642182247250650081DC87 /* LaunchScreen.storyboard */; };
 		8964218F247250660081DC87 /* SemanticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8964218E247250660081DC87 /* SemanticsTests.swift */; };
 		8964219F2472BF4D0081DC87 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8964219E2472BF4C0081DC87 /* CloudKit.framework */; };
+		8968C08324DF087A0093CBFC /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 8968C08224DF087A0093CBFC /* FloatingPanel */; };
+		8968C08524DF09A70093CBFC /* ConditionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8968C08424DF09A70093CBFC /* ConditionsVC.swift */; };
+		8968C08724DFDC340093CBFC /* ConditionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8968C08624DFDC340093CBFC /* ConditionCell.swift */; };
+		8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */; };
 		8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */; };
 		8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */; };
 		8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAD924B3513200299595 /* SemFoldersVC.swift */; };
@@ -58,6 +68,7 @@
 		899AE18024DACAF100C0EB17 /* CoreDataSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE17F24DACAF100C0EB17 /* CoreDataSpace.swift */; };
 		899AE18324DAD5A800C0EB17 /* CloudKitSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE18224DAD5A800C0EB17 /* CloudKitSpace.swift */; };
 		899AE18624DC255D00C0EB17 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE18524DC255D00C0EB17 /* MapVC.swift */; };
+		899AE18824DD622700C0EB17 /* SemAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899AE18724DD622700C0EB17 /* SemAnnotation.swift */; };
 		899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247124C9BCEF00F8259B /* OrganVC.swift */; };
 		899C247424C9C57300F8259B /* WordsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247324C9C57300F8259B /* WordsVC.swift */; };
 		899C247624C9CAE100F8259B /* Sector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247524C9CAE100F8259B /* Sector+.swift */; };
@@ -115,6 +126,12 @@
 		7A142CA0C9D80D637211EB83 /* Pods_SemContentFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemContentFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8911386224C1644A00CBEBB5 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		8911386724C1984C00CBEBB5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemWorldDataLayer.swift; sourceTree = "<group>"; };
+		89290D4724E13B5600F0A862 /* apple-app-site-association */ = {isa = PBXFileReference; lastKnownFileType = text; path = "apple-app-site-association"; sourceTree = "<group>"; };
+		89290D4A24E17E0400F0A862 /* SemWorld.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SemWorld.xcdatamodel; sourceTree = "<group>"; };
+		89290D4C24E185CA00F0A862 /* RealmObjs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjs.swift; sourceTree = "<group>"; };
+		89290D4F24E2A71900F0A862 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		89290D5124E2ADCB00F0A862 /* KeychainItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
 		892C63CF248661D100208446 /* SemTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextStorage.swift; sourceTree = "<group>"; };
 		892C63D12486630900208446 /* SemStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemStyle.swift; sourceTree = "<group>"; };
 		892C63D424866A1000208446 /* NSRange+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+.swift"; sourceTree = "<group>"; };
@@ -146,6 +163,9 @@
 		89642190247250660081DC87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8964219C2472BAC50081DC87 /* Semantics.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Semantics.entitlements; sourceTree = "<group>"; };
 		8964219E2472BF4C0081DC87 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		8968C08424DF09A70093CBFC /* ConditionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionsVC.swift; sourceTree = "<group>"; };
+		8968C08624DFDC340093CBFC /* ConditionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionCell.swift; sourceTree = "<group>"; };
+		8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSupplementaryView.swift; sourceTree = "<group>"; };
 		8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseCollisionBoundsWrapper.swift; sourceTree = "<group>"; };
 		8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
 		8991DAD924B3513200299595 /* SemFoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemFoldersVC.swift; sourceTree = "<group>"; };
@@ -165,6 +185,7 @@
 		899AE17F24DACAF100C0EB17 /* CoreDataSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSpace.swift; sourceTree = "<group>"; };
 		899AE18224DAD5A800C0EB17 /* CloudKitSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSpace.swift; sourceTree = "<group>"; };
 		899AE18524DC255D00C0EB17 /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
+		899AE18724DD622700C0EB17 /* SemAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemAnnotation.swift; sourceTree = "<group>"; };
 		899C247124C9BCEF00F8259B /* OrganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganVC.swift; sourceTree = "<group>"; };
 		899C247324C9C57300F8259B /* WordsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsVC.swift; sourceTree = "<group>"; };
 		899C247524C9CAE100F8259B /* Sector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sector+.swift"; sourceTree = "<group>"; };
@@ -199,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */,
+				8968C08324DF087A0093CBFC /* FloatingPanel in Frameworks */,
 				89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */,
 				896344B224936E210060160B /* Kingfisher in Frameworks */,
 				8964219F2472BF4D0081DC87 /* CloudKit.framework in Frameworks */,
@@ -232,6 +254,14 @@
 				FD10EEC6AA9527A4BDE58F9C /* Pods-SemanticsTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		89290D4E24E2A6DA00F0A862 /* AccountSystem */ = {
+			isa = PBXGroup;
+			children = (
+				89290D4F24E2A71900F0A862 /* LoginVC.swift */,
+			);
+			path = AccountSystem;
 			sourceTree = "<group>";
 		};
 		892C63CE2486616F00208446 /* TextSystem */ = {
@@ -280,6 +310,7 @@
 		896234C4248F99030000ABCD /* Infra */ = {
 			isa = PBXGroup;
 			children = (
+				89290D5124E2ADCB00F0A862 /* KeychainItem.swift */,
 				899AE18124DAD57A00C0EB17 /* CloudKitSpace */,
 				899AE17E24DACAE000C0EB17 /* CoreDataSpace */,
 				899AE17724DABA7C00C0EB17 /* Files */,
@@ -313,6 +344,7 @@
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				89290D4E24E2A6DA00F0A862 /* AccountSystem */,
 				899AE18424DC254C00C0EB17 /* MapSystem */,
 				89A666CE24D6BC0F00851EDF /* MVVM */,
 				89A413DE24C70A82003FD435 /* LifeCycles */,
@@ -442,7 +474,10 @@
 		899AE18424DC254C00C0EB17 /* MapSystem */ = {
 			isa = PBXGroup;
 			children = (
-				899AE18524DC255D00C0EB17 /* MapVC.swift */,
+				89B381E924E0443500B193C2 /* Views */,
+				89B381E524E03C5B00B193C2 /* Models */,
+				899AE18724DD622700C0EB17 /* SemAnnotation.swift */,
+				89290D4724E13B5600F0A862 /* apple-app-site-association */,
 			);
 			path = MapSystem;
 			sourceTree = "<group>";
@@ -525,6 +560,27 @@
 			path = Communication;
 			sourceTree = "<group>";
 		};
+		89B381E524E03C5B00B193C2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */,
+				89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */,
+				89290D4C24E185CA00F0A862 /* RealmObjs.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		89B381E924E0443500B193C2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8968C08624DFDC340093CBFC /* ConditionCell.swift */,
+				8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */,
+				899AE18524DC255D00C0EB17 /* MapVC.swift */,
+				8968C08424DF09A70093CBFC /* ConditionsVC.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		89C2889124A34243002081FE /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,6 +613,7 @@
 				896344B324936E210060160B /* KingfisherSwiftUI */,
 				89C28CFD24ADC22E002081FE /* SwiftHEXColors */,
 				8911386524C1672000CBEBB5 /* SwifterSwift */,
+				8968C08224DF087A0093CBFC /* FloatingPanel */,
 			);
 			productName = Semantics;
 			productReference = 89642171247250590081DC87 /* SemanticsB1.app */;
@@ -613,6 +670,7 @@
 				896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */,
 				8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */,
+				8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 			);
 			productRefGroup = 89642172247250590081DC87 /* Products */;
 			projectDirPath = "";
@@ -631,6 +689,7 @@
 			files = (
 				89642184247250650081DC87 /* LaunchScreen.storyboard in Resources */,
 				89642181247250650081DC87 /* Preview Assets.xcassets in Resources */,
+				89290D4824E13B5600F0A862 /* apple-app-site-association in Resources */,
 				8964217E247250650081DC87 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -718,6 +777,7 @@
 				89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */,
 				899C247624C9CAE100F8259B /* Sector+.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
+				8968C08524DF09A70093CBFC /* ConditionsVC.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
 				899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */,
@@ -725,6 +785,7 @@
 				899AE17324DAA14200C0EB17 /* CKContainer+CloudKitShare.swift in Sources */,
 				8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */,
 				896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */,
+				8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
 				892C6410248A09C600208446 /* OceanLayerVC.swift in Sources */,
 				896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */,
@@ -733,6 +794,7 @@
 				899C247424C9C57300F8259B /* WordsVC.swift in Sources */,
 				8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */,
 				89A666DE24D94EDA00851EDF /* NSNotification+.swift in Sources */,
+				8968C08724DFDC340093CBFC /* ConditionCell.swift in Sources */,
 				899AE17224DAA14200C0EB17 /* CKDatabase+CloudKitShare.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
 				899AE18624DC255D00C0EB17 /* MapVC.swift in Sources */,
@@ -752,6 +814,7 @@
 				89A666D524D6CA8100851EDF /* StringArrayToDataTransformer.swift in Sources */,
 				8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */,
 				89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */,
+				89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */,
 				89A666DB24D847EB00851EDF /* UIButton+.swift in Sources */,
 				892C6416248E1C1800208446 /* SubwordVC.swift in Sources */,
 				892C6414248CCFE200208446 /* WordVC.swift in Sources */,
@@ -761,6 +824,7 @@
 				89C2889324A34308002081FE /* NetworkSpace.swift in Sources */,
 				8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */,
 				8911386824C1984C00CBEBB5 /* Theme.swift in Sources */,
+				899AE18824DD622700C0EB17 /* SemAnnotation.swift in Sources */,
 				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				899AE17924DABA8C00C0EB17 /* Files.swift in Sources */,
@@ -768,12 +832,16 @@
 				89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
+				89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */,
 				89A413E024C70AEB003FD435 /* Creature.swift in Sources */,
 				89988ADB24C2D3040005580B /* BarrierVC.swift in Sources */,
 				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
 				89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */,
+				89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */,
+				89290D4D24E185CA00F0A862 /* RealmObjs.swift in Sources */,
 				89A666D324D6BFF900851EDF /* Schema.swift in Sources */,
 				896344BF249F8F240060160B /* TextLoader.swift in Sources */,
+				89290D5024E2A71900F0A862 /* LoginVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1069,6 +1137,14 @@
 				minimumVersion = 5.14.0;
 			};
 		};
+		8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SCENEE/FloatingPanel.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.5;
+			};
+		};
 		89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/thii/SwiftHEXColors.git";
@@ -1095,6 +1171,11 @@
 			package = 896344B024936E210060160B /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
 		};
+		8968C08224DF087A0093CBFC /* FloatingPanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */;
+			productName = FloatingPanel;
+		};
 		89C28CFD24ADC22E002081FE /* SwiftHEXColors */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */;
@@ -1103,6 +1184,16 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
+		89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				89290D4A24E17E0400F0A862 /* SemWorld.xcdatamodel */,
+			);
+			currentVersion = 89290D4A24E17E0400F0A862 /* SemWorld.xcdatamodel */;
+			path = SemWorld.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		89642178247250590081DC87 /* Semantics.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
