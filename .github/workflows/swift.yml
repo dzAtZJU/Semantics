@@ -1,0 +1,13 @@
+name: Cloc
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  cloc:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: djdefi/cloc-action@2
