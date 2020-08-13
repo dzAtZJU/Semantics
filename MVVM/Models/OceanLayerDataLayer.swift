@@ -8,7 +8,7 @@
 
 import CoreData
 
-struct OceanLayerDataLayer: CoreDataAccessor {
+class OceanLayerDataLayer: CoreDataAccessor {
     static let shared = OceanLayerDataLayer()
     
     func queryByProximity(_ value: Int16, operator: Operator, in sector: Sector) -> OceanLayer? {

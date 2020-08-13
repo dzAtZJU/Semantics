@@ -13,36 +13,17 @@ import Combine
 import AddressBook
 import FloatingPanel
 
-class MapVM {
-    let conditionsVM = ConditionsVM()
-    
-    var selectedAnnotation: MKAnnotation?
-    
-    private(set) var annotations = [MKAnnotation]()
-    
-    private lazy var locationManager: CLLocationManager = {
-        let tmp = CLLocationManager()
+class MapVC: UIViewController {
+    private lazy var panelContentVC: PanelContentVC = {
+        let tmp = PanelContentVC()
+        tmp.delegate = self
         return tmp
     }()
     
-    func requestLocationAuthorization() {
-        locationManager.requestWhenInUseAuthorization()
-    }
-    
-    func loadVisitedPlaces() {
-        annotations = SemWorldDataLayer.queryPlaces().map { place in
-            let tmp = MKPointAnnotation()
-            tmp.title = place.title
-            tmp.coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
-            return tmp
-        }
-    }
-}
-
-class MapVC: UIViewController {
     private lazy var panel: FloatingPanelController = {
         let tmp = FloatingPanelController(delegate: self)
-        tmp.set(contentViewController: ConditionsVC(vm: vm.conditionsVM))
+//        tmp.set(contentViewController: ConditionsVC(vm: vm.conditionsVM))
+        tmp.set(contentViewController: panelContentVC)
         tmp.contentMode = .fitToBounds
         return tmp
     }()
@@ -55,13 +36,16 @@ class MapVC: UIViewController {
         tmp.isRotateEnabled = false
         tmp.showsUserLocation = true
         tmp.userTrackingMode = .follow
-        tmp.region.span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        tmp.region.span = MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)
         tmp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tmp.delegate = self
         return tmp
     }()
     
     private var centerToUserLocation = true
+    
+    private var annotationsToken: AnyCancellable?
+    private var boundingRegionToken: AnyCancellable?
     
     private let vm: MapVM
     init(vm vm_: MapVM) {
@@ -83,6 +67,14 @@ class MapVC: UIViewController {
         
         panel.addPanel(toParent: self)
         
+        annotationsToken = vm.$annotations.sink {
+            self.map.addAnnotations($0)
+        }
+        boundingRegionToken = vm.$boundingRegion.sink {
+            if $0 != nil {
+                self.map.region = $0!
+            }
+        }
         map.addAnnotations(vm.annotations)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
     }
@@ -95,12 +87,26 @@ class MapVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        vm.requestLocationAuthorization()
+        vm.requestLocationAuthorization()
+    }
+    
+    deinit {
+        annotationsToken?.cancel()
+        annotationsToken = nil
+        
+        boundingRegionToken?.cancel()
+        boundingRegionToken = nil
     }
 }
 
 extension MapVC: FloatingPanelControllerDelegate {
     
+}
+
+extension MapVC: PanelContentVCDelegate {
+    func panelContentVC(_ panelContentVC: PanelContentVC, searchDidFinishiWithResponse response: MKLocalSearch.Response) {
+        vm.setPlaces(response.mapItems, boundingRegion: response.boundingRegion)
+    }
 }
 
 extension MapVC: MKMapViewDelegate {
@@ -111,10 +117,11 @@ extension MapVC: MKMapViewDelegate {
         
         centerToUserLocation = false
         mapView.centerCoordinate = userLocation.coordinate
+        panelContentVC.updateUserLocation(userLocation.coordinate)
     }
     
     static let annotationViewIdentifier = "annotationView"
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, fviewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else {
             return nil
         }

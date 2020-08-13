@@ -9,7 +9,7 @@
 import CoreData
 import Foundation
 
-struct SectorDataLayer: CoreDataAccessor {
+class SectorDataLayer: CoreDataAccessor {
     static let shared = SectorDataLayer()
     
     func queryByDisplayOrder(_ value: Int, operator: Operator) -> Sector? {

@@ -18,6 +18,15 @@
 		89290D4D24E185CA00F0A862 /* RealmObjs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4C24E185CA00F0A862 /* RealmObjs.swift */; };
 		89290D5024E2A71900F0A862 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4F24E2A71900F0A862 /* LoginVC.swift */; };
 		89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5124E2ADCB00F0A862 /* KeychainItem.swift */; };
+		89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5824E3D62100F0A862 /* RealmSpace.swift */; };
+		89290D5B24E3D68A00F0A862 /* AccountLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5A24E3D68A00F0A862 /* AccountLayer.swift */; };
+		89290D5D24E403F900F0A862 /* Communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5C24E403F900F0A862 /* Communication.swift */; };
+		89290D5F24E42B3E00F0A862 /* PanelContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */; };
+		89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D6024E44CFA00F0A862 /* UIFont+.swift */; };
+		89290D6324E4E02F00F0A862 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D6224E4E02F00F0A862 /* UILabel+.swift */; };
+		89290D6724E52F1C00F0A862 /* MapVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D6624E52F1C00F0A862 /* MapVM.swift */; };
+		89290D6924E52F4600F0A862 /* ConditionsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D6824E52F4600F0A862 /* ConditionsVM.swift */; };
+		89290D6C24E5313B00F0A862 /* SearchSuggestionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D6B24E5313B00F0A862 /* SearchSuggestionsController.swift */; };
 		892C63D0248661D100208446 /* SemTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63CF248661D100208446 /* SemTextStorage.swift */; };
 		892C63D524866A1000208446 /* NSRange+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D424866A1000208446 /* NSRange+.swift */; };
 		892C63DE24867F8700208446 /* SemTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63DD24867F8700208446 /* SemTextView.swift */; };
@@ -132,6 +141,15 @@
 		89290D4C24E185CA00F0A862 /* RealmObjs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjs.swift; sourceTree = "<group>"; };
 		89290D4F24E2A71900F0A862 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		89290D5124E2ADCB00F0A862 /* KeychainItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
+		89290D5824E3D62100F0A862 /* RealmSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSpace.swift; sourceTree = "<group>"; };
+		89290D5A24E3D68A00F0A862 /* AccountLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLayer.swift; sourceTree = "<group>"; };
+		89290D5C24E403F900F0A862 /* Communication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communication.swift; sourceTree = "<group>"; };
+		89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelContentVC.swift; sourceTree = "<group>"; };
+		89290D6024E44CFA00F0A862 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
+		89290D6224E4E02F00F0A862 /* UILabel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
+		89290D6624E52F1C00F0A862 /* MapVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVM.swift; sourceTree = "<group>"; };
+		89290D6824E52F4600F0A862 /* ConditionsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionsVM.swift; sourceTree = "<group>"; };
+		89290D6B24E5313B00F0A862 /* SearchSuggestionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestionsController.swift; sourceTree = "<group>"; };
 		892C63CF248661D100208446 /* SemTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextStorage.swift; sourceTree = "<group>"; };
 		892C63D12486630900208446 /* SemStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemStyle.swift; sourceTree = "<group>"; };
 		892C63D424866A1000208446 /* NSRange+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSRange+.swift"; sourceTree = "<group>"; };
@@ -260,8 +278,48 @@
 			isa = PBXGroup;
 			children = (
 				89290D4F24E2A71900F0A862 /* LoginVC.swift */,
+				89290D5A24E3D68A00F0A862 /* AccountLayer.swift */,
+				89290D5C24E403F900F0A862 /* Communication.swift */,
 			);
 			path = AccountSystem;
+			sourceTree = "<group>";
+		};
+		89290D5524E3D60800F0A862 /* RealmSpace */ = {
+			isa = PBXGroup;
+			children = (
+				89290D5824E3D62100F0A862 /* RealmSpace.swift */,
+			);
+			path = RealmSpace;
+			sourceTree = "<group>";
+		};
+		89290D6424E52EDF00F0A862 /* MVVM */ = {
+			isa = PBXGroup;
+			children = (
+				89290D6524E52EEF00F0A862 /* VMs */,
+				89B381E924E0443500B193C2 /* Views */,
+				89B381E524E03C5B00B193C2 /* Models */,
+			);
+			path = MVVM;
+			sourceTree = "<group>";
+		};
+		89290D6524E52EEF00F0A862 /* VMs */ = {
+			isa = PBXGroup;
+			children = (
+				89290D6624E52F1C00F0A862 /* MapVM.swift */,
+				89290D6824E52F4600F0A862 /* ConditionsVM.swift */,
+			);
+			path = VMs;
+			sourceTree = "<group>";
+		};
+		89290D6A24E5312600F0A862 /* VCs */ = {
+			isa = PBXGroup;
+			children = (
+				8968C08424DF09A70093CBFC /* ConditionsVC.swift */,
+				899AE18524DC255D00C0EB17 /* MapVC.swift */,
+				89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */,
+				89290D6B24E5313B00F0A862 /* SearchSuggestionsController.swift */,
+			);
+			path = VCs;
 			sourceTree = "<group>";
 		};
 		892C63CE2486616F00208446 /* TextSystem */ = {
@@ -290,6 +348,8 @@
 				89A413CF24C567E0003FD435 /* OneFingerTableView.swift */,
 				89A666DA24D847EB00851EDF /* UIButton+.swift */,
 				899AE17A24DAC2F000C0EB17 /* Bundle.swift */,
+				89290D6024E44CFA00F0A862 /* UIFont+.swift */,
+				89290D6224E4E02F00F0A862 /* UILabel+.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -310,6 +370,7 @@
 		896234C4248F99030000ABCD /* Infra */ = {
 			isa = PBXGroup;
 			children = (
+				89290D5524E3D60800F0A862 /* RealmSpace */,
 				89290D5124E2ADCB00F0A862 /* KeychainItem.swift */,
 				899AE18124DAD57A00C0EB17 /* CloudKitSpace */,
 				899AE17E24DACAE000C0EB17 /* CoreDataSpace */,
@@ -474,8 +535,7 @@
 		899AE18424DC254C00C0EB17 /* MapSystem */ = {
 			isa = PBXGroup;
 			children = (
-				89B381E924E0443500B193C2 /* Views */,
-				89B381E524E03C5B00B193C2 /* Models */,
+				89290D6424E52EDF00F0A862 /* MVVM */,
 				899AE18724DD622700C0EB17 /* SemAnnotation.swift */,
 				89290D4724E13B5600F0A862 /* apple-app-site-association */,
 			);
@@ -573,10 +633,9 @@
 		89B381E924E0443500B193C2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				89290D6A24E5312600F0A862 /* VCs */,
 				8968C08624DFDC340093CBFC /* ConditionCell.swift */,
 				8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */,
-				899AE18524DC255D00C0EB17 /* MapVC.swift */,
-				8968C08424DF09A70093CBFC /* ConditionsVC.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -779,8 +838,11 @@
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				8968C08524DF09A70093CBFC /* ConditionsVC.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
+				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
+				89290D5B24E3D68A00F0A862 /* AccountLayer.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
 				899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */,
+				89290D6C24E5313B00F0A862 /* SearchSuggestionsController.swift in Sources */,
 				89A666D124D6BC4500851EDF /* WordVM.swift in Sources */,
 				899AE17324DAA14200C0EB17 /* CKContainer+CloudKitShare.swift in Sources */,
 				8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */,
@@ -796,6 +858,7 @@
 				89A666DE24D94EDA00851EDF /* NSNotification+.swift in Sources */,
 				8968C08724DFDC340093CBFC /* ConditionCell.swift in Sources */,
 				899AE17224DAA14200C0EB17 /* CKDatabase+CloudKitShare.swift in Sources */,
+				89290D6724E52F1C00F0A862 /* MapVM.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
 				899AE18624DC255D00C0EB17 /* MapVC.swift in Sources */,
 				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
@@ -804,6 +867,7 @@
 				899AE18324DAD5A800C0EB17 /* CloudKitSpace.swift in Sources */,
 				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
 				89A666D724D6EEE100851EDF /* FloatingContainerVC.swift in Sources */,
+				89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */,
 				89A413D724C6F041003FD435 /* Bubble.swift in Sources */,
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
 				89A666E224D9934700851EDF /* CommunityVM.swift in Sources */,
@@ -830,12 +894,16 @@
 				899AE17924DABA8C00C0EB17 /* Files.swift in Sources */,
 				899AE18024DACAF100C0EB17 /* CoreDataSpace.swift in Sources */,
 				89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */,
+				89290D5D24E403F900F0A862 /* Communication.swift in Sources */,
+				89290D6324E4E02F00F0A862 /* UILabel+.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
 				89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */,
 				89A413E024C70AEB003FD435 /* Creature.swift in Sources */,
 				89988ADB24C2D3040005580B /* BarrierVC.swift in Sources */,
 				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
+				89290D6924E52F4600F0A862 /* ConditionsVM.swift in Sources */,
+				89290D5F24E42B3E00F0A862 /* PanelContentVC.swift in Sources */,
 				89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */,
 				89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */,
 				89290D4D24E185CA00F0A862 /* RealmObjs.swift in Sources */,

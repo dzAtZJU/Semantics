@@ -6,6 +6,7 @@
 //  Copyright © 2020 Paper Scratch. All rights reserved.
 //
 import Foundation
+import UIKit
 
 extension String {
     var nsRange: NSRange {

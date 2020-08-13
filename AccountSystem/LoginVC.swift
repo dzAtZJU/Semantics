@@ -52,17 +52,23 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
             fatalError()
         }
+        guard let token = String(data: appleIDCredential.identityToken!, encoding: .utf8) else {
+            fatalError()
+        }
         
-        // Create an account in your system.
-        let userIdentifier = appleIDCredential.user
-        let fullName = appleIDCredential.fullName?.description
-        let email = appleIDCredential.email
+        let givenName: String? = appleIDCredential.fullName?.givenName
+        if givenName != nil {
+            KeychainItem.currentUserName = givenName!
+        }
         
-        try! KeychainItem(service: "ind.paper.semantics", account: "userIdentifier").saveItem(userIdentifier)
-        
-        SemWorldDataLayer.login(userName: userIdentifier) {
-            print("Credential \(userIdentifier) \(fullName) \(email)")
-            self.dismiss(animated: true, completion: nil)
+        AccountLayer.shared.login(appleToken: token) {
+            if let givenName = givenName {
+                _ = SemWorldDataLayer.shared.queryOrCreateCurrentIndividual(userName: givenName)
+            }
+            NotificationCenter.default.post(name: .signedIn, object: nil)
+            DispatchQueue.main.async {
+                self.dismiss(animated: true, completion: nil)
+            }
         }
     }
     
