@@ -12,6 +12,8 @@ import FloatingPanel
 
 protocol PanelContentVCDelegate {
     func panelContentVC(_ panelContentVC: PanelContentVC, searchDidFinishiWithResponse response: MKLocalSearch.Response)
+    
+    func panelContentVCShouldStartFeedback(_ panelContentVC: PanelContentVC)
 }
 
 class PanelContentVC: UIViewController {
@@ -28,6 +30,19 @@ class PanelContentVC: UIViewController {
         return tmp
     }()
     
+    private lazy var feedbackBtn: UIButton = {
+        let tmp = UIButton(type: .roundedRect)
+        tmp.cornerRadius = 10
+        tmp.setTitleForAllStates("Feedback")
+        tmp.translatesAutoresizingMaskIntoConstraints = false
+        tmp.addTarget(self, action: #selector(feedbackBtnTapped), for: .touchUpInside)
+        tmp.backgroundColor = .systemBlue
+        tmp.tintColor = .white
+        tmp.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        tmp.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return tmp
+    }()
+    
     var delegate: PanelContentVCDelegate?
     
     private var localSearch: MKLocalSearch?
@@ -39,18 +54,26 @@ class PanelContentVC: UIViewController {
         view.backgroundColor = .yellow
         
         view.addSubview(searchController.searchBar)
+        
+        view.addSubview(feedbackBtn)
+        feedbackBtn.topAnchor.constraint(equalToSystemSpacingBelow: searchController.searchBar.bottomAnchor, multiplier: 2).isActive = true
+        feedbackBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard searchController.searchBar.superview == view else {
-            return
-        }
+        
     }
     
     func updateUserLocation(_ location: CLLocationCoordinate2D) {
         searchSuggestionsController.updateUserLocation(location)
+    }
+}
+
+extension PanelContentVC {
+    @objc private func feedbackBtnTapped() {
+        delegate?.panelContentVCShouldStartFeedback(self)
     }
 }
 
@@ -92,8 +115,7 @@ extension PanelContentVC: UITableViewDelegate {
         }
         
         // Confine the map search area to an area around the user's current location.
-        searchRequest.region = searchSuggestionsController.searchCompleter.region
-        print("region \(searchRequest.region)")
+//        searchRequest.region = searchSuggestionsController.searchCompleter.region
         searchRequest.resultTypes = .pointOfInterest
         searchRequest.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
         

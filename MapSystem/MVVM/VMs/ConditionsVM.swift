@@ -8,27 +8,24 @@
 
 import Foundation
 import Combine
+import SwiftUI
+import RealmSwift
+
+enum NextOperator: Int {
+    case better = 0
+    case noWorse
+    case noMatter
+}
 
 class ConditionVM {
-    enum NextOperator: Int {
-        case better = 0
-        case noWorse
-        case noMatter
+    let title: String
+    let _id: ObjectId
+    init(title: String, _id: ObjectId) {
+        self.title = title
+        self._id = _id
     }
-    
-    enum `Type` {
-        case bool
-    }
-    let subTitle = ""
-    let caterogy = ""
-    let type = Type.bool
     
     @Published private(set) var nextOperator: NextOperator = .noMatter
-    
-    let title: String
-    init(title: String) {
-        self.title = title
-    }
     
     func setNextOperator(value: NextOperator) {
         if nextOperator != value {
@@ -43,23 +40,48 @@ class ConditionVM {
     }
 }
 
+protocol ConditionsVMDelegate {
+    var selectedPlaceId: ObjectId? {
+        get
+    }
+}
+
 class ConditionsVM {
-    let conditions = [ConditionVM(title: "卫生间"), ConditionVM(title: "咖啡"), ConditionVM(title: "空间感"), ConditionVM(title: "小孩吵"), ConditionVM(title: "背景音乐"), ConditionVM(title: "网络")]
+    var delegate: ConditionsVMDelegate?
+    
+    let conditionVMs: [ConditionVM]
+    init(conditions: Results<Condition>) {
+        conditionVMs = conditions.map {
+            ConditionVM(title: $0.title, _id: $0._id)
+        }
+    }
+    
+    
+    var iterationUpdater: ((SemWorldDataLayer.IterationQueryReslut) -> Void)! = nil
     
     func modifyNextOperator(atTitle title: String, value: Int) {
-        let condition = conditions.first {
+        let condition = conditionVMs.first {
             $0.title == title
             }!
-        condition.setNextOperator(value: ConditionVM.NextOperator(rawValue: value)!)
+        condition.setNextOperator(value: NextOperator(rawValue: value)!)
     }
     
     func runNextIteration() {
-        let filters = conditions.map {
-            "\($0.title): \($0.nextOperator.rawValue)"
-        }.joined(separator: ",")
-        print("runNextIteration: \(filters)")
-        conditions.forEach {
+        guard let selectedPlaceId = delegate?.selectedPlaceId else {
+            return
+        }
+
+        let conditions = conditionVMs.map {
+            SemWorldDataLayer.IterationQuery.Condition(_id: $0._id, operator: $0.nextOperator)
+        }
+        let query = SemWorldDataLayer.IterationQuery(placeId: selectedPlaceId, conditions: conditions)
+
+        conditionVMs.forEach {
             $0.resetNextOperator()
+        }
+        
+        RealmSpace.shared.queue.async {
+            SemWorldDataLayer(realm: RealmSpace.shared.newRealm("Public")).runNextIteration(query: query, completion: self.iterationUpdater)
         }
     }
 }

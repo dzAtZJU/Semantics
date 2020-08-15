@@ -20,10 +20,15 @@ class MapVC: UIViewController {
         return tmp
     }()
     
+    private lazy var conditionsVC: ConditionsVC = {
+        let tmp = ConditionsVC(vm: vm.conditionsVM)
+        tmp.delegate = self
+        return tmp
+    }()
+    
     private lazy var panel: FloatingPanelController = {
         let tmp = FloatingPanelController(delegate: self)
-//        tmp.set(contentViewController: ConditionsVC(vm: vm.conditionsVM))
-        tmp.set(contentViewController: panelContentVC)
+        tmp.set(contentViewController: conditionsVC)
         tmp.contentMode = .fitToBounds
         return tmp
     }()
@@ -51,6 +56,9 @@ class MapVC: UIViewController {
     init(vm vm_: MapVM) {
         vm = vm_
         super.init(nibName: nil, bundle: nil)
+        vm.signedIn = {
+            self.panel.addPanel(toParent: self)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -65,10 +73,11 @@ class MapVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        panel.addPanel(toParent: self)
-        
-        annotationsToken = vm.$annotations.sink {
-            self.map.addAnnotations($0)
+        annotationsToken = vm.$annotations.sink { value in
+            DispatchQueue.main.async {
+                self.map.removeAnnotations(self.map.annotations)
+                self.map.addAnnotations(value)
+            }
         }
         boundingRegionToken = vm.$boundingRegion.sink {
             if $0 != nil {
@@ -76,7 +85,8 @@ class MapVC: UIViewController {
             }
         }
         map.addAnnotations(vm.annotations)
-        map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
+        map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
+        map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
     }
     
     override func viewDidLayoutSubviews() {
@@ -107,6 +117,18 @@ extension MapVC: PanelContentVCDelegate {
     func panelContentVC(_ panelContentVC: PanelContentVC, searchDidFinishiWithResponse response: MKLocalSearch.Response) {
         vm.setPlaces(response.mapItems, boundingRegion: response.boundingRegion)
     }
+    
+    func panelContentVCShouldStartFeedback(_ panelContentVC: PanelContentVC) {
+        
+            let vc = FeedbackVC(feedbackVM: FeedbackVM(conditionsRank: SemWorldDataLayer.shared.queryCurrentIndividual()!.conditionsRank))
+            self.panel.set(contentViewController: vc)
+    }
+}
+
+extension MapVC: ConditionsVCDelegate {
+    func conditionsVCShouldBack() {
+        
+    }
 }
 
 extension MapVC: MKMapViewDelegate {
@@ -121,22 +143,35 @@ extension MapVC: MKMapViewDelegate {
     }
     
     static let annotationViewIdentifier = "annotationView"
-    func mapView(_ mapView: MKMapView, fviewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    static let markAnnotationViewIdentifier = "markAnnotationView"
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else {
             return nil
         }
 
-        let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
+        
+        if annotation is SemAnnotation1 {
+            let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
+            view.canShowCallout = true
+            view.animatesWhenAdded = true
+            return view
+        }
+        
+        let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation)
         view.canShowCallout = true
+        let size = CGSize(width: 10, height: 10)
+        view.image = UIGraphicsImageRenderer(size: size).image { context in
+            UIImage(systemName:"circle.fill")!.withTintColor(.brown).draw(in:CGRect(origin:.zero, size: size))
+        }
         return view
     }
     
     // MARK: Interaction
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        vm.selectedAnnotation = view.annotation
+        vm.setSelectedAnnotation(view.annotation as! SemAnnotation)
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        vm.selectedAnnotation = nil
+        vm.setSelectedAnnotation(nil)
     }
 }

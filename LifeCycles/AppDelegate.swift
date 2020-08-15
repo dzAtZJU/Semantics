@@ -10,14 +10,14 @@ import UIKit
 import CoreData
 import CloudKit
 import Foundation
-import Iconic
-import Highcharts
+//import Iconic
+//import Highcharts
 import AuthenticationServices
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        print("lifcycle: \(#function)")
+        
         
         
         
@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        print("lifcycle: \(#function)")
+        
         //        _ = CoreDataSpace.shared
         //        _ = CloukitSpace.shared
         //        FontAwesomeIcon.register()
@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
 extension AppDelegate {
     // MARK: UISceneSession Lifecycle
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        print("lifcycle: \(#function)")
+        
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)

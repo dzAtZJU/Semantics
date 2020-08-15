@@ -1,7 +1,4 @@
 PODS:
-  - Highcharts (8.1.2)
-  - Iconic (1.5)
-  - Jelly (2.2.2)
   - Realm (10.0.0-beta.2):
     - Realm/Headers (= 10.0.0-beta.2)
   - Realm/Headers (10.0.0-beta.2)
@@ -9,34 +6,17 @@ PODS:
     - Realm (= 10.0.0-beta.2)
 
 DEPENDENCIES:
-  - Highcharts (~> 8.1.2)
-  - Iconic (from `https://github.com/home-assistant/Iconic.git`)
-  - Jelly (~> 2.2.2)
   - RealmSwift (= 10.0.0-beta.2)
 
 SPEC REPOS:
   trunk:
-    - Highcharts
-    - Jelly
     - Realm
     - RealmSwift
 
-EXTERNAL SOURCES:
-  Iconic:
-    :git: https://github.com/home-assistant/Iconic.git
-
-CHECKOUT OPTIONS:
-  Iconic:
-    :commit: 48b595d947e5fbb4a239340bd7cac176f053313c
-    :git: https://github.com/home-assistant/Iconic.git
-
 SPEC CHECKSUMS:
-  Highcharts: 795b5359af23d5af26da7529056da6a0f3e4d47f
-  Iconic: da1d724e702e01d3737046b653bee69f38d148a0
-  Jelly: 0576a8fd3b3bea78f6c2d952acdc30b0835dda71
   Realm: 211e32e680c354c9b1a2bdc0e3aeb01c25849641
   RealmSwift: f9043abf9b6821ad5c3032c2a36b5ddfc90b4ce3
 
-PODFILE CHECKSUM: 7c332656e29d415ad448e810654ba3bf2bb94580
+PODFILE CHECKSUM: 84ab3709b687a968f0dc855e519e6d4ea764c316
 
 COCOAPODS: 1.8.4

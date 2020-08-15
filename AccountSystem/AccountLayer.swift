@@ -13,12 +13,12 @@ class AccountLayer {
     
     static let shared = AccountLayer()
     
-    var currentUser: SyncUser? {
+    func queryCurrentUser() -> SyncUser? {
         RealmSpace.shared.app.currentUser()
     }
     
-    var currentUserID: String? {
-        currentUser?.identity
+    func queryCurrentUserID() -> String? {
+        queryCurrentUser()?.identity
     }
     
     func login(appleToken: String, completion: @escaping () -> Void) {

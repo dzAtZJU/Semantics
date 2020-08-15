@@ -60,6 +60,10 @@
 		8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */; };
 		8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */; };
 		8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */; };
+		8989C5BD24E5C84600FA3FAE /* ConditionFeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */; };
+		8989C5BF24E673AC00FA3FAE /* ConditionFeedbackVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5BE24E673AC00FA3FAE /* ConditionFeedbackVM.swift */; };
+		8989C5C124E6CE3D00FA3FAE /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */; };
+		8989C5C324E6CEF500FA3FAE /* FeedbackVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5C224E6CEF500FA3FAE /* FeedbackVM.swift */; };
 		8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAD924B3513200299595 /* SemFoldersVC.swift */; };
 		8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DADD24B45BE100299595 /* SearchResultsVC.swift */; };
 		8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE024B6F9BD00299595 /* SemTextLayout.swift */; };
@@ -186,6 +190,10 @@
 		8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSupplementaryView.swift; sourceTree = "<group>"; };
 		8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseCollisionBoundsWrapper.swift; sourceTree = "<group>"; };
 		8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
+		8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionFeedbackVC.swift; sourceTree = "<group>"; };
+		8989C5BE24E673AC00FA3FAE /* ConditionFeedbackVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionFeedbackVM.swift; sourceTree = "<group>"; };
+		8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
+		8989C5C224E6CEF500FA3FAE /* FeedbackVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackVM.swift; sourceTree = "<group>"; };
 		8991DAD924B3513200299595 /* SemFoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemFoldersVC.swift; sourceTree = "<group>"; };
 		8991DADD24B45BE100299595 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
 		8991DAE024B6F9BD00299595 /* SemTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextLayout.swift; sourceTree = "<group>"; };
@@ -307,6 +315,8 @@
 			children = (
 				89290D6624E52F1C00F0A862 /* MapVM.swift */,
 				89290D6824E52F4600F0A862 /* ConditionsVM.swift */,
+				8989C5BE24E673AC00FA3FAE /* ConditionFeedbackVM.swift */,
+				8989C5C224E6CEF500FA3FAE /* FeedbackVM.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -318,6 +328,8 @@
 				899AE18524DC255D00C0EB17 /* MapVC.swift */,
 				89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */,
 				89290D6B24E5313B00F0A862 /* SearchSuggestionsController.swift */,
+				8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */,
+				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -536,7 +548,6 @@
 			isa = PBXGroup;
 			children = (
 				89290D6424E52EDF00F0A862 /* MVVM */,
-				899AE18724DD622700C0EB17 /* SemAnnotation.swift */,
 				89290D4724E13B5600F0A862 /* apple-app-site-association */,
 			);
 			path = MapSystem;
@@ -623,6 +634,7 @@
 		89B381E524E03C5B00B193C2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				899AE18724DD622700C0EB17 /* SemAnnotation.swift */,
 				89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */,
 				89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */,
 				89290D4C24E185CA00F0A862 /* RealmObjs.swift */,
@@ -847,6 +859,7 @@
 				899AE17324DAA14200C0EB17 /* CKContainer+CloudKitShare.swift in Sources */,
 				8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */,
 				896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */,
+				8989C5C324E6CEF500FA3FAE /* FeedbackVM.swift in Sources */,
 				8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
 				892C6410248A09C600208446 /* OceanLayerVC.swift in Sources */,
@@ -872,6 +885,7 @@
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
 				89A666E224D9934700851EDF /* CommunityVM.swift in Sources */,
 				89A413D424C57215003FD435 /* Word+.swift in Sources */,
+				8989C5BD24E5C84600FA3FAE /* ConditionFeedbackVC.swift in Sources */,
 				89A4719124D59F0700874BA1 /* WordVC1.swift in Sources */,
 				89642175247250590081DC87 /* AppDelegate.swift in Sources */,
 				89A666E024D9928800851EDF /* CommunityVC.swift in Sources */,
@@ -889,6 +903,7 @@
 				8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */,
 				8911386824C1984C00CBEBB5 /* Theme.swift in Sources */,
 				899AE18824DD622700C0EB17 /* SemAnnotation.swift in Sources */,
+				8989C5BF24E673AC00FA3FAE /* ConditionFeedbackVM.swift in Sources */,
 				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				899AE17924DABA8C00C0EB17 /* Files.swift in Sources */,
@@ -902,6 +917,7 @@
 				89A413E024C70AEB003FD435 /* Creature.swift in Sources */,
 				89988ADB24C2D3040005580B /* BarrierVC.swift in Sources */,
 				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
+				8989C5C124E6CE3D00FA3FAE /* FeedbackVC.swift in Sources */,
 				89290D6924E52F4600F0A862 /* ConditionsVM.swift in Sources */,
 				89290D5F24E42B3E00F0A862 /* PanelContentVC.swift in Sources */,
 				89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */,

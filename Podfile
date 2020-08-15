@@ -5,6 +5,8 @@ target 'Semantics' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  # https://docs.mongodb.com/realm/mongodb
+  # https://docs.mongodb.com/realm/tutorial/ios-swift/
   # https://docs.mongodb.com/realm/
   # https://docs.realm.io/sync/
   # https://realm.io/docs/swift/latest
@@ -12,14 +14,13 @@ target 'Semantics' do
   # https://docs.mongodb.com/realm-sdks/objc/10.0.0-beta.2/index.html
   pod 'RealmSwift', '=10.0.0-beta.2'
    
-  pod 'Jelly', '~> 2.2.2'
+#  pod 'Jelly', '~> 2.2.2'
   
-  # Pods for Semantics
-  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
+#  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
   
   # https://www.highcharts.com/ios/demo
   # https://api.highcharts.com/ios/highcharts/
-  pod 'Highcharts', '~> 8.1.2'
+#  pod 'Highcharts', '~> 8.1.2'
 
   target 'SemanticsTests' do
     inherit! :search_paths

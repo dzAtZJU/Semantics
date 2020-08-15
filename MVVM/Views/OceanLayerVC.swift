@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 import SwiftUI
-import Iconic
+//import Iconic
 import SwifterSwift
 
 class OceanLayerVC: UIViewController {
@@ -294,9 +294,9 @@ extension OceanLayerVC: UITableViewDataSource {
         cell.showsReorderControl = true
         cell.textLabel!.text = word.name
         cell.detailTextLabel?.text = ""
-        if word.hasNeighborWords {
-            cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: .secondaryLabel)
-        }
+//        if word.hasNeighborWords {
+//            cell.detailTextLabel!.attributedText = FontAwesomeIcon.f212Icon.attributedString(ofSize: 11, color: .secondaryLabel)
+//        }
     }
 }
 

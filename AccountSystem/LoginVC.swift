@@ -56,20 +56,20 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
             fatalError()
         }
         
-        let givenName: String? = appleIDCredential.fullName?.givenName
-        if givenName != nil {
-            KeychainItem.currentUserName = givenName!
+        if let givenName = appleIDCredential.fullName?.givenName {
+            KeychainItem.currentUserName = givenName
         }
         
         AccountLayer.shared.login(appleToken: token) {
-            if let givenName = givenName {
-                _ = SemWorldDataLayer.shared.queryOrCreateCurrentIndividual(userName: givenName)
+                DispatchQueue.main.async {
+                    RealmSpace.shared.loadPublicRealm()
+                    SemWorldDataLayer.shared
+                                       .queryOrCreateCurrentIndividual(userName: "Paper") { _ in }
+                    SemWorldDataLayer.shared.createMockData()
+                    NotificationCenter.default.post(name: .signedIn, object: nil)
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
-            NotificationCenter.default.post(name: .signedIn, object: nil)
-            DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Iconic
+//import Iconic
 
 protocol SemTextStorageDelegate: NSTextStorageDelegate {
     func textStorage(_ textStorage: NSTextStorage, didAddNotelinks added: Set<String>, didRemoveNotelinks removed: Set<String>)
@@ -117,11 +117,11 @@ class SemTextStorage: NSTextStorage {
             let innerRange = SemTextProcessor.oneCharTagInnerRange(in: matchedRange)
             let iconName = storage.mutableString.substring(with: innerRange)
             let fontSize = ((attribute(.font, at: matchedRange.location, effectiveRange: nil) as! UIFont).fontDescriptor.fontAttributes[.size] as! NSNumber).floatValue
-            let iconAttriburedString = FontAwesomeIcon(named: iconName).attributedString(ofSize: CGFloat(fontSize), color: UIColor.label)
-            replaceCharacters(in: matchedRange, with: iconAttriburedString)
-            addAttribute(.iconName, value: iconName, range: NSRange(location: matchedRange.location, length: iconAttriburedString.length))
-            
-            offset += iconAttriburedString.length - matchedRange.length
+//            let iconAttriburedString = FontAwesomeIcon(named: iconName).attributedString(ofSize: CGFloat(fontSize), color: UIColor.label)
+//            replaceCharacters(in: matchedRange, with: iconAttriburedString)
+//            addAttribute(.iconName, value: iconName, range: NSRange(location: matchedRange.location, length: iconAttriburedString.length))
+//            
+//            offset += iconAttriburedString.length - matchedRange.length
         }
     }
 }

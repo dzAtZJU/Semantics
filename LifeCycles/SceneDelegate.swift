@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        print("lifcycle: \(#function)")
+        
         let window = UIWindow(windowScene: scene as! UIWindowScene)
         self.window = window
         
@@ -32,18 +32,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        print("lifcycle: \(#function)")
-        if AccountLayer.shared.currentUser == nil {
-            window!.rootViewController!.present(LoginVC(), animated: true, completion: nil)
-        } else {
-            NotificationCenter.default.post(name: .signedIn, object: nil)
-        }
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
+        let user = AccountLayer.shared.queryCurrentUser()
+            if user == nil {
+                DispatchQueue.main.async {
+                    self.window!.rootViewController!.present(LoginVC(), animated: true, completion: nil)
+                }
+            } else {
+                RealmSpace.shared.loadPublicRealm()
+                    NotificationCenter.default.post(name: .signedIn, object: nil)
+            }
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
-        print("lifcycle: \(#function)")
+        
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }

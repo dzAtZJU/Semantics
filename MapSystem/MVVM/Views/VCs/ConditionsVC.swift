@@ -8,11 +8,15 @@
 
 import UIKit
 import Combine
+protocol ConditionsVCDelegate {
+    func conditionsVCShouldBack()
+}
 
 class ConditionsVC: UIViewController {
     static let cellIdentifier = "cell"
     static let pageMargin: CGFloat = 50
     
+    private lazy var backBtn: UIButton = UIButton(systemName: "multiply.circle.fill", textStyle: .title2, target: self, selector: #selector(backBtnTapped))
     
     private lazy var searchButton: UIButton = {
         let tmp = UIButton(systemName: "magnifyingglass.circle")
@@ -36,6 +40,8 @@ class ConditionsVC: UIViewController {
         return tmp
     }()
     
+    var delegate: ConditionsVCDelegate?
+    
     private let vm: ConditionsVM
     init(vm vm_: ConditionsVM) {
         vm = vm_
@@ -50,15 +56,19 @@ class ConditionsVC: UIViewController {
         view = UIView()
         view.backgroundColor = .systemBackground
         
-        view.addSubview(collectionView)
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        view.addSubview(backBtn)
+        view.trailingAnchor.constraint(equalToSystemSpacingAfter: backBtn.trailingAnchor, multiplier: 2).isActive = true
+        backBtn.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
         
         view.addSubview(searchButton)
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: searchButton.trailingAnchor, multiplier: 2).isActive = true
-        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
+        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: backBtn.bottomAnchor, multiplier: 1).isActive = true
+        
+        view.addSubview(collectionView)
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         collectionView.topAnchor.constraint(equalToSystemSpacingBelow: searchButton.bottomAnchor, multiplier: 1).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -71,14 +81,14 @@ class ConditionsVC: UIViewController {
 
 extension ConditionsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.conditions.count
+        vm.conditionVMs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ConditionsVC.cellIdentifier, for: indexPath) as! ConditionCell
         cell.indexPath = indexPath
         
-        let condition = vm.conditions[indexPath.row]
+        let condition = vm.conditionVMs[indexPath.row]
         cell.label.text = condition.title
         cell.token = condition.$nextOperator.sink {
             if $0.rawValue != cell.segmentedControl.selectedSegmentIndex {
@@ -105,6 +115,11 @@ extension ConditionsVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
 // MARK: Interation
 extension ConditionsVC {
+    @objc private func backBtnTapped() {
+        dismiss(animated: true, completion: nil)
+//        delegate?.conditionsVCShouldBack()
+    }
+    
     @objc private func searchBtnTapped() {
         vm.runNextIteration()
     }

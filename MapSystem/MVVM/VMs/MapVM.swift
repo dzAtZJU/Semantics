@@ -9,19 +9,41 @@
 import Foundation
 import MapKit
 import CoreLocation
+import RealmSwift
 
 class MapVM {
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(signdeInReceived), name: .signedIn, object: nil)
     }
     
-    let conditionsVM = ConditionsVM()
+    lazy var conditionsVM: ConditionsVM = {
+        var tmp: ConditionsVM!
+        RealmSpace.shared.queue.sync {
+            let realm = RealmSpace.shared.newRealm("Public")
+            let conditions =  realm.objects(Condition.self)
+            tmp = ConditionsVM(conditions: conditions)
+            tmp.delegate = self
+            tmp.iterationUpdater = {
+                switch $0 {
+                case .none:
+                    print("iterationUpdater none")
+                case .ok(var places):
+                    RealmSpace.shared.queue.async {
+                        self.annotations = SemWorldDataLayer(realm: RealmSpace.shared.newRealm("Public")).queryPlaces(_ids: Array(places.placeId2Conditions.keys)).map(SemAnnotation1.init)
+                    }
+                }
+            }
+        }
+        return tmp
+    }()
     
-    var selectedAnnotation: MKAnnotation?
+    private var selectedAnnotation: SemAnnotation?
     
     @Published private(set) var annotations = [MKAnnotation]()
     
     @Published private(set) var boundingRegion: MKCoordinateRegion?
+    
+    var signedIn: (() -> Void)?
     
     private lazy var locationManager: CLLocationManager = {
         let tmp = CLLocationManager()
@@ -32,13 +54,8 @@ class MapVM {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    func loadPlaces() {
-        annotations = SemWorldDataLayer.shared.queryPlaces().map { place in
-            let tmp = MKPointAnnotation()
-            tmp.title = place.title
-            tmp.coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
-            return tmp
-        }
+    func loadAllPlaces() {
+        self.annotations = SemWorldDataLayer.shared.queryAllPlaces().map(SemAnnotation.init)
     }
     
     func setPlaces(_ items: [MKMapItem], boundingRegion boundingRegion_: MKCoordinateRegion) {
@@ -51,6 +68,10 @@ class MapVM {
         boundingRegion = boundingRegion_
     }
     
+    func setSelectedAnnotation(_ value: SemAnnotation?) {
+        selectedAnnotation = value
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -58,7 +79,13 @@ class MapVM {
 
 extension MapVM {
     @objc private func signdeInReceived(notification: Notification) {
-        SemWorldDataLayer.shared.createMockData()
-        loadPlaces()
+        loadAllPlaces()
+        signedIn?()
+    }
+}
+
+extension MapVM: ConditionsVMDelegate {
+    var selectedPlaceId: ObjectId? {
+        selectedAnnotation?.placeId
     }
 }

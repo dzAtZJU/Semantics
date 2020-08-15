@@ -7,7 +7,17 @@
 //
 import RealmSwift
 
-class Place: Object {
+class SyncedObject: Object {
+    @objc dynamic var _id =  ObjectId.generate()
+    
+    override static func primaryKey() -> String? {
+        "_id"
+    }
+}
+
+class Place: SyncedObject {
+    @objc dynamic var partitionKey: String = "Public"
+    
     @objc dynamic var title = ""
     
     @objc dynamic var latitude: Double = 0
@@ -27,42 +37,68 @@ class Place: Object {
     override static func ignoredProperties() -> [String] {
         []
     }
+    
+    
 }
 
-class Condition: Object {
+class Condition: SyncedObject {
+    @objc dynamic var partitionKey: String = "Public"
+    
     @objc dynamic var title = ""
     
-    let ranks = LinkingObjects(fromType: RankByCondition.self, property: "condition")
+    let ranks = LinkingObjects(fromType: ConditionRank.self, property: "condition")
+    
+    convenience init(title title_: String) {
+        self.init()
+        title = title_
+    }
 }
 
-class PlaceScore: Object {
+class PlaceScore: SyncedObject {
+    @objc dynamic var partitionKey: String = "Public"
+    
     @objc dynamic var place: Place?
     @objc dynamic var score = 0
+    
+    
+    convenience init(place place_: Place, score score_: Int) {
+        self.init()
+        place = place_
+        score = score_
+    }
 }
 
-class RankByCondition: Object {
+class ConditionRank: SyncedObject {
+    @objc dynamic var partitionKey: String = "Public"
+    
     @objc dynamic var condition: Condition?
     
     let placeScoreList = List<PlaceScore>()
+    
+    convenience init(condition condition_: Condition, placeScores: [PlaceScore] = []) {
+        self.init()
+        condition = condition_
+        placeScoreList.append(objectsIn: placeScores)
+    }
 }
 
 class Individual: Object {
+    @objc dynamic var _id: String = ""
+    @objc dynamic var partitionKey: String = "Public"
+    
     @objc dynamic var title = ""
     
-    let rankByConditionList = List<RankByCondition>()
+    let conditionsRank = List<ConditionRank>()
     
     let friends = List<Individual>()
     
-    @objc dynamic var partitionKey: String = "Public"
-    
-    @objc dynamic var id: String = ""
-    override static func primaryKey() -> String? {
-        "id"
-    }
-    
     convenience init(id id_: String, title title_: String) {
         self.init()
-        id = id_
+        _id = id_
         title = title_
+    }
+    
+    override static func primaryKey() -> String? {
+        "_id"
     }
 }
