@@ -119,9 +119,14 @@ extension MapVC: PanelContentVCDelegate {
     }
     
     func panelContentVCShouldStartFeedback(_ panelContentVC: PanelContentVC) {
-        
-            let vc = FeedbackVC(feedbackVM: FeedbackVM(conditionsRank: SemWorldDataLayer.shared.queryCurrentIndividual()!.conditionsRank))
-            self.panel.set(contentViewController: vc)
+        RealmSpace.shared.async {
+            let conditionsRank = SemWorldDataLayer(partitionValue: "Public").queryCurrentIndividual()!.conditionsRank
+            let vm = FeedbackVM(conditionsRank: conditionsRank)
+            DispatchQueue.main.async {
+                self.panel.set(contentViewController: FeedbackVC(feedbackVM: vm))
+                
+            }
+        }
     }
 }
 
@@ -148,7 +153,7 @@ extension MapVC: MKMapViewDelegate {
         guard !annotation.isKind(of: MKUserLocation.self) else {
             return nil
         }
-
+        
         
         if annotation is SemAnnotation1 {
             let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView

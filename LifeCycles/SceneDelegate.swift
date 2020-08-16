@@ -32,14 +32,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        let user = AccountLayer.shared.queryCurrentUser()
+        let user = RealmSpace.shared.queryCurrentUser()
             if user == nil {
                 DispatchQueue.main.async {
                     self.window!.rootViewController!.present(LoginVC(), animated: true, completion: nil)
                 }
             } else {
-                RealmSpace.shared.loadPublicRealm()
-                    NotificationCenter.default.post(name: .signedIn, object: nil)
+                NotificationCenter.default.post(name: .signedIn, object: nil)
             }
     }
     

@@ -13,24 +13,45 @@ class RealmSpace {
     
     lazy var queue = DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated)
     
-    private(set) var app: RealmApp!
-    
-    private(set) var publicRealm: Realm!
+    private(set) var app: RealmApp
     
     private init() {
         app = RealmApp(id: "semantics-tonbj")
     }
-    
-    func newRealm(_ partitionValue: String) -> Realm {
-        let user = AccountLayer.shared.queryCurrentUser()!
-        return try! Realm(configuration: user.configuration(partitionValue: partitionValue), queue: queue)
+}
+// MARK: Threading
+extension RealmSpace {
+    func async(_ block: @escaping () -> Void) {
+        queue.async(execute: block)
+    }
+}
+
+
+// MARK: Account
+extension RealmSpace {
+    func queryCurrentUser() -> SyncUser? {
+        app.currentUser()
     }
     
-    func loadPublicRealm() {
-        let user = AccountLayer.shared.queryCurrentUser()!
-            self.publicRealm = try! Realm(configuration: user.configuration(partitionValue: "Public"))
-        
-        
+    func queryCurrentUserID() -> String? {
+        queryCurrentUser()?.identity
+    }
+    
+    func login(appleToken: String, completion: @escaping () -> Void) {
+        app.login(withCredential: AppCredentials(appleToken: appleToken)) { (user, error) in
+            guard error == nil else {
+                fatalError("\(error)")
+            }
+            completion()
+        }
+    }
+}
+
+// MARK: Realm
+extension RealmSpace {
+    func newRealm(_ partitionValue: String) -> Realm {
+        let user = queryCurrentUser()!
+        return try! Realm(configuration: user.configuration(partitionValue: partitionValue), queue: queue)
     }
 }
 

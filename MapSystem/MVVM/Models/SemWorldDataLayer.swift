@@ -10,18 +10,19 @@ import Foundation
 import RealmSwift
 
 class SemWorldDataLayer {
+    convenience init(partitionValue: String) {
+        self.init(realm: RealmSpace.shared.newRealm(partitionValue))
+    }
     
     private let realm: Realm
     init(realm realm_: Realm) {
         realm = realm_
     }
-    
-    static let shared = SemWorldDataLayer(realm: RealmSpace.shared.publicRealm)
 }
 
 extension SemWorldDataLayer {
     func queryOrCreateCurrentIndividual(userName: String, block: @escaping (Individual) -> Void){
-        let userID = AccountLayer.shared.queryCurrentUserID()!
+        let userID = RealmSpace.shared.queryCurrentUserID()!
         var individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
         if individual == nil {
             individual = Individual(id: userID, title: userName)
@@ -33,7 +34,7 @@ extension SemWorldDataLayer {
     }
     
     func queryCurrentIndividual() -> Individual? {
-        let userID = AccountLayer.shared.queryCurrentUserID()!
+        let userID = RealmSpace.shared.queryCurrentUserID()!
         let individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
         return individual
     }

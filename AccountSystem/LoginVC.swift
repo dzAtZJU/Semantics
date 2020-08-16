@@ -60,16 +60,17 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
             KeychainItem.currentUserName = givenName
         }
         
-        AccountLayer.shared.login(appleToken: token) {
+        RealmSpace.shared.login(appleToken: token) {
+            RealmSpace.shared.async {
+                let dataLayer = SemWorldDataLayer(partitionValue: "Public")
+                dataLayer.queryOrCreateCurrentIndividual(userName: "Paper") { _ in }
+                dataLayer.createMockData()
                 DispatchQueue.main.async {
-                    RealmSpace.shared.loadPublicRealm()
-                    SemWorldDataLayer.shared
-                                       .queryOrCreateCurrentIndividual(userName: "Paper") { _ in }
-                    SemWorldDataLayer.shared.createMockData()
                     NotificationCenter.default.post(name: .signedIn, object: nil)
                     self.dismiss(animated: true, completion: nil)
                 }
             }
+        }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {

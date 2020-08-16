@@ -54,8 +54,10 @@ class MapVM {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    func loadAllPlaces() {
-        self.annotations = SemWorldDataLayer.shared.queryAllPlaces().map(SemAnnotation.init)
+    func loadVisitedPlaces() {
+        RealmSpace.shared.async {
+            self.annotations = SemWorldDataLayer(partitionValue: "Public").queryAllPlaces().map(SemAnnotation.init)
+        }
     }
     
     func setPlaces(_ items: [MKMapItem], boundingRegion boundingRegion_: MKCoordinateRegion) {
@@ -79,7 +81,7 @@ class MapVM {
 
 extension MapVM {
     @objc private func signdeInReceived(notification: Notification) {
-        loadAllPlaces()
+        loadVisitedPlaces()
         signedIn?()
     }
 }

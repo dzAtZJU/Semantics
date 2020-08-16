@@ -19,7 +19,6 @@
 		89290D5024E2A71900F0A862 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4F24E2A71900F0A862 /* LoginVC.swift */; };
 		89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5124E2ADCB00F0A862 /* KeychainItem.swift */; };
 		89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5824E3D62100F0A862 /* RealmSpace.swift */; };
-		89290D5B24E3D68A00F0A862 /* AccountLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5A24E3D68A00F0A862 /* AccountLayer.swift */; };
 		89290D5D24E403F900F0A862 /* Communication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5C24E403F900F0A862 /* Communication.swift */; };
 		89290D5F24E42B3E00F0A862 /* PanelContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */; };
 		89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D6024E44CFA00F0A862 /* UIFont+.swift */; };
@@ -146,7 +145,6 @@
 		89290D4F24E2A71900F0A862 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		89290D5124E2ADCB00F0A862 /* KeychainItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
 		89290D5824E3D62100F0A862 /* RealmSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSpace.swift; sourceTree = "<group>"; };
-		89290D5A24E3D68A00F0A862 /* AccountLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLayer.swift; sourceTree = "<group>"; };
 		89290D5C24E403F900F0A862 /* Communication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communication.swift; sourceTree = "<group>"; };
 		89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelContentVC.swift; sourceTree = "<group>"; };
 		89290D6024E44CFA00F0A862 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
@@ -286,7 +284,6 @@
 			isa = PBXGroup;
 			children = (
 				89290D4F24E2A71900F0A862 /* LoginVC.swift */,
-				89290D5A24E3D68A00F0A862 /* AccountLayer.swift */,
 				89290D5C24E403F900F0A862 /* Communication.swift */,
 			);
 			path = AccountSystem;
@@ -851,7 +848,6 @@
 				8968C08524DF09A70093CBFC /* ConditionsVC.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
-				89290D5B24E3D68A00F0A862 /* AccountLayer.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
 				899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */,
 				89290D6C24E5313B00F0A862 /* SearchSuggestionsController.swift in Sources */,
