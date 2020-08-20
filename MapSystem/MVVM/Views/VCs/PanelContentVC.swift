@@ -10,128 +10,110 @@ import UIKit
 import MapKit
 import FloatingPanel
 
-protocol PanelContentVCDelegate {
-    func panelContentVC(_ panelContentVC: PanelContentVC, searchDidFinishiWithResponse response: MKLocalSearch.Response)
+protocol PanelContent: UIViewController {
+    var panelContentDelegate: PanelContentDelegate? { get set }
     
-    func panelContentVCShouldStartFeedback(_ panelContentVC: PanelContentVC)
+    var showBackBtn: Bool { get }
+    
+    var topInset: CGFloat { get }
+}
+
+extension PanelContent{
+    var topInset: CGFloat {
+        get {
+            0
+        }
+    }
+}
+
+
+protocol PanelContentDelegate {
+    var panel: FloatingPanelController {
+        get
+    }
 }
 
 class PanelContentVC: UIViewController {
-    lazy var searchSuggestionsController: SearchSuggestionsController = {
-        let tmp = SearchSuggestionsController()
-        tmp.tableView.delegate = self
-        return tmp
-    }()
+    var initialVC: UIViewController?
+    var currentVC: UIViewController?
+    init(initialVC initialVC_: UIViewController) {
+        initialVC = initialVC_
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    private lazy var searchController: UISearchController = {
-        let tmp = UISearchController(searchResultsController: searchSuggestionsController)
-        tmp.searchResultsUpdater = searchSuggestionsController
-        tmp.searchBar.delegate = self
-        return tmp
-    }()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    private lazy var feedbackBtn: UIButton = {
-        let tmp = UIButton(type: .roundedRect)
-        tmp.cornerRadius = 10
-        tmp.setTitleForAllStates("Feedback")
-        tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.addTarget(self, action: #selector(feedbackBtnTapped), for: .touchUpInside)
-        tmp.backgroundColor = .systemBlue
-        tmp.tintColor = .white
-        tmp.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        tmp.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        return tmp
-    }()
-    
-    var delegate: PanelContentVCDelegate?
-    
-    private var localSearch: MKLocalSearch?
-    private var localSearchPlaces: [MKMapItem]?
-    private var locaSearchBoundingRegion: MKCoordinateRegion?
+    private lazy var backBtn: UIButton = UIButton(systemName: "multiply.circle.fill", textStyle: .title2, target: self, selector: #selector(backBtnTapped))
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .systemBackground
         
-        view.addSubview(searchController.searchBar)
-        
-        view.addSubview(feedbackBtn)
-        feedbackBtn.topAnchor.constraint(equalToSystemSpacingBelow: searchController.searchBar.bottomAnchor, multiplier: 2).isActive = true
-        feedbackBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        view.addSubview(backBtn)
+        view.trailingAnchor.constraint(equalToSystemSpacingAfter: backBtn.trailingAnchor, multiplier: 2).isActive = true
+        backBtn.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if initialVC != nil {
+            show(initialVC!, sender: nil)
+            initialVC = nil
+        }
     }
     
-    func updateUserLocation(_ location: CLLocationCoordinate2D) {
-        searchSuggestionsController.updateUserLocation(location)
+    override func show(_ vc: UIViewController, sender: Any?) {
+        guard let vc = vc as? PanelContent else {
+            fatalError()
+        }
+        
+        addChild(vc)
+        vc.view.frame = view.bounds.inset(by: .init(top: vc.topInset ?? 0, left: 0, bottom: 0, right: 0))
+        vc.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        vc.view.transform = .init(translationX: 0, y: view.height)
+        view.addSubview(vc.view)
+        view.addSubview(backBtn)
+        UIView.animate(withDuration: 0.25, animations: {
+            vc.view.transform = .identity
+            self.backBtn.isHidden = !vc.showBackBtn
+        }) { _ in
+            vc.didMove(toParent: self)
+        }
     }
-}
+    
 
-extension PanelContentVC {
-    @objc private func feedbackBtnTapped() {
-        delegate?.panelContentVCShouldStartFeedback(self)
-    }
-}
-
-extension PanelContentVC: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        guard let fpc = parent as? FloatingPanelController else {
+    func hideTop() {
+        guard children.count >= 2, let vc = children.last as? PanelContent else {
             return
         }
-        fpc.move(to: .full, animated: true)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        guard let fpc = parent as? FloatingPanelController else {
-            return
-        }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-                fpc.move(to: .half, animated: true)
-        }
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let searchRequest = MKLocalSearch.Request()
-        searchRequest.naturalLanguageQuery = searchBar.text
-        search(using: searchRequest)
-    }
-}
-
-extension PanelContentVC: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let complectorResult = searchSuggestionsController.completerResults![indexPath.row]
-        let request = MKLocalSearch.Request(completion: complectorResult)
-        search(using: request)
-    }
-    
-    private func search(using searchRequest: MKLocalSearch.Request) {
-        searchController.isActive = false
-        if let parent = parent as? FloatingPanelController {
-            parent.move(to: .half, animated: true)
+        
+        var vcWillShow: PanelContent?
+        if case let suffix2 = children.suffix(2), suffix2.count == 2 {
+            vcWillShow = suffix2.first as? PanelContent
         }
         
-        // Confine the map search area to an area around the user's current location.
-//        searchRequest.region = searchSuggestionsController.searchCompleter.region
-        searchRequest.resultTypes = .pointOfInterest
-        searchRequest.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
-        
-        localSearch = MKLocalSearch(request: searchRequest)
-        localSearch!.start { [unowned self] (response, error) in
-            guard error == nil, let response = response else {
-                fatalError()
+        vc.willMove(toParent: nil)
+        UIView.animate(withDuration: 0.25, animations: {
+            vc.view.transform = .init(translationX: 0, y: self.view.height)
+            if let vcWillShow = vcWillShow {
+                self.backBtn.isHidden = !vcWillShow.showBackBtn
             }
-            
-            self.delegate?.panelContentVC(self, searchDidFinishiWithResponse: response)
+        }) { _ in
+            vc.view.removeFromSuperview()
+            vc.view.transform = .identity
+            vc.removeFromParent()
         }
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.superview == searchSuggestionsController.view {
-            searchController.searchBar.resignFirstResponder()
-        }
+}
+
+// MARK: Interaction
+extension PanelContentVC {
+    @objc private func backBtnTapped() {
+        hideTop()
     }
+}
+
+extension PanelContentVC: FloatingPanelControllerDelegate{
 }

@@ -16,7 +16,18 @@ class SemAnnotation: MKPointAnnotation {
         title = place.title
         coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
     }
+    
+    override init() {
+        super.init()
+    }
 }
 
-class SemAnnotation1: SemAnnotation {
+class SemAnnotation1: SemAnnotation {}
+
+class MapItemAnnotation: SemAnnotation {
+    init(item: MKMapItem) {
+        super.init()
+        coordinate = item.placemark.coordinate
+        title = item.name
+    }
 }

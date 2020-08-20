@@ -9,6 +9,8 @@
 import RealmSwift
 
 class RealmSpace {
+    static let partitionValue = "Public1"
+    
     static let shared = RealmSpace()
     
     lazy var queue = DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated)

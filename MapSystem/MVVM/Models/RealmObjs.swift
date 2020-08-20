@@ -16,12 +16,14 @@ class SyncedObject: Object {
 }
 
 class Place: SyncedObject {
-    @objc dynamic var partitionKey: String = "Public"
+    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
     
     @objc dynamic var title = ""
     
     @objc dynamic var latitude: Double = 0
     @objc dynamic var longitude: Double = 0
+    
+    let visitors = LinkingObjects(fromType: Individual.self, property: "visitedPlaces")
     
     convenience init(title: String, latitude: Double, longitude: Double) {
         self.init()
@@ -42,7 +44,7 @@ class Place: SyncedObject {
 }
 
 class Condition: SyncedObject {
-    @objc dynamic var partitionKey: String = "Public"
+    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
     
     @objc dynamic var title = ""
     
@@ -55,7 +57,7 @@ class Condition: SyncedObject {
 }
 
 class PlaceScore: SyncedObject {
-    @objc dynamic var partitionKey: String = "Public"
+    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
     
     @objc dynamic var place: Place?
     @objc dynamic var score = 0
@@ -69,11 +71,11 @@ class PlaceScore: SyncedObject {
 }
 
 class ConditionRank: SyncedObject {
-    @objc dynamic var partitionKey: String = "Public"
+    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
     
     @objc dynamic var condition: Condition?
     
-    let placeScoreList = List<PlaceScore>()
+    var placeScoreList = List<PlaceScore>()
     
     convenience init(condition condition_: Condition, placeScores: [PlaceScore] = []) {
         self.init()
@@ -82,15 +84,25 @@ class ConditionRank: SyncedObject {
     }
 }
 
+class PlaceStory: SyncedObject {
+    @objc dynamic var place: Place?
+    @objc dynamic var state = 1
+    @objc dynamic var individual: Individual?
+}
+
 class Individual: Object {
     @objc dynamic var _id: String = ""
-    @objc dynamic var partitionKey: String = "Public"
+    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
     
     @objc dynamic var title = ""
     
     let conditionsRank = List<ConditionRank>()
     
     let friends = List<Individual>()
+    
+    let visitedPlaces = List<Place>()
+    
+    let placeStoryList = LinkingObjects(fromType: PlaceStory.self, property: "individual")
     
     convenience init(id id_: String, title title_: String) {
         self.init()

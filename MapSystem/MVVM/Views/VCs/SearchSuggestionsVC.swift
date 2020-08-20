@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 
 class SearchSuggestionsVC: UITableViewController {
+    var searchDidFinish: (() -> Void)?
+    
     private class SuggestionCell: UITableViewCell {
         
         static let reuseID = "SuggestionCell"
@@ -23,6 +25,10 @@ class SearchSuggestionsVC: UITableViewController {
         }
     }
 
+    private var localSearch: MKLocalSearch?
+    private var localSearchPlaces: [MKMapItem]?
+    private var locaSearchBoundingRegion: MKCoordinateRegion?
+    
     private static let cellIdentifier = "cellIdentifier"
     
     private(set) lazy var searchCompleter: MKLocalSearchCompleter = {
@@ -30,6 +36,8 @@ class SearchSuggestionsVC: UITableViewController {
         tmp.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
         tmp.resultTypes = [.pointOfInterest]
         tmp.delegate = self
+        
+        
         return tmp
     }()
     
@@ -39,10 +47,6 @@ class SearchSuggestionsVC: UITableViewController {
         super.viewDidLoad()
         
         tableView.register(SuggestionCell.self, forCellReuseIdentifier: Self.cellIdentifier)
-    }
-    
-    func updateUserLocation(_ location: CLLocationCoordinate2D) {
-        searchCompleter.region = .init(center: location, latitudinalMeters: 20_000, longitudinalMeters: 20_000)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,8 +59,8 @@ class SearchSuggestionsVC: UITableViewController {
 extension SearchSuggestionsVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         searchCompleter.queryFragment = searchController.searchBar.text ?? ""
+//        print("queryFragment: \(searchCompleter.queryFragment)")
     }
-    
 }
 
 // MARK: MKLocalSearchCompleterDelegate
@@ -92,5 +96,28 @@ extension SearchSuggestionsVC {
 
 // MARK: UITableViewDelegate
 extension SearchSuggestionsVC {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let complectorResult = completerResults![indexPath.row]
+        let request = MKLocalSearch.Request(completion: complectorResult)
+        search(using: request)
+    }
     
+    func search(using searchRequest: MKLocalSearch.Request) {
+        if let searchRegion = MapSysEnvironment.shared.searchRegion {
+            searchRequest.region = searchRegion
+        }
+        
+        searchRequest.resultTypes = .pointOfInterest
+        searchRequest.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
+        
+        localSearch = MKLocalSearch(request: searchRequest)
+        localSearch!.start { [unowned self] (response, error) in
+            guard error == nil, let response = response else {
+                fatalError()
+            }
+            
+            self.searchDidFinish?()
+            NotificationCenter.default.post(name: NSNotification.Name.searchFinished, object: response)
+        }
+    }
 }

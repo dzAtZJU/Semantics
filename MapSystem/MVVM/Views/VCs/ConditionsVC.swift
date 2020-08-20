@@ -16,8 +16,6 @@ class ConditionsVC: UIViewController {
     static let cellIdentifier = "cell"
     static let pageMargin: CGFloat = 50
     
-    private lazy var backBtn: UIButton = UIButton(systemName: "multiply.circle.fill", textStyle: .title2, target: self, selector: #selector(backBtnTapped))
-    
     private lazy var searchButton: UIButton = {
         let tmp = UIButton(systemName: "magnifyingglass.circle")
         tmp.translatesAutoresizingMaskIntoConstraints = false
@@ -56,13 +54,9 @@ class ConditionsVC: UIViewController {
         view = UIView()
         view.backgroundColor = .systemBackground
         
-        view.addSubview(backBtn)
-        view.trailingAnchor.constraint(equalToSystemSpacingAfter: backBtn.trailingAnchor, multiplier: 2).isActive = true
-        backBtn.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
-        
         view.addSubview(searchButton)
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: searchButton.trailingAnchor, multiplier: 2).isActive = true
-        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: backBtn.bottomAnchor, multiplier: 1).isActive = true
+        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: view.bottomAnchor, multiplier: 1).isActive = true
         
         view.addSubview(collectionView)
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -115,11 +109,6 @@ extension ConditionsVC: UICollectionViewDelegate, UICollectionViewDataSource {
 
 // MARK: Interation
 extension ConditionsVC {
-    @objc private func backBtnTapped() {
-        dismiss(animated: true, completion: nil)
-//        delegate?.conditionsVCShouldBack()
-    }
-    
     @objc private func searchBtnTapped() {
         vm.runNextIteration()
     }

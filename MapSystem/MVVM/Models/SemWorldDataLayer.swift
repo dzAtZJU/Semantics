@@ -14,12 +14,13 @@ class SemWorldDataLayer {
         self.init(realm: RealmSpace.shared.newRealm(partitionValue))
     }
     
-    private let realm: Realm
+    let realm: Realm
     init(realm realm_: Realm) {
         realm = realm_
     }
 }
 
+// MARK: Individual
 extension SemWorldDataLayer {
     func queryOrCreateCurrentIndividual(userName: String, block: @escaping (Individual) -> Void){
         let userID = RealmSpace.shared.queryCurrentUserID()!
@@ -45,7 +46,7 @@ extension SemWorldDataLayer {
     }
 }
 
-
+// MARK: Run Iteration
 extension SemWorldDataLayer {
     struct IterationQuery {
         struct Condition {
@@ -131,17 +132,67 @@ extension SemWorldDataLayer {
     }
 }
 
+// MARK: Places
 extension SemWorldDataLayer {
-    func queryAllPlaces() -> Results<Place> {
-        realm.objects(Place.self)
+    func queryVisitedPlaces() -> [Place] {
+        queryCurrentIndividual()!.placeStoryList.compactMap(by: \.place)
     }
     
     func queryPlaces(_ids: [ObjectId]) -> Results<Place> {
         realm.objects(Place.self).filter("_id in %@", _ids)
     }
     
+    func queryPlaceStory(placeId: ObjectId) -> PlaceStory? {
+        queryCurrentIndividual()!.placeStoryList.first {
+            $0.place!._id == placeId
+        }
+    }
+    
+    func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
+        let places = realm.objects(Place.self).filter("latitude = %@ AND longitude = %@ AND title = %@", uniquePlace.latitude, uniquePlace.longitude, uniquePlace.title)
+        if places.isEmpty {
+            let newPlace = Place(title: uniquePlace.title, latitude: uniquePlace.latitude, longitude: uniquePlace.longitude)
+            try! realm.write {
+                self.realm.add(newPlace)
+            }
+            return newPlace
+        }
+        if places.count > 1 {
+            fatalError("Duplicate Place \(places)")
+        }
+        return places.first!
+    }
+    
+    func markVisited(uniquePlace: UniquePlace, completion: (Place) -> Void) {
+        let place = queryOrCreatePlace(uniquePlace)
+        let ind = queryCurrentIndividual()!
+        let placeStory = PlaceStory()
+        placeStory.individual = ind
+        placeStory.place = place
+        try! realm.write {
+            self.realm.add(placeStory)
+        }
+        
+        completion(place)
+    }
+}
+
+extension SemWorldDataLayer {
+    func queryPlaceSocre(_id: ObjectId) -> PlaceScore {
+        realm.object(ofType: PlaceScore.self, forPrimaryKey: _id)!
+    }
+}
+
+extension SemWorldDataLayer {
+    func queryConditionRank(_id: ObjectId) -> ConditionRank {
+        realm.object(ofType: ConditionRank.self, forPrimaryKey: _id)!
+    }
+}
+
+// MARK: Mock
+extension SemWorldDataLayer {
     func createMockData() {
-        guard queryAllPlaces().count == 0 else {
+        guard queryVisitedPlaces().count == 0 else {
             return
         }
         
@@ -208,10 +259,10 @@ extension SemWorldDataLayer {
             ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
         }
         
-        let newInd = Individual(id: "5f33045a7ece30732bab9299", title: "Weiran")
-        try! realm.write {
-            self.realm.add(newInd)
-        }
+//        let newInd = Individual(id: "5f33045a7ece30732bab9299", title: "Weiran")
+//        try! realm.write {
+//            self.realm.add(newInd)
+//        }
         
         let inds = self.queryAllIndividuals()
         var tag = 0
@@ -271,6 +322,7 @@ extension SemWorldDataLayer {
             print(s)
         }
     }
+    
 }
 
 //mongodb+srv://paper:<password>@cluster0.3ium9.mongodb.net/test

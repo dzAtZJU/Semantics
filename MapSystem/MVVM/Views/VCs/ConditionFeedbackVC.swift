@@ -9,7 +9,17 @@
 import UIKit
 
 class ConditionFeedbackVC: UIViewController {
-    private static let cellIdentifier = "cellIdentifier"
+    class ConditionFeedbackCell: UITableViewCell {
+        static let cellIdentifier = "conditionFeedbackCell"
+        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+            super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
     
     private lazy var conditionLabel: UILabel = {
         let tmp = UILabel()
@@ -21,8 +31,9 @@ class ConditionFeedbackVC: UIViewController {
     private lazy var placesTableView: UITableView = {
         let tmp = UITableView(frame: .zero, style: .insetGrouped)
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.register(UITableViewCell.self, forCellReuseIdentifier: Self.cellIdentifier)
+        tmp.register(UITableViewCell.self, forCellReuseIdentifier: ConditionFeedbackCell.cellIdentifier)
         tmp.dataSource = self
+        tmp.delegate = self
         return tmp
     }()
     
@@ -41,7 +52,7 @@ class ConditionFeedbackVC: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         
         view.addSubview(conditionLabel)
-        conditionLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1).isActive = true
+        conditionLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1).isActive = true
         conditionLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2).isActive = true
         conditionLabel.text = conditionFeedbackVM.conditionTitle
         
@@ -50,28 +61,50 @@ class ConditionFeedbackVC: UIViewController {
         placesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         placesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         placesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        placesTableView.isEditing = true
     }
 }
 
 extension ConditionFeedbackVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        conditionFeedbackVM.levels
+        conditionFeedbackVM.levels + 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        conditionFeedbackVM.count(ofLevel: section)
+        guard section != 0 else {
+            return 0
+        }
+        
+        return conditionFeedbackVM.count(ofLevel: section-1)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellIdentifier)!
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConditionFeedbackCell.cellIdentifier)!
         
-        cell.textLabel!.text = conditionFeedbackVM.placeTitle(atLevel: indexPath.section, ordinal: indexPath.row)
+        let placeInfo = conditionFeedbackVM.placeInfo(at: .init(level: indexPath.section-1, ordinal: indexPath.row))
+        cell.textLabel!.text = placeInfo.title
         return cell
     }
 }
 
 extension ConditionFeedbackVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        conditionFeedbackVM.movePlace(at: .init(level: sourceIndexPath.section-1, ordinal: sourceIndexPath.row), to: .init(level: destinationIndexPath.section-1, ordinal: destinationIndexPath.row)) {
+            print("move data written")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        guard indexPath.section != 0 else {
+            return false
+        }
         
+        let placeInfo = conditionFeedbackVM.placeInfo(at: .init(level: indexPath.section-1, ordinal: indexPath.row))
+        return placeInfo.isTargetPlace
+    }
+    
+   func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        .none
     }
 }

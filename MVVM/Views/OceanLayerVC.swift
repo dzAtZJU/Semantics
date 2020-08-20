@@ -168,6 +168,7 @@ class OceanLayerVC: UIViewController {
                     return
                 }
                 scrollView.panGestureRecognizer.require(toFail: recognizer)
+                scrollView.panGestureRecognizer
             }
         }
         

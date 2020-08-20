@@ -62,7 +62,7 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
         
         RealmSpace.shared.login(appleToken: token) {
             RealmSpace.shared.async {
-                let dataLayer = SemWorldDataLayer(partitionValue: "Public")
+                let dataLayer = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue)
                 dataLayer.queryOrCreateCurrentIndividual(userName: "Paper") { _ in }
                 dataLayer.createMockData()
                 DispatchQueue.main.async {

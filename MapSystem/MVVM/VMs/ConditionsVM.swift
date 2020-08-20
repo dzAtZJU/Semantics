@@ -81,7 +81,7 @@ class ConditionsVM {
         }
         
         RealmSpace.shared.queue.async {
-            SemWorldDataLayer(realm: RealmSpace.shared.newRealm("Public")).runNextIteration(query: query, completion: self.iterationUpdater)
+            SemWorldDataLayer(realm: RealmSpace.shared.newRealm(RealmSpace.partitionValue)).runNextIteration(query: query, completion: self.iterationUpdater)
         }
     }
 }
