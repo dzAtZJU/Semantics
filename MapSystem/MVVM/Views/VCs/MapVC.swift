@@ -53,9 +53,9 @@ class MapVC: UIViewController {
         return tmp
     }()
     
-    private lazy var conditionsVC: ConditionsVC = {
-        let tmp = ConditionsVC(vm: vm.conditionsVM)
-        tmp.delegate = self
+    private lazy var discoverNextVC: DiscoverNextVC = {
+        let tmp = DiscoverNextVC(vm: vm.discoverNextVM)
+        tmp.panelContentDelegate = self
         return tmp
     }()
     
@@ -104,19 +104,18 @@ class MapVC: UIViewController {
                 }
             }
         }
-        selectedAnnotationsToken = vm.$selectedAnnotation.sink { newValue in
-            let oldValue = self.vm.selectedAnnotation
+        selectedAnnotationsToken = vm.$selectedAnnotation.debounce(for: .seconds(0.1), scheduler: RunLoop.main).sink { newValue in
             DispatchQueue.main.async {
                 if newValue != nil {
                     self.panelContentVC.show(self.placeVC, sender: nil)
                 } else {
-                    self.panelContentVC.hideTop()
+                    self.panelContentVC.hideAll()
                 }
                 
                 if let newValue = newValue {
                     self.map.selectAnnotation(newValue, animated: true)
-                } else if let oldValue = oldValue {
-                    self.map.deselectAnnotation(oldValue, animated: true)
+                } else {
+                    self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
                 }
             }
         }
@@ -162,17 +161,10 @@ class MapVC: UIViewController {
     }
 }
 
-extension MapVC: FloatingPanelControllerDelegate {
-    
-}
-
-extension MapVC: PanelContentDelegate {
-}
-
 // MARK: PlaceVCDelegate
 extension MapVC: PlaceVCDelegate {
     func placeWillDisappear(_ placeVC: PlaceVC) {
-        vm.setAnnotation(nil, to: false)
+        vm.deSelectAnnotation()
     }
     
     func placeVCShouldStartFeedback(_ placeVC: PlaceVC) {
@@ -181,20 +173,20 @@ extension MapVC: PlaceVCDelegate {
                 self.panelContentVC.show(FeedbackVC(feedbackVM: vm), sender: nil)
             }
         }
-        
     }
     
     func placeVCShouldMarkVisited(_ placeVC: PlaceVC) {
         vm.markVisited()
     }
-}
-
-extension MapVC: ConditionsVCDelegate {
-    func conditionsVCShouldBack() {
-        
+    
+    func placeVCShouldDiscoverNext(_ placeVC: PlaceVC) {
+        DispatchQueue.main.async {
+            self.panelContentVC.show(self.discoverNextVC, sender: nil)
+        }
     }
 }
 
+// MARK: MKMapViewDelegate
 extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         guard centerToUserLocation else {
@@ -239,10 +231,27 @@ extension MapVC: MKMapViewDelegate {
     
     // MARK: Interaction
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        vm.setAnnotation(view.annotation! as! SemAnnotation, to: true)
+        guard !view.annotation!.isKind(of: MKUserLocation.self) else {
+            return
+        }
+        
+        vm.selectAnnotation(view.annotation! as! SemAnnotation)
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        vm.setAnnotation(view.annotation! as! SemAnnotation, to: false)
+        guard !view.annotation!.isKind(of: MKUserLocation.self) else {
+            return
+        }
+        
+        vm.didDeSelectAnnotation(view.annotation! as! SemAnnotation)
     }
+}
+
+// MARK: FloatingPanelControllerDelegate
+extension MapVC: FloatingPanelControllerDelegate {
+    
+}
+
+// MARK: PanelContentDelegate
+extension MapVC: PanelContentDelegate {
 }

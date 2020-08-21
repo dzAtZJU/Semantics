@@ -23,12 +23,12 @@ class MapVM {
         NotificationCenter.default.addObserver(self, selector: #selector(searchFinished), name: .searchFinished ,object: nil)
     }
     
-    lazy var conditionsVM: ConditionsVM = {
-        var tmp: ConditionsVM!
+    lazy var discoverNextVM: DiscoverNextVM = {
+        var tmp: DiscoverNextVM!
         RealmSpace.shared.queue.sync {
             let realm = RealmSpace.shared.newRealm(RealmSpace.partitionValue)
             let conditions =  realm.objects(Condition.self)
-            tmp = ConditionsVM(conditions: conditions)
+            tmp = DiscoverNextVM(conditions: conditions)
             tmp.delegate = self
             tmp.iterationUpdater = {
                 switch $0 {
@@ -70,22 +70,34 @@ class MapVM {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    func setAnnotation(_ value: SemAnnotation?, to isSelected: Bool) {
-        guard let value = value else {
-            if selectedAnnotation != nil {
-                selectedAnnotation = nil
-            }
+    func selectAnnotation(_ anno: SemAnnotation) {
+        guard anno != selectedAnnotation else {
             return
         }
         
-        if !isSelected {
-            guard selectedAnnotation === value else {
-                return
-            }
+        selectedAnnotation = anno
+        updateSelectedPlaceState()
+    }
+    
+    func deSelectAnnotation() {
+        guard selectedAnnotation != nil else {
+            return
         }
         
-        selectedAnnotation = isSelected ? value : nil
-        if let placeId = value.placeId {
+        selectedAnnotation = nil
+        updateSelectedPlaceState()
+    }
+    
+    func didDeSelectAnnotation(_ anno: SemAnnotation) {
+        guard anno == selectedAnnotation else {
+            return
+        }
+        selectedAnnotation = nil
+        updateSelectedPlaceState()
+    }
+    
+    private func updateSelectedPlaceState() {
+        if let placeId = selectedAnnotation?.placeId {
             RealmSpace.shared.async {
                 if let placeStory = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).queryPlaceStory(placeId: placeId) {
                     self.selectedPlaceState =  PlaceState(rawValue: placeStory.state)
@@ -118,7 +130,7 @@ extension MapVM {
                 let newAnnotation = SemAnnotation(place: place)
                 self.annotations.append(newAnnotation)
                 self.searchResultAnnotation = nil
-                self.setAnnotation(newAnnotation, to: true)
+                self.selectAnnotation(newAnnotation)
             }
         }
     }
@@ -134,14 +146,14 @@ extension MapVM {
         let response = notification.object as! MKLocalSearch.Response
         searchResultAnnotation = response.mapItems.map(MapItemAnnotation.init).first!
         boundingRegion = response.boundingRegion
-        setAnnotation(searchResultAnnotation as! SemAnnotation, to: true)
+        selectAnnotation(searchResultAnnotation as! SemAnnotation)
         let sameAnnotation = annotations.first {
             $0.coordinate == searchResultAnnotation!.coordinate && $0.title == searchResultAnnotation!.title
         }
         if let sameAnnotation = sameAnnotation {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.searchResultAnnotation = nil
-                self.setAnnotation(sameAnnotation as! SemAnnotation, to: true)
+                self.selectAnnotation(sameAnnotation as! SemAnnotation)
             }
         }
     }

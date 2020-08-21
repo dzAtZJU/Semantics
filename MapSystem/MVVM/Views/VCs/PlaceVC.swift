@@ -14,6 +14,8 @@ protocol PlaceVCDelegate {
     
     func placeVCShouldMarkVisited(_ placeVC: PlaceVC)
     
+    func placeVCShouldDiscoverNext(_ placeVC: PlaceVC)
+    
     func placeWillDisappear(_ placeVC: PlaceVC)
 }
 
@@ -30,14 +32,7 @@ class PlaceVC: UIViewController, PanelContent {
                     self.stackView.removeArrangedSubview(self.findNextBtn)
                     self.findNextBtn.removeFromSuperview()
                     break
-                case .visited:
-                    self.stackView.removeArrangedSubview(self.markVisitedBtn)
-                    self.markVisitedBtn.removeFromSuperview()
-                    self.stackView.addArrangedSubview(self.feedbackBtn)
-                    self.stackView.removeArrangedSubview(self.findNextBtn)
-                    self.findNextBtn.removeFromSuperview()
-                    break
-                case .feedbacked:
+                case .visited, .feedbacked:
                     self.stackView.removeArrangedSubview(self.markVisitedBtn)
                     self.markVisitedBtn.removeFromSuperview()
                     self.stackView.addArrangedSubview(self.feedbackBtn)
@@ -64,6 +59,7 @@ class PlaceVC: UIViewController, PanelContent {
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.axis = .horizontal
         tmp.alignment = .center
+        tmp.spacing = 30
         return tmp
     }()
     
@@ -133,6 +129,6 @@ extension PlaceVC {
     }
     
     @objc private func findNextBtnTapped() {
-        
+        delegate?.placeVCShouldDiscoverNext(self)
     }
 }

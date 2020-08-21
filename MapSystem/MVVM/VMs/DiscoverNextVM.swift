@@ -1,5 +1,5 @@
 //
-//  ConditionsVM.swift
+//  DiscoverNextVM.swift
 //  Semantics
 //
 //  Created by Zhou Wei Ran on 2020/8/13.
@@ -46,7 +46,7 @@ protocol ConditionsVMDelegate {
     }
 }
 
-class ConditionsVM {
+class DiscoverNextVM {
     var delegate: ConditionsVMDelegate?
     
     let conditionVMs: [ConditionVM]

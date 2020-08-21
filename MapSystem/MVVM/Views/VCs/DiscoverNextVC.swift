@@ -1,5 +1,5 @@
 //
-//  ConditionsVC.swift
+//  DiscoverNextVC.swift
 //  Semantics
 //
 //  Created by Zhou Wei Ran on 2020/8/9.
@@ -8,11 +8,12 @@
 
 import UIKit
 import Combine
-protocol ConditionsVCDelegate {
-    func conditionsVCShouldBack()
-}
 
-class ConditionsVC: UIViewController {
+class DiscoverNextVC: UIViewController, PanelContent {
+    var panelContentDelegate: PanelContentDelegate?
+    
+    let showBackBtn = false
+    
     static let cellIdentifier = "cell"
     static let pageMargin: CGFloat = 50
     
@@ -38,10 +39,8 @@ class ConditionsVC: UIViewController {
         return tmp
     }()
     
-    var delegate: ConditionsVCDelegate?
-    
-    private let vm: ConditionsVM
-    init(vm vm_: ConditionsVM) {
+    private let vm: DiscoverNextVM
+    init(vm vm_: DiscoverNextVM) {
         vm = vm_
         super.init(nibName: nil, bundle: nil)
     }
@@ -55,8 +54,8 @@ class ConditionsVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         view.addSubview(searchButton)
-        view.trailingAnchor.constraint(equalToSystemSpacingAfter: searchButton.trailingAnchor, multiplier: 2).isActive = true
-        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: view.bottomAnchor, multiplier: 1).isActive = true
+        searchButton.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
         view.addSubview(collectionView)
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -73,13 +72,13 @@ class ConditionsVC: UIViewController {
     }
 }
 
-extension ConditionsVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension DiscoverNextVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         vm.conditionVMs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ConditionsVC.cellIdentifier, for: indexPath) as! ConditionCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiscoverNextVC.cellIdentifier, for: indexPath) as! ConditionCell
         cell.indexPath = indexPath
         
         let condition = vm.conditionVMs[indexPath.row]
@@ -108,7 +107,7 @@ extension ConditionsVC: UICollectionViewDelegate, UICollectionViewDataSource {
 }
 
 // MARK: Interation
-extension ConditionsVC {
+extension DiscoverNextVC {
     @objc private func searchBtnTapped() {
         vm.runNextIteration()
     }

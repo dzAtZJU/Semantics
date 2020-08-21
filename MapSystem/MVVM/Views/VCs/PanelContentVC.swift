@@ -75,7 +75,7 @@ class PanelContentVC: UIViewController {
         vc.view.transform = .init(translationX: 0, y: view.height)
         view.addSubview(vc.view)
         view.addSubview(backBtn)
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .beginFromCurrentState, animations: {
             vc.view.transform = .identity
             self.backBtn.isHidden = !vc.showBackBtn
         }) { _ in
@@ -84,7 +84,7 @@ class PanelContentVC: UIViewController {
     }
     
 
-    func hideTop() {
+    func hideTop(completion: @escaping () -> Void) {
         guard children.count >= 2, let vc = children.last as? PanelContent else {
             return
         }
@@ -95,7 +95,7 @@ class PanelContentVC: UIViewController {
         }
         
         vc.willMove(toParent: nil)
-        UIView.animate(withDuration: 0.25, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .beginFromCurrentState, animations: {
             vc.view.transform = .init(translationX: 0, y: self.view.height)
             if let vcWillShow = vcWillShow {
                 self.backBtn.isHidden = !vcWillShow.showBackBtn
@@ -104,6 +104,13 @@ class PanelContentVC: UIViewController {
             vc.view.removeFromSuperview()
             vc.view.transform = .identity
             vc.removeFromParent()
+            completion()
+        }
+    }
+    
+    func hideAll() {
+        hideTop {
+            self.hideAll()
         }
     }
 }
@@ -111,7 +118,7 @@ class PanelContentVC: UIViewController {
 // MARK: Interaction
 extension PanelContentVC {
     @objc private func backBtnTapped() {
-        hideTop()
+        hideTop() {}
     }
 }
 
