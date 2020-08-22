@@ -47,7 +47,7 @@ class MapVC: UIViewController {
     }()
     
     private lazy var placeVC: PlaceVC = {
-        let tmp = PlaceVC(vm: vm.placeVM)
+        let tmp = PlaceVC()
         tmp.panelContentDelegate = self
         tmp.delegate = self
         return tmp
@@ -59,12 +59,17 @@ class MapVC: UIViewController {
         return tmp
     }()
     
+    private lazy var discoveredPlaceVC: DiscoveredPlaceVC = {
+        let tmp = DiscoveredPlaceVC()
+        return tmp
+    }()
+    
     private var centerToUserLocation = true
     
     private var annotationsToken: AnyCancellable?
     private var boundingRegionToken: AnyCancellable?
-    private var searchResultAnnotationsToken: AnyCancellable?
-    private var selectedAnnotationsToken: AnyCancellable?
+    private var selectedAnnotationToken: AnyCancellable?
+    private var selectedPlaceStateToken: AnyCancellable?
     
     private let vm: MapVM
     init(vm vm_: MapVM) {
@@ -89,33 +94,26 @@ class MapVC: UIViewController {
         
         annotationsToken = vm.$annotations.sink { value in
             DispatchQueue.main.async {
-                self.map.removeAnnotations(self.vm.annotations)
+                self.map.removeAnnotations(self.map.annotations)
                 self.map.addAnnotations(value)
             }
         }
-        searchResultAnnotationsToken = vm.$searchResultAnnotation.sink { newValue in
-            let oldValue = self.vm.searchResultAnnotation
+        selectedAnnotationToken = vm.$selectedAnnotationEvent.sink { newEvent in
             DispatchQueue.main.async {
-                if let oldValue = oldValue {
-                    self.map.removeAnnotation(oldValue)
+                if newEvent.1  == .fromModel {
+                    if let newValue = newEvent.0 {
+                        self.map.selectAnnotation(newValue, animated: true)
+                    } else {
+                        self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
+                    }
                 }
-                if let newValue = newValue {
-                    self.map.addAnnotation(newValue)
-                }
-            }
-        }
-        selectedAnnotationsToken = vm.$selectedAnnotation.debounce(for: .seconds(0.1), scheduler: RunLoop.main).sink { newValue in
-            DispatchQueue.main.async {
-                if newValue != nil {
-                    self.panelContentVC.show(self.placeVC, sender: nil)
-                } else {
-                    self.panelContentVC.hideAll()
-                }
-                
-                if let newValue = newValue {
-                    self.map.selectAnnotation(newValue, animated: true)
-                } else {
-                    self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
+                self.panelContentVC.hideAll()
+                if let newValue = newEvent.0 {
+                    self.panelContentFor(newValue) { panelContent in
+                        DispatchQueue.main.async {
+                            self.panelContentVC.show(panelContent, sender: nil)
+                        }
+                    }
                 }
             }
         }
@@ -131,8 +129,6 @@ class MapVC: UIViewController {
         map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.pinAnnotationViewIdentifier)
-        
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -150,21 +146,18 @@ class MapVC: UIViewController {
         annotationsToken?.cancel()
         annotationsToken = nil
         
-        searchResultAnnotationsToken?.cancel()
-        searchResultAnnotationsToken = nil
-        
         boundingRegionToken?.cancel()
         boundingRegionToken = nil
         
-        selectedAnnotationsToken?.cancel()
-        selectedAnnotationsToken = nil
+        selectedAnnotationToken?.cancel()
+        selectedAnnotationToken = nil
     }
 }
 
 // MARK: PlaceVCDelegate
 extension MapVC: PlaceVCDelegate {
     func placeWillDisappear(_ placeVC: PlaceVC) {
-        vm.deSelectAnnotation()
+        //        vm.deSelectAnnotation()
     }
     
     func placeVCShouldStartFeedback(_ placeVC: PlaceVC) {
@@ -206,19 +199,9 @@ extension MapVC: MKMapViewDelegate {
             return nil
         }
         
-        if annotation is MapItemAnnotation {
-            let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
-            view.displayPriority = .required
-            view.canShowCallout = true
-            view.animatesWhenAdded = true
-            view.isHighlighted = true
-            return view
-        } else if annotation is SemAnnotation1 {
-            let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
-            view.canShowCallout = true
-            view.animatesWhenAdded = true
-            return view
-        } else {
+        let annotation = annotation as! SemAnnotation
+        switch annotation.type {
+        case .visited:
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation)
             view.canShowCallout = true
             let size = CGSize(width: 10, height: 10)
@@ -226,24 +209,48 @@ extension MapVC: MKMapViewDelegate {
                 UIImage(systemName:"circle.fill")!.withTintColor(.brown).draw(in:CGRect(origin:.zero, size: size))
             }
             return view
+        case .inSearching, .inDiscovering:
+            let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
+            view.displayPriority = .required
+            view.canShowCallout = true
+            view.animatesWhenAdded = true
+            return view
         }
     }
     
     // MARK: Interaction
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        guard !view.annotation!.isKind(of: MKUserLocation.self) else {
+        guard let annotation = view.annotation as? SemAnnotation else {
             return
         }
         
-        vm.selectAnnotation(view.annotation! as! SemAnnotation)
+        vm.selectedAnnotationEvent = (annotation, .fromView)
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        guard !view.annotation!.isKind(of: MKUserLocation.self) else {
+        guard let annotation = view.annotation as? SemAnnotation else {
             return
         }
         
-        vm.didDeSelectAnnotation(view.annotation! as! SemAnnotation)
+        vm.selectedAnnotationEvent = (nil, .fromView)
+    }
+    
+    func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
+        switch annotation.type {
+        case .inSearching, .visited:
+            PlaceVM.new(placeId: annotation.placeId) { vm in
+                DispatchQueue.main.async {
+                    self.placeVC.vm = vm
+                    completion(self.placeVC)
+                }
+            }
+        case .inDiscovering:
+            DispatchQueue.main.async {
+                completion(self.discoveredPlaceVC)
+            }
+            break
+        }
+        
     }
 }
 

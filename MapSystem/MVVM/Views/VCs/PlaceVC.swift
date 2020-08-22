@@ -20,33 +20,29 @@ protocol PlaceVCDelegate {
 }
 
 class PlaceVC: UIViewController, PanelContent {
-    init(vm: PlaceVM) {
-        super.init(nibName: nil, bundle: nil)
-        placeStateToken = vm.$placeState.sink { newValue in
-            DispatchQueue.main.async {
-                switch newValue {
-                case .neverBeen:
-                    self.stackView.addArrangedSubview(self.markVisitedBtn)
-                    self.stackView.removeArrangedSubview(self.feedbackBtn)
-                    self.feedbackBtn.removeFromSuperview()
-                    self.stackView.removeArrangedSubview(self.findNextBtn)
-                    self.findNextBtn.removeFromSuperview()
-                    break
-                case .visited, .feedbacked:
-                    self.stackView.removeArrangedSubview(self.markVisitedBtn)
-                    self.markVisitedBtn.removeFromSuperview()
-                    self.stackView.addArrangedSubview(self.feedbackBtn)
-                    self.stackView.addArrangedSubview(self.findNextBtn)
-                    break
+    var vm: PlaceVM! {
+        didSet {
+            placeStateToken = vm.$placeState.sink { newValue in
+                DispatchQueue.main.async {
+                    switch newValue {
+                    case .neverBeen:
+                        self.stackView.addArrangedSubview(self.markVisitedBtn)
+                        self.stackView.removeArrangedSubview(self.feedbackBtn)
+                        self.feedbackBtn.removeFromSuperview()
+                        self.stackView.removeArrangedSubview(self.findNextBtn)
+                        self.findNextBtn.removeFromSuperview()
+                        break
+                    case .visited, .feedbacked:
+                        self.stackView.removeArrangedSubview(self.markVisitedBtn)
+                        self.markVisitedBtn.removeFromSuperview()
+                        self.stackView.addArrangedSubview(self.feedbackBtn)
+                        self.stackView.addArrangedSubview(self.findNextBtn)
+                        break
+                    }
                 }
             }
         }
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     var placeStateToken: AnyCancellable?
     
     var panelContentDelegate: PanelContentDelegate?

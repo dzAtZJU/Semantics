@@ -12,6 +12,7 @@
 		8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386224C1644A00CBEBB5 /* CGRect+.swift */; };
 		8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8911386524C1672000CBEBB5 /* SwifterSwift */; };
 		8911386824C1984C00CBEBB5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386724C1984C00CBEBB5 /* Theme.swift */; };
+		89214F9924F055A800B5F6CC /* DiscoveredPlaceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89214F9824F055A800B5F6CC /* DiscoveredPlaceVC.swift */; };
 		89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */; };
 		89290D4824E13B5600F0A862 /* apple-app-site-association in Resources */ = {isa = PBXBuildFile; fileRef = 89290D4724E13B5600F0A862 /* apple-app-site-association */; };
 		89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */; };
@@ -145,6 +146,7 @@
 		7A142CA0C9D80D637211EB83 /* Pods_SemContentFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemContentFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8911386224C1644A00CBEBB5 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		8911386724C1984C00CBEBB5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		89214F9824F055A800B5F6CC /* DiscoveredPlaceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveredPlaceVC.swift; sourceTree = "<group>"; };
 		89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemWorldDataLayer.swift; sourceTree = "<group>"; };
 		89290D4724E13B5600F0A862 /* apple-app-site-association */ = {isa = PBXFileReference; lastKnownFileType = text; path = "apple-app-site-association"; sourceTree = "<group>"; };
 		89290D4A24E17E0400F0A862 /* SemWorld.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SemWorld.xcdatamodel; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
 				895A4E2524EC36960025ED20 /* PlaceVC.swift */,
 				895A4E2724EC383C0025ED20 /* SearchVC.swift */,
+				89214F9824F055A800B5F6CC /* DiscoveredPlaceVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -877,6 +880,7 @@
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				8968C08524DF09A70093CBFC /* DiscoverNextVC.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
+				89214F9924F055A800B5F6CC /* DiscoveredPlaceVC.swift in Sources */,
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
 				895A4E2824EC383C0025ED20 /* SearchVC.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,

@@ -8,18 +8,46 @@
 
 import Foundation
 import Combine
+import RealmSwift
 
 class PlaceVM {
-    init(parent: MapVM) {
-        selectedPlaceStateToken = parent.$selectedPlaceState.compactMap { $0 }.assign(to: \.placeState, on: self)
+    static func new(placeId: ObjectId?, completion: @escaping (PlaceVM) -> Void) {
+        if let placeId = placeId {
+            RealmSpace.shared.async {
+                let placeStory = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).queryPlaceStory(placeId: placeId)
+                let vm = PlaceVM(placeStory: placeStory)
+                completion(vm)
+            }
+        } else {
+            completion(PlaceVM())
+        }
     }
     
-    private var selectedPlaceStateToken: AnyCancellable?
+    private var placeStoryToken: NotificationToken?
+    @Published private(set) var placeState: PlaceState
+    private init(placeStory: PlaceStory) {
+        placeState = PlaceState(rawValue: placeStory.state)!
+        placeStoryToken = placeStory.observe({ change in
+            switch change {
+            case .change(_, let properties):
+                if let stateChange = try! properties.first(where: { (property: PropertyChange) throws -> Bool in
+                    property.name == #keyPath(PlaceStory.state)
+                }) {
+                    self.placeState = PlaceState(rawValue: stateChange.newValue as! Int)!
+                }
+            case .deleted:
+                fatalError("not implemented")
+            case .error(let error):
+                fatalError(error.debugDescription)
+            }
+        })
+    }
     
-    @Published private(set) var placeState = PlaceState.neverBeen
+    private init() {
+        placeState = .neverBeen
+    }
     
     deinit {
-        selectedPlaceStateToken?.cancel()
-        selectedPlaceStateToken = nil
+        placeStoryToken?.invalidate()
     }
 }

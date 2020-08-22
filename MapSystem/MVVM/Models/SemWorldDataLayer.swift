@@ -10,8 +10,8 @@ import Foundation
 import RealmSwift
 
 class SemWorldDataLayer {
-    convenience init(partitionValue: String) {
-        self.init(realm: RealmSpace.shared.newRealm(partitionValue))
+    convenience init(partitionValue: String, space: RealmSpace = RealmSpace.shared) {
+        self.init(realm: space.newRealm(partitionValue))
     }
     
     let realm: Realm
@@ -138,14 +138,18 @@ extension SemWorldDataLayer {
         queryCurrentIndividual()!.placeStoryList.compactMap(by: \.place)
     }
     
+    func queryPlace(_id: ObjectId) -> Place {
+        realm.object(ofType: Place.self, forPrimaryKey: _id)!
+    }
+    
     func queryPlaces(_ids: [ObjectId]) -> Results<Place> {
         realm.objects(Place.self).filter("_id in %@", _ids)
     }
     
-    func queryPlaceStory(placeId: ObjectId) -> PlaceStory? {
+    func queryPlaceStory(placeId: ObjectId) -> PlaceStory {
         queryCurrentIndividual()!.placeStoryList.first {
             $0.place!._id == placeId
-        }
+        }!
     }
     
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {

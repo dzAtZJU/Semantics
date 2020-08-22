@@ -11,13 +11,16 @@ import RealmSwift
 class RealmSpace {
     static let partitionValue = "Public1"
     
-    static let shared = RealmSpace()
+    static let shared = RealmSpace(queue: DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated))
     
-    lazy var queue = DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated)
+    static let main = RealmSpace(queue: DispatchQueue.main)
+    
+    let queue: DispatchQueue
     
     private(set) var app: RealmApp
     
-    private init() {
+    init(queue queue_: DispatchQueue) {
+        queue = queue_
         app = RealmApp(id: "semantics-tonbj")
     }
 }
@@ -51,7 +54,7 @@ extension RealmSpace {
 
 // MARK: Realm
 extension RealmSpace {
-    func newRealm(_ partitionValue: String) -> Realm {
+    func newRealm(_ partitionValue: String = RealmSpace.partitionValue) -> Realm {
         let user = queryCurrentUser()!
         return try! Realm(configuration: user.configuration(partitionValue: partitionValue), queue: queue)
     }
