@@ -22,7 +22,7 @@ class SemWorldDataLayer {
 
 // MARK: Individual
 extension SemWorldDataLayer {
-    func queryOrCreateCurrentIndividual(userName: String, block: @escaping (Individual) -> Void){
+    func queryOrCreateCurrentIndividual(userName: String) -> Individual {
         let userID = RealmSpace.shared.queryCurrentUserID()!
         var individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
         if individual == nil {
@@ -31,7 +31,8 @@ extension SemWorldDataLayer {
                 realm.add(individual!)
             }
         }
-        block(individual!)
+        
+        return individual!
     }
     
     func queryCurrentIndividual() -> Individual? {
@@ -95,7 +96,7 @@ extension SemWorldDataLayer {
                 }
             }
             print("friend \(s)")
-
+            
             for rank in friend.conditionsRank {
                 guard let condition = betterConditionsInQuery.first(where: {
                     $0._id == rank.condition!._id
@@ -149,7 +150,7 @@ extension SemWorldDataLayer {
     func queryPlaceStory(placeId: ObjectId) -> PlaceStory {
         queryCurrentIndividual()!.placeStoryList.first {
             $0.place!._id == placeId
-        }!
+            }!
     }
     
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
@@ -195,89 +196,104 @@ extension SemWorldDataLayer {
 
 // MARK: Mock
 extension SemWorldDataLayer {
-    func createMockData() {
-        guard queryVisitedPlaces().count == 0 else {
+    func createUserData(name: String) {
+        let ind = queryOrCreateCurrentIndividual(userName: name)
+        let conditions = realm.objects(Condition.self)
+        let rank1 = ConditionRank(condition: conditions[0])
+        let rank2 = ConditionRank(condition: conditions[1])
+        let rank3 = ConditionRank(condition: conditions[2])
+        try! realm.write {
+            ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
+        }
+    }
+    
+    func createAppData() {
+        guard realm.objects(Condition.self).isEmpty else {
             return
         }
+        //        guard queryVisitedPlaces().count == 0 else {
+        //            return
+        //        }
         
-        let places = [
-            Place(title: "Tims-上滨生活广场", latitude: 31.260_402, longitude: 121.503_985),
-            Place(title: "Tims-大学路", latitude: 31.304_107, longitude: 121.508_546),
-            Place(title: "Pacific-瑞虹月亮湾", latitude: 31.264594, longitude: 121.498751),
-            Place(title: "Tims-香溢花城", latitude: 31.254618, longitude: 121.432538),
-            Place(title: "1984", latitude: 31.208482, longitude: 121.442764),
-            Place(title: "钟书阁-芮欧", latitude: 31.223325, longitude: 121.447489)
-        ]
+        //        let places = [
+        //            Place(title: "Tims-上滨生活广场", latitude: 31.260_402, longitude: 121.503_985),
+        //            Place(title: "Tims-大学路", latitude: 31.304_107, longitude: 121.508_546),
+        //            Place(title: "Pacific-瑞虹月亮湾", latitude: 31.264594, longitude: 121.498751),
+        //            Place(title: "Tims-香溢花城", latitude: 31.254618, longitude: 121.432538),
+        //            Place(title: "1984", latitude: 31.208482, longitude: 121.442764),
+        //            Place(title: "钟书阁-芮欧", latitude: 31.223325, longitude: 121.447489)
+        //        ]
         let conditions = [
             Condition(title: "空间感"),
             Condition(title: "网络"),
             Condition(title: "卫生间")
         ]
-        let placeScores1 = places.map { place -> PlaceScore in
-            var score = 5
-            switch place.title {
-            case "Tims-大学路":
-                score = 0
-            case "1984":
-                score = 1
-            case "Tims-上滨生活广场":
-                score = 2
-            case "Tims-香溢花城":
-                score = 2
-            case "Pacific-瑞虹月亮湾":
-                score = 3
-            default:
-                break
-            }
-            return PlaceScore(place: place, score: score)
-        }
-        let rank1 = ConditionRank(condition: conditions[0], placeScores: Array(placeScores1).sorted(by: { (a, b) in
-            a.score < b.score
-        }))
-        
-        let rank2 = ConditionRank(condition: conditions[1])
-        
-        let placeScores3 = places.map { place -> PlaceScore in
-            var score = 5
-            switch place.title {
-            case "Tims-上滨生活广场":
-                score = 0
-            case "Pacific-瑞虹月亮湾":
-                score = 1
-            case "1984":
-                score = 2
-            case "Tims-香溢花城":
-                score = 3
-            case "Tims-大学路":
-                score = 4
-            default:
-                break
-            }
-            return PlaceScore(place: place, score: score)
-        }
-        let rank3 = ConditionRank(condition: conditions[2], placeScores: Array(placeScores3).sorted(by: { (a, b) in
-            a.score < b.score
-        }))
-        let ind = queryCurrentIndividual()!
         try! realm.write {
-            ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
+            self.realm.add(conditions)
         }
+        //        let placeScores1 = places.map { place -> PlaceScore in
+        //            var score = 5
+        //            switch place.title {
+        //            case "Tims-大学路":
+        //                score = 0
+        //            case "1984":
+        //                score = 1
+        //            case "Tims-上滨生活广场":
+        //                score = 2
+        //            case "Tims-香溢花城":
+        //                score = 2
+        //            case "Pacific-瑞虹月亮湾":
+        //                score = 3
+        //            default:
+        //                break
+        //            }
+        //            return PlaceScore(place: place, score: score)
+        //        }
         
-//        let newInd = Individual(id: "5f33045a7ece30732bab9299", title: "Weiran")
-//        try! realm.write {
-//            self.realm.add(newInd)
-//        }
+        //        Array(placeScores1).sorted(by: { (a, b) in
+        //            a.score < b.score
+        //        }))
+        //
         
-        let inds = self.queryAllIndividuals()
-        var tag = 0
-        for individual in inds {
-            guard individual._id != ind._id else { continue }
-            self.createMoccDataFor(individual, tag: tag, places: places, conditions: conditions)
-            tag += 1
-            try! self.realm.write {
-                ind.friends.append(individual)
-            }
-        }
+        //
+        //        let placeScores3 = places.map { place -> PlaceScore in
+        //            var score = 5
+        //            switch place.title {
+        //            case "Tims-上滨生活广场":
+        //                score = 0
+        //            case "Pacific-瑞虹月亮湾":
+        //                score = 1
+        //            case "1984":
+        //                score = 2
+        //            case "Tims-香溢花城":
+        //                score = 3
+        //            case "Tims-大学路":
+        //                score = 4
+        //            default:
+        //                break
+        //            }
+        //            return PlaceScore(place: place, score: score)
+        //        }
+        //        Array(placeScores3).sorted(by: { (a, b) in
+        //            a.score < b.score
+        //        }))
+
+        
+        //        let newInd = Individual(id: "5f33045a7ece30732bab9299", title: "Weiran")
+        //        try! realm.write {
+        //            self.realm.add(newInd)
+        //        }
+        
+        //        let inds = self.queryAllIndividuals()
+        //        var tag = 0
+        //        for individual in inds {
+        //            guard individual._id != ind._id else { continue }
+        //            self.createMoccDataFor(individual, tag: tag, places: places, conditions: conditions)
+        //            tag += 1
+        //            try! self.realm.write {
+        //                ind.friends.append(individual)
+        //            }
+        //        }
     }
     
     func createMoccDataFor(_ individual: Individual, tag: Int, places: [Place], conditions: [Condition]) {

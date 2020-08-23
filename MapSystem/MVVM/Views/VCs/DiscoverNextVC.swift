@@ -54,8 +54,8 @@ class DiscoverNextVC: UIViewController, PanelContent {
         view.backgroundColor = .systemBackground
         
         view.addSubview(searchButton)
-        searchButton.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        searchButton.topAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
+        searchButton.trailingAnchor.constraint(lessThanOrEqualToSystemSpacingAfter: view.trailingAnchor, multiplier: 2).isActive = true
         
         view.addSubview(collectionView)
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true

@@ -110,21 +110,11 @@ extension MapVM {
     }
     @objc private func searchFinished(notification: Notification) {
         let response = notification.object as! MKLocalSearch.Response
-        fatalError("not implemented")
-//        response.mapItems.map({
-//            SemAnnotation(item: $0, type: .inSearching)
-//        }).first!
-//        boundingRegion = response.boundingRegion
-//        selectAnnotation(searchResultAnnotation as! SemAnnotation)
-//        let sameAnnotation = annotations.first {
-//            $0.coordinate == searchResultAnnotation!.coordinate && $0.title == searchResultAnnotation!.title
-//        }
-//        if let sameAnnotation = sameAnnotation {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                self.searchResultAnnotation = nil
-//                self.selectAnnotation(sameAnnotation as! SemAnnotation)
-//            }
-//        }
+        let newAnno = response.mapItems.map({
+            SemAnnotation(item: $0, type: .inSearching)
+        }).first!
+        annotations.append(newAnno)
+        boundingRegion = response.boundingRegion
     }
 }
 

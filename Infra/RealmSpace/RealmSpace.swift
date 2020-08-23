@@ -9,7 +9,7 @@
 import RealmSwift
 
 class RealmSpace {
-    static let partitionValue = "Public1"
+    static let partitionValue = "Public2"
     
     static let shared = RealmSpace(queue: DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated))
     
