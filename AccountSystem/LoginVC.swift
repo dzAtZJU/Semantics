@@ -62,13 +62,15 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
         
         RealmSpace.shared.login(appleToken: token) {
             RealmSpace.shared.async {
-                let dataLayer = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue)
-                dataLayer.createAppData()
-                dataLayer.createUserData(name: UUID().uuidString)
-                
-                DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: .signedIn, object: nil)
-                    self.dismiss(animated: true, completion: nil)
+                RealmSpace.shared.newRealm() { realm in
+                    let dataLayer = SemWorldDataLayer(realm: realm!)
+                    dataLayer.createAppData()
+                    dataLayer.createUserData(name: UUID().uuidString)
+                    
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: .signedIn, object: nil)
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
         }

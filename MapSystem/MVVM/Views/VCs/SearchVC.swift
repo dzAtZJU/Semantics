@@ -10,8 +10,10 @@ import UIKit
 import MapKit
 
 class SearchVC: UIViewController, PanelContent {
+    var panelContentVM: PanelContentVM! = nil
+    
     let showBackBtn = false
-    var panelContentDelegate: PanelContentDelegate?
+    var panelContentDelegate: PanelContentDelegate!
     
     lazy var searchSuggestionsController: SearchSuggestionsVC = {
         let tmp = SearchSuggestionsVC()

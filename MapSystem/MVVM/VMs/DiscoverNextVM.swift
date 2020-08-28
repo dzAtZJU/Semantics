@@ -40,24 +40,21 @@ class ConditionVM {
     }
 }
 
-protocol ConditionsVMDelegate {
-    var selectedPlaceId: ObjectId? {
-        get
+class DiscoverNextVM: PanelContentVM {
+    var thePlaceId: ObjectId? {
+        placeId
     }
-}
-
-class DiscoverNextVM {
-    var delegate: ConditionsVMDelegate?
     
+    var panelContentVMDelegate: PanelContentVMDelegate!
+    
+    let placeId: ObjectId
     let conditionVMs: [ConditionVM]
-    init(conditions: Results<Condition>) {
+    init(placeId placeId_: ObjectId, conditions: Results<Condition>) {
+        placeId = placeId_
         conditionVMs = conditions.map {
             ConditionVM(title: $0.title, _id: $0._id)
         }
     }
-    
-    
-    var iterationUpdater: ((SemWorldDataLayer.IterationQueryReslut) -> Void)! = nil
     
     func modifyNextOperator(atTitle title: String, value: Int) {
         let condition = conditionVMs.first {
@@ -66,22 +63,23 @@ class DiscoverNextVM {
         condition.setNextOperator(value: NextOperator(rawValue: value)!)
     }
     
-    func runNextIteration() {
-        guard let selectedPlaceId = delegate?.selectedPlaceId else {
-            return
-        }
+    func runNextIteration(completion: @escaping (RealmSpace.SearchNextResult) -> Void) {
+        let query = RealmSpace.SearchNextQuery(placeId: placeId, conditions: conditionVMs.map {
+            RealmSpace.SearchNextQuery.ConditionInfo(conditionId: $0._id, nextOperator: $0.nextOperator
+            )
+        })
 
-        let conditions = conditionVMs.map {
-            SemWorldDataLayer.IterationQuery.Condition(_id: $0._id, operator: $0.nextOperator)
-        }
-        let query = SemWorldDataLayer.IterationQuery(placeId: selectedPlaceId, conditions: conditions)
-
-        conditionVMs.forEach {
-            $0.resetNextOperator()
-        }
-        
-        RealmSpace.shared.queue.async {
-            SemWorldDataLayer(realm: RealmSpace.shared.newRealm(RealmSpace.partitionValue)).runNextIteration(query: query, completion: self.iterationUpdater)
+        RealmSpace.shared.searchNext(query: query) { result in
+            self.conditionVMs.forEach {
+                $0.resetNextOperator()
+            }
+            
+            let places = SemWorldDataLayer(realm: RealmSpace.shared.newRealm(RealmSpace.partitionValue)).queryPlaces(_ids: Array(result.places.map(\.placeId)))
+            let annos = try! places.map { place throws -> SemAnnotation in
+                SemAnnotation(place: place, type: .inDiscovering)
+            }
+            self.panelContentVMDelegate.mapVM.appendAnnotations(annos)
+            completion(result)
         }
     }
 }

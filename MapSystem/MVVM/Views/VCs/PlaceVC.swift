@@ -20,6 +20,8 @@ protocol PlaceVCDelegate {
 }
 
 class PlaceVC: UIViewController, PanelContent {
+    var panelContentVM: PanelContentVM!
+    
     var vm: PlaceVM! {
         didSet {
             placeStateToken = vm.$placeState.sink { newValue in
@@ -45,7 +47,7 @@ class PlaceVC: UIViewController, PanelContent {
     }
     var placeStateToken: AnyCancellable?
     
-    var panelContentDelegate: PanelContentDelegate?
+    var panelContentDelegate: PanelContentDelegate!
     let showBackBtn = true
     
     var delegate: PlaceVCDelegate?

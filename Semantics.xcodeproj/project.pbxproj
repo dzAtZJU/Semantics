@@ -12,7 +12,6 @@
 		8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386224C1644A00CBEBB5 /* CGRect+.swift */; };
 		8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8911386524C1672000CBEBB5 /* SwifterSwift */; };
 		8911386824C1984C00CBEBB5 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8911386724C1984C00CBEBB5 /* Theme.swift */; };
-		89214F9924F055A800B5F6CC /* DiscoveredPlaceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89214F9824F055A800B5F6CC /* DiscoveredPlaceVC.swift */; };
 		89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */; };
 		89290D4824E13B5600F0A862 /* apple-app-site-association in Resources */ = {isa = PBXBuildFile; fileRef = 89290D4724E13B5600F0A862 /* apple-app-site-association */; };
 		89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */; };
@@ -92,6 +91,7 @@
 		899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247124C9BCEF00F8259B /* OrganVC.swift */; };
 		899C247424C9C57300F8259B /* WordsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247324C9C57300F8259B /* WordsVC.swift */; };
 		899C247624C9CAE100F8259B /* Sector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899C247524C9CAE100F8259B /* Sector+.swift */; };
+		899CD0A024F2E390003C0040 /* BSON+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899CD09F24F2E390003C0040 /* BSON+.swift */; };
 		89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413CF24C567E0003FD435 /* OneFingerTableView.swift */; };
 		89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413D124C56E0B003FD435 /* OceanLayer+.swift */; };
 		89A413D424C57215003FD435 /* Word+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A413D324C57215003FD435 /* Word+.swift */; };
@@ -108,10 +108,14 @@
 		89A666DE24D94EDA00851EDF /* NSNotification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A666DD24D94EDA00851EDF /* NSNotification+.swift */; };
 		89A666E024D9928800851EDF /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A666DF24D9928800851EDF /* CommunityVC.swift */; };
 		89A666E224D9934700851EDF /* CommunityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A666E124D9934700851EDF /* CommunityVM.swift */; };
+		89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B1736524F9405A00320907 /* DiscoverdResultVC.swift */; };
 		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
 		89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */ = {isa = PBXBuildFile; productRef = 89C28CFD24ADC22E002081FE /* SwiftHEXColors */; };
+		89E257A824F9710C00D6C375 /* PanelContentVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257A724F9710C00D6C375 /* PanelContentVM.swift */; };
+		89E257AA24F9936500D6C375 /* DiscoverdResultVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257A924F9936500D6C375 /* DiscoverdResultVM.swift */; };
+		89E257AE24F9A00900D6C375 /* ConditionBackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257AD24F9A00900D6C375 /* ConditionBackerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,7 +150,6 @@
 		7A142CA0C9D80D637211EB83 /* Pods_SemContentFilter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemContentFilter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8911386224C1644A00CBEBB5 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		8911386724C1984C00CBEBB5 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		89214F9824F055A800B5F6CC /* DiscoveredPlaceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveredPlaceVC.swift; sourceTree = "<group>"; };
 		89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemWorldDataLayer.swift; sourceTree = "<group>"; };
 		89290D4724E13B5600F0A862 /* apple-app-site-association */ = {isa = PBXFileReference; lastKnownFileType = text; path = "apple-app-site-association"; sourceTree = "<group>"; };
 		89290D4A24E17E0400F0A862 /* SemWorld.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SemWorld.xcdatamodel; sourceTree = "<group>"; };
@@ -229,6 +232,7 @@
 		899C247124C9BCEF00F8259B /* OrganVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganVC.swift; sourceTree = "<group>"; };
 		899C247324C9C57300F8259B /* WordsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsVC.swift; sourceTree = "<group>"; };
 		899C247524C9CAE100F8259B /* Sector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sector+.swift"; sourceTree = "<group>"; };
+		899CD09F24F2E390003C0040 /* BSON+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BSON+.swift"; sourceTree = "<group>"; };
 		89A413CF24C567E0003FD435 /* OneFingerTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneFingerTableView.swift; sourceTree = "<group>"; };
 		89A413D124C56E0B003FD435 /* OceanLayer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OceanLayer+.swift"; sourceTree = "<group>"; };
 		89A413D324C57215003FD435 /* Word+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+.swift"; sourceTree = "<group>"; };
@@ -244,8 +248,12 @@
 		89A666DD24D94EDA00851EDF /* NSNotification+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSNotification+.swift"; sourceTree = "<group>"; };
 		89A666DF24D9928800851EDF /* CommunityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVC.swift; sourceTree = "<group>"; };
 		89A666E124D9934700851EDF /* CommunityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVM.swift; sourceTree = "<group>"; };
+		89B1736524F9405A00320907 /* DiscoverdResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverdResultVC.swift; sourceTree = "<group>"; };
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
+		89E257A724F9710C00D6C375 /* PanelContentVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelContentVM.swift; sourceTree = "<group>"; };
+		89E257A924F9936500D6C375 /* DiscoverdResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverdResultVM.swift; sourceTree = "<group>"; };
+		89E257AD24F9A00900D6C375 /* ConditionBackerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionBackerCell.swift; sourceTree = "<group>"; };
 		8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemanticsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemFilterControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7D5A0AE45A410A2DD4DA81F /* Pods-SemanticsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SemanticsTests.debug.xcconfig"; path = "Target Support Files/Pods-SemanticsTests/Pods-SemanticsTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -338,6 +346,8 @@
 				89290D6824E52F4600F0A862 /* DiscoverNextVM.swift */,
 				8989C5C224E6CEF500FA3FAE /* FeedbackVM.swift */,
 				895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */,
+				89E257A724F9710C00D6C375 /* PanelContentVM.swift */,
+				89E257A924F9936500D6C375 /* DiscoverdResultVM.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -345,7 +355,7 @@
 		89290D6A24E5312600F0A862 /* VCs */ = {
 			isa = PBXGroup;
 			children = (
-				8968C08424DF09A70093CBFC /* DiscoverNextVC.swift */,
+				89B1736424F93F7400320907 /* Discovering */,
 				899AE18524DC255D00C0EB17 /* MapVC.swift */,
 				89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */,
 				89290D6B24E5313B00F0A862 /* SearchSuggestionsVC.swift */,
@@ -353,7 +363,6 @@
 				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
 				895A4E2524EC36960025ED20 /* PlaceVC.swift */,
 				895A4E2724EC383C0025ED20 /* SearchVC.swift */,
-				89214F9824F055A800B5F6CC /* DiscoveredPlaceVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -387,6 +396,7 @@
 				89290D6024E44CFA00F0A862 /* UIFont+.swift */,
 				89290D6224E4E02F00F0A862 /* UILabel+.swift */,
 				895A4E2924ED14AF0025ED20 /* CLLocationCoordinate2D+.swift */,
+				899CD09F24F2E390003C0040 /* BSON+.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -659,6 +669,15 @@
 			path = Communication;
 			sourceTree = "<group>";
 		};
+		89B1736424F93F7400320907 /* Discovering */ = {
+			isa = PBXGroup;
+			children = (
+				8968C08424DF09A70093CBFC /* DiscoverNextVC.swift */,
+				89B1736524F9405A00320907 /* DiscoverdResultVC.swift */,
+			);
+			path = Discovering;
+			sourceTree = "<group>";
+		};
 		89B381E524E03C5B00B193C2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -677,6 +696,7 @@
 				89290D6A24E5312600F0A862 /* VCs */,
 				8968C08624DFDC340093CBFC /* ConditionCell.swift */,
 				8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */,
+				89E257AD24F9A00900D6C375 /* ConditionBackerCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -872,15 +892,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89E257A824F9710C00D6C375 /* PanelContentVM.swift in Sources */,
 				89A413DC24C6F201003FD435 /* TestVC.swift in Sources */,
 				89B953AC24B8568200472692 /* SemStyle.swift in Sources */,
+				899CD0A024F2E390003C0040 /* BSON+.swift in Sources */,
 				89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */,
 				895A4E2A24ED14AF0025ED20 /* CLLocationCoordinate2D+.swift in Sources */,
 				899C247624C9CAE100F8259B /* Sector+.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				8968C08524DF09A70093CBFC /* DiscoverNextVC.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
-				89214F9924F055A800B5F6CC /* DiscoveredPlaceVC.swift in Sources */,
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
 				895A4E2824EC383C0025ED20 /* SearchVC.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
@@ -928,6 +949,8 @@
 				8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */,
 				89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */,
 				89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */,
+				89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */,
+				89E257AA24F9936500D6C375 /* DiscoverdResultVM.swift in Sources */,
 				89A666DB24D847EB00851EDF /* UIButton+.swift in Sources */,
 				892C6416248E1C1800208446 /* SubwordVC.swift in Sources */,
 				892C6414248CCFE200208446 /* WordVC.swift in Sources */,
@@ -939,6 +962,7 @@
 				8911386824C1984C00CBEBB5 /* Theme.swift in Sources */,
 				899AE18824DD622700C0EB17 /* SemAnnotation.swift in Sources */,
 				8989C5BF24E673AC00FA3FAE /* ConditionFeedbackVM.swift in Sources */,
+				89E257AE24F9A00900D6C375 /* ConditionBackerCell.swift in Sources */,
 				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				899AE17924DABA8C00C0EB17 /* Files.swift in Sources */,

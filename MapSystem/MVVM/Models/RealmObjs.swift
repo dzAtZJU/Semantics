@@ -23,8 +23,6 @@ class Place: SyncedObject {
     @objc dynamic var latitude: Double = 0
     @objc dynamic var longitude: Double = 0
     
-    let visitors = LinkingObjects(fromType: Individual.self, property: "visitedPlaces")
-    
     convenience init(title: String, latitude: Double, longitude: Double) {
         self.init()
         self.title = title
@@ -48,8 +46,6 @@ class Condition: SyncedObject {
     
     @objc dynamic var title = ""
     
-    let ranks = LinkingObjects(fromType: ConditionRank.self, property: "condition")
-    
     convenience init(title title_: String) {
         self.init()
         title = title_
@@ -57,15 +53,12 @@ class Condition: SyncedObject {
 }
 
 class PlaceScore: SyncedObject {
-    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
-    
-    @objc dynamic var place: Place?
+    @objc dynamic var placeId: ObjectId?
     @objc dynamic var score = 0
     
-    
-    convenience init(place place_: Place, score score_: Int) {
+    convenience init(placeId placeId_: ObjectId, score score_: Int) {
         self.init()
-        place = place_
+        placeId = placeId_
         score = score_
     }
 }
@@ -73,21 +66,30 @@ class PlaceScore: SyncedObject {
 class ConditionRank: SyncedObject {
     @objc dynamic var partitionKey: String = RealmSpace.partitionValue
     
-    @objc dynamic var condition: Condition?
+    @objc dynamic var ownerId: String?
+    
+    @objc dynamic var conditionId: ObjectId?
     
     var placeScoreList = List<PlaceScore>()
     
-    convenience init(condition condition_: Condition, placeScores: [PlaceScore] = []) {
+    convenience init(ownerId ownerId_: String, conditionId conditionId_: ObjectId, placeScores: [PlaceScore] = []) {
         self.init()
-        condition = condition_
+        ownerId = ownerId_
+        conditionId = conditionId_
         placeScoreList.append(objectsIn: placeScores)
     }
 }
 
 class PlaceStory: SyncedObject {
-    @objc dynamic var place: Place?
+    @objc dynamic var placeId: ObjectId?
     @objc dynamic var state = 1
     @objc dynamic var individual: Individual?
+    
+    convenience init(individual individual_: Individual, placeId placeId_: ObjectId) {
+        self.init()
+        individual = individual_
+        placeId = placeId_
+    }
 }
 
 class Individual: Object {
@@ -100,7 +102,7 @@ class Individual: Object {
     
     let friends = List<Individual>()
     
-    let visitedPlaces = List<Place>()
+    let blockedIndividuals = List<String>()
     
     let placeStoryList = LinkingObjects(fromType: PlaceStory.self, property: "individual")
     

@@ -37,6 +37,7 @@ class MapVC: UIViewController {
     
     private lazy var panelContentVC: PanelContentVC = {
         let tmp = PanelContentVC(initialVC: searchVC)
+        tmp.delegate = self
         return tmp
     }()
     
@@ -54,13 +55,8 @@ class MapVC: UIViewController {
     }()
     
     private lazy var discoverNextVC: DiscoverNextVC = {
-        let tmp = DiscoverNextVC(vm: vm.discoverNextVM)
+        let tmp = DiscoverNextVC(vm: mapVM.discoverNextVM)
         tmp.panelContentDelegate = self
-        return tmp
-    }()
-    
-    private lazy var discoveredPlaceVC: DiscoveredPlaceVC = {
-        let tmp = DiscoveredPlaceVC()
         return tmp
     }()
     
@@ -71,13 +67,14 @@ class MapVC: UIViewController {
     private var selectedAnnotationToken: AnyCancellable?
     private var selectedPlaceStateToken: AnyCancellable?
     
-    private let vm: MapVM
+    internal let mapVM: MapVM
     init(vm vm_: MapVM) {
-        vm = vm_
+        mapVM = vm_
         super.init(nibName: nil, bundle: nil)
-        vm.signedIn = {
+        mapVM.signedIn = {
             self.panel.addPanel(toParent: self)
         }
+        mapVM.annotationsModel = self
     }
     
     required init?(coder: NSCoder) {
@@ -92,40 +89,40 @@ class MapVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        annotationsToken = vm.$annotations.sink { value in
-            DispatchQueue.main.async {
-                self.map.removeAnnotations(self.map.annotations)
-                self.map.addAnnotations(value)
+        selectedAnnotationToken = mapVM.$selectedAnnotationEvent.sink { newEvent in
+            guard !self.mapVM.selectedAnnotationEventLock else {
+                return
             }
-        }
-        selectedAnnotationToken = vm.$selectedAnnotationEvent.sink { newEvent in
+            
             DispatchQueue.main.async {
-                if newEvent.1  == .fromModel {
+                switch newEvent.1 {
+                case .fromModel:
                     if let newValue = newEvent.0 {
                         self.map.selectAnnotation(newValue, animated: true)
                     } else {
                         self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
                     }
-                }
-                self.panelContentVC.hideAll()
-                if let newValue = newEvent.0 {
-                    self.panelContentFor(newValue) { panelContent in
-                        DispatchQueue.main.async {
-                            self.panelContentVC.show(panelContent, sender: nil)
+                case .fromView:
+                    self.panelContentVC.hideAll()
+                    if let newValue = newEvent.0 {
+                        self.panelContentFor(newValue) { panelContent in
+                            DispatchQueue.main.async {
+                                self.panelContentVC.show(panelContent, sender: nil)
+                            }
                         }
                     }
                 }
             }
         }
-        boundingRegionToken = vm.$boundingRegion.sink {
+        
+        boundingRegionToken = mapVM.$boundingRegion.sink {
             if $0 != nil {
                 self.map.region = $0!
                 print("map.region \(self.map.region)")
             }
         }
         
-        
-        map.addAnnotations(vm.annotations)
+        map.addAnnotations(mapVM.annotion())
         map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.pinAnnotationViewIdentifier)
@@ -139,7 +136,7 @@ class MapVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        vm.requestLocationAuthorization()
+        mapVM.requestLocationAuthorization()
     }
     
     deinit {
@@ -161,7 +158,7 @@ extension MapVC: PlaceVCDelegate {
     }
     
     func placeVCShouldStartFeedback(_ placeVC: PlaceVC) {
-        FeedbackVM(placeId: self.vm.selectedPlaceId!) { vm in
+        FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
             DispatchQueue.main.async {
                 self.panelContentVC.show(FeedbackVC(feedbackVM: vm), sender: nil)
             }
@@ -169,7 +166,7 @@ extension MapVC: PlaceVCDelegate {
     }
     
     func placeVCShouldMarkVisited(_ placeVC: PlaceVC) {
-        vm.markVisited()
+        mapVM.markVisited()
     }
     
     func placeVCShouldDiscoverNext(_ placeVC: PlaceVC) {
@@ -224,7 +221,7 @@ extension MapVC: MKMapViewDelegate {
             return
         }
         
-        vm.selectedAnnotationEvent = (annotation, .fromView)
+        mapVM.setSelectedAnnotationEvent((annotation, .fromView))
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
@@ -232,7 +229,7 @@ extension MapVC: MKMapViewDelegate {
             return
         }
         
-        vm.selectedAnnotationEvent = (nil, .fromView)
+        mapVM.setSelectedAnnotationEvent((nil, .fromView))
     }
     
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
@@ -245,9 +242,6 @@ extension MapVC: MKMapViewDelegate {
                 }
             }
         case .inDiscovering:
-            DispatchQueue.main.async {
-                completion(self.discoveredPlaceVC)
-            }
             break
         }
         
@@ -262,3 +256,44 @@ extension MapVC: FloatingPanelControllerDelegate {
 // MARK: PanelContentDelegate
 extension MapVC: PanelContentDelegate {
 }
+
+
+extension MapVC: MapVMAnnotationsModel {
+    func addAnnotations(_ annos: [SemAnnotation]) {
+        map.addAnnotations(annos)
+    }
+    
+    func removeAnnotations(_ annos: [SemAnnotation]) {
+        map.removeAnnotations(annos)
+    }
+    
+    var annotations: [SemAnnotation] {
+        map.annotations.filter {
+            $0 is SemAnnotation
+            } as! [SemAnnotation]
+    }
+}
+
+extension MapVC: PanelContentVCDelegate {
+    func panelContentVC(_ panelContentVC: PanelContentVC, didShow panelContent: PanelContent, animated: Bool) {
+        guard let placeId = panelContent.panelContentVM?.thePlaceId else {
+            return
+        }
+        
+        let selectedAnnotation = mapVM.annotion {
+            $0.placeId == placeId
+        }.first!
+        mapVM.setSelectedAnnotationEvent((selectedAnnotation, .fromModel))
+    }
+    
+    func panelContentVC(_ panelContentVC: PanelContentVC, willHide panelContent: PanelContent, animated: Bool) {
+        guard let _ = panelContent.panelContentVM?.thePlaceId else {
+            return
+        }
+        
+        mapVM.setSelectedAnnotationEvent((nil, .fromModel))
+    }
+}
+
+
+

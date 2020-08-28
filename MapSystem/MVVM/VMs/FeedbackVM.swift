@@ -21,11 +21,11 @@ class FeedbackVM {
             
             for conditionRank in self.conditionsRank {
                 let index = conditionRank.placeScoreList.firstIndex {
-                    $0.place!._id == self.targetPlace._id
+                    $0.placeId == self.targetPlace._id
                 }
                 if index == nil {
                     try! self.dataLayer.realm.write {
-                        conditionRank.placeScoreList.append(PlaceScore(place: self.targetPlace, score: 0))
+                        conditionRank.placeScoreList.append(PlaceScore(placeId: self.targetPlace._id, score: 0))
                     }
                 }
             }

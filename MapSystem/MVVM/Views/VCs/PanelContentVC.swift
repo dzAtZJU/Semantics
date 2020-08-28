@@ -9,13 +9,16 @@
 import UIKit
 import MapKit
 import FloatingPanel
+import RealmSwift
 
 protocol PanelContent: UIViewController {
-    var panelContentDelegate: PanelContentDelegate? { get set }
+    var panelContentDelegate: PanelContentDelegate! { get set }
     
     var showBackBtn: Bool { get }
     
     var topInset: CGFloat { get }
+    
+    var panelContentVM: PanelContentVM! { get }
 }
 
 extension PanelContent{
@@ -26,14 +29,29 @@ extension PanelContent{
     }
 }
 
-
 protocol PanelContentDelegate {
     var panel: FloatingPanelController {
         get
     }
+    
+    var mapVM: MapVM {
+        get
+    }
+}
+
+protocol PanelContentVCDelegate {
+    func panelContentVC(_ panelContentVC: PanelContentVC,
+    didShow panelContent: PanelContent,
+    animated: Bool)
+    
+    func panelContentVC(_ panelContentVC: PanelContentVC,
+    willHide panelContent: PanelContent,
+    animated: Bool)
 }
 
 class PanelContentVC: UIViewController {
+    var delegate: PanelContentVCDelegate!
+    
     var initialVC: UIViewController?
     var currentVC: UIViewController?
     init(initialVC initialVC_: UIViewController) {
@@ -75,6 +93,10 @@ class PanelContentVC: UIViewController {
             }
             
             DispatchQueue.main.async {
+                if let top = self.children.last as? PanelContent {
+                    self.delegate.panelContentVC(self, willHide: top, animated: true)
+                }
+                
                 self.addChild(vc)
                 vc.view.frame = self.view.bounds.inset(by: .init(top: vc.topInset ?? 0, left: 0, bottom: 0, right: 0))
                 vc.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -120,6 +142,7 @@ class PanelContentVC: UIViewController {
             }
             
             var vcWillShow: PanelContent?
+            
             if case let suffix2 = self.children.suffix(2), suffix2.count == 2 {
                 vcWillShow = suffix2.first as? PanelContent
             }
@@ -134,6 +157,9 @@ class PanelContentVC: UIViewController {
                 vc.view.removeFromSuperview()
                 vc.view.transform = .identity
                 vc.removeFromParent()
+                if let vcWillShow = vcWillShow {
+                    self.delegate.panelContentVC(self, didShow: vcWillShow, animated: true)
+                }
                 completion(false)
             }
         }

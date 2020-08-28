@@ -45,98 +45,16 @@ extension SemWorldDataLayer {
     func queryAllIndividuals() -> Results<Individual> {
         realm.objects(Individual.self)
     }
-}
-
-// MARK: Run Iteration
-extension SemWorldDataLayer {
-    struct IterationQuery {
-        struct Condition {
-            let _id: ObjectId
-            let `operator`: NextOperator
-        }
+    
+    func block(inds: [ObjectId], forCondition: ObjectId) {
         
-        let placeId: ObjectId
-        let conditions: [Condition]
-    }
-    
-    struct CanditatePlaces {
-        lazy var placeId2Conditions = [ObjectId: Conditions]()
-    }
-    
-    struct Conditions {
-        lazy var conditionId2Condition = [ObjectId: ConditionInfo]()
-    }
-    
-    
-    struct ConditionInfo {
-        lazy var friends = [String]()
-    }
-    
-    enum IterationQueryReslut {
-        case none
-        case ok(CanditatePlaces)
-    }
-    
-    
-    func runNextIteration(query: IterationQuery, completion: @escaping (IterationQueryReslut) -> Void) {
-        let individual = self.queryCurrentIndividual()
-        let friends = individual!.friends
-        let placeIdInQuery = query.placeId
-        let conditionsInQuery = query.conditions
-        let betterConditionsInQuery = conditionsInQuery.filter {
-            $0.operator == .better
-        }
-        var canditatePlaces = CanditatePlaces()
-        for friend in friends {
-            var s = friend.title
-            for rank in friend.conditionsRank {
-                s += " " + rank.condition!.title
-                for placeScore in rank.placeScoreList {
-                    s += " " + placeScore.place!.title
-                }
-            }
-            print("friend \(s)")
-            
-            for rank in friend.conditionsRank {
-                guard let condition = betterConditionsInQuery.first(where: {
-                    $0._id == rank.condition!._id
-                }) else {
-                    continue
-                }
-                
-                let placeScoreList =  rank.placeScoreList
-                let index: Int! = placeScoreList.firstIndex {
-                    $0.place!._id == placeIdInQuery
-                }
-                guard index != nil, index > placeScoreList.startIndex else {
-                    continue
-                }
-                let canditatePlaceScore = placeScoreList[placeScoreList.index(before: index)]
-                let canditatePlaceId = canditatePlaceScore.place!._id
-                canditatePlaces.placeId2Conditions[canditatePlaceId, default: Conditions()].conditionId2Condition[condition._id, default: ConditionInfo()].friends.append(friend._id)
-            }
-        }
-        
-        var removedIds = [ObjectId]()
-        for (placeId, var conditions) in canditatePlaces.placeId2Conditions {
-            guard conditions.conditionId2Condition.count == betterConditionsInQuery.count else {
-                removedIds.append(placeId)
-                continue
-            }
-        }
-        canditatePlaces.placeId2Conditions.removeAll(keys: removedIds)
-        if canditatePlaces.placeId2Conditions.isEmpty {
-            completion(.none)
-        } else {
-            completion(.ok(canditatePlaces))
-        }
     }
 }
 
 // MARK: Places
 extension SemWorldDataLayer {
-    func queryVisitedPlaces() -> [Place] {
-        queryCurrentIndividual()!.placeStoryList.compactMap(by: \.place)
+    func queryVisitedPlaces() -> Results<Place> {
+        queryPlaces(_ids: queryCurrentIndividual()!.placeStoryList.compactMap(by: \.placeId))
     }
     
     func queryPlace(_id: ObjectId) -> Place {
@@ -149,13 +67,14 @@ extension SemWorldDataLayer {
     
     func queryPlaceStory(placeId: ObjectId) -> PlaceStory {
         queryCurrentIndividual()!.placeStoryList.first {
-            $0.place!._id == placeId
+            $0.placeId == placeId
             }!
     }
     
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
-        let places = realm.objects(Place.self).filter("latitude = %@ AND longitude = %@ AND title = %@", uniquePlace.latitude, uniquePlace.longitude, uniquePlace.title)
+        let places = realm.objects(Place.self).filter("latitude == %d AND longitude == %d AND title == %@", uniquePlace.latitude, uniquePlace.longitude, uniquePlace.title)
         if places.isEmpty {
+            print("queryOrCreatePlace should create")
             let newPlace = Place(title: uniquePlace.title, latitude: uniquePlace.latitude, longitude: uniquePlace.longitude)
             try! realm.write {
                 self.realm.add(newPlace)
@@ -171,9 +90,7 @@ extension SemWorldDataLayer {
     func markVisited(uniquePlace: UniquePlace, completion: (Place) -> Void) {
         let place = queryOrCreatePlace(uniquePlace)
         let ind = queryCurrentIndividual()!
-        let placeStory = PlaceStory()
-        placeStory.individual = ind
-        placeStory.place = place
+        let placeStory = PlaceStory(individual: ind, placeId: place._id)
         try! realm.write {
             self.realm.add(placeStory)
         }
@@ -192,6 +109,10 @@ extension SemWorldDataLayer {
     func queryConditionRank(_id: ObjectId) -> ConditionRank {
         realm.object(ofType: ConditionRank.self, forPrimaryKey: _id)!
     }
+    
+    func queryCondition(_id: ObjectId) -> Condition {
+        realm.object(ofType: Condition.self, forPrimaryKey: _id)!
+    }
 }
 
 // MARK: Mock
@@ -199,9 +120,9 @@ extension SemWorldDataLayer {
     func createUserData(name: String) {
         let ind = queryOrCreateCurrentIndividual(userName: name)
         let conditions = realm.objects(Condition.self)
-        let rank1 = ConditionRank(condition: conditions[0])
-        let rank2 = ConditionRank(condition: conditions[1])
-        let rank3 = ConditionRank(condition: conditions[2])
+        let rank1 = ConditionRank(ownerId: ind._id, conditionId: conditions[0]._id)
+        let rank2 = ConditionRank(ownerId: ind._id, conditionId: conditions[1]._id)
+        let rank3 = ConditionRank(ownerId: ind._id, conditionId: conditions[2]._id)
         try! realm.write {
             ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
         }
@@ -211,6 +132,7 @@ extension SemWorldDataLayer {
         guard realm.objects(Condition.self).isEmpty else {
             return
         }
+        print("createAppData should create")
         //        guard queryVisitedPlaces().count == 0 else {
         //            return
         //        }
@@ -308,9 +230,9 @@ extension SemWorldDataLayer {
                 default:
                     return nil
                 }
-                return PlaceScore(place: place, score: score)
+                return PlaceScore(placeId: place._id, score: score)
             }
-            let rank1 = ConditionRank(condition: conditions[2], placeScores: Array(placeScores1).sorted(by: { (a, b) in
+            let rank1 = ConditionRank(ownerId: individual._id, conditionId: conditions[2]._id, placeScores: Array(placeScores1).sorted(by: { (a, b) in
                 a.score < b.score
             }))
             
@@ -324,22 +246,14 @@ extension SemWorldDataLayer {
                 default:
                     return nil
                 }
-                return PlaceScore(place: place, score: score)
+                return PlaceScore(placeId: place._id, score: score)
             }
-            let rank2 = ConditionRank(condition: conditions[0], placeScores: Array(placeScores2).sorted(by: { (a, b) in
+            let rank2 = ConditionRank(ownerId: individual._id, conditionId: conditions[0]._id, placeScores: Array(placeScores2).sorted(by: { (a, b) in
                 a.score < b.score
             }))
             try! realm.write {
                 individual.conditionsRank.append(objectsIn: [rank1, rank2])
             }
-            var s = individual.title
-            for rank in individual.conditionsRank {
-                s += " " + rank.condition!.title
-                for placeScore in rank.placeScoreList {
-                    s += " " + placeScore.place!.title
-                }
-            }
-            print(s)
         }
     }
     

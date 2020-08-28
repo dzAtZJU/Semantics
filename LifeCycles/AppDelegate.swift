@@ -18,8 +18,7 @@ import AuthenticationServices
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
-        
-        
+        RealmSpace.shared.newRealm(completion: {_ in })
         
         return true
     }

@@ -18,7 +18,7 @@ class ConditionFeedbackVM {
     }
     
     var conditionTitle: String {
-        rankByCondition.condition!.title
+        SemWorldDataLayer(realm: RealmSpace.main.newRealm()).queryCondition(_id: rankByCondition.conditionId!).title
     }
         
     var levels: Int {
@@ -35,8 +35,9 @@ class ConditionFeedbackVM {
         let title: String
         let isTargetPlace: Bool
     }
+    
     func placeInfo(at: RankInfo) -> PlaceInfo {
-        let thisPlace = placeScore(at: at).place!
+        let thisPlace = SemWorldDataLayer(realm: RealmSpace.main.newRealm()).queryPlace(_id: placeScore(at: at).placeId!)
         return PlaceInfo(title: thisPlace.title, isTargetPlace: thisPlace._id == targetPlace._id)
     }
     
@@ -51,7 +52,7 @@ class ConditionFeedbackVM {
         RealmSpace.shared.async {
             let dataLayer = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue)
             let livePlaceScore = dataLayer.queryPlaceSocre(_id: placeScore._id)
-            var liveRankByCondition = dataLayer.queryConditionRank(_id: self.rankByCondition._id)
+            let liveRankByCondition = dataLayer.queryConditionRank(_id: self.rankByCondition._id)
             if to.level != -1 {
                 try! dataLayer.realm.write {
                     livePlaceScore.score = to.level

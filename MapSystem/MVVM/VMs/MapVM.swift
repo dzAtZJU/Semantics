@@ -22,19 +22,34 @@ enum EventSource {
     case fromView
 }
 
+protocol MapVMAnnotationsModel {
+    func addAnnotations(_: [SemAnnotation])
+           
+    func removeAnnotations(_: [SemAnnotation])
+    
+    var annotations: [SemAnnotation] {
+        get
+    }
+}
+
 class MapVM {
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(signdeInReceived), name: .signedIn, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchFinished), name: .searchFinished ,object: nil)
     }
     
-    @Published var selectedAnnotationEvent: (SemAnnotation?, EventSource) = (nil, .fromModel)
+    @Published private(set) var selectedAnnotationEvent: (SemAnnotation?, EventSource) = (nil, .fromModel)
+    var selectedAnnotationEventLock = false
+    
+    var annotationsModel: MapVMAnnotationsModel!
     
     private var selectedAnnotation: SemAnnotation? {
         selectedAnnotationEvent.0
     }
     
-    @Published private(set) var annotations = [SemAnnotation]()
+    var selectedPlaceId: ObjectId? {
+        selectedAnnotation?.placeId
+    }
     
     @Published private(set) var boundingRegion: MKCoordinateRegion?
     
@@ -49,6 +64,32 @@ class MapVM {
         locationManager.requestWhenInUseAuthorization()
     }
     
+    func setSelectedAnnotationEvent(_ event: (SemAnnotation?, EventSource)) {
+        guard event.0 != selectedAnnotationEvent.0 else {
+            return
+        }
+        
+        selectedAnnotationEvent = event
+    }
+    
+    func appendAnnotations(_ values: [SemAnnotation]) {
+        annotationsModel.addAnnotations(values)
+    }
+    
+    func removeAnnotations(type: AnnotationType) {
+        let annos = annotationsModel.annotations.filter {
+            $0.type == type
+        }
+        annotationsModel.removeAnnotations(annos)
+    }
+    
+    func annotion(filter: ((SemAnnotation) -> Bool)? = nil) -> [SemAnnotation] {
+        guard let filter = filter else {
+            return []
+        }
+        return annotationsModel.annotations.filter(filter)
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -58,23 +99,8 @@ class MapVM {
         RealmSpace.shared.queue.sync {
             let realm = RealmSpace.shared.newRealm(RealmSpace.partitionValue)
             let conditions =  realm.objects(Condition.self)
-            tmp = DiscoverNextVM(conditions: conditions)
-            tmp.delegate = self
-            tmp.iterationUpdater = {
-                switch $0 {
-                case .none:
-                    print("iterationUpdater none")
-                case .ok(var places):
-                    RealmSpace.shared.queue.async {
-                        self.annotations.removeAll {
-                            $0.type == .inDiscovering
-                        }
-                        self.annotations.append(contentsOf: SemWorldDataLayer(realm: RealmSpace.shared.newRealm(RealmSpace.partitionValue)).queryPlaces(_ids: Array(places.placeId2Conditions.keys)).map({
-                            SemAnnotation(place: $0, type: .inDiscovering)
-                        }))
-                    }
-                }
-            }
+            tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditions: conditions)
+            tmp.panelContentVMDelegate = self
         }
         return tmp
     }()
@@ -84,9 +110,9 @@ class MapVM {
 extension MapVM {
     func loadVisitedPlaces() {
         RealmSpace.shared.async {
-            self.annotations = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).queryVisitedPlaces().map({
+            self.appendAnnotations(SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).queryVisitedPlaces().map({
                 SemAnnotation(place: $0, type: .visited)
-            })
+            }))
         }
     }
     
@@ -95,7 +121,7 @@ extension MapVM {
         RealmSpace.shared.async {
             SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).markVisited(uniquePlace: uniquePlace) { place in
                 let newAnnotation = SemAnnotation(place: place, type: .visited)
-                self.annotations.append(newAnnotation)
+                self.appendAnnotations([newAnnotation])
                 self.selectedAnnotationEvent = (newAnnotation, .fromModel)
             }
         }
@@ -113,17 +139,13 @@ extension MapVM {
         let newAnno = response.mapItems.map({
             SemAnnotation(item: $0, type: .inSearching)
         }).first!
-        annotations.append(newAnno)
+        appendAnnotations([newAnno])
         boundingRegion = response.boundingRegion
     }
 }
 
-// MARK: ConditionsVMDelegate
-extension MapVM: ConditionsVMDelegate {
-    var selectedPlaceId: ObjectId? {
-        selectedAnnotation?.placeId
+extension MapVM: PanelContentVMDelegate {
+    var mapVM: MapVM {
+        self
     }
 }
-
-// Mark Visited
-// Feedback | Find Next

@@ -10,7 +10,12 @@ import Foundation
 import Combine
 import RealmSwift
 
-class PlaceVM {
+class PlaceVM: PanelContentVM {
+    var thePlaceId: ObjectId? {
+        nil
+    }
+    var panelContentVMDelegate: PanelContentVMDelegate!
+    
     static func new(placeId: ObjectId?, completion: @escaping (PlaceVM) -> Void) {
         if let placeId = placeId {
             RealmSpace.shared.async {

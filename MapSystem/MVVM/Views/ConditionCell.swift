@@ -10,6 +10,7 @@ import UIKit
 import Combine
 
 class ConditionCell: UICollectionViewCell {
+    static let identifier = "ConditionCell"
     var indexPath: IndexPath! = nil
     var token: AnyCancellable! = nil
     
@@ -30,21 +31,17 @@ class ConditionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(label)
-        label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        contentView.addSubview(label)
+        label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
         
-        addSubview(segmentedControl)
-        segmentedControl.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        segmentedControl.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        contentView.addSubview(segmentedControl)
+        segmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        segmentedControl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
     }
     
     override func prepareForReuse() {
@@ -58,9 +55,4 @@ class ConditionCell: UICollectionViewCell {
             token = nil
         }
     }
-    
-//    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-//        layoutAttributes.bounds.size.height = segmentedControl.width + label.intrinsicContentSize.width + 10
-//        return layoutAttributes
-//    }
 }

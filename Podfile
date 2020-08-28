@@ -12,8 +12,7 @@ target 'Semantics' do
   # https://realm.io/docs/swift/latest
   # https://realm.io/docs/objc/5.3.3/api/Classes/RLMSyncUser.html
   # https://docs.mongodb.com/realm-sdks/objc/10.0.0-beta.2/index.html
-  pod 'RealmSwift', '=10.0.0-beta.2'
-   
+  pod 'RealmSwift', '=10.0.0-beta.9'
 #  pod 'Jelly', '~> 2.2.2'
   
 #  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
