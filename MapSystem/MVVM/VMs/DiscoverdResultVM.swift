@@ -19,7 +19,7 @@ struct PlaceConditionsVM {
     
     func title(at: IndexPath) -> String {
         let condition = conditions[at.row]
-        return SemWorldDataLayer(realm: RealmSpace.main.newRealm()).queryCondition(_id: condition.id).title + " backed by " + condition.backers.map(by: \.title).joined(separator: ",")
+        return SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue: RealmSpace.partitionValue)).queryCondition(_id: condition.id).title + " backed by " + condition.backers.map(by: \.title).joined(separator: ",")
     }
     
     func dislike(at: IndexPath, completion: @escaping () -> Void) {
@@ -27,7 +27,7 @@ struct PlaceConditionsVM {
         let conditionId = info.id
         let inds = info.backers.map(by: \.id)
         RealmSpace.shared.async {
-            SemWorldDataLayer(realm: RealmSpace.shared.newRealm()).block(inds: inds, forCondition: conditionId)
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).block(inds: inds, forCondition: conditionId)
             completion()
         }
     }

@@ -9,15 +9,8 @@
 import Foundation
 import RealmSwift
 
-class SemWorldDataLayer {
-    convenience init(partitionValue: String, space: RealmSpace = RealmSpace.shared) {
-        self.init(realm: space.newRealm(partitionValue))
-    }
-    
+struct SemWorldDataLayer {
     let realm: Realm
-    init(realm realm_: Realm) {
-        realm = realm_
-    }
 }
 
 // MARK: Individual
@@ -95,7 +88,7 @@ extension SemWorldDataLayer {
             self.realm.add(placeStory)
         }
         
-        completion(place)
+        completion(place.freeze())
     }
 }
 

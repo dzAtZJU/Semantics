@@ -14,9 +14,9 @@ class FeedbackVM {
     private var conditionsRank: List<ConditionRank>!
     private var dataLayer: SemWorldDataLayer!
     init(placeId placeId_: ObjectId, completion: @escaping (FeedbackVM) -> Void) {
-        RealmSpace.shared.async {
-            self.dataLayer = SemWorldDataLayer(partitionValue: RealmSpace.partitionValue)
-            self.targetPlace = self.dataLayer.queryPlaces(_ids: [placeId_]).first!
+        RealmSpace.main.async {
+            self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue: RealmSpace.partitionValue))
+            self.targetPlace = self.dataLayer.queryPlace(_id: placeId_)
             self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
             
             for conditionRank in self.conditionsRank {
@@ -29,9 +29,6 @@ class FeedbackVM {
                     }
                 }
             }
-            
-            self.targetPlace = self.targetPlace.freeze()
-            self.conditionsRank = self.conditionsRank.freeze()
             
             completion(self)
         }

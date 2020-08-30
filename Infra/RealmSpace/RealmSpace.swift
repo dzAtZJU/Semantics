@@ -9,20 +9,62 @@
 import RealmSwift
 
 class RealmSpace {
-    static let partitionValue = "Public2"
-    
     static let shared = RealmSpace(queue: DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated))
     
     static let main = RealmSpace(queue: DispatchQueue.main)
     
-    let queue: DispatchQueue
-    
     private(set) var app: RealmApp
     
+    private lazy var realms = [String: Realm]()
+    
+    let queue: DispatchQueue
     init(queue queue_: DispatchQueue) {
         queue = queue_
         app = RealmApp(id: "semantics-tonbj")
     }
+    
+    func realm(partitionValue: String) -> Realm {
+        if let realm = realms[partitionValue] {
+            if (!realm.autorefresh) {
+               realm.refresh()
+            }
+            return realm
+        }
+        
+        let tmp = newRealm(partitionValue)
+        realms[partitionValue] = tmp
+        return tmp
+    }
+    
+    func realm(partitionValue: String, completion: @escaping (Realm) -> Void) {
+        if let realm = realms[partitionValue] {
+            if (!realm.autorefresh) {
+                realm.refresh()
+            }
+            completion(realm)
+            return
+        }
+        
+        newRealm(partitionValue) {
+            self.realms[partitionValue] = $0
+            completion($0)
+        }
+    }
+    
+    private func newRealm(_ partitionValue: String) -> Realm {
+        let user = queryCurrentUser()!
+        return try! Realm(configuration: user.configuration(partitionValue: partitionValue), queue: queue)
+    }
+    
+    private func newRealm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
+        let user = queryCurrentUser()!
+        
+        Realm.asyncOpen(configuration: user.configuration(partitionValue: partitionValue)) { (realm, error) in
+            completion(realm!)
+        }
+    }
+    
+    static let partitionValue = "Public14"
 }
 // MARK: Threading
 extension RealmSpace {
@@ -51,25 +93,6 @@ extension RealmSpace {
         }
     }
 }
-
-// MARK: Realm
-extension RealmSpace {
-    func newRealm(_ partitionValue: String = RealmSpace.partitionValue) -> Realm {
-        let user = queryCurrentUser()!
-        return try! Realm(configuration: user.configuration(partitionValue: partitionValue), queue: queue)
-    }
-    
-    func newRealm(partitionValue: String = RealmSpace.partitionValue, completion: @escaping (Realm?) -> Void) {
-        guard let user = queryCurrentUser() else {
-            completion(nil)
-            return
-        }
-        Realm.asyncOpen(configuration: user.configuration(partitionValue: partitionValue)) { (realm, error) in
-            completion(realm!)
-        }
-    }
-}
-
 
 // MARK: Functions
 
@@ -130,7 +153,7 @@ extension RealmSpace {
             struct ConditionInfo {
                 let id: ObjectId
                 let backers: [BackerInfo]
-            
+                
                 init(from bson: AnyBSON) {
                     id = bson.documentValue!["id"]!!.objectIdValue!
                     backers = bson.documentValue!["backers"]!!.arrayValue!.map {
@@ -158,7 +181,7 @@ extension RealmSpace {
             guard error == nil else {
                 fatalError("\(error!.localizedDescription)")
             }
-
+            
             let rr = SearchNextResult(from: r!)
             print("searchNextResult \(rr)")
             self.queue.async {

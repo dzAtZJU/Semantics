@@ -76,10 +76,14 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     
     override func viewDidAppear(_ animated: Bool) {
         panelContentDelegate.mapVM.selectedAnnotationEventLock = true
-        selectedAnnotationToken = panelContentDelegate.mapVM.$selectedAnnotationEvent.sink { newEvent in
+        selectedAnnotationToken = panelContentDelegate.mapVM.$selectedAnnotationEvent.removeDuplicates(by: { (a, b) -> Bool in
+            a.0 == b.0
+        }).sink { newEvent in
             switch newEvent.1 {
-            case .fromModel:
-                break
+            case .fromModel, .onlyMap:
+                if newEvent.0 == nil {
+                    self.panelContentDelegate.map.deselectAnnotation(nil, animated: true)
+                }
             case .fromView:
                 if let type = newEvent.0?.type, type != .inDiscovering {
                     break

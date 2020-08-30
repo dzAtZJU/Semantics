@@ -68,11 +68,11 @@ class ConditionFeedbackVC: UIViewController {
 
 extension ConditionFeedbackVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        conditionFeedbackVM.levels + 1
+        conditionFeedbackVM.levels + 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard section != 0 else {
+        guard section != 0, section !=  conditionFeedbackVM.levels + 1 else {
             return 0
         }
         
@@ -90,9 +90,8 @@ extension ConditionFeedbackVC: UITableViewDataSource {
 
 extension ConditionFeedbackVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        conditionFeedbackVM.movePlace(at: .init(level: sourceIndexPath.section-1, ordinal: sourceIndexPath.row), to: .init(level: destinationIndexPath.section-1, ordinal: destinationIndexPath.row)) {
-            print("move data written")
-        }
+        conditionFeedbackVM.movePlace(at: .init(level: sourceIndexPath.section-1, ordinal: sourceIndexPath.row), to: .init(level: destinationIndexPath.section-1, ordinal: destinationIndexPath.row))
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {

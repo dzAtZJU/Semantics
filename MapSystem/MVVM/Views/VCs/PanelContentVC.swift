@@ -37,6 +37,10 @@ protocol PanelContentDelegate {
     var mapVM: MapVM {
         get
     }
+    
+    var map: MKMapView {
+        get
+    }
 }
 
 protocol PanelContentVCDelegate {
@@ -47,6 +51,8 @@ protocol PanelContentVCDelegate {
     func panelContentVC(_ panelContentVC: PanelContentVC,
     willHide panelContent: PanelContent,
     animated: Bool)
+    
+    func panelContentVCWillBack(_ panelContentVC: PanelContentVC)
 }
 
 class PanelContentVC: UIViewController {
@@ -180,6 +186,7 @@ class PanelContentVC: UIViewController {
 extension PanelContentVC {
     @objc private func backBtnTapped() {
         hideTop()
+        delegate.panelContentVCWillBack(self)
     }
 }
 

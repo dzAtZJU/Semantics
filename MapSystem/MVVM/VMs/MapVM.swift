@@ -20,6 +20,7 @@ enum PlaceState: Int {
 enum EventSource {
     case fromModel
     case fromView
+    case onlyMap
 }
 
 protocol MapVMAnnotationsModel {
@@ -65,10 +66,6 @@ class MapVM {
     }
     
     func setSelectedAnnotationEvent(_ event: (SemAnnotation?, EventSource)) {
-        guard event.0 != selectedAnnotationEvent.0 else {
-            return
-        }
-        
         selectedAnnotationEvent = event
     }
     
@@ -94,23 +91,23 @@ class MapVM {
         NotificationCenter.default.removeObserver(self)
     }
     
-    lazy var discoverNextVM: DiscoverNextVM = {
+    var discoverNextVM: DiscoverNextVM {
         var tmp: DiscoverNextVM!
         RealmSpace.shared.queue.sync {
-            let realm = RealmSpace.shared.newRealm(RealmSpace.partitionValue)
+            let realm = RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)
             let conditions =  realm.objects(Condition.self)
             tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditions: conditions)
             tmp.panelContentVMDelegate = self
         }
         return tmp
-    }()
+    }
 }
 
 // MARK: Places
 extension MapVM {
     func loadVisitedPlaces() {
         RealmSpace.shared.async {
-            self.appendAnnotations(SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).queryVisitedPlaces().map({
+            self.appendAnnotations(SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).queryVisitedPlaces().map({
                 SemAnnotation(place: $0, type: .visited)
             }))
         }
@@ -119,10 +116,13 @@ extension MapVM {
     func markVisited() {
         let uniquePlace = UniquePlace(annotation: self.selectedAnnotation!)
         RealmSpace.shared.async {
-            SemWorldDataLayer(partitionValue: RealmSpace.partitionValue).markVisited(uniquePlace: uniquePlace) { place in
-                let newAnnotation = SemAnnotation(place: place, type: .visited)
-                self.appendAnnotations([newAnnotation])
-                self.selectedAnnotationEvent = (newAnnotation, .fromModel)
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).markVisited(uniquePlace: uniquePlace) { place in
+                DispatchQueue.main.async {
+                    self.setSelectedAnnotationEvent((nil, .fromModel))
+                    let newAnnotation = SemAnnotation(place: place, type: .visited)
+                    self.appendAnnotations([newAnnotation])
+                    self.setSelectedAnnotationEvent((newAnnotation, .fromModel))
+                }
             }
         }
     }
@@ -141,6 +141,7 @@ extension MapVM {
         }).first!
         appendAnnotations([newAnno])
         boundingRegion = response.boundingRegion
+        selectedAnnotationEvent = (newAnno, .fromModel)
     }
 }
 

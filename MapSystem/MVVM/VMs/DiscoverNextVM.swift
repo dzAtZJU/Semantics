@@ -74,7 +74,7 @@ class DiscoverNextVM: PanelContentVM {
                 $0.resetNextOperator()
             }
             
-            let places = SemWorldDataLayer(realm: RealmSpace.shared.newRealm(RealmSpace.partitionValue)).queryPlaces(_ids: Array(result.places.map(\.placeId)))
+            let places = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).queryPlaces(_ids: Array(result.places.map(\.placeId)))
             let annos = try! places.map { place throws -> SemAnnotation in
                 SemAnnotation(place: place, type: .inDiscovering)
             }
