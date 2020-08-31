@@ -35,7 +35,7 @@ struct KeychainItem {
     
     // MARK: Keychain access
     
-    func readItem() throws -> String {
+    func readItem() throws -> String? {
         /*
          Build a query to find the item that matches the service, account and
          access group.
@@ -52,8 +52,8 @@ struct KeychainItem {
         }
         
         // Check the return status and throw an error if appropriate.
-        guard status != errSecItemNotFound else { throw KeychainError.noPassword }
-        guard status == noErr else { throw KeychainError.unhandledError }
+        guard status != errSecItemNotFound else { return nil }
+        guard status == noErr else { return nil }
         
         // Parse the password string from the query result.
         guard let existingItem = queryResult as? [String: AnyObject],
@@ -127,12 +127,12 @@ struct KeychainItem {
     }
     
    
-    static var currentUserName: String {
+    static var currentUserName: String? {
         get {
             try! KeychainItem(service: Bundle.main.bundleIdentifier!, account: "userName").readItem()
         }
         set {
-            try! KeychainItem(service: Bundle.main.bundleIdentifier!, account: "userName").saveItem(newValue)
+            try! KeychainItem(service: Bundle.main.bundleIdentifier!, account: "userName").saveItem(newValue!)
         }
     }
 }

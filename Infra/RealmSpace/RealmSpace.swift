@@ -59,12 +59,12 @@ class RealmSpace {
     private func newRealm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
         let user = queryCurrentUser()!
         
-        Realm.asyncOpen(configuration: user.configuration(partitionValue: partitionValue)) { (realm, error) in
+        Realm.asyncOpen(configuration: user.configuration(partitionValue: partitionValue), callbackQueue: queue) { (realm, error) in
             completion(realm!)
         }
     }
     
-    static let partitionValue = "Public14"
+    static let partitionValue = "Public18"
 }
 // MARK: Threading
 extension RealmSpace {
@@ -162,12 +162,12 @@ extension RealmSpace {
                 }
                 
                 struct BackerInfo {
-                    let id: ObjectId
+                    let id: String
                     let title: String
                     
                     init(from bson: AnyBSON) {
                         let doc = bson.documentValue!
-                        id = doc["id"]!!.objectIdValue!
+                        id = doc["id"]!!.stringValue!
                         title = doc["title"]!!.stringValue!
                     }
                 }
@@ -177,7 +177,9 @@ extension RealmSpace {
     
     func searchNext(query: SearchNextQuery, completion: @escaping (SearchNextResult) -> Void) {
         let f = app.functions[dynamicMember: "searchNext"]
+        let bt1 = Date().timeIntervalSince1970
         f([query.bson()]) { r, error in
+            print("[Measure] f:searchNext \(Date().timeIntervalSince1970 - bt1)")
             guard error == nil else {
                 fatalError("\(error!.localizedDescription)")
             }
@@ -187,6 +189,12 @@ extension RealmSpace {
             self.queue.async {
                 completion(rr)
             }
+        }
+        
+        let dumb = app.functions[dynamicMember: "dumb"]
+        let btDumb = Date().timeIntervalSince1970
+        dumb([]) { (_, _) in
+            print(print("[Measure] f:dumb \(Date().timeIntervalSince1970 - btDumb)"))
         }
     }
 }

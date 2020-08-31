@@ -16,17 +16,26 @@ class LoginVC: UIViewController {
         return tmp
     }()
     
+    private lazy var spinner: UIActivityIndicatorView = {
+        let tmp = UIActivityIndicatorView(style: .large)
+        tmp.color = .systemPurple
+        tmp.hidesWhenStopped = true
+        return tmp
+    }()
+    
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .systemYellow
         
         view.addSubview(appleSignInButton)
+        view.addSubview(spinner)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         appleSignInButton.size = .init(width: 169, height: 39)
-        appleSignInButton.center = view.bounds.center
+        appleSignInButton.center = view.center
+        spinner.center = view.center
     }
 }
 
@@ -52,30 +61,31 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
             fatalError()
         }
+        if let givenName = appleIDCredential.fullName?.givenName {
+            KeychainItem.currentUserName = givenName
+        }
         guard let token = String(data: appleIDCredential.identityToken!, encoding: .utf8) else {
             fatalError()
         }
         
-        if let givenName = appleIDCredential.fullName?.givenName {
-            KeychainItem.currentUserName = givenName
-        }
-        
+        spinner.startAnimating()
         RealmSpace.shared.login(appleToken: token) {
             RealmSpace.shared.async {
-                    let dataLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue))
+                RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue) {
+                    let dataLayer = SemWorldDataLayer(realm: $0)
                     dataLayer.createAppData()
-                    dataLayer.createUserData(name: UUID().uuidString)
+                    dataLayer.createUserData(name: KeychainItem.currentUserName ?? String.random(ofLength: 6))
                     
                     DispatchQueue.main.async {
+                        self.spinner.stopAnimating()
                         NotificationCenter.default.post(name: .signedIn, object: nil)
                         self.dismiss(animated: true, completion: nil)
                     }
-               
+                }
             }
         }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        fatalError()
     }
 }

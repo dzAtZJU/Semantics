@@ -14,6 +14,7 @@ class FeedbackVM {
     private var conditionsRank: List<ConditionRank>!
     private var dataLayer: SemWorldDataLayer!
     init(placeId placeId_: ObjectId, completion: @escaping (FeedbackVM) -> Void) {
+        print("[FeedbackVM] \(placeId_)")
         RealmSpace.main.async {
             self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue: RealmSpace.partitionValue))
             self.targetPlace = self.dataLayer.queryPlace(_id: placeId_)
@@ -25,7 +26,7 @@ class FeedbackVM {
                 }
                 if index == nil {
                     try! self.dataLayer.realm.write {
-                        conditionRank.placeScoreList.append(PlaceScore(placeId: self.targetPlace._id, score: 0))
+                        conditionRank.placeScoreList.insert(PlaceScore(placeId: self.targetPlace._id, score: 0), at: 0)
                     }
                 }
             }

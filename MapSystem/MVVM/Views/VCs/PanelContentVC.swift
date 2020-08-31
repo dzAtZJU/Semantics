@@ -41,6 +41,8 @@ protocol PanelContentDelegate {
     var map: MKMapView {
         get
     }
+    
+    func setSpinning(_ to: Bool)
 }
 
 protocol PanelContentVCDelegate {
@@ -56,6 +58,7 @@ protocol PanelContentVCDelegate {
 }
 
 class PanelContentVC: UIViewController {
+    static private var duration: Double = 0
     var delegate: PanelContentVCDelegate!
     
     var initialVC: UIViewController?
@@ -69,7 +72,8 @@ class PanelContentVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var backBtn: UIButton = UIButton(systemName: "multiply.circle.fill", textStyle: .title2, target: self, selector: #selector(backBtnTapped))
+    private lazy var backBtn: UIButton = UIButton(
+        systemName: "multiply.circle.fill", textStyle: .title1, target: self, selector: #selector(backBtnTapped))
     
     override func loadView() {
         view = UIView()
@@ -80,11 +84,10 @@ class PanelContentVC: UIViewController {
         backBtn.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if initialVC != nil {
             show(initialVC!, sender: nil)
-            initialVC = nil
         }
     }
     
@@ -109,11 +112,15 @@ class PanelContentVC: UIViewController {
                 vc.view.transform = .init(translationX: 0, y: self.view.height)
                 self.view.addSubview(vc.view)
                 self.view.addSubview(self.backBtn)
-                UIView.animate(withDuration: 0.25, animations: {
+                UIView.animate(withDuration: Self.duration, animations: {
                     vc.view.transform = .identity
                     self.backBtn.isHidden = !vc.showBackBtn
                 }) { _ in
                     vc.didMove(toParent: self)
+                    if vc == self.initialVC {
+                        self.initialVC = nil
+                        Self.duration = 0.25
+                    }
                     self.dispatchGroup.leave()
                 }
             }
@@ -154,7 +161,7 @@ class PanelContentVC: UIViewController {
             }
             
             vc.willMove(toParent: nil)
-            UIView.animate(withDuration: 0.25, animations: {
+            UIView.animate(withDuration: Self.duration, animations: {
                 vc.view.transform = .init(translationX: 0, y: self.view.height)
                 if let vcWillShow = vcWillShow {
                     self.backBtn.isHidden = !vcWillShow.showBackBtn

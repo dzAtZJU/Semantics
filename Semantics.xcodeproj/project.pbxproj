@@ -355,14 +355,13 @@
 		89290D6A24E5312600F0A862 /* VCs */ = {
 			isa = PBXGroup;
 			children = (
+				897A992E24FC3AB3005613C9 /* Marking */,
 				89B1736424F93F7400320907 /* Discovering */,
 				899AE18524DC255D00C0EB17 /* MapVC.swift */,
 				89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */,
-				89290D6B24E5313B00F0A862 /* SearchSuggestionsVC.swift */,
 				8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */,
 				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
 				895A4E2524EC36960025ED20 /* PlaceVC.swift */,
-				895A4E2724EC383C0025ED20 /* SearchVC.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -516,6 +515,15 @@
 				8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		897A992E24FC3AB3005613C9 /* Marking */ = {
+			isa = PBXGroup;
+			children = (
+				895A4E2724EC383C0025ED20 /* SearchVC.swift */,
+				89290D6B24E5313B00F0A862 /* SearchSuggestionsVC.swift */,
+			);
+			path = Marking;
 			sourceTree = "<group>";
 		};
 		8991DADF24B5A77E00299595 /* Configs */ = {

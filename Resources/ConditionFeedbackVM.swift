@@ -64,14 +64,20 @@ class ConditionFeedbackVM {
             toIndex = index(of: to)
         }
         let isOnlyOne = at.level != to.level && count(ofLevel: at.level) == 1
-        let placeScore = self.placeScore(at: at)
+        print("[movePlace] from: \(at)-\(atIndex) to: \(to)-\(toIndex!) isOnlyOne: \(isOnlyOne)")
         
+        let placeScore = self.placeScore(at: at)
         try! dataLayer.realm.write {
             placeScore.score = to.level
             self.rankByCondition.placeScoreList.move(from: atIndex, to: toIndex)
             
             if isOnlyOne {
-                let start = atIndex + (toIndex > atIndex ? 0 : 1)
+                var start = atIndex
+                if toIndex < atIndex {
+                    start += 1
+                } else if toIndex == atIndex, to.level < at.level {
+                    start += 1
+                }
                 for i in start..<self.rankByCondition.placeScoreList.endIndex {
                     self.rankByCondition.placeScoreList[i].score -= 1
                 }
@@ -83,7 +89,7 @@ class ConditionFeedbackVM {
             }
         }
         
-        print("[] scores \(rankByCondition.placeScoreList.map(by: \.score))")
+        print("[ConditionFeedbackVM] scores \(rankByCondition.placeScoreList.map(by: \.score))")
     }
     
     private func placeScore(at rank: RankInfo) -> PlaceScore {
@@ -97,6 +103,7 @@ class ConditionFeedbackVM {
         if i == rankByCondition.placeScoreList.endIndex {
             i -= 1
         }
+        print("[ConditionFeedbackVM] \(rank) -> \(i)")
         return i
     }
 }

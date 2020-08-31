@@ -107,9 +107,15 @@ class MapVM {
 extension MapVM {
     func loadVisitedPlaces() {
         RealmSpace.shared.async {
-            self.appendAnnotations(SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).queryVisitedPlaces().map({
-                SemAnnotation(place: $0, type: .visited)
-            }))
+            RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue) {
+                let annos = try! SemWorldDataLayer(realm: $0).queryVisitedPlaces().map { place throws in
+                    SemAnnotation(place: place, type: .visited)
+                }
+                    
+                DispatchQueue.main.async {
+                    self.appendAnnotations(annos)
+                }
+            }
         }
     }
     

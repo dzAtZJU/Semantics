@@ -34,7 +34,7 @@ class DiscoverNextVC: UIViewController, PanelContent {
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: layout)
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.contentInset = .init(horizontal: Self.pageMargin, vertical: 0)
-        tmp.backgroundColor = .systemBackground
+        tmp.backgroundColor = .systemYellow
         tmp.dataSource = self
         tmp.delegate = self
         tmp.register(ConditionCell.self, forCellWithReuseIdentifier: ConditionCell.identifier)
@@ -54,7 +54,7 @@ class DiscoverNextVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemYellow
         
         view.addSubview(searchButton)
         searchButton.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
@@ -67,11 +67,21 @@ class DiscoverNextVC: UIViewController, PanelContent {
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        panelContentDelegate.panel.move(to: .full, animated: true)
+        super.viewDidAppear(animated)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = .init(width: collectionView.bounds.inset(by: collectionView.adjustedContentInset).width, height: 50)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        panelContentDelegate.panel.move(to: .half, animated: true)
+        super.viewWillDisappear(animated)
     }
 }
 
@@ -106,7 +116,6 @@ extension DiscoverNextVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("didEndDisplaying \(cell)")
         (cell as! ConditionCell).cleanForDisappear()
     }
 }
@@ -114,12 +123,14 @@ extension DiscoverNextVC: UICollectionViewDelegate, UICollectionViewDataSource {
 // MARK: Interation
 extension DiscoverNextVC {
     @objc private func searchBtnTapped() {
+        panelContentDelegate.setSpinning(true)
         vm.runNextIteration { result in
             DispatchQueue.main.async {
                 let vm = DiscoverdResultVM(result: result)
                 vm.panelContentVMDelegate = self.vm.panelContentVMDelegate
                 let vc = DiscoverdResultVC(vm: vm)
                 vc.panelContentDelegate = self.panelContentDelegate
+                self.panelContentDelegate.setSpinning(false)
                 self.show(vc, sender: nil)
             }
         }

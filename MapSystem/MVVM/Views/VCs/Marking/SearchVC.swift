@@ -26,6 +26,9 @@ class SearchVC: UIViewController, PanelContent {
     
     private lazy var searchController: UISearchController = {
         let tmp = UISearchController(searchResultsController: searchSuggestionsController)
+        tmp.searchBar.searchBarStyle = .minimal
+        tmp.searchBar.isTranslucent = false
+        tmp.searchBar.searchTextField.returnKeyType = .done
         tmp.searchResultsUpdater = searchSuggestionsController
         tmp.searchBar.delegate = self
         return tmp
@@ -33,7 +36,7 @@ class SearchVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemYellow
         
         view.addSubview(searchController.searchBar)
     }
@@ -51,9 +54,10 @@ extension SearchVC: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let searchRequest = MKLocalSearch.Request()
-        searchRequest.naturalLanguageQuery = searchBar.text
-        searchSuggestionsController.search(using: searchRequest)
+        searchSuggestionsController.searchDidFinish?()
+//        let searchRequest = MKLocalSearch.Request()
+//        searchRequest.naturalLanguageQuery = searchBar.text
+//        searchSuggestionsController.search(using: searchRequest)
     }
 }
 

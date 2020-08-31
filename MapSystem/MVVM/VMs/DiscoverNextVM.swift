@@ -64,21 +64,19 @@ class DiscoverNextVM: PanelContentVM {
     }
     
     func runNextIteration(completion: @escaping (RealmSpace.SearchNextResult) -> Void) {
-        let query = RealmSpace.SearchNextQuery(placeId: placeId, conditions: conditionVMs.map {
+        let query = RealmSpace.SearchNextQuery(placeId: placeId, conditions: conditionVMs.filter({ $0.nextOperator != .noMatter }).map {
             RealmSpace.SearchNextQuery.ConditionInfo(conditionId: $0._id, nextOperator: $0.nextOperator
             )
         })
 
         RealmSpace.shared.searchNext(query: query) { result in
-            self.conditionVMs.forEach {
-                $0.resetNextOperator()
-            }
-            
             let places = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).queryPlaces(_ids: Array(result.places.map(\.placeId)))
             let annos = try! places.map { place throws -> SemAnnotation in
                 SemAnnotation(place: place, type: .inDiscovering)
             }
-            self.panelContentVMDelegate.mapVM.appendAnnotations(annos)
+            DispatchQueue.main.async {
+                self.panelContentVMDelegate.mapVM.appendAnnotations(annos)
+            }
             completion(result)
         }
     }

@@ -47,7 +47,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: layout)
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.contentInset = .init(horizontal: Self.pageMargin, vertical: 0)
-        tmp.backgroundColor = .systemBackground
+        tmp.backgroundColor = .systemYellow
         tmp.dataSource = self
         tmp.delegate = self
         tmp.register(ConditionBackerCell.self, forCellWithReuseIdentifier: ConditionBackerCell.identifier)
@@ -56,10 +56,10 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemYellow
 
         view.addSubview(label)
-        label.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1).isActive = true
+        label.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2).isActive = true
         label.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2).isActive = true
         
         view.addSubview(collectionView)
@@ -92,6 +92,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
                 self.collectionView.reloadData()
             }
         }
+        panelContentDelegate.panel.move(to: .tip, animated: true)
         super.viewDidAppear(animated)
     }
     
@@ -100,6 +101,11 @@ class DiscoverdResultVC: UIViewController, PanelContent {
         panelContentDelegate.mapVM.selectedAnnotationEventLock = false
         selectedAnnotationToken = nil
         super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        panelContentDelegate.panel.move(to: .full, animated: true)
+        super.viewDidDisappear(animated)
     }
 }
 
@@ -133,8 +139,11 @@ extension DiscoverdResultVC: UICollectionViewDelegate, UICollectionViewDataSourc
 extension DiscoverdResultVC {
     @objc private func dislikeBtnTapped(sender: UIButton) {
         let indexPath = (sender.superview!.superview! as! ConditionBackerCell).indexPath!
+        panelContentDelegate.setSpinning(true)
         vm.placeConditionsVM!.dislike(at: indexPath) {
-            
+            DispatchQueue.main.async {
+                self.panelContentDelegate.setSpinning(false)
+            }
         }
     }
 }

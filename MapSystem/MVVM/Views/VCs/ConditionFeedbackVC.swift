@@ -20,7 +20,6 @@ class ConditionFeedbackVC: UIViewController {
         }
     }
     
-    
     private lazy var conditionLabel: UILabel = {
         let tmp = UILabel()
         tmp.translatesAutoresizingMaskIntoConstraints = false
@@ -30,6 +29,7 @@ class ConditionFeedbackVC: UIViewController {
     
     private lazy var placesTableView: UITableView = {
         let tmp = UITableView(frame: .zero, style: .insetGrouped)
+        tmp.backgroundColor = .systemYellow
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.register(UITableViewCell.self, forCellReuseIdentifier: ConditionFeedbackCell.cellIdentifier)
         tmp.dataSource = self
@@ -49,7 +49,7 @@ class ConditionFeedbackVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGroupedBackground
+        view.backgroundColor = .systemYellow
         
         view.addSubview(conditionLabel)
         conditionLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1).isActive = true
@@ -81,7 +81,6 @@ extension ConditionFeedbackVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ConditionFeedbackCell.cellIdentifier)!
-        
         let placeInfo = conditionFeedbackVM.placeInfo(at: .init(level: indexPath.section-1, ordinal: indexPath.row))
         cell.textLabel!.text = placeInfo.title
         return cell

@@ -92,6 +92,16 @@ class PlaceStory: SyncedObject {
     }
 }
 
+class ConditionIndividuals: EmbeddedObject {
+    @objc dynamic var conditionId: ObjectId?
+    let individuals = List<String>()
+    
+    convenience init(conditionId conditionId_: ObjectId) {
+        self.init()
+        conditionId = conditionId_
+    }
+}
+
 class Individual: Object {
     @objc dynamic var _id: String = ""
     @objc dynamic var partitionKey: String = RealmSpace.partitionValue
@@ -100,9 +110,7 @@ class Individual: Object {
     
     let conditionsRank = List<ConditionRank>()
     
-    let friends = List<Individual>()
-    
-    let blockedIndividuals = List<String>()
+    let blockedIndividuals = List<ConditionIndividuals>()
     
     let placeStoryList = LinkingObjects(fromType: PlaceStory.self, property: "individual")
     

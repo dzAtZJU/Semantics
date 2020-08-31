@@ -102,7 +102,7 @@ class PlaceVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemYellow
         
         view.addSubview(stackView)
         stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10).isActive = true

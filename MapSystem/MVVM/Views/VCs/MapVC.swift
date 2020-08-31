@@ -21,7 +21,7 @@ class MapVC: UIViewController {
         tmp.isRotateEnabled = false
         tmp.showsUserLocation = true
         tmp.userTrackingMode = .follow
-        tmp.region.span = MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)
+        tmp.region.span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
         tmp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tmp.delegate = self
         return tmp
@@ -60,6 +60,13 @@ class MapVC: UIViewController {
         return tmp
     }
     
+    private lazy var spinner: UIActivityIndicatorView = {
+        let tmp = UIActivityIndicatorView(style: .large)
+        tmp.color = .systemPurple
+        tmp.hidesWhenStopped = true
+        return tmp
+    }()
+    
     private var centerToUserLocation = true
     
     private var annotationsToken: AnyCancellable?
@@ -84,6 +91,7 @@ class MapVC: UIViewController {
     override func loadView() {
         view = UIView()
         view.addSubview(map)
+        view.addSubview(spinner)
     }
     
     override func viewDidLoad() {
@@ -144,6 +152,7 @@ class MapVC: UIViewController {
         super.viewDidLayoutSubviews()
         
         map.frame = view.bounds
+        spinner.center = view.center
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,8 +180,10 @@ extension MapVC: PlaceVCDelegate {
     
     func placeVCShouldStartFeedback(_ placeVC: PlaceVC) {
         FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
+            let vc = FeedbackVC(feedbackVM: vm)
+            vc.panelContentDelegate = self
             DispatchQueue.main.async {
-                self.panelContentVC.show(FeedbackVC(feedbackVM: vm), sender: nil)
+                self.panelContentVC.show(vc, sender: nil)
             }
         }
     }
@@ -270,6 +281,16 @@ extension MapVC: FloatingPanelControllerDelegate {
 
 // MARK: PanelContentDelegate
 extension MapVC: PanelContentDelegate {
+    func setSpinning(_ to: Bool) {
+        if to {
+            view.bringSubviewToFront(spinner)
+            spinner.startAnimating()
+            view.isUserInteractionEnabled = false
+        } else {
+            spinner.stopAnimating()
+            view.isUserInteractionEnabled = true
+        }
+    }
 }
 
 

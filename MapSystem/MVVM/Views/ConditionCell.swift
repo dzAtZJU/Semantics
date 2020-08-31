@@ -23,6 +23,7 @@ class ConditionCell: UICollectionViewCell {
     
     private(set) lazy var segmentedControl: UISegmentedControl = {
         let tmp = UISegmentedControl(items: ["Better", "No Worse", "No Matter"])
+        tmp.backgroundColor = .systemBackground
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.setTitleTextAttributes([.foregroundColor : UIColor.label], for: .normal)
         return tmp
@@ -30,7 +31,6 @@ class ConditionCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         contentView.addSubview(label)
         label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true

@@ -39,8 +39,27 @@ extension SemWorldDataLayer {
         realm.objects(Individual.self)
     }
     
-    func block(inds: [ObjectId], forCondition: ObjectId) {
+    func dislike(inds: [String], forCondition condition: ObjectId) {
+        let ind = queryCurrentIndividual()!
+        var tmp: ConditionIndividuals! = ind.blockedIndividuals.first {
+            $0.conditionId == condition
+        }
+        if tmp == nil {
+            tmp = ConditionIndividuals(conditionId: condition)
+            try! realm.write {
+                ind.blockedIndividuals.append(tmp)
+            }
+            
+        }
+        let newOnes = Set(inds).filter {
+            !tmp.individuals.contains($0)
+        }
+
+        try! realm.write {
+            tmp.individuals.append(objectsIn: newOnes)
+        }
         
+        print("[dislike] \(ind.blockedIndividuals)")
     }
 }
 
@@ -125,7 +144,7 @@ extension SemWorldDataLayer {
         guard realm.objects(Condition.self).isEmpty else {
             return
         }
-        print("createAppData should create")
+        print("[createAppData] should create")
         //        guard queryVisitedPlaces().count == 0 else {
         //            return
         //        }
