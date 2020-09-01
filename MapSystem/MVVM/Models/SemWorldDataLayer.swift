@@ -131,12 +131,14 @@ extension SemWorldDataLayer {
 extension SemWorldDataLayer {
     func createUserData(name: String) {
         let ind = queryOrCreateCurrentIndividual(userName: name)
-        let conditions = realm.objects(Condition.self)
-        let rank1 = ConditionRank(ownerId: ind._id, conditionId: conditions[0]._id)
-        let rank2 = ConditionRank(ownerId: ind._id, conditionId: conditions[1]._id)
-        let rank3 = ConditionRank(ownerId: ind._id, conditionId: conditions[2]._id)
-        try! realm.write {
-            ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
+        if ind.conditionsRank.isEmpty {
+            let conditions = realm.objects(Condition.self)
+            let rank1 = ConditionRank(ownerId: ind._id, conditionId: conditions[0]._id)
+            let rank2 = ConditionRank(ownerId: ind._id, conditionId: conditions[1]._id)
+            let rank3 = ConditionRank(ownerId: ind._id, conditionId: conditions[2]._id)
+            try! realm.write {
+                ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
+            }
         }
     }
     

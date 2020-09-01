@@ -5,6 +5,7 @@ target 'Semantics' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  # Error: https://docs.realm.io/sync/using-synced-realms/errors
   # https://docs.mongodb.com/realm/mongodb
   # https://docs.mongodb.com/realm/tutorial/ios-swift/
   # https://docs.mongodb.com/realm/

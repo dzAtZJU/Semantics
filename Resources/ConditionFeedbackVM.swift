@@ -59,7 +59,7 @@ class ConditionFeedbackVM {
         case -1:
             toIndex = 0
         case levels:
-            toIndex = rankByCondition.placeScoreList.count - 1
+            toIndex = rankByCondition.placeScoreList.count
         default:
             toIndex = index(of: to)
         }
@@ -69,7 +69,22 @@ class ConditionFeedbackVM {
         let placeScore = self.placeScore(at: at)
         try! dataLayer.realm.write {
             placeScore.score = to.level
-            self.rankByCondition.placeScoreList.move(from: atIndex, to: toIndex)
+           let newPS = PlaceScore(placeId: placeScore.placeId!, score: placeScore.score)
+            if atIndex < toIndex {
+//                if toIndex == self.rankByCondition.placeScoreList.endIndex {
+//                    self.rankByCondition.placeScoreList.append(newPS)
+//                } else {
+                    self.rankByCondition.placeScoreList.insert(newPS, at: toIndex)
+//                }
+                self.rankByCondition.placeScoreList.remove(at: atIndex)
+            } else  if atIndex > toIndex {
+                self.rankByCondition.placeScoreList.remove(at: atIndex)
+//                if toIndex == self.rankByCondition.placeScoreList.endIndex {
+//                    self.rankByCondition.placeScoreList.append(newPS)
+//                } else {
+                    self.rankByCondition.placeScoreList.insert(newPS, at: toIndex)
+//                }
+            }
             
             if isOnlyOne {
                 var start = atIndex
@@ -100,9 +115,6 @@ class ConditionFeedbackVM {
         var i = rankByCondition.placeScoreList.firstIndex {
             $0.score == rank.level
             }! + rank.ordinal
-        if i == rankByCondition.placeScoreList.endIndex {
-            i -= 1
-        }
         print("[ConditionFeedbackVM] \(rank) -> \(i)")
         return i
     }

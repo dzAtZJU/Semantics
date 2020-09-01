@@ -34,8 +34,10 @@ protocol MapVMAnnotationsModel {
 }
 
 class MapVM {
+    private var ready = 0
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(signdeInReceived), name: .signedIn, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchFinished), name: .searchFinished ,object: nil)
     }
     
@@ -137,8 +139,20 @@ extension MapVM {
 // MARK: Notification
 extension MapVM {
     @objc private func signdeInReceived(notification: Notification) {
-        loadVisitedPlaces()
-        signedIn?()
+        ready += 1
+//        if ready == 2 {
+            ready = 0
+            loadVisitedPlaces()
+            signedIn?()
+//        }
+    }
+    @objc private func clientReset(notification: Notification) {
+//       ready += 1
+//        if ready == 2 {
+//            ready = 0
+//            loadVisitedPlaces()
+//            signedIn?()
+//        }
     }
     @objc private func searchFinished(notification: Notification) {
         let response = notification.object as! MKLocalSearch.Response

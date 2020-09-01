@@ -85,9 +85,7 @@ extension ConditionFeedbackVC: UITableViewDataSource {
         cell.textLabel!.text = placeInfo.title
         return cell
     }
-}
-
-extension ConditionFeedbackVC: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         conditionFeedbackVM.movePlace(at: .init(level: sourceIndexPath.section-1, ordinal: sourceIndexPath.row), to: .init(level: destinationIndexPath.section-1, ordinal: destinationIndexPath.row))
         tableView.reloadData()
@@ -100,6 +98,22 @@ extension ConditionFeedbackVC: UITableViewDelegate {
         
         let placeInfo = conditionFeedbackVM.placeInfo(at: .init(level: indexPath.section-1, ordinal: indexPath.row))
         return placeInfo.isTargetPlace
+    }
+}
+
+extension ConditionFeedbackVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        guard proposedDestinationIndexPath.section != sourceIndexPath.section else {
+            if proposedDestinationIndexPath.row > sourceIndexPath.row {
+                return IndexPath(row: 0, section: sourceIndexPath.section+1)
+            } else {
+                let destSection = sourceIndexPath.section-1
+                let destRow = self.tableView(tableView, numberOfRowsInSection: destSection)
+                return IndexPath(row: destRow, section: destSection)
+            }
+        }
+        
+        return proposedDestinationIndexPath
     }
     
    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

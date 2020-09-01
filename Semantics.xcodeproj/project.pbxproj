@@ -66,6 +66,9 @@
 		8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */; };
 		8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */; };
 		8976AC6B247BFA3700A7AD15 /* KeyboardAdaptive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */; };
+		897A993024FD6EB2005613C9 /* RealmSyncErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A992F24FD6EB1005613C9 /* RealmSyncErrorHandler.swift */; };
+		897A993324FDA634005613C9 /* SemUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A993224FDA634005613C9 /* SemUserDefaults.swift */; };
+		897A993524FE8A9E005613C9 /* IndexPath+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A993424FE8A9E005613C9 /* IndexPath+.swift */; };
 		8989C5BD24E5C84600FA3FAE /* ConditionFeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */; };
 		8989C5BF24E673AC00FA3FAE /* ConditionFeedbackVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5BE24E673AC00FA3FAE /* ConditionFeedbackVM.swift */; };
 		8989C5C124E6CE3D00FA3FAE /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */; };
@@ -207,6 +210,9 @@
 		8968C08824E0024A0093CBFC /* LabelSupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelSupplementaryView.swift; sourceTree = "<group>"; };
 		8976AC68247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EclipseCollisionBoundsWrapper.swift; sourceTree = "<group>"; };
 		8976AC6A247BFA3700A7AD15 /* KeyboardAdaptive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAdaptive.swift; sourceTree = "<group>"; };
+		897A992F24FD6EB1005613C9 /* RealmSyncErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSyncErrorHandler.swift; sourceTree = "<group>"; };
+		897A993224FDA634005613C9 /* SemUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemUserDefaults.swift; sourceTree = "<group>"; };
+		897A993424FE8A9E005613C9 /* IndexPath+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexPath+.swift"; sourceTree = "<group>"; };
 		8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionFeedbackVC.swift; sourceTree = "<group>"; };
 		8989C5BE24E673AC00FA3FAE /* ConditionFeedbackVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionFeedbackVM.swift; sourceTree = "<group>"; };
 		8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
@@ -307,6 +313,7 @@
 		8924A17D24E932B900718680 /* ErrorHandle */ = {
 			isa = PBXGroup;
 			children = (
+				897A992F24FD6EB1005613C9 /* RealmSyncErrorHandler.swift */,
 			);
 			path = ErrorHandle;
 			sourceTree = "<group>";
@@ -396,6 +403,7 @@
 				89290D6224E4E02F00F0A862 /* UILabel+.swift */,
 				895A4E2924ED14AF0025ED20 /* CLLocationCoordinate2D+.swift */,
 				899CD09F24F2E390003C0040 /* BSON+.swift */,
+				897A993424FE8A9E005613C9 /* IndexPath+.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -416,12 +424,11 @@
 		896234C4248F99030000ABCD /* Infra */ = {
 			isa = PBXGroup;
 			children = (
+				897A993124FDA5E8005613C9 /* Persistence */,
 				8924A17D24E932B900718680 /* ErrorHandle */,
 				89290D5524E3D60800F0A862 /* RealmSpace */,
-				89290D5124E2ADCB00F0A862 /* KeychainItem.swift */,
 				899AE18124DAD57A00C0EB17 /* CloudKitSpace */,
 				899AE17E24DACAE000C0EB17 /* CoreDataSpace */,
-				899AE17724DABA7C00C0EB17 /* Files */,
 				899AE17424DAB9BE00C0EB17 /* CloudSync */,
 				899AE16D24DAA14200C0EB17 /* CKSharing */,
 				892C63D3248669FF00208446 /* Utils */,
@@ -524,6 +531,16 @@
 				89290D6B24E5313B00F0A862 /* SearchSuggestionsVC.swift */,
 			);
 			path = Marking;
+			sourceTree = "<group>";
+		};
+		897A993124FDA5E8005613C9 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				899AE17724DABA7C00C0EB17 /* Files */,
+				89290D5124E2ADCB00F0A862 /* KeychainItem.swift */,
+				897A993224FDA634005613C9 /* SemUserDefaults.swift */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		8991DADF24B5A77E00299595 /* Configs */ = {
@@ -906,12 +923,14 @@
 				899CD0A024F2E390003C0040 /* BSON+.swift in Sources */,
 				89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */,
 				895A4E2A24ED14AF0025ED20 /* CLLocationCoordinate2D+.swift in Sources */,
+				897A993524FE8A9E005613C9 /* IndexPath+.swift in Sources */,
 				899C247624C9CAE100F8259B /* Sector+.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				8968C08524DF09A70093CBFC /* DiscoverNextVC.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
 				895A4E2824EC383C0025ED20 /* SearchVC.swift in Sources */,
+				897A993324FDA634005613C9 /* SemUserDefaults.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
 				899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */,
 				89290D6C24E5313B00F0A862 /* SearchSuggestionsVC.swift in Sources */,
@@ -977,6 +996,7 @@
 				899AE18024DACAF100C0EB17 /* CoreDataSpace.swift in Sources */,
 				89A413D224C56E0B003FD435 /* OceanLayer+.swift in Sources */,
 				89290D5D24E403F900F0A862 /* AccountSysCommunication.swift in Sources */,
+				897A993024FD6EB2005613C9 /* RealmSyncErrorHandler.swift in Sources */,
 				89290D6324E4E02F00F0A862 /* UILabel+.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */,
