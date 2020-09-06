@@ -8,6 +8,8 @@
 import RealmSwift
 
 class SyncedObject: Object {
+    @objc dynamic var partitionKey: String?
+    
     @objc dynamic var _id =  ObjectId.generate()
     
     override static func primaryKey() -> String? {
@@ -16,8 +18,6 @@ class SyncedObject: Object {
 }
 
 class Place: SyncedObject {
-    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
-    
     @objc dynamic var title = ""
     
     @objc dynamic var latitude: Double = 0
@@ -25,6 +25,7 @@ class Place: SyncedObject {
     
     convenience init(title: String, latitude: Double, longitude: Double) {
         self.init()
+        super.partitionKey = RealmSpace.partitionValue
         self.title = title
         self.latitude = latitude
         self.longitude = longitude
@@ -42,12 +43,11 @@ class Place: SyncedObject {
 }
 
 class Condition: SyncedObject {
-    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
-    
     @objc dynamic var title = ""
     
     convenience init(title title_: String) {
         self.init()
+        super.partitionKey = RealmSpace.partitionValue
         title = title_
     }
 }
@@ -58,14 +58,13 @@ class PlaceScore: SyncedObject {
     
     convenience init(placeId placeId_: ObjectId, score score_: Int) {
         self.init()
+        super.partitionKey = RealmSpace.partitionValue
         placeId = placeId_
         score = score_
     }
 }
 
 class ConditionRank: SyncedObject {
-    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
-    
     @objc dynamic var ownerId: String?
     
     @objc dynamic var conditionId: ObjectId?
@@ -74,6 +73,7 @@ class ConditionRank: SyncedObject {
     
     convenience init(ownerId ownerId_: String, conditionId conditionId_: ObjectId, placeScores: [PlaceScore] = []) {
         self.init()
+        super.partitionKey = RealmSpace.partitionValue
         ownerId = ownerId_
         conditionId = conditionId_
         placeScoreList.append(objectsIn: placeScores)
@@ -87,6 +87,7 @@ class PlaceStory: SyncedObject {
     
     convenience init(individual individual_: Individual, placeId placeId_: ObjectId) {
         self.init()
+        super.partitionKey = RealmSpace.partitionValue
         individual = individual_
         placeId = placeId_
     }
