@@ -157,12 +157,12 @@ extension RealmSpace {
 
 extension RealmSpace {
     struct SearchNextQuery {
-        let placeId: ObjectId
+        let placeId: String
         let conditions: [ConditionInfo]
         
         func bson() -> AnyBSON {
             AnyBSON.document([
-                "placeId": AnyBSON.objectId(placeId),
+                "placeId": AnyBSON.string(placeId),
                 "conditions": AnyBSON.array(conditions.map { $0.bson()} )
             ])
         }
@@ -196,13 +196,13 @@ extension RealmSpace {
             }
         }
         struct PlaceConditions {
-            let placeId: ObjectId
+            let placeId: String
             let conditions: [ConditionInfo]
             
             init(from bson: AnyBSON) {
                 let doc = bson.documentValue!
                 
-                placeId = doc["placeId"]!!.objectIdValue!
+                placeId = doc["placeId"]!!.stringValue!
                 
                 conditions = doc["conditions"]!!.arrayValue!.map {
                     ConditionInfo(from: $0!)

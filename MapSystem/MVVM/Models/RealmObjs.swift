@@ -51,10 +51,10 @@ class Condition: SyncedObject {
 }
 
 class PlaceScore: SyncedObject {
-    @objc dynamic var placeId: ObjectId?
+    @objc dynamic var placeId: String?
     @objc dynamic var score = 0
     
-    convenience init(placeId placeId_: ObjectId, score score_: Int) {
+    convenience init(placeId placeId_: String, score score_: Int) {
         self.init()
         super.partitionKey = RealmSpace.main.queryCurrentUserID()!
         placeId = placeId_
@@ -83,11 +83,11 @@ class ConditionRank: SyncedObject {
 }
 
 class PlaceStory: SyncedObject {
-    @objc dynamic var placeId: ObjectId?
+    @objc dynamic var placeId: String?
     @objc dynamic var state = 1
     @objc dynamic var individual: Individual?
     
-    convenience init(individual individual_: Individual, placeId placeId_: ObjectId) {
+    convenience init(individual individual_: Individual, placeId placeId_: String) {
         self.init()
         super.partitionKey = RealmSpace.main.queryCurrentUserID()!
         individual = individual_

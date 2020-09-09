@@ -41,15 +41,15 @@ class ConditionVM {
 }
 
 class DiscoverNextVM: PanelContentVM {
-    var thePlaceId: ObjectId? {
+    var thePlaceId: String? {
         placeId
     }
     
     var panelContentVMDelegate: PanelContentVMDelegate!
     
-    let placeId: ObjectId
+    let placeId: String
     let conditionVMs: [ConditionVM]
-    init(placeId placeId_: ObjectId, conditions: Results<Condition>) {
+    init(placeId placeId_: String, conditions: Results<Condition>) {
         placeId = placeId_
         conditionVMs = conditions.map {
             ConditionVM(title: $0.title, _id: $0._id)

@@ -35,7 +35,7 @@ struct PlaceConditionsVM {
 
 class DiscoverdResultVM: PanelContentVM {
     var panelContentVMDelegate: PanelContentVMDelegate!
-    var thePlaceId: ObjectId?
+    var thePlaceId: String?
     
     var placeConditionsVM: PlaceConditionsVM?
     
@@ -44,7 +44,7 @@ class DiscoverdResultVM: PanelContentVM {
         result = result_
     }
     
-    func setPlaceId(_ value: ObjectId?) {
+    func setPlaceId(_ value: String?) {
         thePlaceId = value
         if let value = value {
             let placeConditions = result.places.first { $0.placeId == value }

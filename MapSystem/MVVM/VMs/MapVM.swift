@@ -50,7 +50,7 @@ class MapVM {
         selectedAnnotationEvent.0
     }
     
-    var selectedPlaceId: ObjectId? {
+    var selectedPlaceId: String? {
         selectedAnnotation?.placeId
     }
     

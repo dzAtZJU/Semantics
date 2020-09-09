@@ -11,12 +11,12 @@ import Combine
 import RealmSwift
 
 class PlaceVM: PanelContentVM {
-    var thePlaceId: ObjectId? {
+    var thePlaceId: String? {
         nil
     }
     var panelContentVMDelegate: PanelContentVMDelegate!
     
-    static func new(placeId: ObjectId?, completion: @escaping (PlaceVM) -> Void) {
+    static func new(placeId: String?, completion: @escaping (PlaceVM) -> Void) {
         if let placeId = placeId {
             RealmSpace.shared.async {
                 let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!)).queryPlaceStory(placeId: placeId)

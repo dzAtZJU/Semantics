@@ -10,7 +10,7 @@ import RealmSwift
 protocol PanelContentVM {
     var panelContentVMDelegate: PanelContentVMDelegate! { get set }
     
-    var thePlaceId: ObjectId? {
+    var thePlaceId: String? {
         get
     }
 }

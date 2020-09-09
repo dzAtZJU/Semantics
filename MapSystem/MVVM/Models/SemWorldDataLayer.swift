@@ -65,19 +65,19 @@ extension SemWorldDataLayer {
 
 // MARK: Places
 extension SemWorldDataLayer {
-    func queryVisitedPlaces() -> [ObjectId] {
+    func queryVisitedPlaces() -> [String] {
         queryCurrentIndividual()!.placeStoryList.compactMap(by: \.placeId)
     }
     
-    func queryPlace(_id: ObjectId) -> Place {
+    func queryPlace(_id: String) -> Place {
         realm.object(ofType: Place.self, forPrimaryKey: _id)!
     }
     
-    func queryPlaces(_ids: [ObjectId]) -> Results<Place> {
+    func queryPlaces(_ids: [String]) -> Results<Place> {
         realm.objects(Place.self).filter("_id in %@", _ids)
     }
     
-    func queryPlaceStory(placeId: ObjectId) -> PlaceStory {
+    func queryPlaceStory(placeId: String) -> PlaceStory {
         queryCurrentIndividual()!.placeStoryList.first {
             $0.placeId == placeId
             }!
