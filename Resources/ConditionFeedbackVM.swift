@@ -11,7 +11,8 @@ import RealmSwift
 
 class ConditionFeedbackVM {
     let conditionTitle: String
-    let dataLayer: SemWorldDataLayer
+    let privateDataLayer: SemWorldDataLayer
+    let publicDataLayer: SemWorldDataLayer
     
     let targetPlace: Place
     let rankByCondition: ConditionRank
@@ -19,8 +20,9 @@ class ConditionFeedbackVM {
         targetPlace = targetPlace_
         rankByCondition = rankByCondition_
         
-        dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue: RealmSpace.partitionValue))
-        conditionTitle = dataLayer.queryCondition(_id: rankByCondition.conditionId!).title
+        publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.partitionValue))
+        privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!))
+        conditionTitle = publicDataLayer.queryCondition(_id: rankByCondition.conditionId!).title
     }
     
     var levels: Int {
@@ -40,7 +42,7 @@ class ConditionFeedbackVM {
     
     func placeInfo(at: RankInfo) -> PlaceInfo {
         let bt = Date().timeIntervalSince1970
-        let thisPlace = dataLayer.queryPlace(_id: placeScore(at: at).placeId!)
+        let thisPlace = publicDataLayer.queryPlace(_id: placeScore(at: at).placeId!)
         let et = Date().timeIntervalSince1970
         print("[Measure] queryPlace \(et-bt)")
         return PlaceInfo(title: thisPlace.title, isTargetPlace: thisPlace._id == targetPlace._id)
@@ -67,7 +69,7 @@ class ConditionFeedbackVM {
         print("[movePlace] from: \(at)-\(atIndex) to: \(to)-\(toIndex!) isOnlyOne: \(isOnlyOne)")
         
         let placeScore = self.placeScore(at: at)
-        try! dataLayer.realm.write {
+        try! privateDataLayer.realm.write {
             placeScore.score = to.level
            let newPS = PlaceScore(placeId: placeScore.placeId!, score: placeScore.score)
             if atIndex < toIndex {

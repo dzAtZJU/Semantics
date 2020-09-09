@@ -16,7 +16,7 @@ class FeedbackVM {
     init(placeId placeId_: ObjectId, completion: @escaping (FeedbackVM) -> Void) {
         print("[FeedbackVM] \(placeId_)")
         RealmSpace.main.async {
-            self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue: RealmSpace.partitionValue))
+            self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!))
             self.targetPlace = self.dataLayer.queryPlace(_id: placeId_)
             self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
             

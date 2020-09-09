@@ -8,7 +8,7 @@
 import RealmSwift
 
 class SyncedObject: Object {
-    @objc dynamic var partitionKey: String?
+    @objc dynamic var partitionKey = ""
     
     @objc dynamic var _id =  ObjectId.generate()
     
@@ -17,7 +17,10 @@ class SyncedObject: Object {
     }
 }
 
-class Place: SyncedObject {
+class Place: Object {
+    @objc dynamic var _id = ""
+    @objc dynamic var partitionKey = ""
+    
     @objc dynamic var title = ""
     
     @objc dynamic var latitude: Double = 0
@@ -25,21 +28,16 @@ class Place: SyncedObject {
     
     convenience init(title: String, latitude: Double, longitude: Double) {
         self.init()
-        super.partitionKey = RealmSpace.partitionValue
+        self.partitionKey = RealmSpace.partitionValue
+        self._id = title
         self.title = title
         self.latitude = latitude
         self.longitude = longitude
     }
     
-    override static func indexedProperties() -> [String] {
-        []
+    override static func primaryKey() -> String? {
+        "_id"
     }
-    
-    override static func ignoredProperties() -> [String] {
-        []
-    }
-    
-    
 }
 
 class Condition: SyncedObject {
@@ -58,7 +56,7 @@ class PlaceScore: SyncedObject {
     
     convenience init(placeId placeId_: ObjectId, score score_: Int) {
         self.init()
-        super.partitionKey = RealmSpace.partitionValue
+        super.partitionKey = RealmSpace.main.queryCurrentUserID()!
         placeId = placeId_
         score = score_
     }
@@ -73,10 +71,14 @@ class ConditionRank: SyncedObject {
     
     convenience init(ownerId ownerId_: String, conditionId conditionId_: ObjectId, placeScores: [PlaceScore] = []) {
         self.init()
-        super.partitionKey = RealmSpace.partitionValue
+        super.partitionKey = RealmSpace.main.queryCurrentUserID()!
         ownerId = ownerId_
         conditionId = conditionId_
         placeScoreList.append(objectsIn: placeScores)
+    }
+    
+    override static func indexedProperties() -> [String] {
+        ["ownerId", "conditionId"]
     }
 }
 
@@ -87,7 +89,7 @@ class PlaceStory: SyncedObject {
     
     convenience init(individual individual_: Individual, placeId placeId_: ObjectId) {
         self.init()
-        super.partitionKey = RealmSpace.partitionValue
+        super.partitionKey = RealmSpace.main.queryCurrentUserID()!
         individual = individual_
         placeId = placeId_
     }
@@ -105,7 +107,7 @@ class ConditionIndividuals: EmbeddedObject {
 
 class Individual: Object {
     @objc dynamic var _id: String = ""
-    @objc dynamic var partitionKey: String = RealmSpace.partitionValue
+    @objc dynamic var partitionKey: String = RealmSpace.main.queryCurrentUserID()!
     
     @objc dynamic var title = ""
     

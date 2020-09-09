@@ -25,7 +25,7 @@ enum EventSource {
 
 protocol MapVMAnnotationsModel {
     func addAnnotations(_: [SemAnnotation])
-           
+    
     func removeAnnotations(_: [SemAnnotation])
     
     var annotations: [SemAnnotation] {
@@ -96,7 +96,7 @@ class MapVM {
     var discoverNextVM: DiscoverNextVM {
         var tmp: DiscoverNextVM!
         RealmSpace.shared.queue.sync {
-            let realm = RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)
+            let realm = RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue)
             let conditions =  realm.objects(Condition.self)
             tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditions: conditions)
             tmp.panelContentVMDelegate = self
@@ -109,14 +109,17 @@ class MapVM {
 extension MapVM {
     func loadVisitedPlaces() {
         RealmSpace.shared.async {
-            RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue) {
-                let dataLayer = SemWorldDataLayer(realm: $0)
-                let annos = try! dataLayer.queryVisitedPlaces().map { place throws in
-                    SemAnnotation(place: place, type: .visited)
-                }
-                    
-                DispatchQueue.main.async {
-                    self.appendAnnotations(annos)
+            RealmSpace.shared.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!) { privateRealm in
+                RealmSpace.shared.realm(partitionValue1: RealmSpace
+                    .partitionValue) { publicRealm in
+                        
+                        let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).queryVisitedPlaces()).map { place throws in
+                            SemAnnotation(place: place, type: .visited)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.appendAnnotations(annos)
+                        }
                 }
             }
         }
@@ -125,7 +128,9 @@ extension MapVM {
     func markVisited() {
         let uniquePlace = UniquePlace(annotation: self.selectedAnnotation!)
         RealmSpace.shared.async {
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue: RealmSpace.partitionValue)).markVisited(uniquePlace: uniquePlace) { place in
+            let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace)
+            
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!)).markVisited(place: place) { place in
                 DispatchQueue.main.async {
                     self.setSelectedAnnotationEvent((nil, .fromModel))
                     let newAnnotation = SemAnnotation(place: place, type: .visited)
@@ -141,19 +146,19 @@ extension MapVM {
 extension MapVM {
     @objc private func signdeInReceived(notification: Notification) {
         ready += 1
-//        if ready == 2 {
-            ready = 0
-            loadVisitedPlaces()
-            signedIn?()
-//        }
+        //        if ready == 2 {
+        ready = 0
+        loadVisitedPlaces()
+        signedIn?()
+        //        }
     }
     @objc private func clientReset(notification: Notification) {
-//       ready += 1
-//        if ready == 2 {
-//            ready = 0
-//            loadVisitedPlaces()
-//            signedIn?()
-//        }
+        //       ready += 1
+        //        if ready == 2 {
+        //            ready = 0
+        //            loadVisitedPlaces()
+        //            signedIn?()
+        //        }
     }
     @objc private func searchFinished(notification: Notification) {
         let response = notification.object as! MKLocalSearch.Response

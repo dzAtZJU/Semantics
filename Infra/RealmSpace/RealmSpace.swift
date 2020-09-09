@@ -32,6 +32,7 @@ class RealmSpace {
 //                        let config = Realm.Configuration(fileURL: URL(fileURLWithPath: path), readOnly: true)
 //                        let oldRealm = try! Realm(configuration: config)
 //                        let objs = oldRealm.objects(Object.self)
+        // for write performance: max 1MB per transcation
 //                        try! realm.write {
 //                            for obj in objs {
 //                                realm.create(Object.self, value: obj, update: .modified)
@@ -72,7 +73,7 @@ class RealmSpace {
         queue = queue_
     }
     
-    func realm(partitionValue: String) -> Realm {
+    func realm(partitionValue1 partitionValue: String) -> Realm {
         if let realm = realms[partitionValue] {
             if (!realm.autorefresh) {
                 realm.refresh()
@@ -85,7 +86,7 @@ class RealmSpace {
         return tmp
     }
     
-    func realm(partitionValue: String, completion: @escaping (Realm) -> Void) {
+    func realm(partitionValue1 partitionValue: String, completion: @escaping (Realm) -> Void) {
         if let realm = realms[partitionValue] {
             if (!realm.autorefresh) {
                 realm.refresh()
@@ -101,16 +102,25 @@ class RealmSpace {
     }
     
     private func newRealm(_ partitionValue: String) -> Realm {
-        let user = queryCurrentUser()!
-        return try! Realm(configuration: user.configuration(partitionValue: partitionValue), queue: queue)
+        var config = queryCurrentUser()!.configuration(partitionValue: partitionValue)
+        config.shouldCompactOnLaunch = determineCompact
+        return try! Realm(configuration: config, queue: queue)
     }
     
     private func newRealm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
         let user = queryCurrentUser()!
         
-        Realm.asyncOpen(configuration: user.configuration(partitionValue: partitionValue), callbackQueue: queue) { (realm, error) in
+        var config = user.configuration(partitionValue: partitionValue)
+        config.shouldCompactOnLaunch = determineCompact
+        Realm.asyncOpen(configuration: config, callbackQueue: queue) { (realm, error) in
             completion(realm!)
         }
+    }
+        
+    private func determineCompact(fileSize: Int, dataSize: Int) -> Bool {
+        // Compact if the file is over 100MB in size and less than 50% 'used'
+        let oneHundredMB = 100 * 1024 * 1024
+        return (fileSize > oneHundredMB) && (Double(dataSize) / Double(fileSize)) < 0.5
     }
     
     static let partitionValue = "Public18"
