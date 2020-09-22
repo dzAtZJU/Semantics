@@ -109,10 +109,9 @@ class MapVM {
 extension MapVM {
     func loadVisitedPlaces() {
         RealmSpace.shared.async {
-            RealmSpace.shared.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!) { privateRealm in
+            RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!) { privateRealm in
                 RealmSpace.shared.realm(partitionValue1: RealmSpace
                     .partitionValue) { publicRealm in
-                        
                         let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).queryVisitedPlaces()).map { place throws in
                             SemAnnotation(place: place, type: .visited)
                         }
@@ -130,7 +129,7 @@ extension MapVM {
         RealmSpace.shared.async {
             let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace)
             
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!)).markVisited(place: place) { place in
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!)).markVisited(place: place) { place in
                 DispatchQueue.main.async {
                     self.setSelectedAnnotationEvent((nil, .fromModel))
                     let newAnnotation = SemAnnotation(place: place, type: .visited)

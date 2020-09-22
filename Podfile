@@ -10,10 +10,10 @@ target 'Semantics' do
   # https://docs.mongodb.com/realm/tutorial/ios-swift/
   # https://docs.mongodb.com/realm/
   # https://docs.realm.io/sync/
-  # https://realm.io/docs/swift/latest
-  # https://realm.io/docs/objc/5.3.3/api/Classes/RLMSyncUser.html
-  # https://docs.mongodb.com/realm-sdks/objc/10.0.0-beta.2/index.html
-  pod 'RealmSwift', '=10.0.0-beta.9'
+  
+  # Reference: https://docs.mongodb.com/realm-sdks/objc/latest
+  # Changelog: https://github.com/realm/realm-cocoa/blob/v10.0.0-beta.4/CHANGELOG.md
+  pod 'RealmSwift', '>= 10.0.0-beta.4'
 #  pod 'Jelly', '~> 2.2.2'
   
 #  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'

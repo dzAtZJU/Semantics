@@ -50,28 +50,35 @@ class Condition: SyncedObject {
     }
 }
 
-class PlaceScore: SyncedObject {
-    @objc dynamic var placeId: String?
+class PlaceScore: Object {
+    @objc dynamic var _id = ""
+    @objc dynamic var partitionKey = ""
+    @objc dynamic var placeId = ""
     @objc dynamic var score = 0
     
-    convenience init(placeId placeId_: String, score score_: Int) {
+    convenience init(conditionId: ObjectId, placeId placeId_: String, score score_: Int) {
         self.init()
-        super.partitionKey = RealmSpace.main.queryCurrentUserID()!
+        _id = placeId_ + " " + conditionId.stringValue
+        partitionKey = RealmSpace.queryCurrentUserID()!
         placeId = placeId_
         score = score_
+    }
+    
+    override static func primaryKey() -> String? {
+        "_id"
     }
 }
 
 class ConditionRank: SyncedObject {
-    @objc dynamic var ownerId: String?
+    @objc dynamic var ownerId = ""
     
-    @objc dynamic var conditionId: ObjectId?
+    @objc dynamic var conditionId = ObjectId()
     
-    var placeScoreList = List<PlaceScore>()
+    let placeScoreList = List<PlaceScore>()
     
     convenience init(ownerId ownerId_: String, conditionId conditionId_: ObjectId, placeScores: [PlaceScore] = []) {
         self.init()
-        super.partitionKey = RealmSpace.main.queryCurrentUserID()!
+        super.partitionKey = RealmSpace.queryCurrentUserID()!
         ownerId = ownerId_
         conditionId = conditionId_
         placeScoreList.append(objectsIn: placeScores)
@@ -89,7 +96,7 @@ class PlaceStory: SyncedObject {
     
     convenience init(individual individual_: Individual, placeId placeId_: String) {
         self.init()
-        super.partitionKey = RealmSpace.main.queryCurrentUserID()!
+        super.partitionKey = RealmSpace.queryCurrentUserID()!
         individual = individual_
         placeId = placeId_
     }
@@ -107,7 +114,7 @@ class ConditionIndividuals: EmbeddedObject {
 
 class Individual: Object {
     @objc dynamic var _id: String = ""
-    @objc dynamic var partitionKey: String = RealmSpace.main.queryCurrentUserID()!
+    @objc dynamic var partitionKey: String = RealmSpace.queryCurrentUserID()!
     
     @objc dynamic var title = ""
     

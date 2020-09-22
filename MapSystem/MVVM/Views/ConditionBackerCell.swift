@@ -25,6 +25,7 @@ class ConditionBackerCell: UICollectionViewCell {
     private(set) lazy var button: UIButton = {
         let tmp = UIButton(systemName: "hand.thumbsdown.fill")
         tmp.translatesAutoresizingMaskIntoConstraints = false
+        tmp.showsTouchWhenHighlighted = true
         return tmp
     }()
     

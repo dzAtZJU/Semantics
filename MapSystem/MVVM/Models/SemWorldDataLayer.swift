@@ -16,7 +16,7 @@ struct SemWorldDataLayer {
 // MARK: Individual
 extension SemWorldDataLayer {
     func queryOrCreateCurrentIndividual(userName: String) -> Individual {
-        let userID = RealmSpace.shared.queryCurrentUserID()!
+        let userID = RealmSpace.queryCurrentUserID()!
         var individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
         if individual == nil {
             individual = Individual(id: userID, title: userName)
@@ -29,7 +29,7 @@ extension SemWorldDataLayer {
     }
     
     func queryCurrentIndividual() -> Individual? {
-        let userID = RealmSpace.shared.queryCurrentUserID()!
+        let userID = RealmSpace.queryCurrentUserID()!
         let individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
         return individual
     }
@@ -84,19 +84,15 @@ extension SemWorldDataLayer {
     }
     
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
-        let places = realm.objects(Place.self).filter("latitude == %d AND longitude == %d AND title == %@", uniquePlace.latitude, uniquePlace.longitude, uniquePlace.title)
-        if places.isEmpty {
-            print("queryOrCreatePlace should create")
+        if let place = realm.object(ofType: Place.self, forPrimaryKey: uniquePlace.title) {
+            return place
+        } else {
             let newPlace = Place(title: uniquePlace.title, latitude: uniquePlace.latitude, longitude: uniquePlace.longitude)
             try! realm.write {
                 self.realm.add(newPlace, update: .modified)
             }
             return newPlace
         }
-        if places.count > 1 {
-            fatalError("Duplicate Place \(places)")
-        }
-        return places.first!
     }
     
     func markVisited(place: Place, completion: (Place) -> Void) {
@@ -133,18 +129,18 @@ extension SemWorldDataLayer {
 
 // MARK: Mock
 extension SemWorldDataLayer {
-    func createUserData(name: String, conditionIds: [ObjectId]) {
-        let ind = queryOrCreateCurrentIndividual(userName: name)
-        guard !conditionIds.isEmpty else {
-            return
+    func createExtraConditionRanks(allConditionIds: [ObjectId]) {
+        let ind = queryCurrentIndividual()!
+        
+        let existingIds = ind.conditionsRank.map { $0.conditionId }
+        let newItems = allConditionIds.filter {
+            !existingIds.contains($0)
+        }.map {
+            ConditionRank(ownerId: ind._id, conditionId: $0)
         }
-        if ind.conditionsRank.isEmpty {
-            let rank1 = ConditionRank(ownerId: ind._id, conditionId: conditionIds[0])
-            let rank2 = ConditionRank(ownerId: ind._id, conditionId: conditionIds[1])
-            let rank3 = ConditionRank(ownerId: ind._id, conditionId: conditionIds[2])
-            try! realm.write {
-                ind.conditionsRank.append(objectsIn: [rank1, rank2, rank3])
-            }
+        
+        try! realm.write {
+            ind.conditionsRank.append(objectsIn: newItems)
         }
     }
 }

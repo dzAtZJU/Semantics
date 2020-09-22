@@ -21,8 +21,8 @@ class ConditionFeedbackVM {
         rankByCondition = rankByCondition_
         
         publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.partitionValue))
-        privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!))
-        conditionTitle = publicDataLayer.queryCondition(_id: rankByCondition.conditionId!).title
+        privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.queryCurrentUserID()!))
+        conditionTitle = publicDataLayer.queryCondition(_id: rankByCondition.conditionId).title
     }
     
     var levels: Int {
@@ -42,7 +42,7 @@ class ConditionFeedbackVM {
     
     func placeInfo(at: RankInfo) -> PlaceInfo {
         let bt = Date().timeIntervalSince1970
-        let thisPlace = publicDataLayer.queryPlace(_id: placeScore(at: at).placeId!)
+        let thisPlace = publicDataLayer.queryPlace(_id: placeScore(at: at).placeId)
         let et = Date().timeIntervalSince1970
         print("[Measure] queryPlace \(et-bt)")
         return PlaceInfo(title: thisPlace.title, isTargetPlace: thisPlace._id == targetPlace._id)
@@ -71,14 +71,14 @@ class ConditionFeedbackVM {
         let placeScore = self.placeScore(at: at)
         try! privateDataLayer.realm.write {
             placeScore.score = to.level
-           let newPS = PlaceScore(placeId: placeScore.placeId!, score: placeScore.score)
+            let newPS = PlaceScore(conditionId: rankByCondition.conditionId, placeId: placeScore.placeId, score: placeScore.score)
             if atIndex < toIndex {
 //                if toIndex == self.rankByCondition.placeScoreList.endIndex {
 //                    self.rankByCondition.placeScoreList.append(newPS)
 //                } else {
-                    self.rankByCondition.placeScoreList.insert(newPS, at: toIndex)
 //                }
                 self.rankByCondition.placeScoreList.remove(at: atIndex)
+                self.rankByCondition.placeScoreList.insert(newPS, at: toIndex-1)
             } else  if atIndex > toIndex {
                 self.rankByCondition.placeScoreList.remove(at: atIndex)
 //                if toIndex == self.rankByCondition.placeScoreList.endIndex {

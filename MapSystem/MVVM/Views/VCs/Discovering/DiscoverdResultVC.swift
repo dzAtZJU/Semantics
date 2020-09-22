@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import SPAlert
 
 class DiscoverdResultVC: UIViewController, PanelContent {
     var panelContentVM: PanelContentVM! {
@@ -139,10 +140,12 @@ extension DiscoverdResultVC: UICollectionViewDelegate, UICollectionViewDataSourc
 extension DiscoverdResultVC {
     @objc private func dislikeBtnTapped(sender: UIButton) {
         let indexPath = (sender.superview!.superview! as! ConditionBackerCell).indexPath!
+        
         panelContentDelegate.setSpinning(true)
         vm.placeConditionsVM!.dislike(at: indexPath) {
             DispatchQueue.main.async {
                 self.panelContentDelegate.setSpinning(false)
+                SPAlert.present(title: "Disagreed", message: "These visitors will not be referred to regarding to \(self.vm.placeConditionsVM!.conditionTitle(at: indexPath))", preset: .dislike)
             }
         }
     }

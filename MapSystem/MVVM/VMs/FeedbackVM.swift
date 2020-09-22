@@ -16,24 +16,28 @@ class FeedbackVM {
     init(placeId placeId_: String, completion: @escaping (FeedbackVM) -> Void) {
         print("[FeedbackVM] \(placeId_)")
         RealmSpace.main.async {
-            self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.shared.queryCurrentUserID()!))
-            self.targetPlace = self.dataLayer.queryPlace(_id: placeId_)
-            self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
-            
-            for conditionRank in self.conditionsRank {
-                let index = conditionRank.placeScoreList.firstIndex {
-                    $0.placeId == self.targetPlace._id
+            self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.queryCurrentUserID()!))
+            RealmSpace.main.realm(partitionValue1: RealmSpace.partitionValue) {
+                let publicDataLayer = SemWorldDataLayer(realm: $0)
+                self.dataLayer.createExtraConditionRanks(allConditionIds: publicDataLayer.queryConditions())
+                self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
+                self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
+                
+                let items = self.conditionsRank.filter {
+                    $0.placeScoreList.firstIndex {
+                        $0.placeId == self.targetPlace._id
+                    } == nil
                 }
-                if index == nil {
-                    try! self.dataLayer.realm.write {
-                        conditionRank.placeScoreList.insert(PlaceScore(placeId: self.targetPlace._id, score: 0), at: 0)
+                
+                try! self.dataLayer.realm.write {
+                    items.forEach {
+                        $0.placeScoreList.insert(PlaceScore(conditionId: $0.conditionId, placeId: self.targetPlace._id, score: 0), at: 0)
                     }
                 }
+                
+                completion(self)
             }
-            
-            completion(self)
         }
-        
     }
     
     var count: Int {

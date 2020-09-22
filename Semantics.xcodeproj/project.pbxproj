@@ -111,6 +111,7 @@
 		89A666DE24D94EDA00851EDF /* NSNotification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A666DD24D94EDA00851EDF /* NSNotification+.swift */; };
 		89A666E024D9928800851EDF /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A666DF24D9928800851EDF /* CommunityVC.swift */; };
 		89A666E224D9934700851EDF /* CommunityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A666E124D9934700851EDF /* CommunityVM.swift */; };
+		89A95DCE250CDBA3006EBD07 /* SPAlert in Frameworks */ = {isa = PBXBuildFile; productRef = 89A95DCD250CDBA3006EBD07 /* SPAlert */; };
 		89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B1736524F9405A00320907 /* DiscoverdResultVC.swift */; };
 		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
@@ -273,6 +274,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89A95DCE250CDBA3006EBD07 /* SPAlert in Frameworks */,
 				8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */,
 				8968C08324DF087A0093CBFC /* FloatingPanel in Frameworks */,
 				89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */,
@@ -759,6 +761,7 @@
 				89C28CFD24ADC22E002081FE /* SwiftHEXColors */,
 				8911386524C1672000CBEBB5 /* SwifterSwift */,
 				8968C08224DF087A0093CBFC /* FloatingPanel */,
+				89A95DCD250CDBA3006EBD07 /* SPAlert */,
 			);
 			productName = Semantics;
 			productReference = 89642171247250590081DC87 /* SemanticsB1.app */;
@@ -816,6 +819,7 @@
 				89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */,
 				8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */,
 				8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */,
+				89A95DCC250CDBA3006EBD07 /* XCRemoteSwiftPackageReference "SPAlert" */,
 			);
 			productRefGroup = 89642172247250590081DC87 /* Products */;
 			projectDirPath = "";
@@ -1031,6 +1035,7 @@
 /* Begin PBXTargetDependency section */
 		8964218C247250660081DC87 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 89642170247250590081DC87 /* Semantics */;
 			targetProxy = 8964218B247250660081DC87 /* PBXContainerItemProxy */;
 		};
@@ -1233,7 +1238,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Semantics.app/Semantics";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SemanticsB1.app/SemanticsB1";
 			};
 			name = Debug;
 		};
@@ -1256,7 +1261,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Semantics.app/Semantics";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SemanticsB1.app/SemanticsB1";
 			};
 			name = Release;
 		};
@@ -1317,6 +1322,14 @@
 				minimumVersion = 1.7.5;
 			};
 		};
+		89A95DCC250CDBA3006EBD07 /* XCRemoteSwiftPackageReference "SPAlert" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ivanvorobei/SPAlert";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.4;
+			};
+		};
 		89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/thii/SwiftHEXColors.git";
@@ -1347,6 +1360,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */;
 			productName = FloatingPanel;
+		};
+		89A95DCD250CDBA3006EBD07 /* SPAlert */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89A95DCC250CDBA3006EBD07 /* XCRemoteSwiftPackageReference "SPAlert" */;
+			productName = SPAlert;
 		};
 		89C28CFD24ADC22E002081FE /* SwiftHEXColors */ = {
 			isa = XCSwiftPackageProductDependency;

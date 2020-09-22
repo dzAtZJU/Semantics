@@ -24,6 +24,6 @@ let realmSyncErrorHandler: ErrorReportingBlock = { error, session in
         }
         UIApplication.shared.windows.first!.rootViewController!.present(alert, animated: true)
     default:
-        fatalError()
+        fatalError("[Sync Error] \(syncError)")
     }
 }

@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        let user = RealmSpace.shared.queryCurrentUser()
+        let user = RealmSpace.queryCurrentUser()
             if user == nil {
                 DispatchQueue.main.async {
                     self.window!.rootViewController!.present(LoginVC(), animated: true, completion: nil)

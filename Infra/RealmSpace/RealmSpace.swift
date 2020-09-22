@@ -17,36 +17,50 @@ class RealmSpace {
     static func prepare() {
         app.syncManager.logLevel = .debug
         app.syncManager.errorHandler = realmSyncErrorHandler
-        
-        RealmSpace.app.syncManager
-//        Self.clientResetQueue.async {
-//            let group = DispatchGroup()
-//            if let dic = SemUserDefaults.getRealmPathDic() {
-//                for (partitionValue, path) in dic {
-//                    group.wait()
-//                    group.enter()
-//                    RealmSpace.shared.realm(partitionValue: partitionValue) { realm in
-//                        if !FileManager.default.fileExists(atPath: path) {
-//                            fatalError()
-//                        }
-//                        let config = Realm.Configuration(fileURL: URL(fileURLWithPath: path), readOnly: true)
-//                        let oldRealm = try! Realm(configuration: config)
-//                        let objs = oldRealm.objects(Object.self)
-        // for write performance: max 1MB per transcation
-//                        try! realm.write {
-//                            for obj in objs {
-//                                realm.create(Object.self, value: obj, update: .modified)
-//                            }
-//                        }
-//                        SemUserDefaults.clearRealmPath(partitionValue: partitionValue)
-//                        try! FileManager.default.removeItem(atPath: path)
-//                        group.leave()
-//                    }
-//                }
-//            }
-//            group.wait()
-//            NotificationCenter.default.post(name: .clientReset, object: nil)
-//        }
+        preloadRealms()
+    }
+    
+    static func preloadRealms() {
+        if let userId = RealmSpace.queryCurrentUserID() {
+            RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue) {_ in
+                
+            }
+            RealmSpace.shared.realm(partitionValue1: userId) {_ in
+                
+            }
+        }
+    }
+    
+    static func handleClientReset() {
+                RealmSpace.app.syncManager
+        //        Self.clientResetQueue.async {
+        //            let group = DispatchGroup()
+        //            if let dic = SemUserDefaults.getRealmPathDic() {
+        //                for (partitionValue, path) in dic {
+        //                    group.wait()
+        //                    group.enter()
+        //                    RealmSpace.shared.realm(partitionValue: partitionValue) { realm in
+        //                        if !FileManager.default.fileExists(atPath: path) {
+        //                            fatalError()
+        //                        }
+        //                        let config = Realm.Configuration(fileURL: URL(fileURLWithPath: path), readOnly: true)
+        //                        let oldRealm = try! Realm(configuration: config)
+        //                        let objs = oldRealm.objects(Object.self)
+                // for write performance: max 1MB per transcation
+        //                        try! realm.write {
+        //                            for obj in objs {
+        //                                realm.create(Object.self, value: obj, update: .modified)
+        //                            }
+        //                        }
+        //                        SemUserDefaults.clearRealmPath(partitionValue: partitionValue)
+        //                        try! FileManager.default.removeItem(atPath: path)
+        //                        group.leave()
+        //                    }
+        //                }
+        //            }
+        //            group.wait()
+        //            NotificationCenter.default.post(name: .clientReset, object: nil)
+        //        }
     }
     
     static func invalidate(partitioinValue: String) {
@@ -60,13 +74,15 @@ class RealmSpace {
         }
     }
     
-    static let app = RealmApp(id: "semantics-tonbj")
+    static let app = App(id: "semantics-tonbj")
     
     static let shared = RealmSpace(queue: DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated))
     
     static let main = RealmSpace(queue: DispatchQueue.main)
     
     private lazy var realms = [String: Realm]()
+    
+    private lazy var partition2Completions = [String: [(Realm)->Void]]()
     
     let queue: DispatchQueue
     init(queue queue_: DispatchQueue) {
@@ -95,25 +111,38 @@ class RealmSpace {
             return
         }
         
+        guard partition2Completions[partitionValue] == nil else {
+            partition2Completions[partitionValue]!.append(completion)
+            return
+        }
+        
+        partition2Completions[partitionValue] = [completion]
         newRealm(partitionValue) {
             self.realms[partitionValue] = $0
-            completion($0)
+            let completions = self.partition2Completions[partitionValue]!
+            self.partition2Completions[partitionValue] = nil
+            for completion in completions {
+                completion($0)
+            }
         }
     }
     
     private func newRealm(_ partitionValue: String) -> Realm {
-        var config = queryCurrentUser()!.configuration(partitionValue: partitionValue)
+        var config = Self.queryCurrentUser()!.configuration(partitionValue: partitionValue)
         config.shouldCompactOnLaunch = determineCompact
         return try! Realm(configuration: config, queue: queue)
     }
     
     private func newRealm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
-        let user = queryCurrentUser()!
+        let user = Self.queryCurrentUser()!
         
         var config = user.configuration(partitionValue: partitionValue)
         config.shouldCompactOnLaunch = determineCompact
         Realm.asyncOpen(configuration: config, callbackQueue: queue) { (realm, error) in
-            completion(realm!)
+            guard let realm = realm, error == nil else {
+                fatalError("[Open Realm] \(error!)")
+            }
+            completion(realm)
         }
     }
         
@@ -135,16 +164,22 @@ extension RealmSpace {
 
 // MARK: Account
 extension RealmSpace {
-    func queryCurrentUser() -> SyncUser? {
-        Self.app.currentUser()
+    static var currentUser: User?
+    
+    static func queryCurrentUser() -> User? {
+        if currentUser == nil {
+            currentUser = app.currentUser()
+        }
+        
+        return currentUser
     }
     
-    func queryCurrentUserID() -> String? {
-        queryCurrentUser()?.identity
+    static func queryCurrentUserID() -> String? {
+        queryCurrentUser()?.id
     }
     
-    func login(appleToken: String, completion: @escaping () -> Void) {
-        Self.app.login(withCredential: AppCredentials(appleToken: appleToken)) { (user, error) in
+    static func login(appleToken: String, completion: @escaping () -> Void) {
+        Self.app.login(credentials: Credentials(appleToken: appleToken)) { (user, error) in
             guard error == nil else {
                 fatalError("\(error)")
             }
@@ -235,14 +270,14 @@ extension RealmSpace {
     }
     
     func searchNext(query: SearchNextQuery, completion: @escaping (SearchNextResult) -> Void) {
-        let f = Self.app.functions[dynamicMember: "searchNext"]
+        let f: Functions.Function = Self.queryCurrentUser()!.functions[dynamicMember: "searchNext"]
         let bt1 = Date().timeIntervalSince1970
         f([query.bson()]) { r, error in
             print("[Measure] f:searchNext \(Date().timeIntervalSince1970 - bt1)")
             guard error == nil else {
                 fatalError("\(error!.localizedDescription)")
             }
-            
+
             let rr = SearchNextResult(from: r!)
             print("searchNextResult \(rr)")
             self.queue.async {
@@ -250,10 +285,10 @@ extension RealmSpace {
             }
         }
         
-        let dumb = Self.app.functions[dynamicMember: "dumb"]
+        let dumb: Functions.Function = Self.queryCurrentUser()!.functions[dynamicMember: "dumb1"]
         let btDumb = Date().timeIntervalSince1970
         dumb([]) { (_, _) in
-            print(print("[Measure] f:dumb \(Date().timeIntervalSince1970 - btDumb)"))
+            print("[Measure] f:dumb \(Date().timeIntervalSince1970 - btDumb)")
         }
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Semantics
+@testable import SemanticsB1
 
 class SemanticsTests: XCTestCase {
 
@@ -22,6 +22,7 @@ class SemanticsTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
     }
 
     func testPerformanceExample() throws {
