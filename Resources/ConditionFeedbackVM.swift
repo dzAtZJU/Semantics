@@ -71,22 +71,13 @@ class ConditionFeedbackVM {
         let placeScore = self.placeScore(at: at)
         try! privateDataLayer.realm.write {
             placeScore.score = to.level
-            let newPS = PlaceScore(conditionId: rankByCondition.conditionId, placeId: placeScore.placeId, score: placeScore.score)
             if atIndex < toIndex {
-//                if toIndex == self.rankByCondition.placeScoreList.endIndex {
-//                    self.rankByCondition.placeScoreList.append(newPS)
-//                } else {
-//                }
-                self.rankByCondition.placeScoreList.remove(at: atIndex)
-                self.rankByCondition.placeScoreList.insert(newPS, at: toIndex-1)
-            } else  if atIndex > toIndex {
-                self.rankByCondition.placeScoreList.remove(at: atIndex)
-//                if toIndex == self.rankByCondition.placeScoreList.endIndex {
-//                    self.rankByCondition.placeScoreList.append(newPS)
-//                } else {
-                    self.rankByCondition.placeScoreList.insert(newPS, at: toIndex)
-//                }
+                toIndex -= 1
             }
+            
+            self.rankByCondition.placeScoreList.remove(at: atIndex)
+            self.rankByCondition.placeScoreList.insert(placeScore, at: toIndex)
+                
             
             if isOnlyOne {
                 var start = atIndex

@@ -40,13 +40,20 @@ class Place: Object {
     }
 }
 
-class Condition: SyncedObject {
+class Condition: Object {
+    @objc dynamic var _id = ""
+    @objc dynamic var partitionKey = ""
     @objc dynamic var title = ""
     
     convenience init(title title_: String) {
         self.init()
-        super.partitionKey = RealmSpace.partitionValue
+        _id = title
+        partitionKey = RealmSpace.partitionValue
         title = title_
+    }
+    
+    override static func primaryKey() -> String? {
+        "_id"
     }
 }
 
@@ -55,10 +62,11 @@ class PlaceScore: Object {
     @objc dynamic var partitionKey = ""
     @objc dynamic var placeId = ""
     @objc dynamic var score = 0
+    let conditionRank = LinkingObjects(fromType: ConditionRank.self, property: "placeScoreList")
     
-    convenience init(conditionId: ObjectId, placeId placeId_: String, score score_: Int) {
+    convenience init(conditionId: String, placeId placeId_: String, score score_: Int) {
         self.init()
-        _id = placeId_ + " " + conditionId.stringValue
+        _id = placeId_ + " " + conditionId
         partitionKey = RealmSpace.queryCurrentUserID()!
         placeId = placeId_
         score = score_
@@ -72,11 +80,11 @@ class PlaceScore: Object {
 class ConditionRank: SyncedObject {
     @objc dynamic var ownerId = ""
     
-    @objc dynamic var conditionId = ObjectId()
+    @objc dynamic var conditionId = ""
     
     let placeScoreList = List<PlaceScore>()
     
-    convenience init(ownerId ownerId_: String, conditionId conditionId_: ObjectId, placeScores: [PlaceScore] = []) {
+    convenience init(ownerId ownerId_: String, conditionId conditionId_: String, placeScores: [PlaceScore] = []) {
         self.init()
         super.partitionKey = RealmSpace.queryCurrentUserID()!
         ownerId = ownerId_
@@ -103,10 +111,10 @@ class PlaceStory: SyncedObject {
 }
 
 class ConditionIndividuals: EmbeddedObject {
-    @objc dynamic var conditionId: ObjectId?
+    @objc dynamic var conditionId = ""
     let individuals = List<String>()
     
-    convenience init(conditionId conditionId_: ObjectId) {
+    convenience init(conditionId conditionId_: String) {
         self.init()
         conditionId = conditionId_
     }

@@ -13,7 +13,7 @@ target 'Semantics' do
   
   # Reference: https://docs.mongodb.com/realm-sdks/objc/latest
   # Changelog: https://github.com/realm/realm-cocoa/blob/v10.0.0-beta.4/CHANGELOG.md
-  pod 'RealmSwift', '>= 10.0.0-beta.4'
+  pod 'RealmSwift', '>= 10.0.0-beta.5'
 #  pod 'Jelly', '~> 2.2.2'
   
 #  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'

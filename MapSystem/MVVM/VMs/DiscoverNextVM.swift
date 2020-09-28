@@ -19,8 +19,8 @@ enum NextOperator: Int {
 
 class ConditionVM {
     let title: String
-    let _id: ObjectId
-    init(title: String, _id: ObjectId) {
+    let _id: String
+    init(title: String, _id: String) {
         self.title = title
         self._id = _id
     }

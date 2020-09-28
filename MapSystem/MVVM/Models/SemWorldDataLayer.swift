@@ -39,7 +39,7 @@ extension SemWorldDataLayer {
         realm.objects(Individual.self)
     }
     
-    func dislike(inds: [String], forCondition condition: ObjectId) {
+    func dislike(inds: [String], forCondition condition: String) {
         let ind = queryCurrentIndividual()!
         var tmp: ConditionIndividuals! = ind.blockedIndividuals.first {
             $0.conditionId == condition
@@ -108,8 +108,8 @@ extension SemWorldDataLayer {
 }
 
 extension SemWorldDataLayer {
-    func queryPlaceSocre(_id: ObjectId) -> PlaceScore {
-        realm.object(ofType: PlaceScore.self, forPrimaryKey: _id)!
+    func queryPlaceSocre(_id: String) -> PlaceScore? {
+        realm.object(ofType: PlaceScore.self, forPrimaryKey: _id)
     }
     
     func queryConditionRank(_id: ObjectId) -> ConditionRank {
@@ -118,18 +118,18 @@ extension SemWorldDataLayer {
 }
 
 extension SemWorldDataLayer {
-    func queryConditions() -> [ObjectId] {
+    func queryConditions() -> [String] {
         realm.objects(Condition.self).map(by: \._id)
     }
     
-    func queryCondition(_id: ObjectId) -> Condition {
+    func queryCondition(_id: String) -> Condition {
         realm.object(ofType: Condition.self, forPrimaryKey: _id)!
     }
 }
 
 // MARK: Mock
 extension SemWorldDataLayer {
-    func createExtraConditionRanks(allConditionIds: [ObjectId]) {
+    func createExtraConditionRanks(allConditionIds: [String]) {
         let ind = queryCurrentIndividual()!
         
         let existingIds = ind.conditionsRank.map { $0.conditionId }

@@ -74,7 +74,7 @@ class RealmSpace {
         }
     }
     
-    static let app = App(id: "semantics-tonbj")
+    static let app = App(id: Environment.current.realmApp)
     
     static let shared = RealmSpace(queue: DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated))
     
@@ -179,6 +179,7 @@ extension RealmSpace {
     }
     
     static func login(appleToken: String, completion: @escaping () -> Void) {
+        // Decoding: https://jwt.io/
         Self.app.login(credentials: Credentials(appleToken: appleToken)) { (user, error) in
             guard error == nil else {
                 fatalError("\(error)")
@@ -203,12 +204,12 @@ extension RealmSpace {
         }
         
         struct ConditionInfo {
-            let conditionId: ObjectId
+            let conditionId: String
             let nextOperator: NextOperator
             
             func bson() -> AnyBSON {
                 AnyBSON.document([
-                    "conditionId": AnyBSON.objectId(conditionId),
+                    "conditionId": AnyBSON.string(conditionId),
                     "nextOperator": AnyBSON.int32(Int32(nextOperator.rawValue))
                 ])
             }
@@ -245,11 +246,11 @@ extension RealmSpace {
             }
             
             struct ConditionInfo {
-                let id: ObjectId
+                let id: String
                 let backers: [BackerInfo]
                 
                 init(from bson: AnyBSON) {
-                    id = bson.documentValue!["id"]!!.objectIdValue!
+                    id = bson.documentValue!["id"]!!.stringValue!
                     backers = bson.documentValue!["backers"]!!.arrayValue!.map {
                         BackerInfo(from: $0!)
                     }

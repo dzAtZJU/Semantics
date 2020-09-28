@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "jest": {
+    "testRunner": "jest-circus/runner"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "realm": "^10.0.0-beta.13"
+    "mongodb": "^3.6.2",
+    "bson": "^4.0.4"
   },
-  "type": "module"
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "jest-circus": "^26.4.2"
+  }
 }

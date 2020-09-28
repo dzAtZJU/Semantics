@@ -1,0 +1,6 @@
+https://docs.mongodb.com/realm/mongodb/
+https://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html
+https://jestjs.io/docs/en/getting-started
+
+mongod --dbpath ~/Semantics/NodeJS/mongodb --logpath ~/Semantics/NodeJS/mongodb/mongo.log --fork
+ps aux | grep -v grep | grep mongod

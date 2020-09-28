@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import RealmSwift
 @testable import SemanticsB1
 
 class SemanticsTests: XCTestCase {
@@ -19,10 +20,20 @@ class SemanticsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testRealmListAPI() throws {
+        let list = List<Int>()
+        list.append(objectsIn: [1,2,3])
+        list.insert(0, at: 0)
+        XCTAssert(list.first! == 0, "insert(i) is at before i")
+        list.insert(4, at: 4)
+        XCTAssert(list.last! == 4, "insert(list.count) is valid")
         
+        list.removeAll()
+        list.append(objectsIn: [0,1,2])
+        list.move(from: 0, to: 2)
+        XCTAssert(list.last! == 0, "move(from, to) to is count after from removed")
+        list.move(from: 2, to: 0)
+        XCTAssert(list.first! == 0, "move(from, to) to is count after from removed")
     }
 
     func testPerformanceExample() throws {
