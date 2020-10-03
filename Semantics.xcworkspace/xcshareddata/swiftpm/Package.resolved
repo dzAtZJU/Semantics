@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/SCENEE/FloatingPanel.git",
         "state": {
           "branch": null,
-          "revision": "e4548b26bd28a271f8aa52e04f64bb2401d5e5a7",
-          "version": "1.7.5"
+          "revision": "ca7596e1cae161415f54059a8c44b82c95724160",
+          "version": "1.7.6"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "175eeb4618b0a6ef4d69a7409b6a74ddd235a093",
-          "version": "5.15.0"
+          "revision": "910d808ade2a576e1a292ceb458a6fa43f67f594",
+          "version": "5.14.0"
         }
       },
       {

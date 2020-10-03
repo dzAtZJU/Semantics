@@ -81,7 +81,8 @@ class TheSearchNext {
                 this.conditionId2Places.set(item.conditionId, [])
             }
             const newPlaceIdsAndBacker = {
-                placeIds: placeScores.slice(0, ceil+1).map(item => { return item.placeId }),
+                placeIds: placeScores.slice(0, ceil+1).map(item => { return item.placeId })
+                    .filter(item => { return item !== this.placeId}),
                 backer: item.ownerId
             }
             this.conditionId2Places.set(item.conditionId, this.conditionId2Places.get(item.conditionId).concat(newPlaceIdsAndBacker))

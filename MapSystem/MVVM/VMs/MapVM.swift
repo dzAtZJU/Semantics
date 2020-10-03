@@ -10,6 +10,7 @@ import Foundation
 import MapKit
 import CoreLocation
 import RealmSwift
+import Combine
 
 enum PlaceState: Int {
     case neverBeen = 0
@@ -34,9 +35,17 @@ protocol MapVMAnnotationsModel {
 }
 
 class MapVM {
-    private var ready = 0
+    private var signedInSubscriber: AnyCancellable?
+    
     init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(signdeInReceived), name: .signedIn, object: nil)
+        signedInSubscriber = RealmSpace.signedInCurrentValueSubject!.sink { value in
+            guard value == 1 else {
+                return
+            }
+            self.loadVisitedPlaces()
+            RealmSpace.signedInCurrentValueSubject = nil
+            self.signedInSubscriber = nil
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchFinished), name: .searchFinished ,object: nil)
     }
@@ -143,14 +152,6 @@ extension MapVM {
 
 // MARK: Notification
 extension MapVM {
-    @objc private func signdeInReceived(notification: Notification) {
-        ready += 1
-        //        if ready == 2 {
-        ready = 0
-        loadVisitedPlaces()
-        signedIn?()
-        //        }
-    }
     @objc private func clientReset(notification: Notification) {
         //       ready += 1
         //        if ready == 2 {

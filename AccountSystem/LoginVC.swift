@@ -8,6 +8,7 @@
 
 import UIKit
 import AuthenticationServices
+import RealmSwift
 
 class LoginVC: UIViewController {
     private lazy var appleSignInButton: ASAuthorizationAppleIDButton = {
@@ -69,7 +70,7 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
         }
         
         spinner.startAnimating()
-        RealmSpace.login(appleToken: token) {
+        RealmSpace.login(cred: Credentials(appleToken: token)) { _ in 
             RealmSpace.shared.async {
                 RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue) { publcRealm in
                     RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!) { privateRealm in

@@ -19,27 +19,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         let window = UIWindow(windowScene: scene as! UIWindowScene)
         self.window = window
         
-//        let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
-//        window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
+        //        let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
+        //        window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
         
         let mapVM = MapVM()
         let mapVC = MapVC(vm: mapVM)
         window.rootViewController = mapVC
         
-//        window.rootViewController = TestVC()
+        //        window.rootViewController = TestVC()
         
         window.makeKeyAndVisible()
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {
-        let user = RealmSpace.queryCurrentUser()
-            if user == nil {
-                DispatchQueue.main.async {
-                    self.window!.rootViewController!.present(LoginVC(), animated: true, completion: nil)
-                }
-            } else {
-                NotificationCenter.default.post(name: .signedIn, object: nil)
-            }
+//        let user = RealmSpace.queryCurrentUser()
+//        if user == nil {
+//            DispatchQueue.main.async {
+//                self.window!.rootViewController!.present(LoginVC(), animated: true, completion: nil)
+//            }
+//        } else {
+//            NotificationCenter.default.post(name: .signedIn, object: nil)
+//        }
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {

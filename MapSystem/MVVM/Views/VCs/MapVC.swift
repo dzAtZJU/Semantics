@@ -78,9 +78,6 @@ class MapVC: UIViewController {
     init(vm vm_: MapVM) {
         mapVM = vm_
         super.init(nibName: nil, bundle: nil)
-        mapVM.signedIn = {
-            self.panel.addPanel(toParent: self)
-        }
         mapVM.annotationsModel = self
     }
     
@@ -96,6 +93,8 @@ class MapVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        panel.addPanel(toParent: self)
         
         selectedAnnotationToken = mapVM.$selectedAnnotationEvent.removeDuplicates(by: { (a, b) -> Bool in
             a.0 == b.0

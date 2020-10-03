@@ -7,6 +7,7 @@
 //
 
 import RealmSwift
+import Combine
 
 extension Notification.Name {
     static let clientReset = Notification.Name("clientReset")
@@ -20,19 +21,32 @@ class RealmSpace {
         preloadRealms()
     }
     
+    static var signedInSubscriber: AnyCancellable? = NotificationCenter.default.publisher(for: .signedIn).sink { _ in
+        RealmSpace.signedInCurrentValueSubject!.value = 1
+        RealmSpace.signedInSubscriber = nil
+    }
+    static var signedInCurrentValueSubject: CurrentValueSubject? = CurrentValueSubject<Int, Never>(0)
+    
+    static var can: AnyCancellable?
     static func preloadRealms() {
+        _ = signedInSubscriber
+        let loadAll = { (userId: String) -> Void in
+            RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue) { _ in}
+            RealmSpace.shared.realm(partitionValue1: userId) { _ in}
+            NotificationCenter.default.post(name: .signedIn, object: nil)
+        }
         if let userId = RealmSpace.queryCurrentUserID() {
-            RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue) {_ in
-                
-            }
-            RealmSpace.shared.realm(partitionValue1: userId) {_ in
-                
+            loadAll(userId)
+        } else {
+            RealmSpace.login(cred: Credentials.anonymous()) { userId in
+                loadAll(userId)
+                NotificationCenter.default.post(name: .signedIn, object: nil)
             }
         }
     }
     
     static func handleClientReset() {
-                RealmSpace.app.syncManager
+        RealmSpace.app.syncManager
         //        Self.clientResetQueue.async {
         //            let group = DispatchGroup()
         //            if let dic = SemUserDefaults.getRealmPathDic() {
@@ -46,7 +60,7 @@ class RealmSpace {
         //                        let config = Realm.Configuration(fileURL: URL(fileURLWithPath: path), readOnly: true)
         //                        let oldRealm = try! Realm(configuration: config)
         //                        let objs = oldRealm.objects(Object.self)
-                // for write performance: max 1MB per transcation
+        // for write performance: max 1MB per transcation
         //                        try! realm.write {
         //                            for obj in objs {
         //                                realm.create(Object.self, value: obj, update: .modified)
@@ -145,7 +159,7 @@ class RealmSpace {
             completion(realm)
         }
     }
-        
+    
     private func determineCompact(fileSize: Int, dataSize: Int) -> Bool {
         // Compact if the file is over 100MB in size and less than 50% 'used'
         let oneHundredMB = 100 * 1024 * 1024
@@ -178,13 +192,16 @@ extension RealmSpace {
         queryCurrentUser()?.id
     }
     
-    static func login(appleToken: String, completion: @escaping () -> Void) {
+    static func login(cred: Credentials, completion: @escaping (String) -> Void) {
         // Decoding: https://jwt.io/
-        Self.app.login(credentials: Credentials(appleToken: appleToken)) { (user, error) in
-            guard error == nil else {
+        Self.app.login(credentials: cred) { (user, error) in
+            guard error == nil, let userId = user?.id else {
                 fatalError("\(error)")
             }
-            completion()
+            RealmSpace.shared.realm(partitionValue1: userId) { privateRealm in
+                _ = SemWorldDataLayer(realm: privateRealm).queryOrCreateCurrentIndividual(userName: KeychainItem.currentUserName ?? String.random(ofLength: 6))
+                completion(userId)
+            }
         }
     }
 }
@@ -278,7 +295,7 @@ extension RealmSpace {
             guard error == nil else {
                 fatalError("\(error!.localizedDescription)")
             }
-
+            
             let rr = SearchNextResult(from: r!)
             print("searchNextResult \(rr)")
             self.queue.async {
