@@ -19,7 +19,7 @@ struct PlaceConditionsVM {
     
     func conditionTitle(at: IndexPath) -> String {
         let condition = conditions[at.row]
-        return SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.partitionValue)).queryCondition(_id: condition.id).title
+        return SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue)).queryCondition(_id: condition.id).title
     }
     
     func title(at: IndexPath) -> String {
@@ -32,7 +32,7 @@ struct PlaceConditionsVM {
         let conditionId = info.id
         let inds = info.backers.map(by: \.id)
         RealmSpace.shared.async {
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!)).dislike(inds: inds, forCondition: conditionId)
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).dislike(inds: inds, forCondition: conditionId)
             completion()
         }
     }

@@ -105,7 +105,7 @@ class MapVM {
     var discoverNextVM: DiscoverNextVM {
         var tmp: DiscoverNextVM!
         RealmSpace.shared.queue.sync {
-            let realm = RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue)
+            let realm = RealmSpace.shared.realm(RealmSpace.partitionValue)
             let conditions =  realm.objects(Condition.self)
             tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditions: conditions)
             tmp.panelContentVMDelegate = self
@@ -118,8 +118,8 @@ class MapVM {
 extension MapVM {
     func loadVisitedPlaces() {
         RealmSpace.shared.async {
-            RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!) { privateRealm in
-                RealmSpace.shared.realm(partitionValue1: RealmSpace
+            RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!) { privateRealm in
+                RealmSpace.shared.realm(RealmSpace
                     .partitionValue) { publicRealm in
                         let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).queryVisitedPlaces()).map { place throws in
                             SemAnnotation(place: place, type: .visited)
@@ -136,9 +136,9 @@ extension MapVM {
     func markVisited() {
         let uniquePlace = UniquePlace(annotation: self.selectedAnnotation!)
         RealmSpace.shared.async {
-            let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace)
+            let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace)
             
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!)).markVisited(place: place) { place in
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).markVisited(place: place) { place in
                 DispatchQueue.main.async {
                     self.setSelectedAnnotationEvent((nil, .fromModel))
                     let newAnnotation = SemAnnotation(place: place, type: .visited)

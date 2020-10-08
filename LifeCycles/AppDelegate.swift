@@ -13,10 +13,17 @@ import Foundation
 //import Iconic
 //import Highcharts
 import AuthenticationServices
+import Sentry
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        SentrySDK.start { options in
+            options.dsn = "https://65e39c9216234994b902b4ea809e7dae@o310831.ingest.sentry.io/5449834"
+            options.debug = true // Enabled debug when first installing is always helpful
+        }
+        
         RealmSpace.prepare()
         
         return true

@@ -31,14 +31,14 @@ class RealmSpace {
     static func preloadRealms() {
         _ = signedInSubscriber
         let loadAll = { (userId: String) -> Void in
-            RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue) { _ in}
-            RealmSpace.shared.realm(partitionValue1: userId) { _ in}
+            RealmSpace.shared.realm(RealmSpace.partitionValue) { _ in}
+            RealmSpace.shared.realm(userId) { _ in}
             NotificationCenter.default.post(name: .signedIn, object: nil)
         }
         if let userId = RealmSpace.queryCurrentUserID() {
             loadAll(userId)
         } else {
-            RealmSpace.login(cred: Credentials.anonymous()) { userId in
+            RealmSpace.login(cred: Credentials.anonymous) { userId in
                 loadAll(userId)
                 NotificationCenter.default.post(name: .signedIn, object: nil)
             }
@@ -103,51 +103,13 @@ class RealmSpace {
         queue = queue_
     }
     
-    func realm(partitionValue1 partitionValue: String) -> Realm {
-        if let realm = realms[partitionValue] {
-            if (!realm.autorefresh) {
-                realm.refresh()
-            }
-            return realm
-        }
-        
-        let tmp = newRealm(partitionValue)
-        realms[partitionValue] = tmp
-        return tmp
-    }
-    
-    func realm(partitionValue1 partitionValue: String, completion: @escaping (Realm) -> Void) {
-        if let realm = realms[partitionValue] {
-            if (!realm.autorefresh) {
-                realm.refresh()
-            }
-            completion(realm)
-            return
-        }
-        
-        guard partition2Completions[partitionValue] == nil else {
-            partition2Completions[partitionValue]!.append(completion)
-            return
-        }
-        
-        partition2Completions[partitionValue] = [completion]
-        newRealm(partitionValue) {
-            self.realms[partitionValue] = $0
-            let completions = self.partition2Completions[partitionValue]!
-            self.partition2Completions[partitionValue] = nil
-            for completion in completions {
-                completion($0)
-            }
-        }
-    }
-    
-    private func newRealm(_ partitionValue: String) -> Realm {
+    func realm(_ partitionValue: String) -> Realm {
         var config = Self.queryCurrentUser()!.configuration(partitionValue: partitionValue)
         config.shouldCompactOnLaunch = determineCompact
         return try! Realm(configuration: config, queue: queue)
     }
     
-    private func newRealm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
+    func realm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
         let user = Self.queryCurrentUser()!
         
         var config = user.configuration(partitionValue: partitionValue)
@@ -182,7 +144,7 @@ extension RealmSpace {
     
     static func queryCurrentUser() -> User? {
         if currentUser == nil {
-            currentUser = app.currentUser()
+            currentUser = app.currentUser
         }
         
         return currentUser
@@ -198,7 +160,7 @@ extension RealmSpace {
             guard error == nil, let userId = user?.id else {
                 fatalError("\(error)")
             }
-            RealmSpace.shared.realm(partitionValue1: userId) { privateRealm in
+            RealmSpace.shared.realm(userId) { privateRealm in
                 _ = SemWorldDataLayer(realm: privateRealm).queryOrCreateCurrentIndividual(userName: KeychainItem.currentUserName ?? String.random(ofLength: 6))
                 completion(userId)
             }

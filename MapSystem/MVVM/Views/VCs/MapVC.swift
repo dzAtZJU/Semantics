@@ -174,17 +174,16 @@ class MapVC: UIViewController {
 // MARK: PlaceVCDelegate
 extension MapVC: PlaceVCDelegate {
     func placeWillDisappear(_ placeVC: PlaceVC) {
-        
     }
     
     func placeVCShouldStartFeedback(_ placeVC: PlaceVC) {
-        FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
-            let vc = FeedbackVC(feedbackVM: vm)
-            vc.panelContentDelegate = self
-            DispatchQueue.main.async {
-                self.panelContentVC.show(vc, sender: nil)
+            FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
+                let vc = FeedbackVC(feedbackVM: vm)
+                vc.panelContentDelegate = self
+                DispatchQueue.main.async {
+                    self.panelContentVC.show(vc, sender: nil)
+                }
             }
-        }
     }
     
     func placeVCShouldMarkVisited(_ placeVC: PlaceVC) {

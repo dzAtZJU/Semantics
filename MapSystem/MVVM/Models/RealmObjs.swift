@@ -66,7 +66,7 @@ class PlaceScore: Object {
     
     convenience init(conditionId: String, placeId placeId_: String, score score_: Int) {
         self.init()
-        _id = placeId_ + " " + conditionId
+        _id = RealmSpace.queryCurrentUserID()! + " " + placeId_ + " " + conditionId
         partitionKey = RealmSpace.queryCurrentUserID()!
         placeId = placeId_
         score = score_

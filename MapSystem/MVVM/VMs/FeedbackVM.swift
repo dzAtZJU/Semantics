@@ -14,19 +14,26 @@ class FeedbackVM {
     private var conditionsRank: List<ConditionRank>!
     private var dataLayer: SemWorldDataLayer!
     init(placeId placeId_: String, completion: @escaping (FeedbackVM) -> Void) {
-        print("[FeedbackVM] \(placeId_)")
-        RealmSpace.main.async {
-            self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.queryCurrentUserID()!))
-            RealmSpace.main.realm(partitionValue1: RealmSpace.partitionValue) {
+        RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!) {
+            self.dataLayer = SemWorldDataLayer(realm: $0)
+            
+            RealmSpace.main.realm(RealmSpace.partitionValue) {
                 let publicDataLayer = SemWorldDataLayer(realm: $0)
+                
                 self.dataLayer.createExtraConditionRanks(allConditionIds: publicDataLayer.queryConditions())
+                
                 self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
                 self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
                 
                 let items = self.conditionsRank.filter {
-                    $0.placeScoreList.firstIndex {
-                        $0.placeId == self.targetPlace._id
-                    } == nil
+                    !$0.placeScoreList.contains {
+                        $0.placeId == placeId_
+                    }
+                }
+                
+                guard !items.isEmpty else {
+                    completion(self)
+                    return
                 }
                 
                 try! self.dataLayer.realm.write {

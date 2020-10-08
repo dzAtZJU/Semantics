@@ -20,8 +20,8 @@ class ConditionFeedbackVM {
         targetPlace = targetPlace_
         rankByCondition = rankByCondition_
         
-        publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.partitionValue))
-        privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(partitionValue1: RealmSpace.queryCurrentUserID()!))
+        publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
+        privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm( RealmSpace.queryCurrentUserID()!))
         conditionTitle = publicDataLayer.queryCondition(_id: rankByCondition.conditionId).title
     }
     

@@ -70,10 +70,11 @@ extension LoginVC: ASAuthorizationControllerDelegate, ASAuthorizationControllerP
         }
         
         spinner.startAnimating()
-        RealmSpace.login(cred: Credentials(appleToken: token)) { _ in 
+        RealmSpace.login(cred: Credentials.apple(idToken: token)) { _ in 
             RealmSpace.shared.async {
-                RealmSpace.shared.realm(partitionValue1: RealmSpace.partitionValue) { publcRealm in
-                    RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!) { privateRealm in
+                RealmSpace.shared.realm(RealmSpace.partitionValue) { publcRealm in
+                    
+                    RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!) { privateRealm in
                         SemWorldDataLayer(realm: privateRealm).queryOrCreateCurrentIndividual(userName: KeychainItem.currentUserName ?? String.random(ofLength: 6))
                         
                         DispatchQueue.main.async {

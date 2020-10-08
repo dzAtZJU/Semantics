@@ -19,7 +19,7 @@ class PlaceVM: PanelContentVM {
     static func new(placeId: String?, completion: @escaping (PlaceVM) -> Void) {
         if let placeId = placeId {
             RealmSpace.shared.async {
-                let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(partitionValue1: RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeId: placeId)
+                let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeId: placeId)
                 let vm = PlaceVM(placeStory: placeStory)
                 completion(vm)
             }

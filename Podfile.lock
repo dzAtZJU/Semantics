@@ -1,22 +1,37 @@
 PODS:
-  - Realm (10.0.0-beta.5):
-    - Realm/Headers (= 10.0.0-beta.5)
-  - Realm/Headers (10.0.0-beta.5)
-  - RealmSwift (10.0.0-beta.5):
-    - Realm (= 10.0.0-beta.5)
+  - Realm (10.0.0-rc.1):
+    - Realm/Headers (= 10.0.0-rc.1)
+  - Realm/Headers (10.0.0-rc.1)
+  - RealmSwift (10.0.0-rc.1):
+    - Realm (= 10.0.0-rc.1)
+  - Sentry (6.0.0):
+    - Sentry/Core (= 6.0.0)
+  - Sentry/Core (6.0.0)
 
 DEPENDENCIES:
-  - RealmSwift (>= 10.0.0-beta.5)
+  - RealmSwift (>= 10.0.0-rc.1)
+  - Sentry (from `https://github.com/getsentry/sentry-cocoa.git`, tag `6.0.0`)
 
 SPEC REPOS:
   trunk:
     - Realm
     - RealmSwift
 
-SPEC CHECKSUMS:
-  Realm: e30d3a77421b1b64932ce5843ba7d08afad749fd
-  RealmSwift: 80488a4f1388b2c5681066f0f26757989034edfb
+EXTERNAL SOURCES:
+  Sentry:
+    :git: https://github.com/getsentry/sentry-cocoa.git
+    :tag: 6.0.0
 
-PODFILE CHECKSUM: a9609de28a05c2414fa2ab09b2f8becc33b357f6
+CHECKOUT OPTIONS:
+  Sentry:
+    :git: https://github.com/getsentry/sentry-cocoa.git
+    :tag: 6.0.0
+
+SPEC CHECKSUMS:
+  Realm: b8faac708a4b5a9e98667ccd58404fcf60b354b7
+  RealmSwift: 7f3831445e6f03dfb9312c4befba0f91fe7ccf3d
+  Sentry: 9f6ac6d0412a09a8d610497f873ccbcf7abbe3f8
+
+PODFILE CHECKSUM: 3dcc54f301d01efb08faf321958791f509cbd09f
 
 COCOAPODS: 1.8.4
