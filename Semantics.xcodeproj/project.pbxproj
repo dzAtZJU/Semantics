@@ -41,6 +41,7 @@
 		895A4E2A24ED14AF0025ED20 /* CLLocationCoordinate2D+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2924ED14AF0025ED20 /* CLLocationCoordinate2D+.swift */; };
 		895A4E2C24ED9F4A0025ED20 /* PlaceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */; };
 		895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2D24EDA4550025ED20 /* UniquePlace.swift */; };
+		89618E6B25385358000253E3 /* PerspectivesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E6A25385358000253E3 /* PerspectivesVC.swift */; };
 		896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C5248F99330000ABCD /* Graphiccontent.swift */; };
 		896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C7248FA7A20000ABCD /* Concurrency.swift */; };
 		8962350D24920CF40000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
@@ -76,6 +77,7 @@
 		8991DADA24B3513200299595 /* SemFoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAD924B3513200299595 /* SemFoldersVC.swift */; };
 		8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DADD24B45BE100299595 /* SearchResultsVC.swift */; };
 		8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991DAE024B6F9BD00299595 /* SemTextLayout.swift */; };
+		89949D30253155FF0023C526 /* InfoSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89949D2F253155FF0023C526 /* InfoSpace.swift */; };
 		89988ADB24C2D3040005580B /* BarrierVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADA24C2D3040005580B /* BarrierVC.swift */; };
 		89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADC24C2D8FF0005580B /* SemSectorVC.swift */; };
 		89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */; };
@@ -187,6 +189,7 @@
 		895A4E2924ED14AF0025ED20 /* CLLocationCoordinate2D+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+.swift"; sourceTree = "<group>"; };
 		895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceVM.swift; sourceTree = "<group>"; };
 		895A4E2D24EDA4550025ED20 /* UniquePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniquePlace.swift; sourceTree = "<group>"; };
+		89618E6A25385358000253E3 /* PerspectivesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectivesVC.swift; sourceTree = "<group>"; };
 		896234C5248F99330000ABCD /* Graphiccontent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphiccontent.swift; sourceTree = "<group>"; };
 		896234C7248FA7A20000ABCD /* Concurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concurrency.swift; sourceTree = "<group>"; };
 		8962350C24920CF40000ABCD /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
@@ -224,6 +227,7 @@
 		8991DAD924B3513200299595 /* SemFoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemFoldersVC.swift; sourceTree = "<group>"; };
 		8991DADD24B45BE100299595 /* SearchResultsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsVC.swift; sourceTree = "<group>"; };
 		8991DAE024B6F9BD00299595 /* SemTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemTextLayout.swift; sourceTree = "<group>"; };
+		89949D2F253155FF0023C526 /* InfoSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoSpace.swift; sourceTree = "<group>"; };
 		89988ADA24C2D3040005580B /* BarrierVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarrierVC.swift; sourceTree = "<group>"; };
 		89988ADC24C2D8FF0005580B /* SemSectorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSectorVC.swift; sourceTree = "<group>"; };
 		89988ADE24C2D9FE0005580B /* SemSectorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemSectorsVC.swift; sourceTree = "<group>"; };
@@ -374,12 +378,11 @@
 		89290D6A24E5312600F0A862 /* VCs */ = {
 			isa = PBXGroup;
 			children = (
+				89949D51253851390023C526 /* ProjectPerspectives */,
 				897A992E24FC3AB3005613C9 /* Marking */,
 				89B1736424F93F7400320907 /* Discovering */,
 				899AE18524DC255D00C0EB17 /* MapVC.swift */,
 				89290D5E24E42B3E00F0A862 /* PanelContentVC.swift */,
-				8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */,
-				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
 				895A4E2524EC36960025ED20 /* PlaceVC.swift */,
 			);
 			path = VCs;
@@ -436,6 +439,7 @@
 		896234C4248F99030000ABCD /* Infra */ = {
 			isa = PBXGroup;
 			children = (
+				89949D2E253155C00023C526 /* InfoIntegration */,
 				897A993124FDA5E8005613C9 /* Persistence */,
 				8924A17D24E932B900718680 /* ErrorHandle */,
 				89290D5524E3D60800F0A862 /* RealmSpace */,
@@ -564,6 +568,24 @@
 				89A14BE12522009300AA3DF7 /* Environment.swift */,
 			);
 			path = Configs;
+			sourceTree = "<group>";
+		};
+		89949D2E253155C00023C526 /* InfoIntegration */ = {
+			isa = PBXGroup;
+			children = (
+				89949D2F253155FF0023C526 /* InfoSpace.swift */,
+			);
+			path = InfoIntegration;
+			sourceTree = "<group>";
+		};
+		89949D51253851390023C526 /* ProjectPerspectives */ = {
+			isa = PBXGroup;
+			children = (
+				8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */,
+				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
+				89618E6A25385358000253E3 /* PerspectivesVC.swift */,
+			);
+			path = ProjectPerspectives;
 			sourceTree = "<group>";
 		};
 		89988AD924C2D0210005580B /* Resources */ = {
@@ -977,6 +999,7 @@
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
 				899AE18324DAD5A800C0EB17 /* CloudKitSpace.swift in Sources */,
 				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
+				89949D30253155FF0023C526 /* InfoSpace.swift in Sources */,
 				89A666D724D6EEE100851EDF /* FloatingContainerVC.swift in Sources */,
 				89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */,
 				89A413D724C6F041003FD435 /* Bubble.swift in Sources */,
@@ -992,6 +1015,7 @@
 				8976AC69247BC7A900A7AD15 /* EclipseCollisionBoundsWrapper.swift in Sources */,
 				89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */,
 				89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */,
+				89618E6B25385358000253E3 /* PerspectivesVC.swift in Sources */,
 				89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */,
 				89E257AA24F9936500D6C375 /* DiscoverdResultVM.swift in Sources */,
 				89A666DB24D847EB00851EDF /* UIButton+.swift in Sources */,

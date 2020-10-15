@@ -8,6 +8,7 @@
 
 import UIKit
 import FloatingPanel
+import Presentr
 
 class FeedbackVC: UIPageViewController, PanelContent {
     var panelContentVM: PanelContentVM! {
@@ -21,6 +22,8 @@ class FeedbackVC: UIPageViewController, PanelContent {
     var panelContentDelegate: PanelContentDelegate!
     
     private weak var scrollView: UIScrollView?
+    
+    private var pageIndex = 0
     
     private let feedbackVM: FeedbackVM
     init(feedbackVM feedbackVM_: FeedbackVM) {
@@ -42,7 +45,16 @@ class FeedbackVC: UIPageViewController, PanelContent {
     override func viewDidAppear(_ animated: Bool) {
         panelContentDelegate.panel.move(to: .full, animated: true)
         super.viewDidAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.1) {
+            let vc = PerspectivesVC()
+            let pr = Presentr(presentationType: .popup)
+            pr.backgroundTap = .noAction
+            self.customPresentViewController(pr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
+
+        }
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         panelContentDelegate.panel.move(to: .half, animated: true)
         super.viewWillDisappear(animated)
@@ -71,6 +83,20 @@ extension FeedbackVC: UIPageViewControllerDataSource {
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        0
+        pageIndex
+    }
+}
+
+extension FeedbackVC: UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard completed else {
+            return
+        }
+        
+        guard let conditionFeedbackVC = pageViewController.viewControllers?.first as? ConditionFeedbackVC else {
+            fatalError("FeedbackVC as UIPageViewControllerDelegate get called with UIPageViewController containing non-ConditionFeedbackVC")
+        }
+        
+        pageIndex = feedbackVM.indexFor(conditionFeedbackVM: conditionFeedbackVC.conditionFeedbackVM)
     }
 }

@@ -17,33 +17,32 @@ class FeedbackVM {
         RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!) {
             self.dataLayer = SemWorldDataLayer(realm: $0)
             
-            RealmSpace.main.realm(RealmSpace.partitionValue) {
-                let publicDataLayer = SemWorldDataLayer(realm: $0)
-                
-                self.dataLayer.createExtraConditionRanks(allConditionIds: publicDataLayer.queryConditions())
-                
-                self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
-                self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
-                
-                let items = self.conditionsRank.filter {
-                    !$0.placeScoreList.contains {
-                        $0.placeId == placeId_
-                    }
+            
+            let publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
+            
+            self.dataLayer.createExtraConditionRanks(allConditionIds: publicDataLayer.queryConditions())
+            
+            self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
+            self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
+            
+            let items = self.conditionsRank.filter {
+                !$0.placeScoreList.contains {
+                    $0.placeId == placeId_
                 }
-                
-                guard !items.isEmpty else {
-                    completion(self)
-                    return
-                }
-                
-                try! self.dataLayer.realm.write {
-                    items.forEach {
-                        $0.placeScoreList.insert(PlaceScore(conditionId: $0.conditionId, placeId: self.targetPlace._id, score: 0), at: 0)
-                    }
-                }
-                
-                completion(self)
             }
+            
+            guard !items.isEmpty else {
+                completion(self)
+                return
+            }
+            
+            try! self.dataLayer.realm.write {
+                items.forEach {
+                    $0.placeScoreList.insert(PlaceScore(conditionId: $0.conditionId, placeId: self.targetPlace._id, score: 0), at: 0)
+                }
+            }
+            
+            completion(self)
         }
     }
     
@@ -66,9 +65,13 @@ class FeedbackVM {
     func conditionFeedbackVM(before vm: ConditionFeedbackVM) -> ConditionFeedbackVM? {
         let index = conditionsRank.index(of: vm.rankByCondition)!
         guard case let preIndex = index - 1, preIndex >= conditionsRank.startIndex
-            else {
-                return nil
+        else {
+            return nil
         }
         return ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionsRank[preIndex])
+    }
+    
+    func indexFor(conditionFeedbackVM: ConditionFeedbackVM) -> Int {
+        return conditionsRank.index(of: conditionFeedbackVM.rankByCondition)!
     }
 }

@@ -120,14 +120,14 @@ extension MapVM {
         RealmSpace.shared.async {
             RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!) { privateRealm in
                 RealmSpace.shared.realm(RealmSpace
-                    .partitionValue) { publicRealm in
-                        let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).queryVisitedPlaces()).map { place throws in
-                            SemAnnotation(place: place, type: .visited)
-                        }
-                        
-                        DispatchQueue.main.async {
-                            self.appendAnnotations(annos)
-                        }
+                                            .partitionValue) { publicRealm in
+                    let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).loadVisitedPlaces()).map { place throws in
+                        SemAnnotation(place: place, type: .visited)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.appendAnnotations(annos)
+                    }
                 }
             }
         }
@@ -136,15 +136,14 @@ extension MapVM {
     func markVisited() {
         let uniquePlace = UniquePlace(annotation: self.selectedAnnotation!)
         RealmSpace.shared.async {
-            let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace)
+            let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace).freeze()
             
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).markVisited(place: place) { place in
-                DispatchQueue.main.async {
-                    self.setSelectedAnnotationEvent((nil, .fromModel))
-                    let newAnnotation = SemAnnotation(place: place, type: .visited)
-                    self.appendAnnotations([newAnnotation])
-                    self.setSelectedAnnotationEvent((newAnnotation, .fromModel))
-                }
+            SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).markVisited(placeID: place._id)
+            DispatchQueue.main.async {
+                self.setSelectedAnnotationEvent((nil, .fromModel))
+                let newAnnotation = SemAnnotation(place: place, type: .visited)
+                self.appendAnnotations([newAnnotation])
+                self.setSelectedAnnotationEvent((newAnnotation, .fromModel))
             }
         }
     }

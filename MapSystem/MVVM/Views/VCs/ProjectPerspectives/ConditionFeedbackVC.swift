@@ -23,6 +23,7 @@ class ConditionFeedbackVC: UIViewController {
     private lazy var conditionLabel: UILabel = {
         let tmp = UILabel()
         tmp.translatesAutoresizingMaskIntoConstraints = false
+        tmp.textColor = .systemBlue
         tmp.font = UIFont.preferredFont(forTextStyle: .title3)
         return tmp
     }()

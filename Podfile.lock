@@ -1,4 +1,5 @@
 PODS:
+  - Presentr (1.9)
   - Realm (10.0.0-rc.1):
     - Realm/Headers (= 10.0.0-rc.1)
   - Realm/Headers (10.0.0-rc.1)
@@ -7,15 +8,20 @@ PODS:
   - Sentry (6.0.0):
     - Sentry/Core (= 6.0.0)
   - Sentry/Core (6.0.0)
+  - TagListView (1.4.1)
 
 DEPENDENCIES:
+  - Presentr
   - RealmSwift (>= 10.0.0-rc.1)
   - Sentry (from `https://github.com/getsentry/sentry-cocoa.git`, tag `6.0.0`)
+  - TagListView (~> 1.0)
 
 SPEC REPOS:
   trunk:
+    - Presentr
     - Realm
     - RealmSwift
+    - TagListView
 
 EXTERNAL SOURCES:
   Sentry:
@@ -28,10 +34,12 @@ CHECKOUT OPTIONS:
     :tag: 6.0.0
 
 SPEC CHECKSUMS:
+  Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
   Realm: b8faac708a4b5a9e98667ccd58404fcf60b354b7
   RealmSwift: 7f3831445e6f03dfb9312c4befba0f91fe7ccf3d
   Sentry: 9f6ac6d0412a09a8d610497f873ccbcf7abbe3f8
+  TagListView: a1c236d17960a0cf64156725a76ce6d73ebce2be
 
-PODFILE CHECKSUM: 3dcc54f301d01efb08faf321958791f509cbd09f
+PODFILE CHECKSUM: cad8c7e7f0f411bb8c753f54acd7e76403e932cb
 
 COCOAPODS: 1.8.4

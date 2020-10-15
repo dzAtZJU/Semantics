@@ -65,8 +65,8 @@ extension SemWorldDataLayer {
 
 // MARK: Places
 extension SemWorldDataLayer {
-    func queryVisitedPlaces() -> [String] {
-        queryCurrentIndividual()!.placeStoryList.compactMap(by: \.placeId)
+    func loadVisitedPlaces() -> [String] {
+        queryCurrentIndividual()!.placeStory_List.map(by: \.placeId)
     }
     
     func queryPlace(_id: String) -> Place {
@@ -77,10 +77,10 @@ extension SemWorldDataLayer {
         realm.objects(Place.self).filter("_id in %@", _ids)
     }
     
-    func queryPlaceStory(placeId: String) -> PlaceStory {
-        queryCurrentIndividual()!.placeStoryList.first {
-            $0.placeId == placeId
-            }!
+    func loadPlaceStory(placeID: String) -> PlaceStory? {
+        queryCurrentIndividual()!.placeStory_List.first {
+            $0.placeId == placeID
+            }
     }
     
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
@@ -95,15 +95,34 @@ extension SemWorldDataLayer {
         }
     }
     
-    func markVisited(place: Place, completion: (Place) -> Void) {
-        
+    func markVisited(placeID: String) {
         let ind = queryCurrentIndividual()!
-        let placeStory = PlaceStory(individual: ind, placeId: place._id)
-        try! realm.write {
-            self.realm.add(placeStory)
+        guard loadPlaceStory(placeID: placeID) == nil else {
+            return
         }
         
-        completion(place.freeze())
+        let placeStory = PlaceStory(placeId: placeID)
+        try! realm.write {
+            ind.placeStory_List.append(placeStory)
+        }
+    }
+}
+
+// MARK: PlaceStory
+extension SemWorldDataLayer {
+    func projectsPerspective(_ conditionID: String, on placeID: String) {
+        let ind = queryCurrentIndividual()!
+        let placeStory = ind.placeStory_List.first {
+            $0.placeId == placeID
+        }!
+        guard !placeStory.perspectives.contains(conditionID) else {
+            fatalError("The perspective \(conditionID) is already projected on \(placeStory.placeId)")
+        }
+        do {
+            try! realm.write {
+                placeStory.perspectives.append(conditionID)
+            }
+        }
     }
 }
 

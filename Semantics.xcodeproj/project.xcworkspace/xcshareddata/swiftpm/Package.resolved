@@ -2,12 +2,48 @@
   "object": {
     "pins": [
       {
+        "package": "FloatingPanel",
+        "repositoryURL": "https://github.com/SCENEE/FloatingPanel.git",
+        "state": {
+          "branch": null,
+          "revision": "ca7596e1cae161415f54059a8c44b82c95724160",
+          "version": "1.7.6"
+        }
+      },
+      {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
           "revision": "910d808ade2a576e1a292ceb458a6fa43f67f594",
           "version": "5.14.0"
+        }
+      },
+      {
+        "package": "SPAlert",
+        "repositoryURL": "https://github.com/ivanvorobei/SPAlert",
+        "state": {
+          "branch": null,
+          "revision": "18862409586ac547bcdf8957cd96beb872fbc729",
+          "version": "2.1.4"
+        }
+      },
+      {
+        "package": "SwifterSwift",
+        "repositoryURL": "https://github.com/SwifterSwift/SwifterSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "dc813f3aa92f904a009fe543b99d5649dce7c134",
+          "version": "5.2.0"
+        }
+      },
+      {
+        "package": "SwiftHEXColors",
+        "repositoryURL": "https://github.com/thii/SwiftHEXColors.git",
+        "state": {
+          "branch": null,
+          "revision": "bf89f80ed03a7a55edf0beb6a6bcadd41a913f9d",
+          "version": "1.4.0"
         }
       }
     ]

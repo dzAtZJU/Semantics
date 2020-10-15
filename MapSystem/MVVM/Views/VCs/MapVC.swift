@@ -206,7 +206,7 @@ extension MapVC: MKMapViewDelegate {
         
         centerToUserLocation = false
         mapView.centerCoordinate = userLocation.coordinate
-        //        MapSysEnvironment.shared.userCurrentCoordinate = userLocation.coordinate
+        MapSysEnvironment.shared.userCurrentCoordinate = userLocation.coordinate
     }
     
     static let annotationViewIdentifier = "annotationView"
@@ -259,7 +259,7 @@ extension MapVC: MKMapViewDelegate {
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
         switch annotation.type {
         case .inSearching, .visited:
-            PlaceVM.new(placeId: annotation.placeId) { vm in
+            PlaceVM.new(placeID: annotation.placeId) { vm in
                 DispatchQueue.main.async {
                     self.placeVC.vm = vm
                     completion(self.placeVC)

@@ -15,7 +15,12 @@ target 'Semantics' do
   # Changelog: https://github.com/realm/realm-cocoa/blob/v10.0.0-beta.4/CHANGELOG.md
   pod 'RealmSwift', '>= 10.0.0-rc.1'
 
+  pod 'Presentr'
+  
+  pod 'TagListView', '~> 1.0'
+  
   pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git', :tag => '6.0.0'
+  
 #  pod 'Jelly', '~> 2.2.2'
   
 #  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'

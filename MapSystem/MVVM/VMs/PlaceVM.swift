@@ -16,14 +16,15 @@ class PlaceVM: PanelContentVM {
     }
     var panelContentVMDelegate: PanelContentVMDelegate!
     
-    static func new(placeId: String?, completion: @escaping (PlaceVM) -> Void) {
-        if let placeId = placeId {
+    static func new(placeID: String?, completion: @escaping (PlaceVM) -> Void) {
+        if let placeId = placeID {
             RealmSpace.shared.async {
-                let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeId: placeId)
-                let vm = PlaceVM(placeStory: placeStory)
+                let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).loadPlaceStory(placeID: placeId)
+                let vm = PlaceVM(placeStory: placeStory!)
                 completion(vm)
             }
         } else {
+            // This place hasn't been visited by anyone, thus its not in realm
             completion(PlaceVM())
         }
     }

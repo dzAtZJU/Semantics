@@ -22,6 +22,6 @@ class MapSysEnvironment {
             return nil
         }
         
-        return MKCoordinateRegion(center: userCurrentCoordinate, latitudinalMeters: 30_000, longitudinalMeters: 30_000)
+        return MKCoordinateRegion(center: userCurrentCoordinate, latitudinalMeters: 10_000, longitudinalMeters: 10_000)
     }
 }

@@ -19,6 +19,8 @@ class SearchSuggestionsVC: UITableViewController {
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
             contentView.backgroundColor = .systemYellow
+            textLabel?.textColor = .systemBlue
+            detailTextLabel?.textColor = .systemIndigo
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -37,8 +39,9 @@ class SearchSuggestionsVC: UITableViewController {
         tmp.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
         tmp.resultTypes = [.pointOfInterest]
         tmp.delegate = self
-        
-        
+        if let searchRegion = MapSysEnvironment.shared.searchRegion {
+            tmp.region = searchRegion
+        }
         return tmp
     }()
     
@@ -61,7 +64,7 @@ class SearchSuggestionsVC: UITableViewController {
 extension SearchSuggestionsVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         searchCompleter.queryFragment = searchController.searchBar.text ?? ""
-//        print("queryFragment: \(searchCompleter.queryFragment)")
+//        print("[Space:Search-Completer] area size is \(searchCompleter.region.size) in meters")
     }
 }
 
