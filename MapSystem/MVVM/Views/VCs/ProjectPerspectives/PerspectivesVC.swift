@@ -8,9 +8,12 @@ class PerspectivesVC: UIViewController {
         tmp.separatorStyle = .none
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.register(PerspectiveCell.self, forCellReuseIdentifier: PerspectiveCell.identifier)
+        tmp.register(AddPerspectiveCell.self, forCellReuseIdentifier: AddPerspectiveCell.identifier)
         tmp.delegate = self
         tmp.dataSource = self
         tmp.delaysContentTouches = false
+        tmp.isEditing = true
+        tmp.allowsSelectionDuringEditing = true
         return tmp
     }()
     
@@ -43,29 +46,63 @@ class PerspectivesVC: UIViewController {
 }
 
 extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PerspectiveCell.identifier, for: indexPath)
-        cell.textLabel?.text = "adsadadssad"
-        cell.accessoryType = .checkmark
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)!
-        switch cell.accessoryType {
-        case .checkmark:
-            cell.accessoryType = .none
-        case .none:
-            cell.accessoryType = .checkmark
+        switch section {
+        case 0:
+            return 5
+        case 1:
+            return 1
         default:
             fatalError()
         }
-        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: PerspectiveCell.identifier, for: indexPath)
+            cell.textLabel?.text = "adsadadssad"
+            cell.accessoryType = .checkmark
+            
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: AddPerspectiveCell.identifier, for: indexPath)
+            return cell
+        default:
+            fatalError()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.cellForRow(at: indexPath)!
+            switch cell.accessoryType {
+            case .checkmark:
+                cell.accessoryType = .none
+            case .none:
+                cell.accessoryType = .checkmark
+            default:
+                fatalError()
+            }
+            tableView.deselectRow(at: indexPath, animated: true)
+        case 1:
+            break
+        default:
+            fatalError()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return indexPath.section == 1 ? .insert : .none
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section == 1
     }
 }
 
@@ -75,6 +112,20 @@ private class PerspectiveCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: Self.identifier)
         backgroundColor = .secondarySystemBackground
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private class AddPerspectiveCell: UITableViewCell {
+    static let identifier = "AddPerspectiveCell"
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: Self.identifier)
+        backgroundColor = .secondarySystemBackground
+        textLabel?.text = "add condition"
     }
     
     required init?(coder: NSCoder) {
