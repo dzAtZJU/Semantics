@@ -2,42 +2,31 @@ import UIKit
 import TagListView
 
 class PerspectivesVC: UIViewController {
-    
-    private var placePerspectivesView: TagListView = {
-        let tmp = TagListView()
-        tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.textFont = .preferredFont(forTextStyle: .title3)
-        tmp.tagBackgroundColor = .systemGreen
-        tmp.marginX = 6
-        tmp.marginY = 6
-        tmp.alignment = .leading
-        tmp.backgroundColor = .systemBackground
-        return tmp
-    }()
-    
-    private static let cellIdentifier = "privatePerspectiveCell"
     private lazy var privatePerspectivesView: UITableView = {
         let tmp = UITableView(frame: .zero, style: .plain)
+        tmp.backgroundColor = .secondarySystemBackground
         tmp.separatorStyle = .none
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.register(UITableViewCell.self, forCellReuseIdentifier: Self.cellIdentifier)
+        tmp.register(PerspectiveCell.self, forCellReuseIdentifier: PerspectiveCell.identifier)
         tmp.delegate = self
         tmp.dataSource = self
+        tmp.delaysContentTouches = false
         return tmp
     }()
     
     override func loadView() {
         view = UIView()
+        view.backgroundColor = .secondarySystemBackground
+        
         navigationItem.title = "Conditions"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneBtnTapped))
-        
-        view.addSubview(placePerspectivesView)
-        placePerspectivesView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1).isActive = true
-        placePerspectivesView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1).isActive = true
-        view.trailingAnchor.constraint(equalToSystemSpacingAfter: placePerspectivesView.trailingAnchor, multiplier: 1).isActive = true
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.shadowColor = .none
+        standardAppearance.backgroundColor = .secondarySystemBackground
+        navigationItem.standardAppearance = standardAppearance
         
         view.addSubview(privatePerspectivesView)
-        privatePerspectivesView.topAnchor.constraint(equalToSystemSpacingBelow: placePerspectivesView.bottomAnchor, multiplier: 1).isActive = true
+        privatePerspectivesView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
         privatePerspectivesView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 0).isActive = true
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: privatePerspectivesView.trailingAnchor, multiplier: 0).isActive = true
         privatePerspectivesView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
@@ -46,12 +35,6 @@ class PerspectivesVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        placePerspectivesView.addTags(["1", "12", "123", "1234", "12345", "123456", "1", "12", "123", "1234", "12345", "123456"])
-        placePerspectivesView.tagViews.forEach {
-            $0.layer.cornerRadius = 10
-            $0.layer.masksToBounds = true
-        }
     }
     
     @objc func doneBtnTapped() {
@@ -65,14 +48,36 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: PerspectiveCell.identifier, for: indexPath)
         cell.textLabel?.text = "adsadadssad"
         cell.accessoryType = .checkmark
+        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)!
+        switch cell.accessoryType {
+        case .checkmark:
+            cell.accessoryType = .none
+        case .none:
+            cell.accessoryType = .checkmark
+        default:
+            fatalError()
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-extension PerspectivesVC: UISearchResultsUpdating, UISearchBarDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
+private class PerspectiveCell: UITableViewCell {
+    static let identifier = "PerspectiveCell"
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: Self.identifier)
+        backgroundColor = .secondarySystemBackground
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

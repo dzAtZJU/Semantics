@@ -8,6 +8,8 @@
 
 import UIKit
 import Combine
+import TagListView
+import Presentr
 
 protocol PlaceVCDelegate {
     func placeVCShouldStartFeedback(_ placeVC: PlaceVC)
@@ -100,24 +102,50 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
+    private lazy var placePerspectivesView: TagListView = {
+        let tmp = TagListView()
+        tmp.translatesAutoresizingMaskIntoConstraints = false
+        tmp.textFont = .preferredFont(forTextStyle: .title3)
+        tmp.tagBackgroundColor = .systemGreen
+        tmp.marginX = 6
+        tmp.marginY = 6
+        tmp.alignment = .center
+        tmp.delegate = self
+        tmp.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(placePerspectivesTapped)))
+        return tmp
+    }()
+    
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .secondarySystemBackground
         
         view.addSubview(stackView)
         stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        view.addSubview(placePerspectivesView)
+        placePerspectivesView.topAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 4).isActive = true
+        placePerspectivesView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2).isActive = true
+        view.trailingAnchor.constraint(equalToSystemSpacingAfter: placePerspectivesView.trailingAnchor, multiplier: 2).isActive = true
+        
     }
     
+    override func viewDidLoad() {
+        placePerspectivesView.addTags(["1", "12", "123", "1234", "12345", "123456", "1", "12", "123", "1234", "12345", "123456"])
+        placePerspectivesView.tagViews.forEach {
+            $0.layer.cornerRadius = 10
+            $0.layer.masksToBounds = true
+        }
+    }
+        
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         delegate?.placeWillDisappear(self)
     }
-    
 }
 
 // MARK: Interaction
-extension PlaceVC {
+extension PlaceVC: TagListViewDelegate {
     @objc private func feedbackBtnTapped() {
         delegate?.placeVCShouldStartFeedback(self)
     }
@@ -128,5 +156,18 @@ extension PlaceVC {
     
     @objc private func findNextBtnTapped() {
         delegate?.placeVCShouldDiscoverNext(self)
+    }
+    
+    @objc private func placePerspectivesTapped() {
+        let vc = PerspectivesVC()
+        let pr = Presentr(presentationType: .popup)
+        pr.transitionType = .crossDissolve
+        pr.dismissTransitionType = .crossDissolve
+        pr.backgroundTap = .dismiss
+        self.customPresentViewController(pr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
+    }
+    
+    @objc func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
+        placePerspectivesTapped()
     }
 }

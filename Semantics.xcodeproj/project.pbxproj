@@ -42,6 +42,7 @@
 		895A4E2C24ED9F4A0025ED20 /* PlaceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */; };
 		895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2D24EDA4550025ED20 /* UniquePlace.swift */; };
 		89618E6B25385358000253E3 /* PerspectivesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E6A25385358000253E3 /* PerspectivesVC.swift */; };
+		89618E7825398FD1000253E3 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E7725398FD1000253E3 /* UIView+.swift */; };
 		896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C5248F99330000ABCD /* Graphiccontent.swift */; };
 		896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C7248FA7A20000ABCD /* Concurrency.swift */; };
 		8962350D24920CF40000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
@@ -190,6 +191,7 @@
 		895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceVM.swift; sourceTree = "<group>"; };
 		895A4E2D24EDA4550025ED20 /* UniquePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniquePlace.swift; sourceTree = "<group>"; };
 		89618E6A25385358000253E3 /* PerspectivesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectivesVC.swift; sourceTree = "<group>"; };
+		89618E7725398FD1000253E3 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		896234C5248F99330000ABCD /* Graphiccontent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphiccontent.swift; sourceTree = "<group>"; };
 		896234C7248FA7A20000ABCD /* Concurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concurrency.swift; sourceTree = "<group>"; };
 		8962350C24920CF40000ABCD /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
@@ -450,6 +452,7 @@
 				892C63D3248669FF00208446 /* Utils */,
 				896234C5248F99330000ABCD /* Graphiccontent.swift */,
 				896234C7248FA7A20000ABCD /* Concurrency.swift */,
+				89618E7725398FD1000253E3 /* UIView+.swift */,
 			);
 			path = Infra;
 			sourceTree = "<group>";
@@ -1054,6 +1057,7 @@
 				89A666D324D6BFF900851EDF /* Schema.swift in Sources */,
 				896344BF249F8F240060160B /* TextLoader.swift in Sources */,
 				89290D5024E2A71900F0A862 /* LoginVC.swift in Sources */,
+				89618E7825398FD1000253E3 /* UIView+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

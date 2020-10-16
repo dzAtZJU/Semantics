@@ -8,7 +8,6 @@
 
 import UIKit
 import FloatingPanel
-import Presentr
 
 class FeedbackVC: UIPageViewController, PanelContent {
     var panelContentVM: PanelContentVM! {
@@ -45,14 +44,6 @@ class FeedbackVC: UIPageViewController, PanelContent {
     override func viewDidAppear(_ animated: Bool) {
         panelContentDelegate.panel.move(to: .full, animated: true)
         super.viewDidAppear(animated)
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+0.1) {
-            let vc = PerspectivesVC()
-            let pr = Presentr(presentationType: .popup)
-            pr.backgroundTap = .noAction
-            self.customPresentViewController(pr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
-
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
