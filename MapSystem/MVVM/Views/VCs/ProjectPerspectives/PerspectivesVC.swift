@@ -2,6 +2,24 @@ import UIKit
 import TagListView
 
 class PerspectivesVC: UIViewController {
+    struct PerspectiveChoice {
+        let perspective: String
+        var isChosen: Bool
+    }
+    
+    private var perspectiveChoice_List: [PerspectiveChoice]
+    
+    private var isDuringInput = false
+    
+    init(perspectiveChoice_List perspectiveChoice_List_: [PerspectiveChoice]) {
+        perspectiveChoice_List = perspectiveChoice_List_
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private lazy var privatePerspectivesView: UITableView = {
         let tmp = UITableView(frame: .zero, style: .plain)
         tmp.backgroundColor = .secondarySystemBackground
@@ -9,6 +27,7 @@ class PerspectivesVC: UIViewController {
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.register(PerspectiveCell.self, forCellReuseIdentifier: PerspectiveCell.identifier)
         tmp.register(AddPerspectiveCell.self, forCellReuseIdentifier: AddPerspectiveCell.identifier)
+        tmp.register(InputPerspectiveCell.self, forCellReuseIdentifier: InputPerspectiveCell.identifier)
         tmp.delegate = self
         tmp.dataSource = self
         tmp.delaysContentTouches = false
@@ -45,15 +64,15 @@ class PerspectivesVC: UIViewController {
     }
 }
 
-extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource {
+extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource, InputPerspectiveCellDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
+        isDuringInput ? 1 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 5
+            return perspectiveChoice_List.count + (isDuringInput ? 1 : 0)
         case 1:
             return 1
         default:
@@ -64,11 +83,20 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: PerspectiveCell.identifier, for: indexPath)
-            cell.textLabel?.text = "adsadadssad"
-            cell.accessoryType = .checkmark
-            
-            return cell
+            if indexPath.row == perspectiveChoice_List.count {
+                let cell = tableView.dequeueReusableCell(withIdentifier: InputPerspectiveCell.identifier, for: indexPath) as! InputPerspectiveCell
+                cell.delegate = self
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                    cell.textField.becomeFirstResponder()
+                }
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: PerspectiveCell.identifier, for: indexPath)
+                let perspectiveChoice = perspectiveChoice_List[indexPath.row]
+                cell.textLabel!.text = perspectiveChoice.perspective
+                cell.accessoryType = perspectiveChoice.isChosen ? .checkmark : .none
+                return cell
+            }
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: AddPerspectiveCell.identifier, for: indexPath)
             return cell
@@ -80,20 +108,39 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            let cell = tableView.cellForRow(at: indexPath)!
-            switch cell.accessoryType {
-            case .checkmark:
-                cell.accessoryType = .none
-            case .none:
-                cell.accessoryType = .checkmark
-            default:
-                fatalError()
-            }
-            tableView.deselectRow(at: indexPath, animated: true)
+            perspectiveChoice_List[indexPath.row].isChosen = !perspectiveChoice_List[indexPath.row].isChosen
+            tableView.reloadRows(at: [indexPath], with: .automatic)
         case 1:
-            break
+            setDuringInput(to: true)
         default:
             fatalError()
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        switch editingStyle {
+        case .insert:
+            setDuringInput(to: true)
+        default:
+            fatalError()
+        }
+    }
+    
+    private func setDuringInput(to: Bool) {
+        if to {
+            isDuringInput = true
+            privatePerspectivesView.beginUpdates()
+            privatePerspectivesView.insertRows(at: [IndexPath(row: perspectiveChoice_List.count, section: 0)], with: .fade)
+            privatePerspectivesView.deleteSections([1], with: .fade)
+            privatePerspectivesView.endUpdates()
+        } else {
+            isDuringInput = false
+            privatePerspectivesView.beginUpdates()
+            privatePerspectivesView.reloadRows(at: [IndexPath(row: perspectiveChoice_List.count-1, section: 0)], with: .fade)
+            privatePerspectivesView.insertSections([1], with: .fade)
+            privatePerspectivesView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
+            privatePerspectivesView.endUpdates()
         }
     }
     
@@ -103,6 +150,11 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section == 1
+    }
+    
+    fileprivate func inputPerspectiveCellDidEndEditing(_ inputPerspectiveCell: InputPerspectiveCell) {
+        perspectiveChoice_List.append(PerspectiveChoice(perspective: inputPerspectiveCell.textField.text!, isChosen: true))
+        setDuringInput(to: false)
     }
 }
 
@@ -130,5 +182,54 @@ private class AddPerspectiveCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private protocol InputPerspectiveCellDelegate: class {
+    func inputPerspectiveCellDidEndEditing(_ inputPerspectiveCell: InputPerspectiveCell)
+}
+
+private class InputPerspectiveCell: UITableViewCell, UITextFieldDelegate {
+    static let identifier = "InputPerspectiveCell"
+    
+    var textField: UITextField!
+    
+    unowned var delegate: InputPerspectiveCellDelegate!
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .default, reuseIdentifier: Self.identifier)
+        backgroundColor = .secondarySystemBackground
+        
+        textField = UITextField()
+        textField.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        contentView.addSubview(textField)
+        textField.placeholder = "condition"
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        textField.frame = contentView.bounds.insetBy(dx: textLabel!.x, dy: 0)
+        textField.delegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        textField.text = nil
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard textField.text != nil && !textField.text!.isEmpty else {
+            return false
+        }
+        
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate!.inputPerspectiveCellDidEndEditing(self)
     }
 }

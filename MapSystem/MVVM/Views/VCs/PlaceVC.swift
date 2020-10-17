@@ -45,9 +45,27 @@ class PlaceVC: UIViewController, PanelContent {
                     }
                 }
             }
+            perspectivesToken = vm.$perspectives.sink {
+                guard var perspectives = $0 else {
+                    return
+                }
+                if perspectives.isEmpty {
+                    perspectives.append("add condition")
+                }
+                DispatchQueue.main.async {
+                    self.placePerspectivesView.removeAllTags()
+                    self.placePerspectivesView.addTags(perspectives)
+                    self.placePerspectivesView.tagViews.forEach {
+                        $0.layer.cornerRadius = 10
+                        $0.layer.masksToBounds = true
+                    }
+                }
+            }
         }
     }
     var placeStateToken: AnyCancellable?
+    
+    var perspectivesToken: AnyCancellable?
     
     var panelContentDelegate: PanelContentDelegate!
     let showBackBtn = true
@@ -129,14 +147,6 @@ class PlaceVC: UIViewController, PanelContent {
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: placePerspectivesView.trailingAnchor, multiplier: 2).isActive = true
         
     }
-    
-    override func viewDidLoad() {
-        placePerspectivesView.addTags(["1", "12", "123", "1234", "12345", "123456", "1", "12", "123", "1234", "12345", "123456"])
-        placePerspectivesView.tagViews.forEach {
-            $0.layer.cornerRadius = 10
-            $0.layer.masksToBounds = true
-        }
-    }
         
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -159,11 +169,11 @@ extension PlaceVC: TagListViewDelegate {
     }
     
     @objc private func placePerspectivesTapped() {
-        let vc = PerspectivesVC()
+        let vc = PerspectivesVC(perspectiveChoice_List: [])
         let pr = Presentr(presentationType: .popup)
         pr.transitionType = .crossDissolve
         pr.dismissTransitionType = .crossDissolve
-        pr.backgroundTap = .dismiss
+        pr.backgroundTap = .noAction
         self.customPresentViewController(pr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
     }
     
