@@ -43,12 +43,33 @@ class Place: Object {
 class Condition: Object {
     @objc dynamic var _id = ""
     @objc dynamic var partitionKey = ""
+    
+    convenience init(id id_: String) {
+        self.init()
+        _id = id_
+        partitionKey = RealmSpace.partitionValue
+    }
+    
+    override static func primaryKey() -> String? {
+        "_id"
+    }
+}
+
+class Individual: Object {
+    @objc dynamic var _id: String = ""
+    @objc dynamic var partitionKey: String = RealmSpace.queryCurrentUserID()!
+    
     @objc dynamic var title = ""
     
-    convenience init(title title_: String) {
+    let placeStory_List = List<PlaceStory>()
+    
+    let conditionRank_List = List<ConditionRank>()
+    
+    let blockedIndividuals = List<ConditionIndividuals>()
+    
+    convenience init(id id_: String, title title_: String) {
         self.init()
-        _id = title
-        partitionKey = RealmSpace.partitionValue
+        _id = id_
         title = title_
     }
     
@@ -57,54 +78,37 @@ class Condition: Object {
     }
 }
 
-class PlaceScore: Object {
-    @objc dynamic var _id = ""
-    @objc dynamic var partitionKey = ""
-    @objc dynamic var placeId = ""
-    @objc dynamic var score = 0
-    let conditionRank = LinkingObjects(fromType: ConditionRank.self, property: "placeScoreList")
-    
-    convenience init(conditionId: String, placeId placeId_: String, score score_: Int) {
-        self.init()
-        _id = RealmSpace.queryCurrentUserID()! + " " + placeId_ + " " + conditionId
-        partitionKey = RealmSpace.queryCurrentUserID()!
-        placeId = placeId_
-        score = score_
-    }
-    
-    override static func primaryKey() -> String? {
-        "_id"
-    }
-}
-
-class ConditionRank: SyncedObject {
-    @objc dynamic var ownerId = ""
-    
-    @objc dynamic var conditionId = ""
-    
-    let placeScoreList = List<PlaceScore>()
-    
-    convenience init(ownerId ownerId_: String, conditionId conditionId_: String, placeScores: [PlaceScore] = []) {
-        self.init()
-        super.partitionKey = RealmSpace.queryCurrentUserID()!
-        ownerId = ownerId_
-        conditionId = conditionId_
-        placeScoreList.append(objectsIn: placeScores)
-    }
-    
-    override static func indexedProperties() -> [String] {
-        ["ownerId", "conditionId"]
-    }
-}
-
 class PlaceStory: EmbeddedObject {
-    @objc dynamic var placeId = ""
+    @objc dynamic var placeID = ""
     @objc dynamic var state = 1
-    let perspectives = List<String>()
+    let perspectiveID_List = List<String>()
     
-    convenience init(placeId placeId_: String) {
+    convenience init(placeID placeID_: String) {
         self.init()
-        placeId = placeId_
+        placeID = placeID_
+    }
+}
+
+class ConditionRank: EmbeddedObject {
+    @objc dynamic var conditionID = ""
+    
+    let placeScore_List = List<PlaceScore>()
+    
+    convenience init(conditionID conditionID_: String, placeScores: [PlaceScore] = []) {
+        self.init()
+        conditionID = conditionID_
+        placeScore_List.append(objectsIn: placeScores)
+    }
+}
+
+class PlaceScore: EmbeddedObject {
+    @objc dynamic var placeID = ""
+    @objc dynamic var score = 0
+    
+    convenience init(placeID placeID_: String, score score_: Int) {
+        self.init()
+        placeID = placeID_
+        score = score_
     }
 }
 
@@ -115,28 +119,5 @@ class ConditionIndividuals: EmbeddedObject {
     convenience init(conditionId conditionId_: String) {
         self.init()
         conditionId = conditionId_
-    }
-}
-
-class Individual: Object {
-    @objc dynamic var _id: String = ""
-    @objc dynamic var partitionKey: String = RealmSpace.queryCurrentUserID()!
-    
-    @objc dynamic var title = ""
-    
-    let conditionsRank = List<ConditionRank>()
-    
-    let blockedIndividuals = List<ConditionIndividuals>()
-    
-    let placeStory_List = List<PlaceStory>()
-    
-    convenience init(id id_: String, title title_: String) {
-        self.init()
-        _id = id_
-        title = title_
-    }
-    
-    override static func primaryKey() -> String? {
-        "_id"
     }
 }

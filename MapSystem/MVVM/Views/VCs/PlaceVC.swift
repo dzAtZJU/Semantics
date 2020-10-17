@@ -169,7 +169,8 @@ extension PlaceVC: TagListViewDelegate {
     }
     
     @objc private func placePerspectivesTapped() {
-        let vc = PerspectivesVC(perspectiveChoice_List: [])
+        let vc = PerspectivesVC(perspectiveChoice_List: vm.perspectiveChoice_List)
+        vc.delegate = vm
         let pr = Presentr(presentationType: .popup)
         pr.transitionType = .crossDissolve
         pr.dismissTransitionType = .crossDissolve

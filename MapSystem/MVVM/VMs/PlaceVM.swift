@@ -39,7 +39,7 @@ class PlaceVM: PanelContentVM {
     
     private init(placeStory placeStory_: PlaceStory) {
         placeState = PlaceState(rawValue: placeStory_.state)!
-        perspectivesToken = placeStory_.perspectives.observe {
+        perspectivesToken = placeStory_.perspectiveID_List.observe {
             switch $0 {
             case .initial(let perspectives_):
                 fallthrough
@@ -69,8 +69,38 @@ class PlaceVM: PanelContentVM {
         placeState = .neverBeen
     }
     
+    var perspectiveChoice_List: [PerspectiveChoice] {
+        var perspectiveChoice_List: [PerspectiveChoice] = []
+        if let placePerspectives = perspectives {
+            let privatePerspectives = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).queryPrivatePerspectives()
+            perspectiveChoice_List = privatePerspectives.map {
+                PerspectiveChoice(perspective: $0, isChosen: placePerspectives.contains($0))
+            }
+        }
+        return perspectiveChoice_List
+    }
+    
     deinit {
         placeStoryToken?.invalidate()
         perspectivesToken?.invalidate()
+    }
+}
+
+extension PlaceVM: PerspectivesVCDelegate {
+    func perspectivesVCDidFinishChoose(_ perspectivesVC: PerspectivesVC, perspectiveChoice_List: [PerspectiveChoice]) {
+        guard let perspectives = perspectives else {
+            fatalError()
+        }
+        
+        let publicLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
+        let privateLayer = SemWorldDataLayer2(layer1: SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)))
+        perspectiveChoice_List.forEach {
+            if $0.isChosen && !perspectives.contains($0.perspective) {
+                publicLayer.createCondition_IfNone(id: $0.perspective)
+                privateLayer.loadPerspective($0.perspective, on: thePlaceId!)
+            } else if !$0.isChosen && perspectives.contains($0.perspective) {
+                privateLayer.unloadPerspective($0.perspective, from: thePlaceId!)
+            }
+        }
     }
 }
