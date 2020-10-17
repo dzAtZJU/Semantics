@@ -1,11 +1,19 @@
 import UIKit
 import TagListView
 
+struct PerspectiveChoice {
+    let perspective: String
+    var isChosen: Bool
+}
+
+protocol PerspectivesVCDelegate: class {
+    func perspectivesVCDidFinishChoose(_ perspectivesVC: PerspectivesVC, perspectiveChoice_List: [PerspectiveChoice])
+}
+
 class PerspectivesVC: UIViewController {
-    struct PerspectiveChoice {
-        let perspective: String
-        var isChosen: Bool
-    }
+    
+    
+    weak var delegate: PerspectivesVCDelegate?
     
     private var perspectiveChoice_List: [PerspectiveChoice]
     
@@ -61,6 +69,8 @@ class PerspectivesVC: UIViewController {
     
     @objc func doneBtnTapped() {
         self.dismiss(animated: true)
+        
+        delegate?.perspectivesVCDidFinishChoose(self, perspectiveChoice_List: perspectiveChoice_List)
     }
 }
 
