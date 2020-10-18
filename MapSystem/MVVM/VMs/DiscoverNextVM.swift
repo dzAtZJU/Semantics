@@ -20,8 +20,8 @@ enum NextOperator: Int {
 class ConditionVM {
     let title: String
     let _id: String
-    init(title: String, _id: String) {
-        self.title = title
+    init(_id: String) {
+        self.title = _id
         self._id = _id
     }
     
@@ -52,7 +52,7 @@ class DiscoverNextVM: PanelContentVM {
     init(placeId placeId_: String, conditions: Results<Condition>) {
         placeId = placeId_
         conditionVMs = conditions.map {
-            ConditionVM(title: $0.title, _id: $0._id)
+            ConditionVM(_id: $0._id)
         }
     }
     

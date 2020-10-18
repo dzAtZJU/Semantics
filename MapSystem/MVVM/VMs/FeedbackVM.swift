@@ -11,67 +11,64 @@ import RealmSwift
 
 class FeedbackVM {
     private var targetPlace: Place!
-    private var conditionsRank: List<ConditionRank>!
+    
+    private var conditionRank_List: [ConditionRank]
+    
     private var dataLayer: SemWorldDataLayer!
+    
     init(placeId placeId_: String, completion: @escaping (FeedbackVM) -> Void) {
-        RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!) {
-            self.dataLayer = SemWorldDataLayer(realm: $0)
-            
-            
-            let publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
-            
-            self.dataLayer.createExtraConditionRanks(allConditionIds: publicDataLayer.queryConditions())
-            
-            self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
-            self.conditionsRank = self.dataLayer.queryCurrentIndividual()!.conditionsRank
-            
-            let items = self.conditionsRank.filter {
-                !$0.placeScoreList.contains {
-                    $0.placeId == placeId_
-                }
+        self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!))
+        let publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
+        
+        self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
+        self.conditionRank_List = SemWorldDataLayer2(layer1: self.dataLayer).queryConditionRank_List(havingPlace: placeId_)
+        
+        let items = self.conditionRank_List.filter {
+            !$0.placeScore_List.contains {
+                $0.placeID == placeId_
             }
-            
-            guard !items.isEmpty else {
-                completion(self)
-                return
-            }
-            
-            try! self.dataLayer.realm.write {
-                items.forEach {
-                    $0.placeScoreList.insert(PlaceScore(conditionId: $0.conditionId, placeId: self.targetPlace._id, score: 0), at: 0)
-                }
-            }
-            
-            completion(self)
         }
+        
+        guard !items.isEmpty else {
+            completion(self)
+            return
+        }
+        
+        try! self.dataLayer.realm.write {
+            items.forEach {
+                $0.placeScore_List.insert(PlaceScore(placeID: self.targetPlace._id, score: 0), at: 0)
+            }
+        }
+        
+        completion(self)
     }
     
     var count: Int {
-        conditionsRank.count
+        conditionRank_List.count
     }
     
     var firstConditionFeedbackVM: ConditionFeedbackVM {
-        ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionsRank.first!)
+        ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionRank_List.first!)
     }
     
     func conditionFeedbackVM(after vm: ConditionFeedbackVM) -> ConditionFeedbackVM? {
-        let index = conditionsRank.index(of: vm.rankByCondition)!
-        guard case let nextIndex = index + 1, nextIndex < conditionsRank.endIndex else {
+        let index = conditionRank_List.firstIndex(of: vm.rankByCondition)!
+        guard case let nextIndex = index + 1, nextIndex < conditionRank_List.endIndex else {
             return nil
         }
-        return ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionsRank[nextIndex])
+        return ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionRank_List[nextIndex])
     }
     
     func conditionFeedbackVM(before vm: ConditionFeedbackVM) -> ConditionFeedbackVM? {
-        let index = conditionsRank.index(of: vm.rankByCondition)!
-        guard case let preIndex = index - 1, preIndex >= conditionsRank.startIndex
+        let index = conditionRank_List.firstIndex(of: vm.rankByCondition)!
+        guard case let preIndex = index - 1, preIndex >= conditionRank_List.startIndex
         else {
             return nil
         }
-        return ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionsRank[preIndex])
+        return ConditionFeedbackVM(targetPlace: targetPlace, rankByCondition: conditionRank_List[preIndex])
     }
     
     func indexFor(conditionFeedbackVM: ConditionFeedbackVM) -> Int {
-        return conditionsRank.index(of: conditionFeedbackVM.rankByCondition)!
+        return conditionRank_List.firstIndex(of: conditionFeedbackVM.rankByCondition)!
     }
 }

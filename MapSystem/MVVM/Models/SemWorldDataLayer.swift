@@ -110,7 +110,7 @@ extension SemWorldDataLayer {
 
 // MARK: PlaceStory
 extension SemWorldDataLayer {
-    func removeCondition(_ conditionID: String, from placeID: String) {
+    func addCondition(_ conditionID: String, toPlace placeID: String) {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
@@ -118,14 +118,12 @@ extension SemWorldDataLayer {
         guard !placeStory.perspectiveID_List.contains(conditionID) else {
             fatalError("The perspective \(conditionID) is already projected on \(placeStory.placeID)")
         }
-        do {
-            try! realm.write {
-                placeStory.perspectiveID_List.append(conditionID)
-            }
-        }
+        
+        
+        placeStory.perspectiveID_List.append(conditionID)
     }
     
-    func addCondition(_ conditionID: String, toPlace placeID: String) {
+    func removeCondition(_ conditionID: String, fromPlace placeID: String) {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
@@ -134,11 +132,8 @@ extension SemWorldDataLayer {
         guard let index = placeStory.perspectiveID_List.index(of: conditionID) else {
             fatalError("The perspective \(conditionID) is not on \(placeStory.placeID)")
         }
-        do {
-            try! realm.write {
-                placeStory.perspectiveID_List.remove(at: index)
-            }
-        }
+        
+        placeStory.perspectiveID_List.remove(at: index)
     }
 }
 
@@ -150,9 +145,7 @@ extension SemWorldDataLayer {
         }
         
         let ind = queryCurrentIndividual()!
-        try! realm.write {
-            ind.conditionRank_List.append(ConditionRank(conditionID: conditionID))
-        }
+        ind.conditionRank_List.append(ConditionRank(conditionID: conditionID))
     }
     
     func addPlace(_ placeID: String, toConditionRank conditionID: String) {
@@ -167,9 +160,8 @@ extension SemWorldDataLayer {
         }
         
         let lowerestScore = conditionRank.placeScore_List.last?.score ?? 0
-        try! realm.write {
-            conditionRank.placeScore_List.append(PlaceScore(placeID: placeID, score: lowerestScore))
-        }
+        
+        conditionRank.placeScore_List.append(PlaceScore(placeID: placeID, score: lowerestScore))
     }
     
     func removePlace(_ placeID: String, fromConditionRank conditionID: String) {
@@ -183,9 +175,7 @@ extension SemWorldDataLayer {
             fatalError()
         }
         
-        try! realm.write {
-            conditionRank.placeScore_List.remove(at: index)
-        }
+        conditionRank.placeScore_List.remove(at: index)
     }
     
     func queryConditionRank(conditionID: String) -> ConditionRank? {
@@ -193,6 +183,11 @@ extension SemWorldDataLayer {
         return ind.conditionRank_List.first {
             $0.conditionID == conditionID
         }
+    }
+    
+    func loadConditionRank_List() -> List<ConditionRank> {
+        let ind = queryCurrentIndividual()!
+        return ind.conditionRank_List
     }
     
     func queryPrivatePerspectives() -> [String] {
@@ -206,7 +201,7 @@ extension SemWorldDataLayer {
 // Condition
 extension SemWorldDataLayer {
     func createCondition_IfNone(id id_: String) {
-        do {
+        try! realm.write {
             realm.add(Condition(id: id_), update: .modified)
         }
     }

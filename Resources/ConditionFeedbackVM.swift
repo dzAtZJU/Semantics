@@ -22,15 +22,15 @@ class ConditionFeedbackVM {
         
         publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
         privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm( RealmSpace.queryCurrentUserID()!))
-        conditionTitle = publicDataLayer.queryCondition(_id: rankByCondition.conditionId).title
+        conditionTitle = rankByCondition.conditionID
     }
     
     var levels: Int {
-        Set(rankByCondition.placeScoreList.map(by: \.score)).count
+        Set(rankByCondition.placeScore_List.map(by: \.score)).count
     }
     
     func count(ofLevel level: Int) -> Int {
-        rankByCondition.placeScoreList.count {
+        rankByCondition.placeScore_List.count {
             $0.score == level
         }
     }
@@ -42,7 +42,7 @@ class ConditionFeedbackVM {
     
     func placeInfo(at: RankInfo) -> PlaceInfo {
         let bt = Date().timeIntervalSince1970
-        let thisPlace = publicDataLayer.queryPlace(_id: placeScore(at: at).placeId)
+        let thisPlace = publicDataLayer.queryPlace(_id: placeScore(at: at).placeID)
         let et = Date().timeIntervalSince1970
         print("[Measure] queryPlace \(et-bt)")
         return PlaceInfo(title: thisPlace.title, isTargetPlace: thisPlace._id == targetPlace._id)
@@ -61,24 +61,21 @@ class ConditionFeedbackVM {
         case -1:
             toIndex = 0
         case levels:
-            toIndex = rankByCondition.placeScoreList.count
+            toIndex = rankByCondition.placeScore_List.count
         default:
             toIndex = index(of: to)
         }
         let isOnlyOne = at.level != to.level && count(ofLevel: at.level) == 1
         print("[movePlace] from: \(at)-\(atIndex) to: \(to)-\(toIndex!) isOnlyOne: \(isOnlyOne)")
         
-        let placeScore = self.placeScore(at: at)
+        let atPlaceScore = self.placeScore(at: at)
+        let newPlaceScore = PlaceScore(placeID: atPlaceScore.placeID, score: to.level)
+        if atIndex < toIndex {
+            toIndex -= 1
+        }
         try! privateDataLayer.realm.write {
-            placeScore.score = to.level
-            if atIndex < toIndex {
-                toIndex -= 1
-            }
-            
-            self.rankByCondition.placeScoreList.remove(at: atIndex)
-            self.rankByCondition.placeScoreList.insert(placeScore, at: toIndex)
-                
-            
+            self.rankByCondition.placeScore_List.remove(at: atIndex)
+            self.rankByCondition.placeScore_List.insert(newPlaceScore, at: toIndex)
             if isOnlyOne {
                 var start = atIndex
                 if toIndex < atIndex {
@@ -86,26 +83,26 @@ class ConditionFeedbackVM {
                 } else if toIndex == atIndex, to.level < at.level {
                     start += 1
                 }
-                for i in start..<self.rankByCondition.placeScoreList.endIndex {
-                    self.rankByCondition.placeScoreList[i].score -= 1
+                for i in start..<self.rankByCondition.placeScore_List.endIndex {
+                    self.rankByCondition.placeScore_List[i].score -= 1
                 }
             }
             if to.level == -1 {
-                for item in self.rankByCondition.placeScoreList {
+                for item in self.rankByCondition.placeScore_List {
                     item.score += 1
                 }
             }
         }
         
-        print("[ConditionFeedbackVM] scores \(rankByCondition.placeScoreList.map(by: \.score))")
+        print("[ConditionFeedbackVM] scores \(rankByCondition.placeScore_List.map(by: \.score))")
     }
     
     private func placeScore(at rank: RankInfo) -> PlaceScore {
-        rankByCondition.placeScoreList[index(of: rank)]
+        rankByCondition.placeScore_List[index(of: rank)]
     }
     
     private func index(of rank: RankInfo) -> Int {
-        var i = rankByCondition.placeScoreList.firstIndex {
+        let i = rankByCondition.placeScore_List.firstIndex {
             $0.score == rank.level
             }! + rank.ordinal
         print("[ConditionFeedbackVM] \(rank) -> \(i)")

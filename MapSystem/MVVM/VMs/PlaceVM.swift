@@ -11,12 +11,11 @@ import Combine
 import RealmSwift
 
 class PlaceVM: PanelContentVM {
-    var thePlaceId: String? {
-        nil
-    }
+    var thePlaceId: String?
+    
     var panelContentVMDelegate: PanelContentVMDelegate!
     
-    private var placeStoryToken: NotificationToken?
+    private var placeStoryToken: NSKeyValueObservation?
     
     private var perspectivesToken: NotificationToken?
     
@@ -38,6 +37,7 @@ class PlaceVM: PanelContentVM {
     }
     
     private init(placeStory placeStory_: PlaceStory) {
+        thePlaceId = placeStory_.placeID
         placeState = PlaceState(rawValue: placeStory_.state)!
         perspectivesToken = placeStory_.perspectiveID_List.observe {
             switch $0 {
@@ -49,19 +49,8 @@ class PlaceVM: PanelContentVM {
                 fatalError("\(error)")
             }
         }
-        placeStoryToken = placeStory_.observe({ change in
-            switch change {
-            case .change(_, let properties):
-                if let stateChange = try! properties.first(where: { (property: PropertyChange) throws -> Bool in
-                    property.name == #keyPath(PlaceStory.state)
-                }) {
-                    self.placeState = PlaceState(rawValue: stateChange.newValue as! Int)!
-                }
-            case .deleted:
-                fatalError("not implemented")
-            case .error(let error):
-                fatalError(error.debugDescription)
-            }
+        placeStoryToken = placeStory_.observe(\.state, options: [.new], changeHandler: { (placeStory, change) in
+            self.placeState = PlaceState(rawValue: change.newValue!)!
         })
     }
     
@@ -97,9 +86,9 @@ extension PlaceVM: PerspectivesVCDelegate {
         perspectiveChoice_List.forEach {
             if $0.isChosen && !perspectives.contains($0.perspective) {
                 publicLayer.createCondition_IfNone(id: $0.perspective)
-                privateLayer.loadPerspective($0.perspective, on: thePlaceId!)
+                privateLayer.projectPerspective($0.perspective, on: thePlaceId!)
             } else if !$0.isChosen && perspectives.contains($0.perspective) {
-                privateLayer.unloadPerspective($0.perspective, from: thePlaceId!)
+                privateLayer.withdrawPerspective($0.perspective, from: thePlaceId!)
             }
         }
     }

@@ -12,18 +12,29 @@ struct SemWorldDataLayer2 {
 }
 
 extension SemWorldDataLayer2 {
-    func unloadPerspective(_ conditionID: String, from placeID: String) {
+    func withdrawPerspective(_ conditionID: String, from placeID: String) {
         try! layer1.realm.write {
-            layer1.removeCondition(conditionID, from: placeID)
+            layer1.removeCondition(conditionID, fromPlace: placeID)
             layer1.removePlace(placeID, fromConditionRank: conditionID)
         }
     }
     
-    func loadPerspective(_ conditionID: String, on placeID: String) {
+    func projectPerspective(_ conditionID: String, on placeID: String) {
         try! layer1.realm.write {
             layer1.createConditionRank_IfNone(conditionID: conditionID)
             layer1.addCondition(conditionID, toPlace: placeID)
             layer1.addPlace(placeID, toConditionRank: conditionID)
+        }
+    }
+    
+    func queryConditionRank_List(havingPlace placeID: String) -> [ConditionRank] {
+        guard let placeStory = layer1.loadPlaceStory(placeID: placeID) else {
+            fatalError()
+        }
+        
+        let placeperspectives = placeStory.perspectiveID_List
+        return try! layer1.loadConditionRank_List().filter { (conditionRank: ConditionRank) throws -> Bool in
+            placeperspectives.contains(conditionRank.conditionID)
         }
     }
 }

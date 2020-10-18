@@ -79,6 +79,8 @@ class Individual: Object {
 }
 
 class PlaceStory: EmbeddedObject {
+    let owner = LinkingObjects(fromType: Individual.self, property: "placeStory_List")
+    
     @objc dynamic var placeID = ""
     @objc dynamic var state = 1
     let perspectiveID_List = List<String>()
@@ -90,6 +92,8 @@ class PlaceStory: EmbeddedObject {
 }
 
 class ConditionRank: EmbeddedObject {
+    let owner = LinkingObjects(fromType: Individual.self, property: "conditionRank_List")
+    
     @objc dynamic var conditionID = ""
     
     let placeScore_List = List<PlaceScore>()
@@ -102,6 +106,8 @@ class ConditionRank: EmbeddedObject {
 }
 
 class PlaceScore: EmbeddedObject {
+    let owner = LinkingObjects(fromType: ConditionRank.self, property: "placeScore_List")
+    
     @objc dynamic var placeID = ""
     @objc dynamic var score = 0
     
@@ -113,6 +119,8 @@ class PlaceScore: EmbeddedObject {
 }
 
 class ConditionIndividuals: EmbeddedObject {
+    let owner = LinkingObjects(fromType: Individual.self, property: "blockedIndividuals")
+    
     @objc dynamic var conditionId = ""
     let individuals = List<String>()
     

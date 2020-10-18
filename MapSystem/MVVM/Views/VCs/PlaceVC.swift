@@ -47,6 +47,7 @@ class PlaceVC: UIViewController, PanelContent {
             }
             perspectivesToken = vm.$perspectives.sink {
                 guard var perspectives = $0 else {
+                    self.placePerspectivesView.removeAllTags()
                     return
                 }
                 if perspectives.isEmpty {
@@ -157,6 +158,10 @@ class PlaceVC: UIViewController, PanelContent {
 // MARK: Interaction
 extension PlaceVC: TagListViewDelegate {
     @objc private func feedbackBtnTapped() {
+        guard !vm.perspectives!.isEmpty else {
+            placePerspectivesTapped()
+            return
+        }
         delegate?.placeVCShouldStartFeedback(self)
     }
     

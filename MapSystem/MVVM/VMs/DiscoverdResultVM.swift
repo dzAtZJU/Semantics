@@ -18,8 +18,7 @@ struct PlaceConditionsVM {
     }
     
     func conditionTitle(at: IndexPath) -> String {
-        let condition = conditions[at.row]
-        return SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue)).queryCondition(_id: condition.id).title
+        conditions[at.row].id
     }
     
     func title(at: IndexPath) -> String {
