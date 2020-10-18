@@ -105,9 +105,8 @@ class MapVM {
     var discoverNextVM: DiscoverNextVM {
         var tmp: DiscoverNextVM!
         RealmSpace.shared.queue.sync {
-            let realm = RealmSpace.shared.realm(RealmSpace.partitionValue)
-            let conditions =  realm.objects(Condition.self)
-            tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditions: conditions)
+            let dataLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!))
+            tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditionIDs: dataLayer.quryConditionIDs(forPlace: selectedAnnotation!.placeId!))
             tmp.panelContentVMDelegate = self
         }
         return tmp

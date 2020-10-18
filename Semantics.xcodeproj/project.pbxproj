@@ -1475,7 +1475,7 @@
 			repositoryURL = "https://github.com/SCENEE/FloatingPanel.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.7.5;
+				minimumVersion = 2.0.0;
 			};
 		};
 		89A95DCC250CDBA3006EBD07 /* XCRemoteSwiftPackageReference "SPAlert" */ = {

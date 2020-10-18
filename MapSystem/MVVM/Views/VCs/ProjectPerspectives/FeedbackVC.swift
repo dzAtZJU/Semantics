@@ -39,15 +39,16 @@ class FeedbackVC: UIPageViewController, PanelContent {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .full, animated: true)
+        panelContentDelegate.panel.move(to: .half, animated: true)
         super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .half, animated: true)
+        panelContentDelegate.panel.move(to: .tip, animated: true)
         super.viewWillDisappear(animated)
     }
 }

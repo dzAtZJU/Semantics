@@ -30,7 +30,7 @@ class ConditionFeedbackVC: UIViewController {
     
     private lazy var placesTableView: UITableView = {
         let tmp = UITableView(frame: .zero, style: .insetGrouped)
-        tmp.backgroundColor = .systemYellow
+        tmp.backgroundColor = .systemBackground
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.register(UITableViewCell.self, forCellReuseIdentifier: ConditionFeedbackCell.cellIdentifier)
         tmp.dataSource = self
@@ -50,7 +50,7 @@ class ConditionFeedbackVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .systemBackground
         
         view.addSubview(conditionLabel)
         conditionLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1).isActive = true

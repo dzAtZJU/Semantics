@@ -26,7 +26,7 @@ class LoginVC: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .systemBackground
         
         view.addSubview(appleSignInButton)
         view.addSubview(spinner)

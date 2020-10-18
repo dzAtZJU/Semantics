@@ -18,7 +18,7 @@ class SearchSuggestionsVC: UITableViewController {
         
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-            contentView.backgroundColor = .systemYellow
+            contentView.backgroundColor = .systemBackground
             textLabel?.textColor = .systemBlue
             detailTextLabel?.textColor = .systemIndigo
         }
@@ -50,7 +50,7 @@ class SearchSuggestionsVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = .systemYellow
+        tableView.backgroundColor = .systemBackground
         tableView.register(SuggestionCell.self, forCellReuseIdentifier: Self.cellIdentifier)
     }
     

@@ -1,5 +1,6 @@
 import UIKit
 import TagListView
+import Presentr
 
 struct PerspectiveChoice {
     let perspective: String
@@ -11,8 +12,14 @@ protocol PerspectivesVCDelegate: class {
 }
 
 class PerspectivesVC: UIViewController {
-    
-    
+    lazy var presentr: Presentr = {
+        let tmp = Presentr(presentationType: .popup)
+        tmp.transitionType = .crossDissolve
+        tmp.dismissTransitionType = .crossDissolve
+        tmp.backgroundTap = .dismiss
+        return tmp
+    }()
+        
     weak var delegate: PerspectivesVCDelegate?
     
     private var perspectiveChoice_List: [PerspectiveChoice]

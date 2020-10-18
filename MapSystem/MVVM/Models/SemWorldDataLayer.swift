@@ -77,12 +77,6 @@ extension SemWorldDataLayer {
         realm.objects(Place.self).filter("_id in %@", _ids)
     }
     
-    func loadPlaceStory(placeID: String) -> PlaceStory? {
-        queryCurrentIndividual()!.placeStory_List.first {
-            $0.placeID == placeID
-            }
-    }
-    
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
         if let place = realm.object(ofType: Place.self, forPrimaryKey: uniquePlace.title) {
             return place
@@ -97,7 +91,7 @@ extension SemWorldDataLayer {
     
     func markVisited(placeID: String) {
         let ind = queryCurrentIndividual()!
-        guard loadPlaceStory(placeID: placeID) == nil else {
+        guard queryPlaceStory(placeID: placeID) == nil else {
             return
         }
         
@@ -134,6 +128,22 @@ extension SemWorldDataLayer {
         }
         
         placeStory.perspectiveID_List.remove(at: index)
+    }
+    
+    func queryPlaceStory(placeID: String) -> PlaceStory? {
+        queryCurrentIndividual()!.placeStory_List.first {
+            $0.placeID == placeID
+            }
+    }
+    
+    func quryConditionIDs(forPlace placeID: String) -> [String] {
+        guard let placeStory = queryPlaceStory(placeID: placeID) else {
+            fatalError()
+        }
+        
+        return try! placeStory.perspectiveID_List.map { (id) throws -> String in
+            id
+        }
     }
 }
 

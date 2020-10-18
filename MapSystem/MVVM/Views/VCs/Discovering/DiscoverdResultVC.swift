@@ -48,7 +48,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: layout)
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.contentInset = .init(horizontal: Self.pageMargin, vertical: 0)
-        tmp.backgroundColor = .systemYellow
+        tmp.backgroundColor = .systemBackground
         tmp.dataSource = self
         tmp.delegate = self
         tmp.register(ConditionBackerCell.self, forCellWithReuseIdentifier: ConditionBackerCell.identifier)
@@ -57,7 +57,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .systemBackground
 
         view.addSubview(label)
         label.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2).isActive = true
@@ -105,7 +105,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .full, animated: true)
+        panelContentDelegate.panel.move(to: .half, animated: true)
         super.viewDidDisappear(animated)
     }
 }

@@ -28,7 +28,7 @@ extension SemWorldDataLayer2 {
     }
     
     func queryConditionRank_List(havingPlace placeID: String) -> [ConditionRank] {
-        guard let placeStory = layer1.loadPlaceStory(placeID: placeID) else {
+        guard let placeStory = layer1.queryPlaceStory(placeID: placeID) else {
             fatalError()
         }
         

@@ -49,10 +49,10 @@ class DiscoverNextVM: PanelContentVM {
     
     let placeId: String
     let conditionVMs: [ConditionVM]
-    init(placeId placeId_: String, conditions: Results<Condition>) {
+    init(placeId placeId_: String, conditionIDs: [String]) {
         placeId = placeId_
-        conditionVMs = conditions.map {
-            ConditionVM(_id: $0._id)
+        conditionVMs = conditionIDs.map {
+            ConditionVM(_id: $0)
         }
     }
     

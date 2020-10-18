@@ -19,7 +19,7 @@ class SearchVC: UIViewController, PanelContent {
         let tmp = SearchSuggestionsVC()
         tmp.searchDidFinish = {
             self.searchController.isActive = false
-            self.panelContentDelegate?.panel.move(to: .half, animated: true)
+            self.panelContentDelegate?.panel.move(to: .tip, animated: true)
         }
         return tmp
     }()
@@ -36,20 +36,21 @@ class SearchVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .systemBackground
         
         view.addSubview(searchController.searchBar)
     }
 }
 
 extension SearchVC: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         panelContentDelegate?.panel.move(to: .full, animated: true)
+        return true
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            self.panelContentDelegate?.panel.move(to: .half, animated: true)
+            self.panelContentDelegate?.panel.move(to: .tip, animated: true)
         }
     }
     

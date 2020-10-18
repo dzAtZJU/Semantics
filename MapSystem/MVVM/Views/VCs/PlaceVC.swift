@@ -176,11 +176,7 @@ extension PlaceVC: TagListViewDelegate {
     @objc private func placePerspectivesTapped() {
         let vc = PerspectivesVC(perspectiveChoice_List: vm.perspectiveChoice_List)
         vc.delegate = vm
-        let pr = Presentr(presentationType: .popup)
-        pr.transitionType = .crossDissolve
-        pr.dismissTransitionType = .crossDissolve
-        pr.backgroundTap = .noAction
-        self.customPresentViewController(pr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
+        self.customPresentViewController(vc.presentr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
     }
     
     @objc func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {

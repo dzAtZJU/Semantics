@@ -34,7 +34,7 @@ class DiscoverNextVC: UIViewController, PanelContent {
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: layout)
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.contentInset = .init(horizontal: Self.pageMargin, vertical: 0)
-        tmp.backgroundColor = .systemYellow
+        tmp.backgroundColor = .systemBackground
         tmp.dataSource = self
         tmp.delegate = self
         tmp.register(ConditionCell.self, forCellWithReuseIdentifier: ConditionCell.identifier)
@@ -54,21 +54,21 @@ class DiscoverNextVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemYellow
+        view.backgroundColor = .systemBackground
         
         view.addSubview(searchButton)
         searchButton.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: searchButton.trailingAnchor, multiplier: 2).isActive = true
         
         view.addSubview(collectionView)
+        collectionView.topAnchor.constraint(equalToSystemSpacingBelow: searchButton.bottomAnchor, multiplier: 1).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.topAnchor.constraint(equalToSystemSpacingBelow: searchButton.bottomAnchor, multiplier: 1).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .full, animated: true)
+        panelContentDelegate.panel.move(to: .half, animated: true)
         super.viewDidAppear(animated)
     }
     
@@ -80,7 +80,7 @@ class DiscoverNextVC: UIViewController, PanelContent {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .half, animated: true)
+        panelContentDelegate.panel.move(to: .tip, animated: true)
         super.viewWillDisappear(animated)
     }
 }

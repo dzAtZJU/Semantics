@@ -27,8 +27,21 @@ class MapVC: UIViewController {
         return tmp
     }()
     
+    private class SemFloatingPanelLayout: FloatingPanelLayout {
+        var position: FloatingPanelPosition = .bottom
+        
+        var initialState: FloatingPanelState = .tip
+        
+        var anchors: [FloatingPanelState : FloatingPanelLayoutAnchoring] = [
+            .full: FloatingPanelLayoutAnchor(absoluteInset: 16, edge: .top, referenceGuide: .safeArea),
+            .half: FloatingPanelLayoutAnchor(fractionalInset: 0.5, edge: .bottom, referenceGuide: .safeArea),
+            .tip: FloatingPanelLayoutAnchor(absoluteInset: 44, edge: .bottom, referenceGuide: .safeArea),
+            .hidden: FloatingPanelLayoutAnchor(fractionalInset: 0.1, edge: .bottom, referenceGuide: .safeArea),
+        ]
+    }
     internal lazy var panel: FloatingPanelController = {
         let tmp = FloatingPanelController(delegate: self)
+        tmp.layout = SemFloatingPanelLayout()
         tmp.set(contentViewController: panelContentVC)
         tmp.contentMode = .fitToBounds
         tmp.delegate = panelContentVC
@@ -222,7 +235,7 @@ extension MapVC: MKMapViewDelegate {
         case .visited:
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation)
             view.canShowCallout = true
-            let size = CGSize(width: 10, height: 10)
+            let size = CGSize(width: 14, height: 14)
             view.image = UIGraphicsImageRenderer(size: size).image { context in
                 UIImage(systemName:"circle.fill")!.withTintColor(.brown).draw(in:CGRect(origin:.zero, size: size))
             }
