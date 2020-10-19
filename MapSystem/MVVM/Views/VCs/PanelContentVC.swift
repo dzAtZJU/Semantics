@@ -77,7 +77,6 @@ class PanelContentVC: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemBackground
         
         view.addSubview(backBtn)
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: backBtn.trailingAnchor, multiplier: 2).isActive = true

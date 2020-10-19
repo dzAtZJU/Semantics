@@ -15,7 +15,7 @@ class SearchVC: UIViewController, PanelContent {
     let showBackBtn = false
     var panelContentDelegate: PanelContentDelegate!
     
-    lazy var searchSuggestionsController: SearchSuggestionsVC = {
+    private lazy var searchSuggestionsController: SearchSuggestionsVC = {
         let tmp = SearchSuggestionsVC()
         tmp.searchDidFinish = {
             self.searchController.isActive = false
@@ -24,8 +24,11 @@ class SearchVC: UIViewController, PanelContent {
         return tmp
     }()
     
-    private lazy var searchController: UISearchController = {
+    lazy var searchController: UISearchController = {
         let tmp = UISearchController(searchResultsController: searchSuggestionsController)
+        tmp.delegate = self
+        tmp.view.backgroundColor = .clear
+        
         tmp.searchBar.searchBarStyle = .minimal
         tmp.searchBar.isTranslucent = false
         tmp.searchBar.searchTextField.returnKeyType = .done
@@ -37,22 +40,29 @@ class SearchVC: UIViewController, PanelContent {
     override func loadView() {
         view = UIView()
         view.backgroundColor = .systemBackground
-        
         view.addSubview(searchController.searchBar)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
 }
 
-extension SearchVC: UISearchBarDelegate {
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+// TOOD: Remove UISearchController since its not compatible with FloatingPanel
+extension SearchVC: UISearchBarDelegate, UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
         panelContentDelegate?.panel.move(to: .full, animated: true)
-        return true
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-            self.panelContentDelegate?.panel.move(to: .tip, animated: true)
-        }
+    func didDismissSearchController(_ searchController: UISearchController) {
+        panelContentDelegate?.panel.move(to: .half, animated: true)
     }
+    
+    func presentSearchController(_ searchController: UISearchController) {
+        
+        self.view.addSubview(searchController.searchBar)
+    }
+
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchSuggestionsController.searchDidFinish?()
@@ -61,4 +71,3 @@ extension SearchVC: UISearchBarDelegate {
 //        searchSuggestionsController.search(using: searchRequest)
     }
 }
-
