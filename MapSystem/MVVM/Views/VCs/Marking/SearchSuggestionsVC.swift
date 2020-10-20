@@ -10,6 +10,10 @@ import UIKit
 import MapKit
 
 class SearchSuggestionsVC: UITableViewController {
+    lazy var searchUpdater: ((String) -> Void) = {
+        self.searchCompleter.queryFragment = $0
+    }
+    
     var searchDidFinish: (() -> Void)?
     
     private class SuggestionCell: UITableViewCell {
@@ -37,7 +41,7 @@ class SearchSuggestionsVC: UITableViewController {
     private(set) lazy var searchCompleter: MKLocalSearchCompleter = {
         let tmp = MKLocalSearchCompleter()
         tmp.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
-        tmp.resultTypes = [.pointOfInterest]
+        tmp.resultTypes = [.pointOfInterest, .address, .query]
         tmp.delegate = self
         if let searchRegion = MapSysEnvironment.shared.searchRegion {
             tmp.region = searchRegion
@@ -45,11 +49,10 @@ class SearchSuggestionsVC: UITableViewController {
         return tmp
     }()
     
-    private(set) var completerResults: [MKLocalSearchCompletion]?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.tableFooterView = UIView(frame: .init(origin: .zero, size: .init(width: 0, height: 1)))
         tableView.backgroundColor = .systemBackground
         tableView.register(SuggestionCell.self, forCellReuseIdentifier: Self.cellIdentifier)
     }
@@ -60,18 +63,9 @@ class SearchSuggestionsVC: UITableViewController {
     }
 }
 
-// MARK: UISearchResultsUpdating
-extension SearchSuggestionsVC: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        searchCompleter.queryFragment = searchController.searchBar.text ?? ""
-//        print("[Space:Search-Completer] area size is \(searchCompleter.region.size) in meters")
-    }
-}
-
 // MARK: MKLocalSearchCompleterDelegate
 extension SearchSuggestionsVC: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        completerResults = completer.results
         tableView.reloadData()
     }
     
@@ -86,13 +80,13 @@ extension SearchSuggestionsVC: MKLocalSearchCompleterDelegate {
 // MARK: UITableViewDataSource
 extension SearchSuggestionsVC {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return completerResults?.count ?? 0
+        return searchCompleter.results.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellIdentifier, for: indexPath)
 
-        let suggestion = completerResults![indexPath.row]
+        let suggestion = searchCompleter.results[indexPath.row]
         cell.textLabel!.setHighlightedText(suggestion.title, ranges: suggestion.titleHighlightRanges)
         cell.detailTextLabel!.setHighlightedText(suggestion.subtitle, ranges: suggestion.subtitleHighlightRanges)
         return cell
@@ -102,7 +96,7 @@ extension SearchSuggestionsVC {
 // MARK: UITableViewDelegate
 extension SearchSuggestionsVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let complectorResult = completerResults![indexPath.row]
+        let complectorResult = searchCompleter.results[indexPath.row]
         let request = MKLocalSearch.Request(completion: complectorResult)
         search(using: request)
     }

@@ -18,56 +18,73 @@ class SearchVC: UIViewController, PanelContent {
     private lazy var searchSuggestionsController: SearchSuggestionsVC = {
         let tmp = SearchSuggestionsVC()
         tmp.searchDidFinish = {
-            self.searchController.isActive = false
-            self.panelContentDelegate?.panel.move(to: .tip, animated: true)
+            self.searchBar.resignFirstResponder()
         }
         return tmp
     }()
     
-    lazy var searchController: UISearchController = {
-        let tmp = UISearchController(searchResultsController: searchSuggestionsController)
+    lazy var searchBar: UISearchBar = {
+        let tmp = UISearchBar()
+        tmp.translatesAutoresizingMaskIntoConstraints = false
+        tmp.searchBarStyle = .minimal
+        tmp.isTranslucent = false
+        tmp.searchTextField.returnKeyType = .done
         tmp.delegate = self
-        tmp.view.backgroundColor = .clear
-        
-        tmp.searchBar.searchBarStyle = .minimal
-        tmp.searchBar.isTranslucent = false
-        tmp.searchBar.searchTextField.returnKeyType = .done
-        tmp.searchResultsUpdater = searchSuggestionsController
-        tmp.searchBar.delegate = self
         return tmp
     }()
     
     override func loadView() {
         view = UIView()
         view.backgroundColor = .systemBackground
-        view.addSubview(searchController.searchBar)
+        view.addSubview(searchBar)
+        searchBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func show(_ vc: UIViewController, sender: Any?) {
+        addChild(vc)
+        vc.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(vc.view)
+        vc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        vc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        vc.view.topAnchor.constraint(equalToSystemSpacingBelow: searchBar.bottomAnchor, multiplier: 1).isActive = true
+        vc.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        vc.didMove(toParent: self)
+    }
+    
+    func hide(_ vc: UIViewController) {
+        vc.willMove(toParent: nil)
+        vc.view.removeFromSuperview()
+        vc.removeFromParent()
     }
 }
 
-// TOOD: Remove UISearchController since its not compatible with FloatingPanel
-extension SearchVC: UISearchBarDelegate, UISearchControllerDelegate {
-    func willPresentSearchController(_ searchController: UISearchController) {
-        panelContentDelegate?.panel.move(to: .full, animated: true)
+extension SearchVC: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        show(searchSuggestionsController, sender: self)
+        searchBar.setShowsCancelButton(true, animated: false)
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate?.panel.move(to: .full, animated: false)
+        }
+        return true
     }
     
-    func didDismissSearchController(_ searchController: UISearchController) {
-        panelContentDelegate?.panel.move(to: .half, animated: true)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchSuggestionsController.searchUpdater(searchText)
     }
     
-    func presentSearchController(_ searchController: UISearchController) {
-        
-        self.view.addSubview(searchController.searchBar)
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        hide(searchSuggestionsController)
+        searchBar.clear()
+        searchBar.setShowsCancelButton(false, animated: false)
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate?.panel.move(to: .tip, animated: false)
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchSuggestionsController.searchDidFinish?()
-//        let searchRequest = MKLocalSearch.Request()
-//        searchRequest.naturalLanguageQuery = searchBar.text
-//        searchSuggestionsController.search(using: searchRequest)
-    }
 }
