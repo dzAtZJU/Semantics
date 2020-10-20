@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 
+private let excludeCategories: [MKPointOfInterestCategory] = [.airport, .atm, .bank, .carRental, .evCharger, .fireStation, .gasStation, .hospital, .parking, .pharmacy, .police, .postOffice, .publicTransport]
+
 class SearchSuggestionsVC: UITableViewController {
     lazy var searchUpdater: ((String) -> Void) = {
         self.searchCompleter.queryFragment = $0
@@ -40,7 +42,7 @@ class SearchSuggestionsVC: UITableViewController {
     
     private(set) lazy var searchCompleter: MKLocalSearchCompleter = {
         let tmp = MKLocalSearchCompleter()
-        tmp.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
+        tmp.pointOfInterestFilter = .init(excluding: excludeCategories)
         tmp.resultTypes = [.pointOfInterest, .address, .query]
         tmp.delegate = self
         if let searchRegion = MapSysEnvironment.shared.searchRegion {
@@ -107,7 +109,7 @@ extension SearchSuggestionsVC {
         }
         
         searchRequest.resultTypes = .pointOfInterest
-        searchRequest.pointOfInterestFilter = .init(including: [.cafe, .restaurant])
+        searchRequest.pointOfInterestFilter = .init(excluding: excludeCategories)
         
         localSearch = MKLocalSearch(request: searchRequest)
         localSearch!.start { [unowned self] (response, error) in

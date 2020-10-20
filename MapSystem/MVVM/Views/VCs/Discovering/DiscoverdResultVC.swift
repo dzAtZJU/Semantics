@@ -93,7 +93,9 @@ class DiscoverdResultVC: UIViewController, PanelContent {
                 self.collectionView.reloadData()
             }
         }
-        panelContentDelegate.panel.move(to: .tip, animated: true)
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate.panel.move(to: .tip, animated: false)
+        }
         super.viewDidAppear(animated)
     }
     
@@ -105,7 +107,9 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .half, animated: true)
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate.panel.move(to: .half, animated: false)
+        }
         super.viewDidDisappear(animated)
     }
 }

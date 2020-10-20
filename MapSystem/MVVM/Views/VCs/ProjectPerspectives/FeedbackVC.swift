@@ -43,12 +43,16 @@ class FeedbackVC: UIPageViewController, PanelContent {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .half, animated: true)
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate.panel.move(to: .half, animated: false)
+        }
         super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        panelContentDelegate.panel.move(to: .tip, animated: true)
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate.panel.move(to: .tip, animated: false)
+        }
         super.viewWillDisappear(animated)
     }
 }

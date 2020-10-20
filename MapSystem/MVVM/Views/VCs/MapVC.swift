@@ -49,6 +49,7 @@ class MapVC: UIViewController {
     
     private lazy var panelContentVC: PanelContentVC = {
         let tmp = PanelContentVC(initialVC: searchVC)
+        tmp.view.backgroundColor = .systemBackground
         tmp.delegate = self
         return tmp
     }()
