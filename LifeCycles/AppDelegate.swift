@@ -6,6 +6,8 @@
 //  Copyright © 2020 Paper Scratch. All rights reserved.
 //
 
+// curl -v -H 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6Ik1ZUEZEQkRWNU0ifQ.eyJpc3MiOiJIVEc1UlBKNlFGIiwiaWF0IjoxNjAzMjAxOTAzLCJleHAiOjE2MTg3NTM5MDN9.5eifRpVQS4m0mlkXSLti8mhHwDfAqDrxn2o14bchqJY6bqYpd2ejWghjI1x4vLUWyM0tiflcQsvZurImNqXYdw' "https://api.music.apple.com/v1/catalog/us/songs/203709340"
+
 import UIKit
 import CoreData
 import CloudKit

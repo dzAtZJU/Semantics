@@ -120,6 +120,10 @@
 		89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B1736524F9405A00320907 /* DiscoverdResultVC.swift */; };
 		89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */; };
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
+		89BF917D2547F3F8006E364A /* Language.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89BF917C2547F3F8006E364A /* Language.storyboard */; };
+		89BF91812547F4F9006E364A /* Language.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89BF91802547F4F9006E364A /* Language.xcassets */; };
+		89BF91852548160F006E364A /* CountryHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF91842548160F006E364A /* CountryHomeVC.swift */; };
+		89BF918D25482C08006E364A /* CountryHomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF918C25482C08006E364A /* CountryHomeVM.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
 		89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */ = {isa = PBXBuildFile; productRef = 89C28CFD24ADC22E002081FE /* SwiftHEXColors */; };
 		89E257A824F9710C00D6C375 /* PanelContentVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257A724F9710C00D6C375 /* PanelContentVM.swift */; };
@@ -269,6 +273,10 @@
 		89A666E124D9934700851EDF /* CommunityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVM.swift; sourceTree = "<group>"; };
 		89B1736524F9405A00320907 /* DiscoverdResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverdResultVC.swift; sourceTree = "<group>"; };
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
+		89BF917C2547F3F8006E364A /* Language.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Language.storyboard; sourceTree = "<group>"; };
+		89BF91802547F4F9006E364A /* Language.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Language.xcassets; sourceTree = "<group>"; };
+		89BF91842548160F006E364A /* CountryHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryHomeVC.swift; sourceTree = "<group>"; };
+		89BF918C25482C08006E364A /* CountryHomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryHomeVM.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89E257A724F9710C00D6C375 /* PanelContentVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelContentVM.swift; sourceTree = "<group>"; };
 		89E257A924F9936500D6C375 /* DiscoverdResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverdResultVM.swift; sourceTree = "<group>"; };
@@ -480,6 +488,7 @@
 		89642168247250590081DC87 = {
 			isa = PBXGroup;
 			children = (
+				89BF917B2547F3D5006E364A /* LanguageSystem */,
 				89290D4E24E2A6DA00F0A862 /* AccountSystem */,
 				899AE18424DC254C00C0EB17 /* MapSystem */,
 				89A666CE24D6BC0F00851EDF /* MVVM */,
@@ -767,6 +776,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		89BF917B2547F3D5006E364A /* LanguageSystem */ = {
+			isa = PBXGroup;
+			children = (
+				89BF917C2547F3F8006E364A /* Language.storyboard */,
+				89BF91802547F4F9006E364A /* Language.xcassets */,
+				89BF91842548160F006E364A /* CountryHomeVC.swift */,
+				89BF918C25482C08006E364A /* CountryHomeVM.swift */,
+			);
+			path = LanguageSystem;
+			sourceTree = "<group>";
+		};
 		89C2889124A34243002081FE /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -876,7 +896,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				89642184247250650081DC87 /* LaunchScreen.storyboard in Resources */,
+				89BF917D2547F3F8006E364A /* Language.storyboard in Resources */,
 				89642181247250650081DC87 /* Preview Assets.xcassets in Resources */,
+				89BF91812547F4F9006E364A /* Language.xcassets in Resources */,
 				89290D4824E13B5600F0A862 /* apple-app-site-association in Resources */,
 				8964217E247250650081DC87 /* Assets.xcassets in Resources */,
 			);
@@ -1006,10 +1028,12 @@
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
 				899AE18324DAD5A800C0EB17 /* CloudKitSpace.swift in Sources */,
 				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
+				89BF918D25482C08006E364A /* CountryHomeVM.swift in Sources */,
 				89949D30253155FF0023C526 /* InfoSpace.swift in Sources */,
 				89A666D724D6EEE100851EDF /* FloatingContainerVC.swift in Sources */,
 				89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */,
 				89A413D724C6F041003FD435 /* Bubble.swift in Sources */,
+				89BF91852548160F006E364A /* CountryHomeVC.swift in Sources */,
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
 				89A666E224D9934700851EDF /* CommunityVM.swift in Sources */,
 				89A413D424C57215003FD435 /* Word+.swift in Sources */,

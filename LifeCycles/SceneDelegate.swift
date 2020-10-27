@@ -22,11 +22,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         //        let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
         //        window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
         
-        let mapVM = MapVM()
-        let mapVC = MapVC(vm: mapVM)
-        window.rootViewController = mapVC
+//        let mapVM = MapVM()
+//        let mapVC = MapVC(vm: mapVM)
+//        window.rootViewController = mapVC
         
-        //        window.rootViewController = TestVC()
+        window.rootViewController = CountryHomeVC(vm: CountryHomeVM.test)
         
         window.makeKeyAndVisible()
     }
