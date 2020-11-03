@@ -1,15 +1,9 @@
-//
-//  FeedbackVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/14.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import FloatingPanel
 
 class FeedbackVC: UIPageViewController, PanelContent {
+    var prevPanelState:  FloatingPanelState?
+    
     var panelContentVM: PanelContentVM! {
         nil
     }

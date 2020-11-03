@@ -1,77 +1,21 @@
-//
-//  PlaceVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/19.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import Combine
 import TagListView
 import Presentr
+import FloatingPanel
 
 protocol PlaceVCDelegate {
-    func placeVCShouldStartFeedback(_ placeVC: PlaceVC)
+    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC)
     
-    func placeVCShouldMarkVisited(_ placeVC: PlaceVC)
+    func placeVCShouldHumankindAble(_ placeVC: PlaceVC)
     
-    func placeVCShouldDiscoverNext(_ placeVC: PlaceVC)
+    func placeVCShouldCollect(_ placeVC: PlaceVC)
     
     func placeWillDisappear(_ placeVC: PlaceVC)
 }
 
 class PlaceVC: UIViewController, PanelContent {
-    var panelContentVM: PanelContentVM!
-    
-    var vm: PlaceVM! {
-        didSet {
-            placeStateToken = vm.$placeState.sink { newValue in
-                DispatchQueue.main.async {
-                    switch newValue {
-                    case .neverBeen:
-                        self.stackView.addArrangedSubview(self.markVisitedBtn)
-                        self.stackView.removeArrangedSubview(self.feedbackBtn)
-                        self.feedbackBtn.removeFromSuperview()
-                        self.stackView.removeArrangedSubview(self.findNextBtn)
-                        self.findNextBtn.removeFromSuperview()
-                        break
-                    case .visited, .feedbacked:
-                        self.stackView.removeArrangedSubview(self.markVisitedBtn)
-                        self.markVisitedBtn.removeFromSuperview()
-                        self.stackView.addArrangedSubview(self.feedbackBtn)
-                        self.stackView.addArrangedSubview(self.findNextBtn)
-                        break
-                    }
-                }
-            }
-            perspectivesToken = vm.$perspectives.sink {
-                guard var perspectives = $0 else {
-                    self.placePerspectivesView.removeAllTags()
-                    return
-                }
-                if perspectives.isEmpty {
-                    perspectives.append("add condition")
-                }
-                DispatchQueue.main.async {
-                    self.placePerspectivesView.removeAllTags()
-                    self.placePerspectivesView.addTags(perspectives)
-                    self.placePerspectivesView.tagViews.forEach {
-                        $0.layer.cornerRadius = 10
-                        $0.layer.masksToBounds = true
-                    }
-                }
-            }
-        }
-    }
-    var placeStateToken: AnyCancellable?
-    
-    var perspectivesToken: AnyCancellable?
-    
-    var panelContentDelegate: PanelContentDelegate!
-    let showBackBtn = true
-    
-    var delegate: PlaceVCDelegate?
+    var prevPanelState:  FloatingPanelState?
     
     private lazy var stackView: UIStackView = {
         let tmp = UIStackView()
@@ -82,10 +26,10 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
-    private lazy var markVisitedBtn: UIButton = {
+    private lazy var collectBtn: UIButton = {
         let tmp = UIButton(type: .roundedRect)
         tmp.cornerRadius = 10
-        tmp.setTitleForAllStates("Visited")
+        tmp.setTitleForAllStates("Collect")
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.addTarget(self, action: #selector(markVisitedBtnTapped), for: .touchUpInside)
         tmp.backgroundColor = .systemBlue
@@ -95,10 +39,9 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
-    private lazy var feedbackBtn: UIButton = {
+    private lazy var individualAbleBtn: UIButton = {
         let tmp = UIButton(type: .roundedRect)
         tmp.cornerRadius = 10
-        tmp.setTitleForAllStates("Feedback")
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.addTarget(self, action: #selector(feedbackBtnTapped), for: .touchUpInside)
         tmp.backgroundColor = .systemBlue
@@ -108,10 +51,9 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
-    private lazy var findNextBtn: UIButton = {
+    private lazy var humankindAbleBtn: UIButton = {
         let tmp = UIButton(type: .roundedRect)
         tmp.cornerRadius = 10
-        tmp.setTitleForAllStates("Find Next")
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.addTarget(self, action: #selector(findNextBtnTapped), for: .touchUpInside)
         tmp.backgroundColor = .systemBlue
@@ -121,7 +63,7 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
-    private lazy var placePerspectivesView: TagListView = {
+    private lazy var tagsView: TagListView = {
         let tmp = TagListView()
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.textFont = .preferredFont(forTextStyle: .title3)
@@ -134,6 +76,61 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
+    var panelContentVM: PanelContentVM!
+    
+    var vm: PlaceVM! {
+        didSet {
+            placeStateToken = vm.$placeState.sink { newValue in
+                DispatchQueue.main.async {
+                    switch newValue {
+                    case .neverBeen:
+                        self.stackView.addArrangedSubview(self.collectBtn)
+                        self.stackView.removeArrangedSubview(self.individualAbleBtn)
+                        self.individualAbleBtn.removeFromSuperview()
+                        self.stackView.removeArrangedSubview(self.humankindAbleBtn)
+                        self.humankindAbleBtn.removeFromSuperview()
+                        break
+                    case .visited, .feedbacked:
+                        self.stackView.removeArrangedSubview(self.collectBtn)
+                        self.collectBtn.removeFromSuperview()
+                        self.individualAbleBtn.setTitleForAllStates(self.vm.interactionTitles!.individualAble)
+                        self.stackView.addArrangedSubview(self.individualAbleBtn)
+                        self.humankindAbleBtn.setTitleForAllStates(self.vm.interactionTitles!.humankindAble)
+                        self.stackView.addArrangedSubview(self.humankindAbleBtn)
+                        break
+                    }
+                }
+            }
+            tagsToken = vm.$tags.sink {
+                guard var perspectives = $0 else {
+                    self.tagsView.removeAllTags()
+                    return
+                }
+                if perspectives.isEmpty {
+                    perspectives.append("add \(self.vm.interactionTitles!.anchor)")
+                }
+                DispatchQueue.main.async {
+                    self.tagsView.removeAllTags()
+                    self.tagsView.addTags(perspectives)
+                    self.tagsView.tagViews.forEach {
+                        $0.layer.cornerRadius = 10
+                        $0.layer.masksToBounds = true
+                    }
+                }
+            }
+        }
+    }
+    
+    var placeStateToken: AnyCancellable?
+    
+    var tagsToken: AnyCancellable?
+    
+    var panelContentDelegate: PanelContentDelegate!
+    
+    let showBackBtn = true
+    
+    var delegate: PlaceVCDelegate?
+    
     override func loadView() {
         view = UIView()
         view.backgroundColor = .systemBackground
@@ -142,13 +139,13 @@ class PlaceVC: UIViewController, PanelContent {
         stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        view.addSubview(placePerspectivesView)
-        placePerspectivesView.topAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 4).isActive = true
-        placePerspectivesView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2).isActive = true
-        view.trailingAnchor.constraint(equalToSystemSpacingAfter: placePerspectivesView.trailingAnchor, multiplier: 2).isActive = true
+        view.addSubview(tagsView)
+        tagsView.topAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 4).isActive = true
+        tagsView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2).isActive = true
+        view.trailingAnchor.constraint(equalToSystemSpacingAfter: tagsView.trailingAnchor, multiplier: 2).isActive = true
         
     }
-        
+            
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         delegate?.placeWillDisappear(self)
@@ -158,23 +155,23 @@ class PlaceVC: UIViewController, PanelContent {
 // MARK: Interaction
 extension PlaceVC: TagListViewDelegate {
     @objc private func feedbackBtnTapped() {
-        guard !vm.perspectives!.isEmpty else {
+        guard !vm.tags!.isEmpty else {
             placePerspectivesTapped()
             return
         }
-        delegate?.placeVCShouldStartFeedback(self)
+        delegate?.placeVCShouldStartIndividualAble(self)
     }
     
     @objc private func markVisitedBtnTapped() {
-        delegate?.placeVCShouldMarkVisited(self)
+        delegate?.placeVCShouldCollect(self)
     }
     
     @objc private func findNextBtnTapped() {
-        delegate?.placeVCShouldDiscoverNext(self)
+        delegate?.placeVCShouldHumankindAble(self)
     }
     
     @objc private func placePerspectivesTapped() {
-        let vc = PerspectivesVC(perspectiveChoice_List: vm.perspectiveChoice_List)
+        let vc = TagsVC(tagChoice_List: vm.tagChoice_List, title: vm.interactionTitles!.anchorCollectionTitle, inputingCellPlaceholder: vm.interactionTitles!.anchor, enableAdding: vm.enableAddingTag)
         vc.delegate = vm
         self.customPresentViewController(vc.presentr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
     }

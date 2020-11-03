@@ -1,16 +1,11 @@
-//
-//  DiscoverdResultVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/28.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import Combine
 import SPAlert
+import FloatingPanel
 
 class DiscoverdResultVC: UIViewController, PanelContent {
+    var prevPanelState:  FloatingPanelState?
+    
     var panelContentVM: PanelContentVM! {
         nil
     }

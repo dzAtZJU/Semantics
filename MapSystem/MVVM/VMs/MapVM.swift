@@ -1,11 +1,3 @@
-//
-//  MapVM.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/13.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import Foundation
 import MapKit
 import CoreLocation
@@ -106,7 +98,7 @@ class MapVM {
         var tmp: DiscoverNextVM!
         RealmSpace.shared.queue.sync {
             let dataLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!))
-            tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditionIDs: dataLayer.quryConditionIDs(forPlace: selectedAnnotation!.placeId!))
+            tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditionIDs: dataLayer.queryConditionIDs(forPlace: selectedAnnotation!.placeId!))
             tmp.panelContentVMDelegate = self
         }
         return tmp

@@ -1,11 +1,3 @@
-//
-//  SubwordVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/6/8.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import SwiftUI
 import UIKit
 

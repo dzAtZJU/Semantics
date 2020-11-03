@@ -1,11 +1,3 @@
-//
-//  MapVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/6.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import MapKit
 import CoreLocation
@@ -47,7 +39,7 @@ class MapVC: UIViewController {
         return tmp
     }()
     
-    private lazy var panelContentVC: PanelContentVC = {
+    lazy var panelContentVC: PanelContentVC = {
         let tmp = PanelContentVC(initialVC: searchVC)
         tmp.view.backgroundColor = .systemBackground
         tmp.delegate = self
@@ -74,7 +66,8 @@ class MapVC: UIViewController {
     }
     
     private lazy var spinner: UIActivityIndicatorView = {
-        let tmp = UIActivityIndicatorView(style: .large)
+        let tmp = UIActivityIndicatorView()
+        tmp.style = .large
         tmp.color = .systemPurple
         tmp.hidesWhenStopped = true
         return tmp
@@ -189,7 +182,9 @@ extension MapVC: PlaceVCDelegate {
     func placeWillDisappear(_ placeVC: PlaceVC) {
     }
     
-    func placeVCShouldStartFeedback(_ placeVC: PlaceVC) {
+    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC) {
+        switch placeVC.vm.uniqueness! {
+        case .ordinary:
             FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
                 let vc = FeedbackVC(feedbackVM: vm)
                 vc.panelContentDelegate = self
@@ -197,13 +192,22 @@ extension MapVC: PlaceVCDelegate {
                     self.panelContentVC.show(vc, sender: nil)
                 }
             }
+        case .unique:
+            DispatchQueue.main.async {
+                let vc = SeasonsVC()
+                vc.prevPanelState = .tip
+                vc.panelContentDelegate = self
+                self.panelContentVC.show(vc, sender: nil)
+            }
+        }
+            
     }
     
-    func placeVCShouldMarkVisited(_ placeVC: PlaceVC) {
+    func placeVCShouldCollect(_ placeVC: PlaceVC) {
         mapVM.markVisited()
     }
     
-    func placeVCShouldDiscoverNext(_ placeVC: PlaceVC) {
+    func placeVCShouldHumankindAble(_ placeVC: PlaceVC) {
         DispatchQueue.main.async {
             self.panelContentVC.show(self.discoverNextVC, sender: nil)
         }
@@ -272,14 +276,14 @@ extension MapVC: MKMapViewDelegate {
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
         switch annotation.type {
         case .inSearching, .visited:
-            PlaceVM.new(placeID: annotation.placeId) { vm in
+            PlaceVM.new(placeID: annotation.placeId, uniqueness: annotation.uniqueness) { vm in
                 DispatchQueue.main.async {
                     self.placeVC.vm = vm
                     completion(self.placeVC)
                 }
             }
         case .inDiscovering:
-            break
+            fatalError()
         }
         
     }

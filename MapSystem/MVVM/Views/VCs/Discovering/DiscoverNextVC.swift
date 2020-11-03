@@ -8,8 +8,11 @@
 
 import UIKit
 import Combine
+import FloatingPanel
 
 class DiscoverNextVC: UIViewController, PanelContent {
+    var prevPanelState:  FloatingPanelState?
+    
     var panelContentVM: PanelContentVM! {
         vm
     }

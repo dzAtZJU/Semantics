@@ -1,10 +1,3 @@
-//
-//  RealmObjs.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/10.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
 import RealmSwift
 
 class SyncedObject: Object {
@@ -23,16 +16,19 @@ class Place: Object {
     
     @objc dynamic var title = ""
     
-    @objc dynamic var latitude: Double = 0
     @objc dynamic var longitude: Double = 0
+    @objc dynamic var latitude: Double = 0
     
-    convenience init(title: String, latitude: Double, longitude: Double) {
+    @objc dynamic var uniqueness: Int = 0
+    
+    convenience init(title: String, latitude: Double, longitude: Double, uniqueness: Int) {
         self.init()
         self.partitionKey = RealmSpace.partitionValue
         self._id = title
         self.title = title
         self.latitude = latitude
         self.longitude = longitude
+        self.uniqueness = uniqueness
     }
     
     override static func primaryKey() -> String? {
@@ -82,7 +78,11 @@ class PlaceStory: EmbeddedObject {
     let owner = LinkingObjects(fromType: Individual.self, property: "placeStory_List")
     
     @objc dynamic var placeID = ""
+    
     @objc dynamic var state = 1
+    
+    let conditionID_List = List<String>()
+    
     let perspectiveID_List = List<String>()
     
     convenience init(placeID placeID_: String) {

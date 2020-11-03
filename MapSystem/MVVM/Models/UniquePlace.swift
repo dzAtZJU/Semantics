@@ -1,10 +1,3 @@
-//
-//  UniquePlace.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/20.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
 import MapKit
 
 struct UniquePlace {
@@ -17,4 +10,9 @@ struct UniquePlace {
         latitude = annotation.coordinate.latitude
         longitude = annotation.coordinate.longitude
     }
+}
+
+enum Uniqueness: Int {
+    case ordinary
+    case unique
 }

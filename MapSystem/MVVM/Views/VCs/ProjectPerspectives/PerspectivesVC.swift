@@ -2,16 +2,16 @@ import UIKit
 import TagListView
 import Presentr
 
-struct PerspectiveChoice {
-    let perspective: String
+struct TagChoice {
+    let tag: String
     var isChosen: Bool
 }
 
-protocol PerspectivesVCDelegate: class {
-    func perspectivesVCDidFinishChoose(_ perspectivesVC: PerspectivesVC, perspectiveChoice_List: [PerspectiveChoice])
+protocol TagsVCDelegate: class {
+    func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_List: [TagChoice])
 }
 
-class PerspectivesVC: UIViewController {
+class TagsVC: UIViewController {
     lazy var presentr: Presentr = {
         let tmp = Presentr(presentationType: .popup)
         tmp.transitionType = .crossDissolve
@@ -20,15 +20,22 @@ class PerspectivesVC: UIViewController {
         return tmp
     }()
         
-    weak var delegate: PerspectivesVCDelegate?
+    weak var delegate: TagsVCDelegate?
     
-    private var perspectiveChoice_List: [PerspectiveChoice]
+    private var tagChoice_List: [TagChoice]
     
     private var isDuringInput = false
     
-    init(perspectiveChoice_List perspectiveChoice_List_: [PerspectiveChoice]) {
-        perspectiveChoice_List = perspectiveChoice_List_
+    private let inputingCellPlaceholder: String
+    
+    private let enableAdding: Bool
+    
+    init(tagChoice_List tagChoice_List_: [TagChoice], title title_: String, inputingCellPlaceholder inputingCellPlaceholder_: String, enableAdding enableAdding_: Bool) {
+        tagChoice_List = tagChoice_List_
+        inputingCellPlaceholder = inputingCellPlaceholder_
+        enableAdding = enableAdding_
         super.init(nibName: nil, bundle: nil)
+        title = title_
     }
     
     required init?(coder: NSCoder) {
@@ -40,9 +47,9 @@ class PerspectivesVC: UIViewController {
         tmp.backgroundColor = .secondarySystemBackground
         tmp.separatorStyle = .none
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.register(PerspectiveCell.self, forCellReuseIdentifier: PerspectiveCell.identifier)
-        tmp.register(AddPerspectiveCell.self, forCellReuseIdentifier: AddPerspectiveCell.identifier)
-        tmp.register(InputPerspectiveCell.self, forCellReuseIdentifier: InputPerspectiveCell.identifier)
+        tmp.register(TagCell.self, forCellReuseIdentifier: TagCell.identifier)
+        tmp.register(AddingCell.self, forCellReuseIdentifier: AddingCell.identifier)
+        tmp.register(InputingCell.self, forCellReuseIdentifier: InputingCell.identifier)
         tmp.delegate = self
         tmp.dataSource = self
         tmp.delaysContentTouches = false
@@ -55,7 +62,7 @@ class PerspectivesVC: UIViewController {
         view = UIView()
         view.backgroundColor = .secondarySystemBackground
         
-        navigationItem.title = "Conditions"
+        navigationItem.title = title
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneBtnTapped))
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.shadowColor = .none
@@ -77,19 +84,23 @@ class PerspectivesVC: UIViewController {
     @objc func doneBtnTapped() {
         self.dismiss(animated: true)
         
-        delegate?.perspectivesVCDidFinishChoose(self, perspectiveChoice_List: perspectiveChoice_List)
+        delegate?.tagsVCDidFinishChoose(self, tagChoice_List: tagChoice_List)
     }
 }
 
-extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource, InputPerspectiveCellDelegate {
+extension TagsVC: UITableViewDelegate, UITableViewDataSource, InputPerspectiveCellDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        isDuringInput ? 1 : 2
+        if enableAdding {
+            return isDuringInput ? 1 : 2
+        } else {
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return perspectiveChoice_List.count + (isDuringInput ? 1 : 0)
+            return tagChoice_List.count + (isDuringInput ? 1 : 0)
         case 1:
             return 1
         default:
@@ -100,22 +111,23 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource, InputPersp
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            if indexPath.row == perspectiveChoice_List.count {
-                let cell = tableView.dequeueReusableCell(withIdentifier: InputPerspectiveCell.identifier, for: indexPath) as! InputPerspectiveCell
+            if indexPath.row == tagChoice_List.count {
+                let cell = tableView.dequeueReusableCell(withIdentifier: InputingCell.identifier, for: indexPath) as! InputingCell
                 cell.delegate = self
+                cell.textField.placeholder = inputingCellPlaceholder
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                     cell.textField.becomeFirstResponder()
                 }
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: PerspectiveCell.identifier, for: indexPath)
-                let perspectiveChoice = perspectiveChoice_List[indexPath.row]
-                cell.textLabel!.text = perspectiveChoice.perspective
+                let cell = tableView.dequeueReusableCell(withIdentifier: TagCell.identifier, for: indexPath)
+                let perspectiveChoice = tagChoice_List[indexPath.row]
+                cell.textLabel!.text = perspectiveChoice.tag
                 cell.accessoryType = perspectiveChoice.isChosen ? .checkmark : .none
                 return cell
             }
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: AddPerspectiveCell.identifier, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: AddingCell.identifier, for: indexPath)
             return cell
         default:
             fatalError()
@@ -125,7 +137,7 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource, InputPersp
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            perspectiveChoice_List[indexPath.row].isChosen = !perspectiveChoice_List[indexPath.row].isChosen
+            tagChoice_List[indexPath.row].isChosen = !tagChoice_List[indexPath.row].isChosen
             tableView.reloadRows(at: [indexPath], with: .automatic)
         case 1:
             setDuringInput(to: true)
@@ -148,13 +160,13 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource, InputPersp
         if to {
             isDuringInput = true
             privatePerspectivesView.beginUpdates()
-            privatePerspectivesView.insertRows(at: [IndexPath(row: perspectiveChoice_List.count, section: 0)], with: .fade)
+            privatePerspectivesView.insertRows(at: [IndexPath(row: tagChoice_List.count, section: 0)], with: .fade)
             privatePerspectivesView.deleteSections([1], with: .fade)
             privatePerspectivesView.endUpdates()
         } else {
             isDuringInput = false
             privatePerspectivesView.beginUpdates()
-            privatePerspectivesView.reloadRows(at: [IndexPath(row: perspectiveChoice_List.count-1, section: 0)], with: .fade)
+            privatePerspectivesView.reloadRows(at: [IndexPath(row: tagChoice_List.count-1, section: 0)], with: .fade)
             privatePerspectivesView.insertSections([1], with: .fade)
             privatePerspectivesView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .fade)
             privatePerspectivesView.endUpdates()
@@ -169,14 +181,14 @@ extension PerspectivesVC: UITableViewDelegate, UITableViewDataSource, InputPersp
         return indexPath.section == 1
     }
     
-    fileprivate func inputPerspectiveCellDidEndEditing(_ inputPerspectiveCell: InputPerspectiveCell) {
-        perspectiveChoice_List.append(PerspectiveChoice(perspective: inputPerspectiveCell.textField.text!, isChosen: true))
+    fileprivate func inputPerspectiveCellDidEndEditing(_ inputPerspectiveCell: InputingCell) {
+        tagChoice_List.append(TagChoice(tag: inputPerspectiveCell.textField.text!, isChosen: true))
         setDuringInput(to: false)
     }
 }
 
-private class PerspectiveCell: UITableViewCell {
-    static let identifier = "PerspectiveCell"
+private class TagCell: UITableViewCell {
+    static let identifier = "TagCell"
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: Self.identifier)
@@ -188,13 +200,12 @@ private class PerspectiveCell: UITableViewCell {
     }
 }
 
-private class AddPerspectiveCell: UITableViewCell {
-    static let identifier = "AddPerspectiveCell"
+private class AddingCell: UITableViewCell {
+    static let identifier = "AddingCell"
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: Self.identifier)
         backgroundColor = .secondarySystemBackground
-        textLabel?.text = "add condition"
     }
     
     required init?(coder: NSCoder) {
@@ -203,11 +214,11 @@ private class AddPerspectiveCell: UITableViewCell {
 }
 
 private protocol InputPerspectiveCellDelegate: class {
-    func inputPerspectiveCellDidEndEditing(_ inputPerspectiveCell: InputPerspectiveCell)
+    func inputPerspectiveCellDidEndEditing(_ inputPerspectiveCell: InputingCell)
 }
 
-private class InputPerspectiveCell: UITableViewCell, UITextFieldDelegate {
-    static let identifier = "InputPerspectiveCell"
+private class InputingCell: UITableViewCell, UITextFieldDelegate {
+    static let identifier = "InputingCell"
     
     var textField: UITextField!
     
@@ -220,7 +231,6 @@ private class InputPerspectiveCell: UITableViewCell, UITextFieldDelegate {
         textField = UITextField()
         textField.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         contentView.addSubview(textField)
-        textField.placeholder = "condition"
     }
     
     override func layoutSubviews() {

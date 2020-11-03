@@ -1,17 +1,9 @@
-//
-//  PanelContentVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/12.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import MapKit
 import FloatingPanel
 import RealmSwift
 
-protocol PanelContent: UIViewController {
+protocol PanelContent: Reusable, UIViewController {
     var panelContentDelegate: PanelContentDelegate! { get set }
     
     var showBackBtn: Bool { get }
@@ -19,9 +11,14 @@ protocol PanelContent: UIViewController {
     var topInset: CGFloat { get }
     
     var panelContentVM: PanelContentVM! { get }
+    
+    var prevPanelState:  FloatingPanelState? {
+        get
+        set
+    }
 }
 
-extension PanelContent{
+extension PanelContent {
     var topInset: CGFloat {
         get {
             0
@@ -31,6 +28,10 @@ extension PanelContent{
 
 protocol PanelContentDelegate {
     var panel: FloatingPanelController {
+        get
+    }
+    
+    var panelContentVC: PanelContentVC {
         get
     }
     

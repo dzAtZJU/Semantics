@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "MHLoadingButton",
+        "repositoryURL": "https://github.com/twho/loading-buttons-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "4c6fba521e65232917ede6afd026ab84f372a515",
+          "version": "0.1.1"
+        }
+      },
+      {
         "package": "SPAlert",
         "repositoryURL": "https://github.com/ivanvorobei/SPAlert",
         "state": {
