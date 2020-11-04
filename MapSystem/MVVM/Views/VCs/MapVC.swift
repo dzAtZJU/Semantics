@@ -208,8 +208,17 @@ extension MapVC: PlaceVCDelegate {
     }
     
     func placeVCShouldHumankindAble(_ placeVC: PlaceVC) {
-        DispatchQueue.main.async {
-            self.panelContentVC.show(self.discoverNextVC, sender: nil)
+        switch placeVC.vm.uniqueness! {
+        case .ordinary:
+            DispatchQueue.main.async {
+                self.panelContentVC.show(self.discoverNextVC, sender: nil)
+            }
+        case .unique:
+            DispatchQueue.main.async {
+                let v = TalksVC(vm: TalksVM(placeID: self.mapVM.selectedPlaceId!))
+                let nv = UINavigationController(rootViewController: v)
+                self.present(nv, animated: true, completion: nil)
+            }
         }
     }
 }

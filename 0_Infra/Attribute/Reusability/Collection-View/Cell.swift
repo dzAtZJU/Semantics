@@ -7,7 +7,7 @@ class TitleSupplementaryView: UICollectionReusableView {
         let tmp = UILabel()
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.adjustsFontForContentSizeCategory = true
-        tmp.font = UIFont.preferredFont(forTextStyle: .footnote)
+        tmp.font = UIFont.preferredFont(forTextStyle: .callout)
         return tmp
     }()
     
@@ -17,7 +17,7 @@ class TitleSupplementaryView: UICollectionReusableView {
         addSubview(label)
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            label.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     
@@ -27,7 +27,7 @@ class TitleSupplementaryView: UICollectionReusableView {
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let size = label.intrinsicContentSize
-        layoutAttributes.bounds.size.height = size.height
+        layoutAttributes.bounds.size.height = size.height + 20
         return layoutAttributes
     }
 }
@@ -80,14 +80,5 @@ class ImageWithTitleCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-struct TitleItem: Hashable {
-    let title: String
-    let identifier = UUID()
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
     }
 }

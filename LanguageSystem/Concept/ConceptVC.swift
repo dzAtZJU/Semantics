@@ -8,7 +8,6 @@ class ConceptVC: UIViewController {
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.backgroundColor = .systemBackground
         return tmp
-        
     }()
     
     private let vm: ConceptVM

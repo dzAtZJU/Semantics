@@ -28,6 +28,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         
 //        window.rootViewController = UINavigationController(rootViewController: ConceptVC(vm: ConceptVM(concept: Concept.Seasons)))
         
+//        window.rootViewController = TalksVC(vm: ConceptVM(concept: Concept.Seasons))
+        
         window.makeKeyAndVisible()
     }
     

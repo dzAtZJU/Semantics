@@ -45,22 +45,30 @@ class PlaceVM: PanelContentVM {
         uniqueness = uniqueness_
         placeState = PlaceState(rawValue: placeStory_.state)!
         
-        let tag_List: List<String> = {
-            switch uniqueness! {
-            case .ordinary:
-                return placeStory_.conditionID_List
-            case .unique:
-                return placeStory_.perspectiveID_List
+        switch uniqueness! {
+        case .ordinary:
+            tagsToken = placeStory_.conditionID_List.observe {
+                switch $0 {
+                case .initial(let tags_):
+                    fallthrough
+                case .update(let tags_, _, _, _):
+                    self.tags = tags_.map { $0 }
+                case .error(let error):
+                    fatalError("\(error)")
+                }
             }
-        }()
-        tagsToken = tag_List.observe {
-            switch $0 {
-            case .initial(let tags_):
-                fallthrough
-            case .update(let tags_, _, _, _):
-                self.tags = tags_.map { $0 }
-            case .error(let error):
-                fatalError("\(error)")
+        case .unique:
+            tagsToken = placeStory_.perspectiveInterpretation_List.observe {
+                switch $0 {
+                case .initial(let perspectiveInterpretation_List):
+                    fallthrough
+                case .update(let perspectiveInterpretation_List, _, _, _):
+                    self.tags = try! perspectiveInterpretation_List.map({ (item) throws -> String in
+                        item.perspectiveID
+                    })
+                case .error(let error):
+                    fatalError("\(error)")
+                }
             }
         }
         
@@ -90,7 +98,7 @@ class PlaceVM: PanelContentVM {
                 case .ordinary:
                     return SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).queryPrivateConditions()
                 case .unique:
-                    return Perspective.all
+                    return Concept.allTitles
                 }
             }()
             

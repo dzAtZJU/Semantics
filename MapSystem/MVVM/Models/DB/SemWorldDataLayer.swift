@@ -153,12 +153,14 @@ extension SemWorldDataLayer {
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
         }!
-        guard !placeStory.perspectiveID_List.contains(perspectiveID) else {
+        guard !placeStory.perspectiveInterpretation_List.contains(where: { (item) -> Bool in
+            item.perspectiveID == perspectiveID
+        }) else {
             fatalError("The perspective \(perspectiveID) is already projected on \(placeStory.placeID)")
         }
-        
-        
-        placeStory.perspectiveID_List.append(perspectiveID)
+
+
+        placeStory.perspectiveInterpretation_List.append(PerspectiveInterpretation(perspectiveID: perspectiveID, fileData: ""))
     }
     
     func removePerspective(_ perspectiveID: String, fromPlace placeID: String) {
@@ -166,12 +168,14 @@ extension SemWorldDataLayer {
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
         }!
-        
-        guard let index = placeStory.perspectiveID_List.index(of: perspectiveID) else {
+
+        guard let index = placeStory.perspectiveInterpretation_List.firstIndex(where: { (item) -> Bool in
+            item.perspectiveID == perspectiveID
+        }) else {
             fatalError("The perspective \(perspectiveID) is not on \(placeStory.placeID)")
         }
-        
-        placeStory.perspectiveID_List.remove(at: index)
+
+        placeStory.perspectiveInterpretation_List.remove(at: index)
     }
     
     func queryPerspectiveIDs(forPlace placeID: String) -> [String] {
@@ -179,8 +183,8 @@ extension SemWorldDataLayer {
             fatalError()
         }
         
-        return try! placeStory.perspectiveID_List.map { (id) throws -> String in
-            id
+        return try! placeStory.perspectiveInterpretation_List.map { (item) throws -> String in
+            item.perspectiveID
         }
     }
 }

@@ -83,11 +83,23 @@ class PlaceStory: EmbeddedObject {
     
     let conditionID_List = List<String>()
     
-    let perspectiveID_List = List<String>()
+    let perspectiveInterpretation_List = List<PerspectiveInterpretation>()
     
     convenience init(placeID placeID_: String) {
         self.init()
         placeID = placeID_
+    }
+}
+
+class PerspectiveInterpretation: EmbeddedObject {
+    @objc dynamic var perspectiveID = ""
+    
+    @objc dynamic var fileData = ""
+    
+    convenience init(perspectiveID perspectiveID_: String, fileData fileData_: String) {
+        self.init()
+        perspectiveID = perspectiveID_
+        fileData = fileData_
     }
 }
 

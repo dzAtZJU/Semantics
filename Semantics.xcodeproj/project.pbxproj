@@ -132,10 +132,15 @@
 		89E8AF0E254FC0830030E8B5 /* Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF0D254FC0830030E8B5 /* Reuse.swift */; };
 		89E8AF16254FFF550030E8B5 /* ConceptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF15254FFF550030E8B5 /* ConceptVC.swift */; };
 		89E8AF1A255000590030E8B5 /* ConceptVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF19255000590030E8B5 /* ConceptVM.swift */; };
-		89E8AF20255001BC0030E8B5 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF1F255001BC0030E8B5 /* CollectionViewCell.swift */; };
+		89E8AF20255001BC0030E8B5 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF1F255001BC0030E8B5 /* Cell.swift */; };
 		89E8AF26255002C20030E8B5 /* Memory-Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF25255002C20030E8B5 /* Memory-Model.swift */; };
 		89E8AF2D255018480030E8B5 /* Concept.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF2C255018470030E8B5 /* Concept.swift */; };
 		89E8AF34255148C10030E8B5 /* InterpretationBirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF33255148C10030E8B5 /* InterpretationBirdView.swift */; };
+		89E8AF3A255151790030E8B5 /* TalksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF39255151780030E8B5 /* TalksVC.swift */; };
+		89E8AF3E255152FD0030E8B5 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF3D255152FD0030E8B5 /* Profile.swift */; };
+		89E8AF42255271A90030E8B5 /* Separator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF41255271A80030E8B5 /* Separator.swift */; };
+		89E8AF46255277570030E8B5 /* TalksVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF45255277570030E8B5 /* TalksVM.swift */; };
+		89E8AF4B25527F200030E8B5 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF4A25527F200030E8B5 /* Item.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -290,10 +295,15 @@
 		89E8AF0D254FC0830030E8B5 /* Reuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reuse.swift; sourceTree = "<group>"; };
 		89E8AF15254FFF550030E8B5 /* ConceptVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConceptVC.swift; sourceTree = "<group>"; };
 		89E8AF19255000590030E8B5 /* ConceptVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConceptVM.swift; sourceTree = "<group>"; };
-		89E8AF1F255001BC0030E8B5 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		89E8AF1F255001BC0030E8B5 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		89E8AF25255002C20030E8B5 /* Memory-Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Memory-Model.swift"; sourceTree = "<group>"; };
 		89E8AF2C255018470030E8B5 /* Concept.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concept.swift; sourceTree = "<group>"; };
 		89E8AF33255148C10030E8B5 /* InterpretationBirdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpretationBirdView.swift; sourceTree = "<group>"; };
+		89E8AF39255151780030E8B5 /* TalksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalksVC.swift; sourceTree = "<group>"; };
+		89E8AF3D255152FD0030E8B5 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		89E8AF41255271A80030E8B5 /* Separator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Separator.swift; sourceTree = "<group>"; };
+		89E8AF45255277570030E8B5 /* TalksVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalksVM.swift; sourceTree = "<group>"; };
+		89E8AF4A25527F200030E8B5 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemanticsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FD0C28B58EAE29B6350CF11 /* Pods-Semantics.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Semantics.debug dev.xcconfig"; path = "Target Support Files/Pods-Semantics/Pods-Semantics.debug dev.xcconfig"; sourceTree = "<group>"; };
 		A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemFilterControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -857,8 +867,10 @@
 		89E8AF1E2550019B0030E8B5 /* Reusability */ = {
 			isa = PBXGroup;
 			children = (
-				89E8AF1F255001BC0030E8B5 /* CollectionViewCell.swift */,
+				89E8AF4925527EEB0030E8B5 /* Collection-View */,
 				89E8AF25255002C20030E8B5 /* Memory-Model.swift */,
+				89E8AF3D255152FD0030E8B5 /* Profile.swift */,
+				89E8AF41255271A80030E8B5 /* Separator.swift */,
 			);
 			path = Reusability;
 			sourceTree = "<group>";
@@ -867,8 +879,19 @@
 			isa = PBXGroup;
 			children = (
 				89E8AF33255148C10030E8B5 /* InterpretationBirdView.swift */,
+				89E8AF39255151780030E8B5 /* TalksVC.swift */,
+				89E8AF45255277570030E8B5 /* TalksVM.swift */,
 			);
 			path = Interpretation;
+			sourceTree = "<group>";
+		};
+		89E8AF4925527EEB0030E8B5 /* Collection-View */ = {
+			isa = PBXGroup;
+			children = (
+				89E8AF1F255001BC0030E8B5 /* Cell.swift */,
+				89E8AF4A25527F200030E8B5 /* Item.swift */,
+			);
+			path = "Collection-View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1068,7 +1091,7 @@
 				899C247624C9CAE100F8259B /* Sector+.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				8968C08524DF09A70093CBFC /* DiscoverNextVC.swift in Sources */,
-				89E8AF20255001BC0030E8B5 /* CollectionViewCell.swift in Sources */,
+				89E8AF20255001BC0030E8B5 /* Cell.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				89E8AF16254FFF550030E8B5 /* ConceptVC.swift in Sources */,
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
@@ -1084,12 +1107,14 @@
 				896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */,
 				8989C5C324E6CEF500FA3FAE /* FeedbackVM.swift in Sources */,
 				8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */,
+				89E8AF46255277570030E8B5 /* TalksVM.swift in Sources */,
 				896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */,
 				89E8AF34255148C10030E8B5 /* InterpretationBirdView.swift in Sources */,
 				892C6410248A09C600208446 /* OceanLayerVC.swift in Sources */,
 				896344B8249DD7F90060160B /* WordsGraphVC.swift in Sources */,
 				89618E7C253B2917000253E3 /* SemWorldDataLayer2.swift in Sources */,
 				899AE17124DAA14200C0EB17 /* HandleCloudKitError.swift in Sources */,
+				89E8AF42255271A90030E8B5 /* Separator.swift in Sources */,
 				895A4E2C24ED9F4A0025ED20 /* PlaceVM.swift in Sources */,
 				8991DAE124B6F9BD00299595 /* SemTextLayout.swift in Sources */,
 				899C247424C9C57300F8259B /* WordsVC.swift in Sources */,
@@ -1102,6 +1127,7 @@
 				89290D6724E52F1C00F0A862 /* MapVM.swift in Sources */,
 				892C63D524866A1000208446 /* NSRange+.swift in Sources */,
 				899AE18624DC255D00C0EB17 /* MapVC.swift in Sources */,
+				89E8AF4B25527F200030E8B5 /* Item.swift in Sources */,
 				8911386324C1644A00CBEBB5 /* CGRect+.swift in Sources */,
 				899C247224C9BCEF00F8259B /* OrganVC.swift in Sources */,
 				892C63DE24867F8700208446 /* SemTextView.swift in Sources */,
@@ -1131,6 +1157,7 @@
 				89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */,
 				89E257AA24F9936500D6C375 /* DiscoverdResultVM.swift in Sources */,
 				89A666DB24D847EB00851EDF /* UIButton+.swift in Sources */,
+				89E8AF3E255152FD0030E8B5 /* Profile.swift in Sources */,
 				89E8AF0E254FC0830030E8B5 /* Reuse.swift in Sources */,
 				892C6416248E1C1800208446 /* SubwordVC.swift in Sources */,
 				892C6414248CCFE200208446 /* WordVC.swift in Sources */,
@@ -1144,6 +1171,7 @@
 				8989C5BF24E673AC00FA3FAE /* ConditionFeedbackVM.swift in Sources */,
 				89E257AE24F9A00900D6C375 /* ConditionBackerCell.swift in Sources */,
 				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
+				89E8AF3A255151790030E8B5 /* TalksVC.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				899AE17924DABA8C00C0EB17 /* Files.swift in Sources */,
 				899AE18024DACAF100C0EB17 /* CoreDataSpace.swift in Sources */,
