@@ -148,7 +148,7 @@ extension SemWorldDataLayer {
         }
     }
     
-    func addPerspective(_ perspectiveID: String, toPlace placeID: String) {
+    func addPerspective(_ perspectiveID: String, fileData: Data, toPlace placeID: String) {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
@@ -160,7 +160,7 @@ extension SemWorldDataLayer {
         }
 
 
-        placeStory.perspectiveInterpretation_List.append(PerspectiveInterpretation(perspectiveID: perspectiveID, fileData: ""))
+        placeStory.perspectiveInterpretation_List.append(PerspectiveInterpretation(perspectiveID: perspectiveID, fileData: fileData))
     }
     
     func removePerspective(_ perspectiveID: String, fromPlace placeID: String) {

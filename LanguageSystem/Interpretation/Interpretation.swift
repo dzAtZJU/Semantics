@@ -1,0 +1,1 @@
+protocol Interpretation: Codable {}

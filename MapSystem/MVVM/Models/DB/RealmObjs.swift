@@ -94,9 +94,9 @@ class PlaceStory: EmbeddedObject {
 class PerspectiveInterpretation: EmbeddedObject {
     @objc dynamic var perspectiveID = ""
     
-    @objc dynamic var fileData = ""
+    @objc dynamic var fileData: Data?
     
-    convenience init(perspectiveID perspectiveID_: String, fileData fileData_: String) {
+    convenience init(perspectiveID perspectiveID_: String, fileData fileData_: Data) {
         self.init()
         perspectiveID = perspectiveID_
         fileData = fileData_

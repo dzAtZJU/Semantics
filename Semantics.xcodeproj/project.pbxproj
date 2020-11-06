@@ -122,7 +122,7 @@
 		89B953AC24B8568200472692 /* SemStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C63D12486630900208446 /* SemStyle.swift */; };
 		89BF91852548160F006E364A /* CountryHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF91842548160F006E364A /* CountryHomeVC.swift */; };
 		89BF918D25482C08006E364A /* CountryHomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF918C25482C08006E364A /* CountryHomeVM.swift */; };
-		89BF91942549A9FE006E364A /* SeasonsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF91932549A9FE006E364A /* SeasonsVC.swift */; };
+		89BF91942549A9FE006E364A /* PhasesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BF91932549A9FE006E364A /* PhasesVC.swift */; };
 		89C2889324A34308002081FE /* NetworkSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C2889224A34308002081FE /* NetworkSpace.swift */; };
 		89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */ = {isa = PBXBuildFile; productRef = 89C28CFD24ADC22E002081FE /* SwiftHEXColors */; };
 		89E257A824F9710C00D6C375 /* PanelContentVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257A724F9710C00D6C375 /* PanelContentVM.swift */; };
@@ -141,6 +141,9 @@
 		89E8AF42255271A90030E8B5 /* Separator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF41255271A80030E8B5 /* Separator.swift */; };
 		89E8AF46255277570030E8B5 /* TalksVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF45255277570030E8B5 /* TalksVM.swift */; };
 		89E8AF4B25527F200030E8B5 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF4A25527F200030E8B5 /* Item.swift */; };
+		89E8AF4F255436290030E8B5 /* SeasonsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF4E255436280030E8B5 /* SeasonsVM.swift */; };
+		89E8AF5325554EAB0030E8B5 /* Adding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF5225554EAB0030E8B5 /* Adding.swift */; };
+		89E8AF5B25556F800030E8B5 /* Interpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF5A25556F800030E8B5 /* Interpretation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,7 +290,7 @@
 		89B953AA24B70FCE00472692 /* SemGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemGestureRecognizer.swift; sourceTree = "<group>"; };
 		89BF91842548160F006E364A /* CountryHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryHomeVC.swift; sourceTree = "<group>"; };
 		89BF918C25482C08006E364A /* CountryHomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryHomeVM.swift; sourceTree = "<group>"; };
-		89BF91932549A9FE006E364A /* SeasonsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonsVC.swift; sourceTree = "<group>"; };
+		89BF91932549A9FE006E364A /* PhasesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhasesVC.swift; sourceTree = "<group>"; };
 		89C2889224A34308002081FE /* NetworkSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSpace.swift; sourceTree = "<group>"; };
 		89E257A724F9710C00D6C375 /* PanelContentVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelContentVM.swift; sourceTree = "<group>"; };
 		89E257A924F9936500D6C375 /* DiscoverdResultVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverdResultVM.swift; sourceTree = "<group>"; };
@@ -304,6 +307,9 @@
 		89E8AF41255271A80030E8B5 /* Separator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Separator.swift; sourceTree = "<group>"; };
 		89E8AF45255277570030E8B5 /* TalksVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TalksVM.swift; sourceTree = "<group>"; };
 		89E8AF4A25527F200030E8B5 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		89E8AF4E255436280030E8B5 /* SeasonsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonsVM.swift; sourceTree = "<group>"; };
+		89E8AF5225554EAB0030E8B5 /* Adding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Adding.swift; sourceTree = "<group>"; };
+		89E8AF5A25556F800030E8B5 /* Interpretation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interpretation.swift; sourceTree = "<group>"; };
 		8F372B7B3F145196D23CE67D /* Pods_SemanticsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemanticsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FD0C28B58EAE29B6350CF11 /* Pods-Semantics.debug dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Semantics.debug dev.xcconfig"; path = "Target Support Files/Pods-Semantics/Pods-Semantics.debug dev.xcconfig"; sourceTree = "<group>"; };
 		A32F1871FEF854BC52BFCFBE /* Pods_SemFilterControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SemFilterControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -804,7 +810,6 @@
 				89E8AF322551460D0030E8B5 /* Interpretation */,
 				89E8AF14254FFF450030E8B5 /* Concept */,
 				89E8AF11254FFEE70030E8B5 /* Country */,
-				89BF91922549A9CB006E364A /* Seasons */,
 			);
 			path = LanguageSystem;
 			sourceTree = "<group>";
@@ -812,7 +817,7 @@
 		89BF91922549A9CB006E364A /* Seasons */ = {
 			isa = PBXGroup;
 			children = (
-				89BF91932549A9FE006E364A /* SeasonsVC.swift */,
+				89E8AF4E255436280030E8B5 /* SeasonsVM.swift */,
 			);
 			path = Seasons;
 			sourceTree = "<group>";
@@ -848,6 +853,7 @@
 		89E8AF14254FFF450030E8B5 /* Concept */ = {
 			isa = PBXGroup;
 			children = (
+				89BF91922549A9CB006E364A /* Seasons */,
 				89E8AF15254FFF550030E8B5 /* ConceptVC.swift */,
 				89E8AF19255000590030E8B5 /* ConceptVM.swift */,
 				89E8AF2C255018470030E8B5 /* Concept.swift */,
@@ -867,10 +873,12 @@
 		89E8AF1E2550019B0030E8B5 /* Reusability */ = {
 			isa = PBXGroup;
 			children = (
+				89BF91932549A9FE006E364A /* PhasesVC.swift */,
 				89E8AF4925527EEB0030E8B5 /* Collection-View */,
 				89E8AF25255002C20030E8B5 /* Memory-Model.swift */,
 				89E8AF3D255152FD0030E8B5 /* Profile.swift */,
 				89E8AF41255271A80030E8B5 /* Separator.swift */,
+				89E8AF5225554EAB0030E8B5 /* Adding.swift */,
 			);
 			path = Reusability;
 			sourceTree = "<group>";
@@ -881,6 +889,7 @@
 				89E8AF33255148C10030E8B5 /* InterpretationBirdView.swift */,
 				89E8AF39255151780030E8B5 /* TalksVC.swift */,
 				89E8AF45255277570030E8B5 /* TalksVM.swift */,
+				89E8AF5A25556F800030E8B5 /* Interpretation.swift */,
 			);
 			path = Interpretation;
 			sourceTree = "<group>";
@@ -1100,6 +1109,7 @@
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
 				899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */,
 				89290D6C24E5313B00F0A862 /* SearchSuggestionsVC.swift in Sources */,
+				89E8AF4F255436290030E8B5 /* SeasonsVM.swift in Sources */,
 				89A666D124D6BC4500851EDF /* WordVM.swift in Sources */,
 				899AE17324DAA14200C0EB17 /* CKContainer+CloudKitShare.swift in Sources */,
 				895A4E2624EC36970025ED20 /* PlaceVC.swift in Sources */,
@@ -1171,6 +1181,7 @@
 				8989C5BF24E673AC00FA3FAE /* ConditionFeedbackVM.swift in Sources */,
 				89E257AE24F9A00900D6C375 /* ConditionBackerCell.swift in Sources */,
 				89A413D024C567E0003FD435 /* OneFingerTableView.swift in Sources */,
+				89E8AF5325554EAB0030E8B5 /* Adding.swift in Sources */,
 				89E8AF3A255151790030E8B5 /* TalksVC.swift in Sources */,
 				892C63E22487BA6500208446 /* NSAttributedString.Key+.swift in Sources */,
 				899AE17924DABA8C00C0EB17 /* Files.swift in Sources */,
@@ -1182,7 +1193,7 @@
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
-				89BF91942549A9FE006E364A /* SeasonsVC.swift in Sources */,
+				89BF91942549A9FE006E364A /* PhasesVC.swift in Sources */,
 				89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */,
 				89A413E024C70AEB003FD435 /* Creature.swift in Sources */,
 				89E8AF2D255018480030E8B5 /* Concept.swift in Sources */,
@@ -1190,6 +1201,7 @@
 				892C6412248A0C2100208446 /* UIViewController+.swift in Sources */,
 				8989C5C124E6CE3D00FA3FAE /* FeedbackVC.swift in Sources */,
 				89290D6924E52F4600F0A862 /* DiscoverNextVM.swift in Sources */,
+				89E8AF5B25556F800030E8B5 /* Interpretation.swift in Sources */,
 				89290D5F24E42B3E00F0A862 /* PanelContentVC.swift in Sources */,
 				89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */,
 				89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */,

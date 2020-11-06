@@ -134,7 +134,13 @@ extension PlaceVM: TagsVCDelegate {
                     publicLayer.createCondition_IfNone(id: $0.tag)
                     privateLayer.projectCondition($0.tag, on: thePlaceId!)
                 case .unique:
-                    privateLayer.projectPerspective($0.tag, on: thePlaceId!)
+                    switch $0.tag {
+                    case Concept.Seasons.title:
+                        let fileData = try! JSONEncoder().encode(SeasonsInterpretation())
+                        privateLayer.projectPerspective($0.tag, fileData: fileData, on: thePlaceId!)
+                    default:
+                        fatalError()
+                    }
                 }
             } else if !$0.isChosen && tags.contains($0.tag) {
                 switch uniqueness! {

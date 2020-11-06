@@ -194,7 +194,7 @@ extension MapVC: PlaceVCDelegate {
             }
         case .unique:
             DispatchQueue.main.async {
-                let vc = SeasonsVC()
+                let vc = PhasesVC(seasonsVM: SeasonsVM(placeID: self.mapVM.selectedPlaceId!))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self
                 self.panelContentVC.show(vc, sender: nil)

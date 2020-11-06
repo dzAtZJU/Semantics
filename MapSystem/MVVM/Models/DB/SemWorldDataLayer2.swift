@@ -38,9 +38,9 @@ extension SemWorldDataLayer2 {
         }
     }
     
-    func projectPerspective(_ perspectiveID: String, on placeID: String) {
+    func projectPerspective(_ perspectiveID: String, fileData: Data, on placeID: String) {
         try! layer1.realm.write {
-            layer1.addPerspective(perspectiveID, toPlace: placeID)
+            layer1.addPerspective(perspectiveID, fileData: fileData, toPlace: placeID)
         }
     }
     
