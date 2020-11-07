@@ -24,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "2357F140-6216-4BB2-B3FC-C79D1B7A032B"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Library/Developer/Xcode/DerivedData/Semantics-aqvozsicsatiolavwchpzdutjgog/SourcePackages/checkouts/FloatingPanel/Sources/Core.swift"
@@ -56,7 +56,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "6A3243DC-7D7D-414C-9F26-20A2A747ECBF"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Library/Developer/Xcode/DerivedData/Semantics-aqvozsicsatiolavwchpzdutjgog/SourcePackages/checkouts/FloatingPanel/Sources/Layout.swift"

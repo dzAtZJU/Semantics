@@ -14,11 +14,20 @@
 import UIKit
 import WebKit
 
-enum Season: Int, Phase, Codable {
-    case Spring
-    case Summer
-    case Autumn
-    case Winter
+enum Season: String, Phase, Codable, CaseIterable {    
+    case Spring = "Spring"
+    case Summer = "Summer"
+    case Autumn = "Autumn"
+    case Winter = "Winter"
+    
+    var next: Season {
+        let allCases = Self.allCases
+        var nextIndex = allCases.firstIndex(of: self)! + 1
+        if nextIndex == allCases.endIndex {
+            nextIndex = 0
+        }
+        return allCases[nextIndex]
+    }
 }
 
 struct SeasonsInterpretation: Interpretation {
@@ -31,16 +40,39 @@ struct SeasonsInterpretation: Interpretation {
 }
 
 class SeasonsVM {
-
+    let placeID: String
+    
     var dayIndexPath = DayIndexPath(phase: Season.Spring, day: 0)
     
     var fileDataToken: NSKeyValueObservation?
     
     @Published var seasonInterpretation: SeasonsInterpretation! = nil
     
-    init(placeID: String) {
+    let perspectiveInterpretation: PerspectiveInterpretation
+    
+    var season: Season {
+        dayIndexPath.phase as! Season
+    }
+    
+    var isTransitToNextPhase: Bool {
+        dayIndexPath.day == 0
+    }
+    
+    var title: String {
+        season.rawValue
+    }
+    
+    var progress: Float {
+        guard numberOfDays(inSeason: season) != 0 else {
+            return 1
+        }
+        return Float(dayIndexPath.day + 1) / Float(numberOfDays(inSeason: season))
+    }
+    
+    init(placeID placeID_: String) {
+        placeID = placeID_
         let privateLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!))
-        let perspectiveInterpretation = try! privateLayer.queryPlaceStory(placeID: placeID)!.perspectiveInterpretation_List.first { (item) throws-> Bool in
+        perspectiveInterpretation = try! privateLayer.queryPlaceStory(placeID: placeID)!.perspectiveInterpretation_List.first { (item) throws-> Bool in
             item.perspectiveID == Concept.Seasons.title
         }!
         
@@ -49,6 +81,51 @@ class SeasonsVM {
             self.seasonInterpretation = try! JSONDecoder().decode(SeasonsInterpretation.self, from: change.newValue!!)
         }
         
+    }
+    
+    func numberOfDays(inSeason season: Season) -> Int {
+        seasonInterpretation.season2Days[season]!.count
+    }
+    
+    func addADay(url: URL) {
+        var newSeasonInterpretation = seasonInterpretation!
+        newSeasonInterpretation.season2Days[season]!.append(url)
+        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(Concept.Seasons.title, fileData: try! JSONEncoder().encode(newSeasonInterpretation), toPlace: placeID)
+    }
+    
+    func deleteADay() {
+        var newSeasonInterpretation = seasonInterpretation!
+        newSeasonInterpretation.season2Days[season]!.remove(at: dayIndexPath.day)
+        updateDayIndexPathForDelete()
+        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(Concept.Seasons.title, fileData: try! JSONEncoder().encode(newSeasonInterpretation), toPlace: placeID)
+    }
+    
+    func updateDayIndexPathToNext() {
+        guard numberOfDays(inSeason: season) != 0 else {
+            dayIndexPath.phase = season.next
+            return
+        }
+        
+        if numberOfDays(inSeason: season) - 1 == dayIndexPath.day {
+            updateDayIndexPathToNextSeason()
+        } else {
+            dayIndexPath.day += 1
+        }
+    }
+    
+    func updateDayIndexPathByOneDay() {
+        dayIndexPath.day += 1
+    }
+    
+    func updateDayIndexPathForDelete() {
+        if dayIndexPath.day == numberOfDays(inSeason: season) - 1 {
+            updateDayIndexPathToNextSeason()
+        }
+    }
+    
+    func updateDayIndexPathToNextSeason() {
+        dayIndexPath.phase = season.next
+        dayIndexPath.day = 0
     }
     
     deinit {
@@ -63,7 +140,14 @@ extension SeasonsVM: PhasesVCDatasource  {
             fatalError()
         }
         
-        let celltype: PhasesVC.CellType = seasonInterpretation.season2Days[season]!.count == 0 ? .Adding : .Showing
+        let celltype: PhasesVC.CellType = {
+            let seasonDays = numberOfDays(inSeason: season)
+            if seasonDays == 0 || seasonDays == dayIndexPath.day {
+                return .Adding
+            } else {
+                return .Showing
+            }
+        }()
         let cell = phasesVC.dequeueReusableCell(withCellType: celltype, for: dayIndexPath)
         
         switch celltype {
@@ -71,7 +155,6 @@ extension SeasonsVM: PhasesVCDatasource  {
             guard let cell = cell as? UISearchBar else {
                 fatalError()
             }
-            cell.text = "asdasdasdssa"
             return cell
         case .Showing:
             guard let cell = cell as? WKWebView else {

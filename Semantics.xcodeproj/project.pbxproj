@@ -128,7 +128,6 @@
 		89E257A824F9710C00D6C375 /* PanelContentVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257A724F9710C00D6C375 /* PanelContentVM.swift */; };
 		89E257AA24F9936500D6C375 /* DiscoverdResultVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257A924F9936500D6C375 /* DiscoverdResultVM.swift */; };
 		89E257AE24F9A00900D6C375 /* ConditionBackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E257AD24F9A00900D6C375 /* ConditionBackerCell.swift */; };
-		89E8AF03254BE4AB0030E8B5 /* MHLoadingButton in Frameworks */ = {isa = PBXBuildFile; productRef = 89E8AF02254BE4AB0030E8B5 /* MHLoadingButton */; };
 		89E8AF0E254FC0830030E8B5 /* Reuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF0D254FC0830030E8B5 /* Reuse.swift */; };
 		89E8AF16254FFF550030E8B5 /* ConceptVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF15254FFF550030E8B5 /* ConceptVC.swift */; };
 		89E8AF1A255000590030E8B5 /* ConceptVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF19255000590030E8B5 /* ConceptVM.swift */; };
@@ -144,6 +143,7 @@
 		89E8AF4F255436290030E8B5 /* SeasonsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF4E255436280030E8B5 /* SeasonsVM.swift */; };
 		89E8AF5325554EAB0030E8B5 /* Adding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF5225554EAB0030E8B5 /* Adding.swift */; };
 		89E8AF5B25556F800030E8B5 /* Interpretation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E8AF5A25556F800030E8B5 /* Interpretation.swift */; };
+		89E8AF6425572EFF0030E8B5 /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 89E8AF6325572EFF0030E8B5 /* NVActivityIndicatorView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -331,7 +331,7 @@
 				89C28CFE24ADC22E002081FE /* SwiftHEXColors in Frameworks */,
 				896344B224936E210060160B /* Kingfisher in Frameworks */,
 				8964219F2472BF4D0081DC87 /* CloudKit.framework in Frameworks */,
-				89E8AF03254BE4AB0030E8B5 /* MHLoadingButton in Frameworks */,
+				89E8AF6425572EFF0030E8B5 /* NVActivityIndicatorView in Frameworks */,
 				896344B424936E210060160B /* KingfisherSwiftUI in Frameworks */,
 				8962350D24920CF40000ABCD /* NetworkExtension.framework in Frameworks */,
 				66A40F737D45F299B37EE8AE /* Pods_Semantics.framework in Frameworks */,
@@ -929,7 +929,7 @@
 				8911386524C1672000CBEBB5 /* SwifterSwift */,
 				8968C08224DF087A0093CBFC /* FloatingPanel */,
 				89A95DCD250CDBA3006EBD07 /* SPAlert */,
-				89E8AF02254BE4AB0030E8B5 /* MHLoadingButton */,
+				89E8AF6325572EFF0030E8B5 /* NVActivityIndicatorView */,
 			);
 			productName = Semantics;
 			productReference = 89642171247250590081DC87 /* SemanticsB1.app */;
@@ -988,7 +988,7 @@
 				8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */,
 				8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				89A95DCC250CDBA3006EBD07 /* XCRemoteSwiftPackageReference "SPAlert" */,
-				89E8AF01254BE4AB0030E8B5 /* XCRemoteSwiftPackageReference "loading-buttons-ios" */,
+				89E8AF6225572EFF0030E8B5 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
 			);
 			productRefGroup = 89642172247250590081DC87 /* Products */;
 			projectDirPath = "";
@@ -1643,12 +1643,12 @@
 				minimumVersion = 1.4.0;
 			};
 		};
-		89E8AF01254BE4AB0030E8B5 /* XCRemoteSwiftPackageReference "loading-buttons-ios" */ = {
+		89E8AF6225572EFF0030E8B5 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twho/loading-buttons-ios.git";
+			repositoryURL = "https://github.com/ninjaprox/NVActivityIndicatorView.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.1;
+				minimumVersion = 5.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1684,10 +1684,10 @@
 			package = 89C28CFC24ADC22E002081FE /* XCRemoteSwiftPackageReference "SwiftHEXColors" */;
 			productName = SwiftHEXColors;
 		};
-		89E8AF02254BE4AB0030E8B5 /* MHLoadingButton */ = {
+		89E8AF6325572EFF0030E8B5 /* NVActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 89E8AF01254BE4AB0030E8B5 /* XCRemoteSwiftPackageReference "loading-buttons-ios" */;
-			productName = MHLoadingButton;
+			package = 89E8AF6225572EFF0030E8B5 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
+			productName = NVActivityIndicatorView;
 		};
 /* End XCSwiftPackageProductDependency section */
 

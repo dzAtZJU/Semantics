@@ -159,8 +159,21 @@ extension SemWorldDataLayer {
             fatalError("The perspective \(perspectiveID) is already projected on \(placeStory.placeID)")
         }
 
-
         placeStory.perspectiveInterpretation_List.append(PerspectiveInterpretation(perspectiveID: perspectiveID, fileData: fileData))
+    }
+    
+    func replacePerspectiveFileData(_ perspectiveID: String, fileData: Data, toPlace placeID: String) {
+        let ind = queryCurrentIndividual()!
+        let placeStory = ind.placeStory_List.first {
+            $0.placeID == placeID
+        }!
+
+        let perspectiveInterpretation = try! placeStory.perspectiveInterpretation_List.first { (item) throws -> Bool in
+            item.perspectiveID == perspectiveID
+        }!
+        try! realm.write {
+            perspectiveInterpretation.fileData = fileData
+        }
     }
     
     func removePerspective(_ perspectiveID: String, fromPlace placeID: String) {
