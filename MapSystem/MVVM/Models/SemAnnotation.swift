@@ -10,11 +10,9 @@ enum AnnotationType {
 class SemAnnotation: MKPointAnnotation {
     var placeId: String?
     let type: AnnotationType
-    private(set) var uniqueness: Uniqueness! = nil
     init(place: Place, type type_: AnnotationType) {
         placeId = place._id
         type = type_
-        uniqueness = Uniqueness(rawValue: place.uniqueness)!
         super.init()
         title = place.title
         coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)

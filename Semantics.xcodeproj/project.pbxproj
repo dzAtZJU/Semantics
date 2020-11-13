@@ -41,7 +41,7 @@
 		895A4E2A24ED14AF0025ED20 /* CLLocationCoordinate2D+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2924ED14AF0025ED20 /* CLLocationCoordinate2D+.swift */; };
 		895A4E2C24ED9F4A0025ED20 /* PlaceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */; };
 		895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895A4E2D24EDA4550025ED20 /* UniquePlace.swift */; };
-		89618E6B25385358000253E3 /* PerspectivesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E6A25385358000253E3 /* PerspectivesVC.swift */; };
+		89618E6B25385358000253E3 /* TagsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E6A25385358000253E3 /* TagsVC.swift */; };
 		89618E7825398FD1000253E3 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E7725398FD1000253E3 /* UIView+.swift */; };
 		89618E7C253B2917000253E3 /* SemWorldDataLayer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E7B253B2917000253E3 /* SemWorldDataLayer2.swift */; };
 		896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C5248F99330000ABCD /* Graphiccontent.swift */; };
@@ -210,7 +210,7 @@
 		895A4E2924ED14AF0025ED20 /* CLLocationCoordinate2D+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+.swift"; sourceTree = "<group>"; };
 		895A4E2B24ED9F4A0025ED20 /* PlaceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceVM.swift; sourceTree = "<group>"; };
 		895A4E2D24EDA4550025ED20 /* UniquePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniquePlace.swift; sourceTree = "<group>"; };
-		89618E6A25385358000253E3 /* PerspectivesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerspectivesVC.swift; sourceTree = "<group>"; };
+		89618E6A25385358000253E3 /* TagsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsVC.swift; sourceTree = "<group>"; };
 		89618E7725398FD1000253E3 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		89618E7B253B2917000253E3 /* SemWorldDataLayer2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemWorldDataLayer2.swift; sourceTree = "<group>"; };
 		896234C5248F99330000ABCD /* Graphiccontent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphiccontent.swift; sourceTree = "<group>"; };
@@ -628,7 +628,6 @@
 			children = (
 				8989C5BC24E5C84600FA3FAE /* ConditionFeedbackVC.swift */,
 				8989C5C024E6CE3D00FA3FAE /* FeedbackVC.swift */,
-				89618E6A25385358000253E3 /* PerspectivesVC.swift */,
 			);
 			path = ProjectPerspectives;
 			sourceTree = "<group>";
@@ -853,6 +852,7 @@
 		89E8AF14254FFF450030E8B5 /* Concept */ = {
 			isa = PBXGroup;
 			children = (
+				89618E6A25385358000253E3 /* TagsVC.swift */,
 				89BF91922549A9CB006E364A /* Seasons */,
 				89E8AF15254FFF550030E8B5 /* ConceptVC.swift */,
 				89E8AF19255000590030E8B5 /* ConceptVM.swift */,
@@ -1163,7 +1163,7 @@
 				89988ADD24C2D8FF0005580B /* SemSectorVC.swift in Sources */,
 				89E8AF26255002C20030E8B5 /* Memory-Model.swift in Sources */,
 				89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */,
-				89618E6B25385358000253E3 /* PerspectivesVC.swift in Sources */,
+				89618E6B25385358000253E3 /* TagsVC.swift in Sources */,
 				89B1736624F9405A00320907 /* DiscoverdResultVC.swift in Sources */,
 				89E257AA24F9936500D6C375 /* DiscoverdResultVM.swift in Sources */,
 				89A666DB24D847EB00851EDF /* UIButton+.swift in Sources */,

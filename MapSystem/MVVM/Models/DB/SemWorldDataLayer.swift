@@ -65,8 +65,22 @@ extension SemWorldDataLayer {
 
 // MARK: Places
 extension SemWorldDataLayer {
-    func loadVisitedPlaces() -> [String] {
-        queryCurrentIndividual()!.placeStory_List.map(by: \.placeID)
+    func loadVisitedPlacesRequire(publicConcept: Bool, privateConcept: Bool) -> [String] {
+        try! queryCurrentIndividual()!.placeStory_List.filter { (story: PlaceStory) throws in
+            if publicConcept {
+                return !story.conditionID_List.isEmpty || story.perspectiveInterpretation_List.contains {
+                    !Concept.map[$0.perspectiveID]!.isPrivate
+                }
+            }
+            
+            if privateConcept {
+                return story.perspectiveInterpretation_List.contains {
+                    Concept.map[$0.perspectiveID]!.isPrivate
+                }
+            }
+            
+            return true
+        }.map(\.placeID)
     }
     
     func queryPlace(_id: String) -> Place {
@@ -81,13 +95,12 @@ extension SemWorldDataLayer {
     func queryOrCreatePlace(_ uniquePlace: UniquePlace) -> Place {
 //        if let place = realm.object(ofType: Place.self, forPrimaryKey: uniquePlace.title) {
 //            return place
-//        } else {
-            let uniqueness = uniquePlace.title.contains("领事馆") ? Uniqueness.unique.rawValue : Uniqueness.ordinary.rawValue
-            let newPlace = Place(title: uniquePlace.title, latitude: uniquePlace.latitude, longitude: uniquePlace.longitude, uniqueness: uniqueness)
-            try! realm.write {
-                self.realm.add(newPlace, update: .modified)
-            }
-            return newPlace
+        //        } else {
+        let newPlace = Place(title: uniquePlace.title, latitude: uniquePlace.latitude, longitude: uniquePlace.longitude)
+        try! realm.write {
+            self.realm.add(newPlace, update: .modified)
+        }
+        return newPlace
 //        }
     }
     
@@ -112,30 +125,32 @@ extension SemWorldDataLayer {
             }
     }
     
-    func addCondition(_ conditionID: String, toPlace placeID: String) {
+    func addCondition(_ conditionID: String, toPlace placeID: String) -> Bool {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
         }!
         guard !placeStory.conditionID_List.contains(conditionID) else {
-            fatalError("The perspective \(conditionID) is already projected on \(placeStory.placeID)")
+            return false
         }
         
         
         placeStory.conditionID_List.append(conditionID)
+        return true
     }
     
-    func removeCondition(_ conditionID: String, fromPlace placeID: String) {
+    func removeCondition(_ conditionID: String, fromPlace placeID: String) -> Bool {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
         }!
         
         guard let index = placeStory.conditionID_List.index(of: conditionID) else {
-            fatalError("The perspective \(conditionID) is not on \(placeStory.placeID)")
+            return false
         }
         
         placeStory.conditionID_List.remove(at: index)
+        return true
     }
     
     func queryConditionIDs(forPlace placeID: String) -> [String] {
@@ -148,7 +163,7 @@ extension SemWorldDataLayer {
         }
     }
     
-    func addPerspective(_ perspectiveID: String, fileData: Data, toPlace placeID: String) {
+    func addPerspective(_ perspectiveID: String, fileData: Data, toPlace placeID: String) -> Bool {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
@@ -156,10 +171,11 @@ extension SemWorldDataLayer {
         guard !placeStory.perspectiveInterpretation_List.contains(where: { (item) -> Bool in
             item.perspectiveID == perspectiveID
         }) else {
-            fatalError("The perspective \(perspectiveID) is already projected on \(placeStory.placeID)")
+            return false
         }
 
         placeStory.perspectiveInterpretation_List.append(PerspectiveInterpretation(perspectiveID: perspectiveID, fileData: fileData))
+        return true
     }
     
     func replacePerspectiveFileData(_ perspectiveID: String, fileData: Data, toPlace placeID: String) {
@@ -176,7 +192,7 @@ extension SemWorldDataLayer {
         }
     }
     
-    func removePerspective(_ perspectiveID: String, fromPlace placeID: String) {
+    func removePerspective(_ perspectiveID: String, fromPlace placeID: String) -> Bool {
         let ind = queryCurrentIndividual()!
         let placeStory = ind.placeStory_List.first {
             $0.placeID == placeID
@@ -185,10 +201,11 @@ extension SemWorldDataLayer {
         guard let index = placeStory.perspectiveInterpretation_List.firstIndex(where: { (item) -> Bool in
             item.perspectiveID == perspectiveID
         }) else {
-            fatalError("The perspective \(perspectiveID) is not on \(placeStory.placeID)")
+            return false
         }
 
         placeStory.perspectiveInterpretation_List.remove(at: index)
+        return true
     }
     
     func queryPerspectiveIDs(forPlace placeID: String) -> [String] {
@@ -213,7 +230,7 @@ extension SemWorldDataLayer {
         ind.conditionRank_List.append(ConditionRank(conditionID: conditionID))
     }
     
-    func addPlace(_ placeID: String, toConditionRank conditionID: String) {
+    func addPlace(_ placeID: String, toConditionRank conditionID: String) -> Bool {
         guard let conditionRank = queryConditionRank(conditionID: conditionID) else {
             fatalError()
         }
@@ -221,15 +238,16 @@ extension SemWorldDataLayer {
         guard nil == conditionRank.placeScore_List.firstIndex(where: {
             $0.placeID == placeID
         }) else {
-            fatalError()
+            return false
         }
         
         let lowerestScore = conditionRank.placeScore_List.last?.score ?? 0
         
         conditionRank.placeScore_List.append(PlaceScore(placeID: placeID, score: lowerestScore))
+        return true
     }
     
-    func removePlace(_ placeID: String, fromConditionRank conditionID: String) {
+    func removePlace(_ placeID: String, fromConditionRank conditionID: String) -> Bool {
         guard let conditionRank = queryConditionRank(conditionID: conditionID) else {
             fatalError()
         }
@@ -237,10 +255,11 @@ extension SemWorldDataLayer {
         guard let index = conditionRank.placeScore_List.firstIndex(where: {
             $0.placeID == placeID
         }) else {
-            fatalError()
+            return false
         }
         
         conditionRank.placeScore_List.remove(at: index)
+        return true
     }
     
     func queryConditionRank(conditionID: String) -> ConditionRank? {

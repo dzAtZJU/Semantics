@@ -21,12 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         
         //        let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
         //        window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
-        
-        let mapVM = MapVM()
-        let mapVC = MapVC(vm: mapVM)
-        window.rootViewController = mapVC
-        
-//        window.rootViewController = UINavigationController(rootViewController: ConceptVC(vm: ConceptVM(concept: Concept.Seasons)))
+        let mapVC = MapVC(vm: MapVM(circleOfTrust: .public))
+        let wishVC = MapVC(vm: MapVM(circleOfTrust: .private))
+        let tabVC = UITabBarController()
+        tabVC.setViewControllers([mapVC, wishVC], animated: false)
+        window.rootViewController = tabVC
         
 //        window.rootViewController = TalksVC(vm: ConceptVM(concept: Concept.Seasons))
         

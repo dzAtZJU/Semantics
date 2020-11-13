@@ -5,11 +5,11 @@ import Presentr
 import FloatingPanel
 
 protocol PlaceVCDelegate {
-    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC)
-    
-    func placeVCShouldHumankindAble(_ placeVC: PlaceVC)
+    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC, tag: String)
     
     func placeVCShouldCollect(_ placeVC: PlaceVC)
+    
+    func placeVCShouldHumankindAble(_ placeVC: PlaceVC, tag: String)
     
     func placeWillDisappear(_ placeVC: PlaceVC)
 }
@@ -26,28 +26,16 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
-    private lazy var collectBtn: UIButton = {
-        let tmp = UIButton(type: .roundedRect)
-        tmp.cornerRadius = 10
-        tmp.setTitleForAllStates("Collect")
-        tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.addTarget(self, action: #selector(markVisitedBtnTapped), for: .touchUpInside)
-        tmp.backgroundColor = .systemBlue
-        tmp.tintColor = .white
-        tmp.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        tmp.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        return tmp
-    }()
-    
     private lazy var individualAbleBtn: UIButton = {
         let tmp = UIButton(type: .roundedRect)
         tmp.cornerRadius = 10
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.addTarget(self, action: #selector(feedbackBtnTapped), for: .touchUpInside)
+        tmp.addTarget(self, action: #selector(individualAbleBtnTapped), for: .touchUpInside)
         tmp.backgroundColor = .systemBlue
         tmp.tintColor = .white
         tmp.widthAnchor.constraint(equalToConstant: 150).isActive = true
         tmp.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        tmp.isHidden = true
         return tmp
     }()
     
@@ -55,11 +43,12 @@ class PlaceVC: UIViewController, PanelContent {
         let tmp = UIButton(type: .roundedRect)
         tmp.cornerRadius = 10
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.addTarget(self, action: #selector(findNextBtnTapped), for: .touchUpInside)
+        tmp.addTarget(self, action: #selector(humankindAbleBtnTapped), for: .touchUpInside)
         tmp.backgroundColor = .systemBlue
         tmp.tintColor = .white
         tmp.widthAnchor.constraint(equalToConstant: 150).isActive = true
         tmp.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        tmp.isHidden = true
         return tmp
     }()
     
@@ -76,40 +65,18 @@ class PlaceVC: UIViewController, PanelContent {
         return tmp
     }()
     
+    private var selectedTag: String?
     var panelContentVM: PanelContentVM!
     
     var vm: PlaceVM! {
         didSet {
-            placeStateToken = vm.$placeState.sink { newValue in
-                DispatchQueue.main.async {
-                    switch newValue {
-                    case .neverBeen:
-                        self.stackView.addArrangedSubview(self.collectBtn)
-                        self.stackView.removeArrangedSubview(self.individualAbleBtn)
-                        self.individualAbleBtn.removeFromSuperview()
-                        self.stackView.removeArrangedSubview(self.humankindAbleBtn)
-                        self.humankindAbleBtn.removeFromSuperview()
-                        break
-                    case .visited, .feedbacked:
-                        self.stackView.removeArrangedSubview(self.collectBtn)
-                        self.collectBtn.removeFromSuperview()
-                        self.individualAbleBtn.setTitleForAllStates(self.vm.interactionTitles!.individualAble)
-                        self.stackView.addArrangedSubview(self.individualAbleBtn)
-                        self.humankindAbleBtn.setTitleForAllStates(self.vm.interactionTitles!.humankindAble)
-                        self.stackView.addArrangedSubview(self.humankindAbleBtn)
-                        break
-                    }
-                }
-            }
             tagsToken = vm.$tags.sink {
-                guard var perspectives = $0 else {
-                    self.tagsView.removeAllTags()
-                    return
-                }
-                if perspectives.isEmpty {
-                    perspectives.append("add \(self.vm.interactionTitles!.anchor)")
-                }
+                var perspectives = $0 ?? []
+                perspectives.append(addtag)
                 DispatchQueue.main.async {
+                    self.stackView.arrangedSubviews.forEach {
+                        $0.isHidden = true
+                    }
                     self.tagsView.removeAllTags()
                     self.tagsView.addTags(perspectives)
                     self.tagsView.tagViews.forEach {
@@ -120,8 +87,6 @@ class PlaceVC: UIViewController, PanelContent {
             }
         }
     }
-    
-    var placeStateToken: AnyCancellable?
     
     var tagsToken: AnyCancellable?
     
@@ -138,6 +103,7 @@ class PlaceVC: UIViewController, PanelContent {
         view.addSubview(stackView)
         stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackView.addArrangedSubviews([individualAbleBtn, humankindAbleBtn])
         
         view.addSubview(tagsView)
         tagsView.topAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 4).isActive = true
@@ -154,29 +120,47 @@ class PlaceVC: UIViewController, PanelContent {
 
 // MARK: Interaction
 extension PlaceVC: TagListViewDelegate {
-    @objc private func feedbackBtnTapped() {
-        guard !vm.tags!.isEmpty else {
-            placePerspectivesTapped()
-            return
-        }
-        delegate?.placeVCShouldStartIndividualAble(self)
+    @objc private func individualAbleBtnTapped() {
+        delegate?.placeVCShouldStartIndividualAble(self, tag: selectedTag!)
     }
-    
-    @objc private func markVisitedBtnTapped() {
-        delegate?.placeVCShouldCollect(self)
-    }
-    
-    @objc private func findNextBtnTapped() {
-        delegate?.placeVCShouldHumankindAble(self)
+        
+    @objc private func humankindAbleBtnTapped() {
+        delegate?.placeVCShouldHumankindAble(self, tag: selectedTag!)
     }
     
     @objc private func placePerspectivesTapped() {
-        let vc = TagsVC(tagChoice_List: vm.tagChoice_List, title: vm.interactionTitles!.anchorCollectionTitle, inputingCellPlaceholder: vm.interactionTitles!.anchor, enableAdding: vm.enableAddingTag)
+        let vc = TagsVC(tagChoice_Sections: vm.tagChoice_Sections)
         vc.delegate = vm
         self.customPresentViewController(vc.presentr, viewController: UINavigationController(rootViewController: vc), animated: true, completion: nil)
     }
     
     @objc func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
-        placePerspectivesTapped()
+        if vm.thePlaceId == nil {
+            delegate?.placeVCShouldCollect(self)
+            return
+        }
+        selectedTag = tagView.titleForNormal!
+        UIView.animate(withDuration: 0.25) {
+            switch self.selectedTag! {
+            case addtag:
+                self.placePerspectivesTapped()
+            case Concept.Seasons.title:
+                self.individualAbleBtn.setTitle("Describe", for: .normal)
+                self.humankindAbleBtn.setTitle("Talks", for: .normal)
+                self.individualAbleBtn.isHidden = false
+                self.humankindAbleBtn.isHidden = false
+            case Concept.Scent.title:
+                self.individualAbleBtn.setTitle("Experience", for: .normal)
+                self.individualAbleBtn.isHidden = false
+                self.humankindAbleBtn.isHidden = true
+            default:
+                self.individualAbleBtn.setTitle("Compare", for: .normal)
+                self.humankindAbleBtn.setTitle("Search", for: .normal)
+                self.individualAbleBtn.isHidden = false
+                self.humankindAbleBtn.isHidden = false
+            }
+        }
     }
 }
+
+private let addtag = "add tag"

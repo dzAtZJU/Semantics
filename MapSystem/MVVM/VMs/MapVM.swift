@@ -26,16 +26,45 @@ protocol MapVMAnnotationsModel {
     }
 }
 
+enum CircleOfTrust {
+    case `public`
+    case `private`
+}
+
 class MapVM {
     private var signedInSubscriber: AnyCancellable?
     
-    init() {
+    let circleOfTrust: CircleOfTrust
+    
+    var tabBarItem: UITabBarItem {
+        switch circleOfTrust {
+        case .public:
+            let img = UIImage(systemName: "hand.point.up.braille.fill")?.withBaselineOffset(fromBottom: UIFont.systemFontSize/4)
+            return UITabBarItem(title: "Public", image: img, selectedImage: img)
+        case .private:
+            let img = UIImage(systemName: "heart.fill")
+            return UITabBarItem(title: "Wish List", image: img, selectedImage: img)
+        }
+    }
+    
+    var tintColor: UIColor? {
+        switch circleOfTrust {
+        case .public:
+            return .systemYellow
+        case .private:
+            return nil
+        }
+    }
+    
+    init(circleOfTrust: CircleOfTrust) {
+        self.circleOfTrust = circleOfTrust
+        
         signedInSubscriber = RealmSpace.signedInCurrentValueSubject!.sink { value in
             guard value == 1 else {
                 return
             }
             self.loadVisitedPlaces()
-            RealmSpace.signedInCurrentValueSubject = nil
+//            RealmSpace.signedInCurrentValueSubject = nil
             self.signedInSubscriber = nil
         }
         NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)
@@ -108,11 +137,12 @@ class MapVM {
 // MARK: Places
 extension MapVM {
     func loadVisitedPlaces() {
+        let trust = circleOfTrust
         RealmSpace.shared.async {
             RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!) { privateRealm in
                 RealmSpace.shared.realm(RealmSpace
                                             .partitionValue) { publicRealm in
-                    let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).loadVisitedPlaces()).map { place throws in
+                    let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).loadVisitedPlacesRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
                         SemAnnotation(place: place, type: .visited)
                     }
                     

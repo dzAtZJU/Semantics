@@ -3,31 +3,65 @@ struct ConceptLink: Hashable {
     
     static let Illustrates = ConceptLink(title: "Illustrates")
     
+    static let Instance = ConceptLink(title: "Instance")
+    
     let title: String
 }
 
 struct Concept {
+    // MARK: Public
+    static var Seasons = Concept(title: "Seasons", isPrivate: false)
+    
+    static var Scenery = Concept(title: "Scenery", isPrivate: false)
+    
+    static let Period = Concept(title: "Period", isPrivate: false)
+    
+    // MARK: Resource
+    static let Bread = Concept(title: "Bread", isPrivate: false)
+    static let Coffee = Concept(title: "Coffee", isPrivate: false)
+    static let Fragrance = Concept(title: "Fragrance", isPrivate: false)
+    static let Forest = Concept(title: "Forest", isPrivate: false)
+    
+    // MARK: Private
+    static var Scent = Concept(title: "Scent", isPrivate: true)
+    
     static func load() {
-        Concept.Seasons.map[ConceptLink.Comparison] = [Concept.Scenery, Concept.Period, Concept.Seasons]
-        Concept.Seasons.map[ConceptLink.Illustrates] = [Concept.Period]
+        Seasons.map[ConceptLink.Comparison] = [.Scenery]
+        Seasons.map[ConceptLink.Illustrates] = [.Period]
         
-        Concept.Scenery.map[ConceptLink.Comparison] = [Concept.Seasons]
+        Scenery.map[ConceptLink.Comparison] = [.Seasons]
+        
+        Scent.map[ConceptLink.Instance] = [.Bread, .Coffee, .Fragrance, .Forest]
     }
     
-    static var all: [Concept] {
+    static var allPublic: [Concept] {
         [Seasons]
     }
     
-    static var allTitles: [String] {
-        all.map(\.title)
+    static var allPublicTitles: [String] {
+        allPublic.map(\.title)
     }
     
-    static var Seasons = Concept(title: "Seasons")
+    static var allPrivate: [Concept] {
+        [Scent]
+    }
     
-    static var Scenery = Concept(title: "Scenery")
+    static var allPrivateTitles: [String] {
+        allPrivate.map(\.title)
+    }
     
-    static let Period = Concept(title: "Period")
+    static let map: [String: Concept] = [
+        Concept.Seasons.title: Concept.Seasons,
+        Concept.Scent.title: Concept.Scent
+    ]
     
     let title: String
+    let isPrivate: Bool
     var map: [ConceptLink: [Concept]] = [:]
+}
+
+enum IndividualAbleType {
+    case compare
+    case phase
+    case concept
 }

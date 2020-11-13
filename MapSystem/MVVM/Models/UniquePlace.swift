@@ -12,7 +12,8 @@ struct UniquePlace {
     }
 }
 
-enum Uniqueness: Int {
-    case ordinary
-    case unique
+enum PalceType: Int {
+    case compare
+    case seasons
+    case scent
 }

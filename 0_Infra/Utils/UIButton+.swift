@@ -1,11 +1,3 @@
-//
-//  UIButton+.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/3.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 
 extension UIButton {
@@ -16,5 +8,11 @@ extension UIButton {
         if let selector = selector {
             addTarget(target, action: selector, for: .touchUpInside)
         }
+    }
+    
+    convenience init(systemName: String, textStyle: UIFont.TextStyle = .title1, primaryAction: UIAction) {
+        self.init(primaryAction: primaryAction)
+        translatesAutoresizingMaskIntoConstraints = false
+        setImage(UIImage(systemName: systemName, withConfiguration: UIImage.SymbolConfiguration(textStyle: textStyle)), for: .normal)
     }
 }

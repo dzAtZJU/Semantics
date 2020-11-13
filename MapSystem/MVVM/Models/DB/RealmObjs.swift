@@ -19,16 +19,13 @@ class Place: Object {
     @objc dynamic var longitude: Double = 0
     @objc dynamic var latitude: Double = 0
     
-    @objc dynamic var uniqueness: Int = 0
-    
-    convenience init(title: String, latitude: Double, longitude: Double, uniqueness: Int) {
+    convenience init(title: String, latitude: Double, longitude: Double) {
         self.init()
         self.partitionKey = RealmSpace.partitionValue
         self._id = title
         self.title = title
         self.latitude = latitude
         self.longitude = longitude
-        self.uniqueness = uniqueness
     }
     
     override static func primaryKey() -> String? {
@@ -74,6 +71,7 @@ class Individual: Object {
     }
 }
 
+// Editor <-> User
 class PlaceStory: EmbeddedObject {
     let owner = LinkingObjects(fromType: Individual.self, property: "placeStory_List")
     

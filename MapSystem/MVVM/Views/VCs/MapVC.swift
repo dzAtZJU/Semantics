@@ -5,6 +5,8 @@ import Combine
 import FloatingPanel
 
 class MapVC: UIViewController {
+    private var tintLayer: CALayer?
+    
     internal lazy var map: MKMapView = {
         let tmp = MKMapView()
         tmp.mapType = .mutedStandard
@@ -84,6 +86,7 @@ class MapVC: UIViewController {
     init(vm vm_: MapVM) {
         mapVM = vm_
         super.init(nibName: nil, bundle: nil)
+        tabBarItem = mapVM.tabBarItem
         mapVM.annotationsModel = self
     }
     
@@ -158,6 +161,13 @@ class MapVC: UIViewController {
         
         map.frame = view.bounds
         spinner.center = view.center
+         
+        if let tintColor = mapVM.tintColor, tintLayer == nil {
+            tintLayer = CALayer()
+            tintLayer!.backgroundColor = tintColor.withAlphaComponent(0.005).cgColor
+            view.layer.addSublayer(tintLayer!)
+        }
+        tintLayer?.frame = view.bounds
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -182,42 +192,47 @@ extension MapVC: PlaceVCDelegate {
     func placeWillDisappear(_ placeVC: PlaceVC) {
     }
     
-    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC) {
-        switch placeVC.vm.uniqueness! {
-        case .ordinary:
-            FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
-                let vc = FeedbackVC(feedbackVM: vm)
-                vc.panelContentDelegate = self
-                DispatchQueue.main.async {
-                    self.panelContentVC.show(vc, sender: nil)
-                }
-            }
-        case .unique:
+    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC, tag: String) {
+        switch tag {
+        case Concept.Seasons.title:
             DispatchQueue.main.async {
                 let vc = PhasesVC(seasonsVM: SeasonsVM(placeID: self.mapVM.selectedPlaceId!))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self
                 self.panelContentVC.show(vc, sender: nil)
             }
+        case Concept.Scent.title:
+            DispatchQueue.main.async {
+                let vm = ConceptVM(concept: Concept.Scent, placeID: self.mapVM.selectedPlaceId!)
+                let vc = UINavigationController(rootViewController: ConceptVC(vm: vm))
+                self.present(vc, animated: true, completion: nil)
+            }
+        default:
+            _ = FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
+                let vc = FeedbackVC(feedbackVM: vm)
+                vc.panelContentDelegate = self
+                DispatchQueue.main.async {
+                    self.panelContentVC.show(vc, sender: nil)
+                }
+            }
         }
-            
     }
     
     func placeVCShouldCollect(_ placeVC: PlaceVC) {
         mapVM.markVisited()
     }
     
-    func placeVCShouldHumankindAble(_ placeVC: PlaceVC) {
-        switch placeVC.vm.uniqueness! {
-        case .ordinary:
-            DispatchQueue.main.async {
-                self.panelContentVC.show(self.discoverNextVC, sender: nil)
-            }
-        case .unique:
+    func placeVCShouldHumankindAble(_ placeVC: PlaceVC, tag: String) {
+        switch tag {
+        case Concept.Seasons.title, Concept.Scent.title:
             DispatchQueue.main.async {
                 let v = TalksVC(vm: TalksVM(placeID: self.mapVM.selectedPlaceId!))
                 let nv = UINavigationController(rootViewController: v)
                 self.present(nv, animated: true, completion: nil)
+            }
+        default:
+            DispatchQueue.main.async {
+                self.panelContentVC.show(self.discoverNextVC, sender: nil)
             }
         }
     }
@@ -285,7 +300,7 @@ extension MapVC: MKMapViewDelegate {
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
         switch annotation.type {
         case .inSearching, .visited:
-            PlaceVM.new(placeID: annotation.placeId, uniqueness: annotation.uniqueness) { vm in
+            PlaceVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
                 DispatchQueue.main.async {
                     self.placeVC.vm = vm
                     completion(self.placeVC)
