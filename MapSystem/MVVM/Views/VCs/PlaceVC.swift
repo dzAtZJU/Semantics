@@ -7,8 +7,6 @@ import FloatingPanel
 protocol PlaceVCDelegate {
     func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC, tag: String)
     
-    func placeVCShouldCollect(_ placeVC: PlaceVC)
-    
     func placeVCShouldHumankindAble(_ placeVC: PlaceVC, tag: String)
     
     func placeWillDisappear(_ placeVC: PlaceVC)
@@ -56,7 +54,8 @@ class PlaceVC: UIViewController, PanelContent {
         let tmp = TagListView()
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.textFont = .preferredFont(forTextStyle: .title3)
-        tmp.tagBackgroundColor = .systemGreen
+        tmp.tagBackgroundColor = .systemFill
+        tmp.tagSelectedBackgroundColor = .systemBlue
         tmp.marginX = 6
         tmp.marginY = 6
         tmp.alignment = .center
@@ -135,10 +134,10 @@ extension PlaceVC: TagListViewDelegate {
     }
     
     @objc func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
-        if vm.thePlaceId == nil {
-            delegate?.placeVCShouldCollect(self)
-            return
+        sender.tagViews.forEach {
+            $0.isSelected = $0 === tagView
         }
+        
         selectedTag = tagView.titleForNormal!
         UIView.animate(withDuration: 0.25) {
             switch self.selectedTag! {

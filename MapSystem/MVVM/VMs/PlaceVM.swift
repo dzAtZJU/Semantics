@@ -2,59 +2,67 @@ import Foundation
 import Combine
 import RealmSwift
 
-struct PlaceInteraction {
-    static let ordinary = PlaceInteraction(individualAble: "Compare", humankindAble: "Search", anchor: "Condition", anchorCollectionTitle: "Conditions")
-    static let unique = PlaceInteraction(individualAble: "Describe", humankindAble: "Talks", anchor: "Perspective", anchorCollectionTitle: "Dictionary")
-    
-    let individualAble: String
-    let humankindAble: String
-    let anchor: String
-    let anchorCollectionTitle: String
-}
-
 class PlaceVM: PanelContentVM {
+    static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceVM) -> Void) {
+        guard let placeID = placeID else {
+            completion(PlaceVM(allowsCondition: allowsCondition))
+            return
+        }
+        
+        RealmSpace.shared.async {
+            let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeID: placeID)!
+            
+            let vm = PlaceVM(allowsCondition: allowsCondition, placeStory: placeStory)
+            completion(vm)
+        }
+    }
+    
     var panelContentVMDelegate: PanelContentVMDelegate!
     
     var thePlaceId: String?
     
-    let allowsCondition: Bool
+    @Published private(set) var tags: [String]!
     
-    private var placeStoryToken: NSKeyValueObservation?
+    var tagChoice_Sections: [TagChoiceSection] {
+        var tmp: [TagChoiceSection] = []
+        if allowsCondition {
+            var section = TagChoiceSection(allowsEditing: true, items: [])
+            let allConditions: [String] = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).queryPrivateConditions()
+            let placeConditions = conditions ?? []
+            let conditionChoices = allConditions.map {
+                TagChoice(tag: $0, isChosen: placeConditions.contains($0))
+            }
+            section.items.append(contentsOf: conditionChoices)
+            tmp.append(section)
+        }
+
+        let allConcepts = allowsCondition ? Concept.allPublicTitles: Concept.allPrivateTitles
+        let placeConcepts = concepts ?? []
+        let conceptChoices = allConcepts.map {
+            TagChoice(tag: $0, isChosen: placeConcepts.contains($0))
+        }
+        tmp.append(TagChoiceSection(allowsEditing: false, items: conceptChoices))
+
+        return tmp
+    }
+
+    private let allowsCondition: Bool
     
     private var conditionsToken: NotificationToken?
     private var conditions: [String]? {
         didSet {
             DispatchQueue.main.async {
                 self.generateTags()
-                self.generateTagChoiceSections()
             }
         }
     }
     
-    private var conceptsToken: NotificationToken!
+    private var conceptsToken: NotificationToken?
     private var concepts: [String]! {
         didSet {
             DispatchQueue.main.async {
                 self.generateTags()
-                self.generateTagChoiceSections()
             }
-        }
-    }
-    
-    @Published private(set) var tagChoice_Sections: [TagChoiceSection] = []
-    
-    @Published private(set) var tags: [String] = []
-    
-    static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceVM) -> Void) {
-        if let placeId = placeID {
-            RealmSpace.shared.async {
-                let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeID: placeId)
-                let vm = PlaceVM(placeStory: placeStory!, allowsCondition: allowsCondition)
-                completion(vm)
-            }
-        } else {
-            // This place hasn't been visited by anyone, thus its not in realm
-            completion(PlaceVM(allowsCondition: allowsCondition))
         }
     }
     
@@ -62,10 +70,15 @@ class PlaceVM: PanelContentVM {
         self.allowsCondition = allowsCondition
     }
     
-    private init(placeStory: PlaceStory, allowsCondition: Bool) {
-        self.allowsCondition = allowsCondition
+    private convenience init(allowsCondition: Bool, placeStory: PlaceStory) {
+        self.init(allowsCondition: allowsCondition)
+        
+        loadPlace(placeStory: placeStory)
+    }
+    
+    func loadPlace(placeStory: PlaceStory) {
         thePlaceId = placeStory.placeID
-                
+        
         conceptsToken = placeStory.perspectiveInterpretation_List.observe {
             switch $0 {
             case .initial(let perspectiveInterpretation_List):
@@ -74,7 +87,7 @@ class PlaceVM: PanelContentVM {
                 self.concepts = try! perspectiveInterpretation_List.map({ (item) throws -> String in
                     item.perspectiveID
                 }).filter {
-                    allowsCondition != Concept.map[$0]!.isPrivate
+                    self.allowsCondition != Concept.map[$0]!.isPrivate
                 }
             case .error(let error):
                 fatalError("\(error)")
@@ -105,28 +118,8 @@ class PlaceVM: PanelContentVM {
         }
         tags = tmp
     }
-    
-    private func generateTagChoiceSections() {
-        var tmp: [TagChoiceSection] = []
-        if let placeConditions = conditions {
-            let allConditions: [String] =  SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).queryPrivateConditions()
-            let conditionChoices = allConditions.map {
-                TagChoice(tag: $0, isChosen: placeConditions.contains($0))
-            }
-            tmp.append(TagChoiceSection(allowsEditing: true, items: conditionChoices))
-        }
-
-        let allConcepts = allowsCondition ? Concept.allPublicTitles: Concept.allPrivateTitles
-        let conceptChoices = allConcepts.map {
-            TagChoice(tag: $0, isChosen: concepts.contains($0))
-        }
-        tmp.append(TagChoiceSection(allowsEditing: false, items: conceptChoices))
-
-        tagChoice_Sections = tmp
-    }
         
     deinit {
-        placeStoryToken?.invalidate()
         conceptsToken?.invalidate()
         conditionsToken?.invalidate()
     }
@@ -134,36 +127,51 @@ class PlaceVM: PanelContentVM {
 
 extension PlaceVM: TagsVCDelegate {
     func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_Sections: [TagChoiceSection]) {
-        let publicLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
-        let privateLayer = SemWorldDataLayer2(layer1: SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)))
-        tagChoice_Sections.forEach {
-            if $0.allowsEditing {
-                $0.items.forEach {
-                    if $0.isChosen {
-                        publicLayer.createCondition_IfNone(id: $0.tag)
-                        privateLayer.projectCondition($0.tag, on: thePlaceId!)
-                    } else {
-                        privateLayer.withdrawCondition($0.tag, from: thePlaceId!)
-                    }
-                }
-            } else {
-                $0.items.forEach {
-                    if $0.isChosen {
-                        switch $0.tag {
-                        case Concept.Seasons.title:
-                            let fileData = try! JSONEncoder().encode(SeasonsInterpretation())
-                            privateLayer.projectPerspective($0.tag, fileData: fileData, on: thePlaceId!)
-                        case Concept.Scent.title:
-                            let fileData = try! JSONEncoder().encode(ScentInterpretation())
-                            privateLayer.projectPerspective($0.tag, fileData: fileData, on: thePlaceId!)
-                        default:
-                            fatalError()
+        let action: () -> () = {
+            RealmSpace.shared.async {
+                let publicLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue))
+                let privateLayer = SemWorldDataLayer2(layer1: SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)))
+                tagChoice_Sections.forEach {
+                    if $0.allowsEditing {
+                        $0.items.forEach {
+                            if $0.isChosen {
+                                publicLayer.createCondition_IfNone(id: $0.tag)
+                                privateLayer.projectCondition($0.tag, on: self.thePlaceId!)
+                            } else {
+                                privateLayer.withdrawCondition($0.tag, from: self.thePlaceId!)
+                            }
                         }
                     } else {
-                        privateLayer.withdrawPerspective($0.tag, from: thePlaceId!)
+                        $0.items.forEach {
+                            if $0.isChosen {
+                                switch $0.tag {
+                                case Concept.Seasons.title:
+                                    let fileData = try! JSONEncoder().encode(SeasonsInterpretation())
+                                    privateLayer.projectPerspective($0.tag, fileData: fileData, on: self.thePlaceId!)
+                                case Concept.Scent.title:
+                                    let fileData = try! JSONEncoder().encode(ScentInterpretation())
+                                    privateLayer.projectPerspective($0.tag, fileData: fileData, on: self.thePlaceId!)
+                                default:
+                                    fatalError()
+                                }
+                            } else {
+                                privateLayer.withdrawPerspective($0.tag, from: self.thePlaceId!)
+                            }
+                        }
                     }
                 }
             }
         }
+        
+        guard thePlaceId != nil else {
+            panelContentVMDelegate.mapVM.collectPlace {
+                self.loadPlace(placeStory: $0)
+                action()
+            }
+            
+            return
+        }
+        
+        action()
     }
 }

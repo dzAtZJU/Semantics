@@ -104,16 +104,17 @@ extension SemWorldDataLayer {
 //        }
     }
     
-    func markVisited(placeID: String) {
+    func collectPlace(placeID: String) -> PlaceStory {
         let ind = queryCurrentIndividual()!
-        guard queryPlaceStory(placeID: placeID) == nil else {
-            return
+        if let placeStory = queryPlaceStory(placeID: placeID) {
+            return placeStory
         }
         
         let placeStory = PlaceStory(placeID: placeID)
         try! realm.write {
             ind.placeStory_List.append(placeStory)
         }
+        return placeStory
     }
 }
 

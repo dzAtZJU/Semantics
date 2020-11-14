@@ -9,7 +9,7 @@ enum AnnotationType {
 
 class SemAnnotation: MKPointAnnotation {
     var placeId: String?
-    let type: AnnotationType
+    var type: AnnotationType
     init(place: Place, type type_: AnnotationType) {
         placeId = place._id
         type = type_

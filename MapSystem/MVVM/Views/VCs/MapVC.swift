@@ -218,10 +218,6 @@ extension MapVC: PlaceVCDelegate {
         }
     }
     
-    func placeVCShouldCollect(_ placeVC: PlaceVC) {
-        mapVM.markVisited()
-    }
-    
     func placeVCShouldHumankindAble(_ placeVC: PlaceVC, tag: String) {
         switch tag {
         case Concept.Seasons.title, Concept.Scent.title:
@@ -298,18 +294,13 @@ extension MapVC: MKMapViewDelegate {
     }
     
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
-        switch annotation.type {
-        case .inSearching, .visited:
-            PlaceVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
-                DispatchQueue.main.async {
-                    self.placeVC.vm = vm
-                    completion(self.placeVC)
-                }
+        PlaceVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
+            vm.panelContentVMDelegate = self.mapVM
+            DispatchQueue.main.async {
+                self.placeVC.vm = vm
+                completion(self.placeVC)
             }
-        case .inDiscovering:
-            fatalError()
         }
-        
     }
 }
 
@@ -351,7 +342,7 @@ extension MapVC: MapVMAnnotationsModel {
 
 extension MapVC: PanelContentVCDelegate {
     func panelContentVCWillBack(_ panelContentVC: PanelContentVC) {
-        mapVM.setSelectedAnnotationEvent((nil, .fromModel))
+        
     }
     
     func panelContentVC(_ panelContentVC: PanelContentVC, didShow panelContent: PanelContent, animated: Bool) {

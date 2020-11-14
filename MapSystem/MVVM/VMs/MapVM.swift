@@ -50,9 +50,9 @@ class MapVM {
     var tintColor: UIColor? {
         switch circleOfTrust {
         case .public:
-            return .systemYellow
-        case .private:
             return nil
+        case .private:
+            return .systemYellow
         }
     }
     
@@ -154,12 +154,14 @@ extension MapVM {
         }
     }
     
-    func markVisited() {
+    func collectPlace(completion: @escaping (PlaceStory) -> ()) {
         let uniquePlace = UniquePlace(annotation: self.selectedAnnotation!)
         RealmSpace.shared.async {
             let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace).freeze()
             
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).markVisited(placeID: place._id)
+            let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).collectPlace(placeID: place._id)
+            
+            completion(placeStory)
             DispatchQueue.main.async {
                 self.setSelectedAnnotationEvent((nil, .fromModel))
                 let newAnnotation = SemAnnotation(place: place, type: .visited)
