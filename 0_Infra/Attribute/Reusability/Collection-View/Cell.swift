@@ -1,10 +1,5 @@
 import UIKit
 
-enum HeaderType {
-    case Title
-    case TitleWithAdding
-}
-
 class TitleWithAddingSupplementaryView: TitleSupplementaryView {
     class override var identifier: String {
         "TitleWithAddingSupplementaryView"

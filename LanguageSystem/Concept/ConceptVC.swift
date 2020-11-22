@@ -1,17 +1,57 @@
 import UIKit
 import Combine
 
-struct Section {
-    let titleItem: TitleItem
-    let items: [TitleItem]
+struct ConceptSection {
+    let sectionInfo: ConceptSectionInfo
+    let items: [ConceptItem]
+}
+
+struct ConceptSectionInfo: Hashable, Equatable {
+    let headerType: HeaderType
+    
+    let addingItemType: ItemType
+    
+    let uuid = UUID()
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
+    }
+    static func == (lhs: ConceptSectionInfo, rhs: ConceptSectionInfo) -> Bool {
+        lhs.uuid == rhs.uuid
+    }
+}
+
+struct ConceptItem: Hashable, Equatable {
+    let itemType: ItemType
+    
+    let uuid = UUID()
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(uuid)
+    }
+    static func == (lhs: ConceptItem, rhs: ConceptItem) -> Bool {
+        lhs.uuid == rhs.uuid
+    }
+}
+
+enum ItemType {
+    case Opinion(Opinion)
+    case AddingOpinion
+    
+    case Label(String)
+    case AddingLabel
+}
+
+enum HeaderType {
+    case Title(String)
+    case TitleWithAdding(String)
 }
 
 class ConceptVC: UIViewController {
+    
     private let vm: ConceptVM
     
     var interpretationToken: AnyCancellable?
     
-    private var inputingItem: TitleItem?
+    private var inputingItem: ConceptItem?
     
     lazy var collectionView: UICollectionView = {
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -51,58 +91,72 @@ class ConceptVC: UIViewController {
     }
     
     private lazy var dataSource: UICollectionViewDiffableDataSource
-    <TitleItem, TitleItem> = {
-        let cellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TitleItem> { cell, indexPath, titleItem in
+    <ConceptSectionInfo, ConceptItem> = {
+        let labelCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, ConceptItem> { cell, indexPath, conceptItem in
             var content = UIListContentConfiguration.cell()
             content.textProperties.font = UIFont.preferredFont(forTextStyle: .title2)
-            content.text = titleItem.title
+            guard case let ItemType.Label(text) = conceptItem.itemType else {
+                fatalError()
+            }
+            content.text = text
             cell.contentConfiguration = content
         }
-        let conceptCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, TitleItem> { cell, indexPath, titleItem in
+        let textFieldCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, ConceptItem> { cell, indexPath, titleItem in
             var content = ConceptContentConfiguration.inputing()
-            content.placeholder = "input instance"
+            content.placeholder = "input"
             content.textFieldDelegate = self
             cell.contentConfiguration = content
         }
         let tmp = UICollectionViewDiffableDataSource
-        <TitleItem, TitleItem> (collectionView: collectionView) {
+        <ConceptSectionInfo, ConceptItem> (collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath,
-             item: TitleItem) -> UICollectionViewCell? in
-            if item.isInputing {
-                return collectionView.dequeueConfiguredReusableCell(using: conceptCellRegistration, for: indexPath, item: item)
-            } else {
-                return collectionView.dequeueConfiguredReusableCell(using:
-                      cellRegistration, for: indexPath, item: item)
+             item: ConceptItem) -> UICollectionViewCell? in
+            switch item.itemType {
+            case .Label(_):
+                return collectionView.dequeueConfiguredReusableCell(using: labelCellRegistration, for: indexPath, item: item)
+            case .AddingLabel:
+                return collectionView.dequeueConfiguredReusableCell(using: textFieldCellRegistration, for: indexPath, item: item)
+            case .Opinion(_):
+                return collectionView.dequeueConfiguredReusableCell(using: labelCellRegistration, for: indexPath, item: item)
+            case .AddingOpinion:
+                return collectionView.dequeueConfiguredReusableCell(using: textFieldCellRegistration, for: indexPath, item: item)
             }
         }
         
-        let titleRegistration = UICollectionView.SupplementaryRegistration
+        let titleHeaderRegistration = UICollectionView.SupplementaryRegistration
         <TitleSupplementaryView>(elementKind: TitleSupplementaryView.identifier) {
             supplementaryView, string, indexPath in
-            let titleItem = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-            supplementaryView.label.text = titleItem.title
+            let sectionInfo = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+            guard case let HeaderType.Title(title) = sectionInfo.headerType else {
+                fatalError()
+            }
+
+            supplementaryView.label.text = title
         }
-        let titleWithAddingRegistration = UICollectionView.SupplementaryRegistration
+        let titleWithAddingHeaderRegistration = UICollectionView.SupplementaryRegistration
         <TitleWithAddingSupplementaryView>(elementKind: TitleWithAddingSupplementaryView.identifier) {
             supplementaryView, string, indexPath in
-            let titleItem = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-            supplementaryView.label.text = titleItem.title
+            let sectionInfo = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+            guard case let HeaderType.TitleWithAdding(title) = sectionInfo.headerType else {
+                fatalError()
+            }
+            supplementaryView.label.text = title
             supplementaryView.addingBtnTapped = {
                 supplementaryView.isUserInteractionEnabled = false
-                var snapshot = NSDiffableDataSourceSectionSnapshot<TitleItem>()
-                self.inputingItem = TitleItem(isInputing: true, title: "", type: nil)
+                var snapshot = NSDiffableDataSourceSectionSnapshot<ConceptItem>()
+                self.inputingItem = ConceptItem(itemType: sectionInfo.addingItemType)
                 snapshot.append([self.inputingItem!])
-                snapshot.append(self.dataSource.snapshot(for: titleItem).items)
-                self.dataSource.apply(snapshot, to: titleItem)
+                snapshot.append(self.dataSource.snapshot(for: sectionInfo).items)
+                self.dataSource.apply(snapshot, to: sectionInfo)
             }
         }
         tmp.supplementaryViewProvider = {(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            let titleItem = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-            switch titleItem.type! {
+            let sectionInfo = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+            switch sectionInfo.headerType {
             case .Title:
-                return collectionView.dequeueConfiguredReusableSupplementary(using: titleRegistration, for: indexPath)
+                return collectionView.dequeueConfiguredReusableSupplementary(using: titleHeaderRegistration, for: indexPath)
             case .TitleWithAdding:
-                return collectionView.dequeueConfiguredReusableSupplementary(using: titleWithAddingRegistration, for: indexPath)
+                return collectionView.dequeueConfiguredReusableSupplementary(using: titleWithAddingHeaderRegistration, for: indexPath)
             }
         }
         return tmp
@@ -112,23 +166,13 @@ class ConceptVC: UIViewController {
         vm = vm_
         super.init(nibName: nil, bundle: nil)
         
-        interpretationToken = vm.$conceptInterpretation.sink { newValue in
-            let sections = self.vm.concept.map.map { (link, neighbors) -> Section in
-                let headerType: HeaderType = link == .Instance ? .TitleWithAdding : .Title
-                let sectionItem = TitleItem(isInputing: false, title: link.title, type: headerType)
-                switch link {
-                case .Instance:
-                    return Section(titleItem: sectionItem, items: newValue!.instance.map({ TitleItem(isInputing: false, title: $0, type: nil) }))
-                default:
-                    return Section(titleItem: sectionItem, items: neighbors.map({ TitleItem(isInputing: false, title: $0.title, type: nil) }))
-                }
-            }
-            var tmp = NSDiffableDataSourceSnapshot<TitleItem, TitleItem>()
-            sections.forEach {
-                tmp.appendSections([$0.titleItem])
-                tmp.appendItems($0.items)
-            }
+        interpretationToken = vm.$sections.sink { newValue in
             DispatchQueue.main.async {
+                var tmp = NSDiffableDataSourceSnapshot<ConceptSectionInfo, ConceptItem>()
+                newValue!.forEach {
+                    tmp.appendSections([$0.sectionInfo])
+                    tmp.appendItems($0.items)
+                }
                 self.dataSource.apply(tmp)
             }
         }

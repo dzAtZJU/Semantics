@@ -5,6 +5,8 @@ struct ConceptLink: Hashable {
     
     static let Instance = ConceptLink(title: "Instance")
     
+    static let CanBeTrusted = ConceptLink(title: "Can be trusted")
+    
     let title: String
 }
 
@@ -15,6 +17,8 @@ struct Concept {
     static var Scenery = Concept(title: "Scenery", isPrivate: false)
     
     static let Period = Concept(title: "Period", isPrivate: false)
+    
+    static let Trust = Concept(title: "Trust", isPrivate: false)
     
     // MARK: Resource
     static let Bread = Concept(title: "Bread", isPrivate: false)
@@ -30,8 +34,6 @@ struct Concept {
         Seasons.map[ConceptLink.Illustrates] = [.Period]
         
         Scenery.map[ConceptLink.Comparison] = [.Seasons]
-        
-        Scent.map[ConceptLink.Instance] = [.Bread, .Coffee, .Fragrance, .Forest]
     }
     
     static var allPublic: [Concept] {

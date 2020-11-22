@@ -222,9 +222,10 @@ extension MapVC: PlaceVCDelegate {
         switch tag {
         case Concept.Seasons.title, Concept.Scent.title:
             DispatchQueue.main.async {
-                let v = TalksVC(vm: TalksVM(placeID: self.mapVM.selectedPlaceId!))
-                let nv = UINavigationController(rootViewController: v)
-                self.present(nv, animated: true, completion: nil)
+//                let v = TalksVC(vm: TalksVM(placeID: self.mapVM.selectedPlaceId!))
+//                let nv = UINavigationController(rootViewController: v)
+//                self.present(nv, animated: true, completion: nil)
+                fatalError()
             }
         default:
             DispatchQueue.main.async {

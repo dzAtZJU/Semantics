@@ -21,6 +21,8 @@ target 'Semantics' do
   
   pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git', :tag => '6.0.0'
   
+  pod 'ResearchKit', '>= 2.0.0'
+  
 #  pod 'Jelly', '~> 2.2.2'
   
 #  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
