@@ -144,16 +144,20 @@ extension PlaceVM: TagsVCDelegate {
                     } else {
                         $0.items.forEach {
                             if $0.isChosen {
-                                switch $0.tag {
-                                case Concept.Seasons.title:
-                                    let fileData = try! JSONEncoder().encode(SeasonsInterpretation())
-                                    privateLayer.projectPerspective($0.tag, fileData: fileData, on: self.thePlaceId!)
-                                case Concept.Scent.title:
-                                    let fileData = try! JSONEncoder().encode(ScentInterpretation())
-                                    privateLayer.projectPerspective($0.tag, fileData: fileData, on: self.thePlaceId!)
-                                default:
-                                    fatalError()
-                                }
+                                let tag = $0.tag
+                                let fileData: Data = {
+                                    switch tag {
+                                    case Concept.Seasons.title:
+                                        return try! JSONEncoder().encode(SeasonsInterpretation())
+                                    case Concept.Scent.title:
+                                        return try! JSONEncoder().encode(ScentInterpretation())
+                                    case Concept.Trust.title:
+                                        return try! JSONEncoder().encode(TrustInterpretation())
+                                    default:
+                                        fatalError()
+                                    }
+                                }()
+                                privateLayer.projectPerspective($0.tag, fileData: fileData, on: self.thePlaceId!)
                             } else {
                                 privateLayer.withdrawPerspective($0.tag, from: self.thePlaceId!)
                             }

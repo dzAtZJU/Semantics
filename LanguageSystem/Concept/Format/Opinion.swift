@@ -1,5 +1,9 @@
 import Foundation
 
+// Reality: 外部环境
+// Reality: 个体地位的意识，个体互相Support的意识，信任缺失的社会
+// Reality: Unite Multiple Individuals，弱势者的声音
+// Reality <- 微妙的，间接的，感受不到的东西
 // Reality <- Opinion; Poll; History
 // 复杂被人为制造以浑水摸鱼
 // 躲藏在大众之中
@@ -20,6 +24,7 @@ struct Opinion: Codable {
     
     struct Poll: OpinionData {
         let agreePortion: Int
+        let url: URL
     }
     
     let title: String

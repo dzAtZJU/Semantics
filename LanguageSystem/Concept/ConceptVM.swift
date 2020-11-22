@@ -5,6 +5,8 @@ protocol FillingSection {
     var sections: [ConceptSection] {
         get
     }
+    
+    mutating func addItem(_ item: ConceptItem)
 }
 
 extension ScentInterpretation: FillingSection {
@@ -17,6 +19,14 @@ extension ScentInterpretation: FillingSection {
         tmp.append(ConceptSection(sectionInfo: instanceSection, items: instanceItems))
         
         return tmp
+    }
+    
+    mutating func addItem(_ item: ConceptItem) {
+        guard case let .Label(text) = item.itemType else {
+            fatalError()
+        }
+        
+        instance.insert(text, at: 0)
     }
 }
 
@@ -31,9 +41,17 @@ extension TrustInterpretation: FillingSection {
         
         return tmp
     }
+    
+    mutating func addItem(_ item: ConceptItem) {
+        guard case let .Opinion(opinion) = item.itemType else {
+            fatalError()
+        }
+        
+        caBeTrusted.insert(opinion, at: 0)
+    }
 }
 
-class ConceptVM {
+class ConceptVM: AConceptVM {
     let placeID: String
     
     let interpretationInRealm: PerspectiveInterpretation
@@ -42,7 +60,13 @@ class ConceptVM {
     
     let concept: Concept
     
+    private var interpretation: (Interpretation & FillingSection)!
+    
     @Published var sections: [ConceptSection]!
+    
+    var sectionsPublisher: Published<[ConceptSection]?>.Publisher {
+        $sections
+    }
     
     init(concept: Concept, placeID: String) {
         self.placeID = placeID
@@ -60,7 +84,7 @@ class ConceptVM {
     }
     
     private func generateInterpretation(fromRealm data: Data) {
-        let interpretation: Interpretation & FillingSection = {
+        interpretation = {
             switch concept.title {
             case Concept.Scent.title:
                 return try! JSONDecoder().decode(ScentInterpretation.self, from: data)
@@ -74,11 +98,47 @@ class ConceptVM {
         sections = interpretation.sections
     }
     
-    func addInstance(_ instance: String, item: ConceptItem) {
-//        var newConceptInterpretation = individualInterpretation!
-//        newConceptInterpretation.instance.insert(instance, at: 0)
-//        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(Concept.Scent.title, fileData: try! JSONEncoder().encode(newConceptInterpretation), toPlace: placeID)
+    func addItem(_ item: ConceptItem) {
+        var newInterpretation = interpretation!
+        newInterpretation.addItem(item)
+        let data: Data = {
+            switch concept.title {
+            case Concept.Scent.title:
+                return try! JSONEncoder().encode(newInterpretation as! ScentInterpretation)
+            case Concept.Trust.title:
+                return try! JSONEncoder().encode(newInterpretation as! TrustInterpretation)
+            default:
+            fatalError()
+            }
+        }()
+        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(concept.title, fileData: data, toPlace: placeID)
     }
 }
 
-
+class MockConceptVM: AConceptVM {
+    var concept: Concept = .Trust
+    
+    @Published var sections: [ConceptSection]!
+    
+    var sectionsPublisher: Published<[ConceptSection]?>.Publisher {
+        $sections
+    }
+    
+    init() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.sections = [
+                ConceptSection(
+                    sectionInfo: .init(headerType: .TitleWithAdding(ConceptLink.CanBeTrusted.title),
+                                       addingItemType: .AddingOpinion),
+                    items: [
+                        .init(itemType: .Opinion(.init(title: "Most other people", format: .Poll, data: try! JSONEncoder().encode(Opinion.Poll(agreePortion: 30, url: URL(string: "https://www.youtube.com/watch?v=iAZwvTV3CyQ")!))))),
+                        .init(itemType: .Opinion(.init(title: "School", format: .Personal, data: try! JSONEncoder().encode(Opinion.Individual(isAgree: false)))))]
+                )
+            ]
+        }
+    }
+    
+    func addItem(_ item: ConceptItem) {
+        fatalError()
+    }
+}

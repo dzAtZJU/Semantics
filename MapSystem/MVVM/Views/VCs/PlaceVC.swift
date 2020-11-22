@@ -143,7 +143,7 @@ extension PlaceVC: TagListViewDelegate {
             switch self.selectedTag! {
             case addtag:
                 self.placePerspectivesTapped()
-            case Concept.Seasons.title:
+            case Concept.Seasons.title, Concept.Trust.title:
                 self.individualAbleBtn.setTitle("Describe", for: .normal)
                 self.humankindAbleBtn.setTitle("Talks", for: .normal)
                 self.individualAbleBtn.isHidden = false

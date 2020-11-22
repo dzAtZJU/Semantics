@@ -37,25 +37,26 @@ struct Concept {
     }
     
     static var allPublic: [Concept] {
-        [Seasons]
-    }
-    
-    static var allPublicTitles: [String] {
-        allPublic.map(\.title)
+        [Seasons, Trust]
     }
     
     static var allPrivate: [Concept] {
         [Scent]
     }
     
+    static let map: [String: Concept] = [
+        Concept.Seasons.title: Concept.Seasons,
+        Concept.Scent.title: Concept.Scent,
+        Concept.Trust.title: Concept.Trust
+    ]
+    
+    static var allPublicTitles: [String] {
+        allPublic.map(\.title)
+    }
+    
     static var allPrivateTitles: [String] {
         allPrivate.map(\.title)
     }
-    
-    static let map: [String: Concept] = [
-        Concept.Seasons.title: Concept.Seasons,
-        Concept.Scent.title: Concept.Scent
-    ]
     
     let title: String
     let isPrivate: Bool

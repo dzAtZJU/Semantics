@@ -76,11 +76,7 @@ class PhasesVC: UIViewController, PanelContent {
         case Showing
     }
     
-    lazy var spinner: NVActivityIndicatorView = {
-        let tmp = NVActivityIndicatorView(frame: .zero, type: .ballGridBeat, color: .systemFill, padding: .none)
-        tmp.translatesAutoresizingMaskIntoConstraints = false
-        return tmp
-    }()
+    lazy var spinner = Spinner.create()
     
     lazy var titleLabel: UILabel = {
         var tmp = UILabel()
@@ -97,7 +93,7 @@ class PhasesVC: UIViewController, PanelContent {
     }()
     
     lazy var addingView: UISearchBar = {
-        let tmp = Adding.createAddingLinkView()
+        let tmp = Adding.createAddingLinkView(returnKeyType: .search)
         tmp.delegate = self
         return tmp
     }()
@@ -188,10 +184,6 @@ class PhasesVC: UIViewController, PanelContent {
         
         view.addSubview(spinner)
         spinner.anchorCenterSuperview()
-        NSLayoutConstraint.activate([
-            spinner.widthAnchor.constraint(equalToConstant: 50),
-            spinner.heightAnchor.constraint(equalTo: spinner.widthAnchor, multiplier: 1)
-        ])
     }
     
     override func viewDidAppear(_ animated: Bool) {

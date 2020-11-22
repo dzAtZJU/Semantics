@@ -201,11 +201,13 @@ extension MapVC: PlaceVCDelegate {
                 vc.panelContentDelegate = self
                 self.panelContentVC.show(vc, sender: nil)
             }
-        case Concept.Scent.title:
+        case Concept.Scent.title, Concept.Trust.title:
             DispatchQueue.main.async {
-                let vm = ConceptVM(concept: Concept.Scent, placeID: self.mapVM.selectedPlaceId!)
-                let vc = UINavigationController(rootViewController: ConceptVC(vm: vm))
-                self.present(vc, animated: true, completion: nil)
+                let vm = ConceptVM(concept: Concept.map[tag]!, placeID: self.mapVM.selectedPlaceId!)
+                let vc = PanelNavigationController(rootViewController: ConceptVC(vm: vm))
+                vc.prevPanelState = .tip
+                vc.panelContentDelegate = self
+                self.panelContentVC.show(vc, sender: nil)
             }
         default:
             _ = FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in

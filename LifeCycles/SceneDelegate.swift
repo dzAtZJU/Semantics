@@ -28,6 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
         window.rootViewController = tabVC
         
 //        window.rootViewController = TalksVC(vm: ConceptVM(concept: Concept.Seasons))
+//        window.rootViewController = ConceptVC(vm: MockConceptVM())
         
         window.makeKeyAndVisible()
     }

@@ -1,5 +1,7 @@
 import UIKit
 import Combine
+import FloatingPanel
+import NVActivityIndicatorView
 
 struct ConceptSection {
     let sectionInfo: ConceptSectionInfo
@@ -45,18 +47,31 @@ enum HeaderType {
     case TitleWithAdding(String)
 }
 
+protocol AConceptVM {
+    var concept: Concept { get }
+    
+    var sectionsPublisher: Published<[ConceptSection]?>.Publisher { get }
+        
+    func addItem(_ item: ConceptItem)
+}
+
 class ConceptVC: UIViewController {
     
-    private let vm: ConceptVM
+    private let vm: AConceptVM
     
     var interpretationToken: AnyCancellable?
     
     private var inputingItem: ConceptItem?
     
+    lazy var spinner = Spinner.create()
+    
     lazy var collectionView: UICollectionView = {
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         tmp.translatesAutoresizingMaskIntoConstraints = false
         tmp.backgroundColor = .systemBackground
+        tmp.showsVerticalScrollIndicator = false
+        tmp.showsHorizontalScrollIndicator = false
+        tmp.delegate = self
         return tmp
     }()
     
@@ -66,7 +81,7 @@ class ConceptVC: UIViewController {
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
             let horizontal = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension:.fractionalWidth(1), heightDimension: .fractionalHeight(0.5)), subitem: item, count: 2)
-            let verticalGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .estimated(100)), subitem: horizontal, count: 2)
+            let verticalGroup = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(0.9), heightDimension: .estimated(400)), subitem: horizontal, count: 2)
             
             let section = NSCollectionLayoutSection(group: verticalGroup)
             
@@ -107,6 +122,31 @@ class ConceptVC: UIViewController {
             content.textFieldDelegate = self
             cell.contentConfiguration = content
         }
+        let pollCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, ConceptItem> { cell, indexPath, conceptItem in
+            guard case let ItemType.Opinion(opinion) = conceptItem.itemType else {
+                fatalError()
+            }
+            var content = PollContentConfiguration(opinion: opinion)
+            cell.contentConfiguration = content
+        }
+        let individualOpinionCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, ConceptItem> { cell, indexPath, conceptItem in
+            guard case let ItemType.Opinion(opinion) = conceptItem.itemType else {
+                fatalError()
+            }
+            var content = IndividualOpinionContentConfiguration(opinion: opinion)
+            cell.contentConfiguration = content
+        }
+        let addingPollViewCellRegistration = UICollectionView.CellRegistration<UICollectionViewCell, ConceptItem> { cell, indexPath, conceptItem in
+            guard case let ItemType.AddingOpinion = conceptItem.itemType else {
+                fatalError()
+            }
+            let content = AddingPollViewContentConfiguration { (title, portion, url) in
+                self.vm.addItem(
+                    ConceptItem(itemType: .Opinion(Opinion(title: title, format: .Poll, data: try! JSONEncoder().encode(Opinion.Poll(agreePortion: portion, url: url)))))
+                )
+            }
+            cell.contentConfiguration = content
+        }
         let tmp = UICollectionViewDiffableDataSource
         <ConceptSectionInfo, ConceptItem> (collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath,
@@ -116,10 +156,15 @@ class ConceptVC: UIViewController {
                 return collectionView.dequeueConfiguredReusableCell(using: labelCellRegistration, for: indexPath, item: item)
             case .AddingLabel:
                 return collectionView.dequeueConfiguredReusableCell(using: textFieldCellRegistration, for: indexPath, item: item)
-            case .Opinion(_):
-                return collectionView.dequeueConfiguredReusableCell(using: labelCellRegistration, for: indexPath, item: item)
+            case let .Opinion(opinion):
+                switch opinion.format {
+                case .Poll:
+                    return collectionView.dequeueConfiguredReusableCell(using: pollCellRegistration, for: indexPath, item: item)
+                case .Personal:
+                    return collectionView.dequeueConfiguredReusableCell(using: individualOpinionCellRegistration, for: indexPath, item: item)
+                }
             case .AddingOpinion:
-                return collectionView.dequeueConfiguredReusableCell(using: textFieldCellRegistration, for: indexPath, item: item)
+                return collectionView.dequeueConfiguredReusableCell(using: addingPollViewCellRegistration, for: indexPath, item: item)
             }
         }
         
@@ -162,14 +207,17 @@ class ConceptVC: UIViewController {
         return tmp
     }()
         
-    init(vm vm_: ConceptVM) {
+    init(vm vm_: AConceptVM) {
         vm = vm_
         super.init(nibName: nil, bundle: nil)
         
-        interpretationToken = vm.$sections.sink { newValue in
+        interpretationToken = vm.sectionsPublisher.sink {
+            guard let newValue = $0 else {
+                return
+            }
             DispatchQueue.main.async {
                 var tmp = NSDiffableDataSourceSnapshot<ConceptSectionInfo, ConceptItem>()
-                newValue!.forEach {
+                newValue.forEach {
                     tmp.appendSections([$0.sectionInfo])
                     tmp.appendItems($0.items)
                 }
@@ -196,6 +244,32 @@ class ConceptVC: UIViewController {
             collectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        view.addSubview(spinner)
+        spinner.anchorCenterSuperview()
+    }
+}
+
+extension ConceptVC: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = dataSource.itemIdentifier(for: indexPath)!
+        switch item.itemType {
+        case let .Opinion(opinion):
+            switch opinion.format {
+            case .Poll:
+                spinner.startAnimating()
+                let vc = WebViewController(nibName: nil, bundle: nil)
+                let source = (opinion.opinionData as! Opinion.Poll).url
+                vc.load(url: source) {
+                    self.spinner.stopAnimating()
+                    self.present(vc, animated: true, completion: nil)
+                }
+            default:
+                return
+            }
+        default:
+            return
+        }
     }
 }
 
@@ -205,7 +279,7 @@ extension ConceptVC: UITextFieldDelegate {
             return false
         }
         
-        vm.addInstance(text, item: inputingItem!)
+        vm.addItem(ConceptItem(itemType: .Label(text)))
         textField.resignFirstResponder()
         return true
     }
