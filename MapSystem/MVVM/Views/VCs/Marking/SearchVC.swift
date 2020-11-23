@@ -5,7 +5,10 @@ import FloatingPanel
 class SearchVC: UIViewController, PanelContent {
     var prevPanelState:  FloatingPanelState?
     
+    var allowsEditing = true
+    
     let showBackBtn = false
+    
     var panelContentDelegate: PanelContentDelegate!
     
     private lazy var searchSuggestionsController: SearchSuggestionsVC = {

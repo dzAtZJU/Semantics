@@ -54,10 +54,17 @@ class MapVC: UIViewController {
         return tmp
     }()
     
-    private lazy var placeVC: PlaceVC = {
-        let tmp = PlaceVC()
+    private lazy var placeStoryVC: PlaceStoryVC = {
+        let tmp = PlaceStoryVC(style: .Plain)
         tmp.panelContentDelegate = self
         tmp.delegate = self
+        return tmp
+    }()
+    
+    private lazy var placeStoriesVC: PlaceStoriesVC = {
+        let tmp = PlaceStoriesVC(vm: PlaceStoriesVM())
+        tmp.allowsEditing = false
+        tmp.panelContentDelegate = self
         return tmp
     }()
     
@@ -175,12 +182,9 @@ class MapVC: UIViewController {
     }
 }
 
-// MARK: PlaceVCDelegate
-extension MapVC: PlaceVCDelegate {
-    func placeWillDisappear(_ placeVC: PlaceVC) {
-    }
-    
-    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC, tag: String) {
+// MARK: PlaceStoryDelegate
+extension MapVC: PlaceStoryDelegate {
+    func placeStoryVCShouldStartIndividualAble(_ placeVC: PlaceStoryVC, tag: String) {
         switch tag {
         case Concept.Seasons.title:
             DispatchQueue.main.async {
@@ -208,7 +212,7 @@ extension MapVC: PlaceVCDelegate {
         }
     }
     
-    func placeVCShouldHumankindAble(_ placeVC: PlaceVC, tag: String) {
+    func placeStoryVCShouldHumankindAble(_ placeVC: PlaceStoryVC, tag: String) {
         switch tag {
         case Concept.Seasons.title, Concept.Scent.title:
             DispatchQueue.main.async {
@@ -282,11 +286,15 @@ extension MapVC: MKMapViewDelegate {
     }
     
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
-        PlaceVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
-            vm.parent = self.mapVM
-            DispatchQueue.main.async {
-                self.placeVC.vm = vm
-                completion(self.placeVC)
+        if mapVM.circleOfTrust == .private {
+            completion(placeStoriesVC)
+        } else {
+            PlaceStoryVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
+                vm.parent = self.mapVM
+                DispatchQueue.main.async {
+                    self.placeStoryVC.vm = vm
+                    completion(self.placeStoryVC)
+                }
             }
         }
     }

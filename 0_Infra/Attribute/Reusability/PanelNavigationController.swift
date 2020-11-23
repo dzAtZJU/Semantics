@@ -2,11 +2,11 @@ import UIKit
 import FloatingPanel
 
 class PanelNavigationController: UINavigationController, PanelContent {
+    var allowsEditing = true
+    
     var panelContentDelegate: PanelContentDelegate!
     
-    var showBackBtn: Bool {
-        true
-    }
+    let showBackBtn = true
     
     var prevPanelState: FloatingPanelState?
     

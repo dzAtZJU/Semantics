@@ -2,13 +2,13 @@ import UIKit
 import FloatingPanel
 
 class FeedbackVC: UIPageViewController, PanelContent {
-    var prevPanelState:  FloatingPanelState?
+    var allowsEditing = true
     
     let showBackBtn = true
     
-    var panelContentDelegate: PanelContentDelegate!
+    var prevPanelState:  FloatingPanelState?
     
-    private weak var scrollView: UIScrollView?
+    var panelContentDelegate: PanelContentDelegate!
     
     private var pageIndex = 0
     
@@ -18,7 +18,6 @@ class FeedbackVC: UIPageViewController, PanelContent {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         
         dataSource = self
-        setViewControllers([ConditionFeedbackVC(conditionFeedbackVM: feedbackVM.firstConditionFeedbackVM)], direction: .forward, animated: false, completion: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -28,6 +27,10 @@ class FeedbackVC: UIPageViewController, PanelContent {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
+        let vc = ConditionFeedbackVC(conditionFeedbackVM: feedbackVM.firstConditionFeedbackVM)
+        vc.allowsEditing = allowsEditing
+        setViewControllers([vc], direction: .forward, animated: false, completion: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -51,7 +54,9 @@ extension FeedbackVC: UIPageViewControllerDataSource {
         guard let vm = feedbackVM.conditionFeedbackVM(before: vc.conditionFeedbackVM) else {
             return nil
         }
-        return ConditionFeedbackVC(conditionFeedbackVM: vm)
+        let newVC = ConditionFeedbackVC(conditionFeedbackVM: vm)
+        newVC.allowsEditing = allowsEditing
+        return newVC
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
@@ -59,7 +64,9 @@ extension FeedbackVC: UIPageViewControllerDataSource {
         guard let vm = feedbackVM.conditionFeedbackVM(after: vc.conditionFeedbackVM) else {
             return nil
         }
-        return ConditionFeedbackVC(conditionFeedbackVM: vm)
+        let newVC = ConditionFeedbackVC(conditionFeedbackVM: vm)
+        newVC.allowsEditing = allowsEditing
+        return newVC
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {

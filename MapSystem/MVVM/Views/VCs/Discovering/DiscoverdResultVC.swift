@@ -10,7 +10,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
        
     let showBackBtn = true
     
-    static let pageMargin: CGFloat = 50
+    var allowsEditing = true
     
     let vm: DiscoverdResultVM
     init(vm vm_: DiscoverdResultVM) {
@@ -36,7 +36,6 @@ class DiscoverdResultVC: UIViewController, PanelContent {
         layout.sectionInsetReference = .fromContentInset
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: layout)
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.contentInset = .init(horizontal: Self.pageMargin, vertical: 0)
         tmp.backgroundColor = .systemBackground
         tmp.dataSource = self
         tmp.delegate = self

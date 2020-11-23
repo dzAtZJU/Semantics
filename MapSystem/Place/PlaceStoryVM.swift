@@ -2,17 +2,17 @@ import Foundation
 import Combine
 import RealmSwift
 
-class PlaceVM {
-    static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceVM) -> Void) {
+class PlaceStoryVM: APlaceStoryVM {
+    static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceStoryVM) -> Void) {
         guard let placeID = placeID else {
-            completion(PlaceVM(allowsCondition: allowsCondition))
+            completion(PlaceStoryVM(allowsCondition: allowsCondition))
             return
         }
         
         RealmSpace.shared.async {
             let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeID: placeID)!
             
-            let vm = PlaceVM(allowsCondition: allowsCondition, placeStory: placeStory)
+            let vm = PlaceStoryVM(allowsCondition: allowsCondition, placeStory: placeStory)
             completion(vm)
         }
     }
@@ -21,7 +21,13 @@ class PlaceVM {
         
     var thePlaceId: String?
     
+    var partnerProfile: Profile!
+    
     @Published private(set) var tags: [String]!
+    
+    var tagsPublisher: Published<[String]?>.Publisher {
+        $tags
+    }
     
     var tagChoice_Sections: [TagChoiceSection] {
         var tmp: [TagChoiceSection] = []
@@ -76,7 +82,7 @@ class PlaceVM {
         loadPlace(placeStory: placeStory)
     }
     
-    func loadPlace(placeStory: PlaceStory) {
+    private func loadPlace(placeStory: PlaceStory) {
         thePlaceId = placeStory.placeID
         
         conceptsToken = placeStory.perspectiveInterpretation_List.observe {
@@ -125,7 +131,7 @@ class PlaceVM {
     }
 }
 
-extension PlaceVM: TagsVCDelegate {
+extension PlaceStoryVM: TagsVCDelegate {
     func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_Sections: [TagChoiceSection]) {
         let action: () -> () = {
             RealmSpace.shared.async {
@@ -177,5 +183,39 @@ extension PlaceVM: TagsVCDelegate {
         }
         
         action()
+    }
+}
+
+class MockPlaceStoryVM: APlaceStoryVM {
+    static let mock1: MockPlaceStoryVM = {
+        let tmp = MockPlaceStoryVM()
+        tmp.partnerProfile = Profile(name: "Mila", image: UIImage(named: "mila")!)
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            tmp.tags = ["A1", "B1", "C1"]
+        }
+        return tmp
+    }()
+    
+    static let mock2: MockPlaceStoryVM = {
+        let tmp = MockPlaceStoryVM()
+        tmp.partnerProfile = Profile(name: "Eileen", image: UIImage(named: "eileen")!)
+        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+            tmp.tags = ["A2", "B2"]
+        }
+        return tmp
+    }()
+    
+    @Published private(set) var tags: [String]!
+    
+    var tagsPublisher: Published<[String]?>.Publisher {
+        $tags
+    }
+    
+    var tagChoice_Sections: [TagChoiceSection] = []
+    
+    var partnerProfile: Profile!
+    
+    func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_Sections: [TagChoiceSection]) {
+        
     }
 }

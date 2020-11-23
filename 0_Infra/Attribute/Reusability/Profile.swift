@@ -25,6 +25,9 @@ struct Profile {
         
         return tmp
     }
+    
+    let name: String
+    let image: UIImage
 }
 
 class AvatarWithNameView: UIStackView {

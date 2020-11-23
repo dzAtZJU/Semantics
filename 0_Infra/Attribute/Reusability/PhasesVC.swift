@@ -138,7 +138,10 @@ class PhasesVC: UIViewController, PanelContent {
     
     var panelContentDelegate: PanelContentDelegate!
     
-    var showBackBtn = false
+    let showBackBtn = false
+    
+    var allowsEditing = true
+    //
     
     init(seasonsVM seasonsVM_: SeasonsVM) {
         phasesVM = seasonsVM_

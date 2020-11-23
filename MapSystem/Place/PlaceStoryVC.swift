@@ -3,16 +3,35 @@ import Combine
 import TagListView
 import Presentr
 import FloatingPanel
-
-protocol PlaceVCDelegate {
-    func placeVCShouldStartIndividualAble(_ placeVC: PlaceVC, tag: String)
+        
+protocol APlaceStoryVM: TagsVCDelegate {
+    var partnerProfile: Profile! {
+        get
+    }
+        
+    var tagsPublisher: Published<[String]?>.Publisher { get }
     
-    func placeVCShouldHumankindAble(_ placeVC: PlaceVC, tag: String)
-    
-    func placeWillDisappear(_ placeVC: PlaceVC)
+    var tagChoice_Sections: [TagChoiceSection] {
+        get
+    }
 }
 
-class PlaceVC: UIViewController, PanelContent {
+protocol PlaceStoryDelegate {
+    func placeStoryVCShouldStartIndividualAble(_ placeStoryVC: PlaceStoryVC, tag: String)
+    
+    func placeStoryVCShouldHumankindAble(_ placeStoryVC: PlaceStoryVC, tag: String)
+}
+
+class PlaceStoryVC: UIViewController, PanelContent {
+    enum Style {
+        case Card
+        case Plain
+    }
+    
+    private let style: Style
+    
+    var allowsEditing = true
+    
     var prevPanelState:  FloatingPanelState?
     
     private lazy var profileView: AvatarWithNameView = AvatarWithNameView(axis: .horizontal, width: 50)
@@ -68,11 +87,13 @@ class PlaceVC: UIViewController, PanelContent {
     
     private var selectedTag: String?
     
-    var vm: PlaceVM! {
+    var vm: APlaceStoryVM! {
         didSet {
-            tagsToken = vm.$tags.sink {
+            tagsToken = vm.tagsPublisher.sink {
                 var perspectives = $0 ?? []
-                perspectives.append(addtag)
+                if self.allowsEditing {
+                    perspectives.append(addtag)
+                }
                 DispatchQueue.main.async {
                     self.stackView.arrangedSubviews.forEach {
                         $0.isHidden = true
@@ -94,7 +115,16 @@ class PlaceVC: UIViewController, PanelContent {
     
     let showBackBtn = true
     
-    var delegate: PlaceVCDelegate?
+    var delegate: PlaceStoryDelegate?
+    
+    init(style: Style) {
+        self.style = style
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = UIView()
@@ -119,24 +149,21 @@ class PlaceVC: UIViewController, PanelContent {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileView.nameLabel.text = "Mila"
-        profileView.avatarView.image = UIImage(named: "mila")
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        delegate?.placeWillDisappear(self)
+        if let partnerProfile = vm.partnerProfile {
+            profileView.nameLabel.text = partnerProfile.name
+            profileView.avatarView.image = partnerProfile.image
+        }
     }
 }
 
 // MARK: Interaction
-extension PlaceVC: TagListViewDelegate {
+extension PlaceStoryVC: TagListViewDelegate {
     @objc private func individualAbleBtnTapped() {
-        delegate?.placeVCShouldStartIndividualAble(self, tag: selectedTag!)
+        delegate?.placeStoryVCShouldStartIndividualAble(self, tag: selectedTag!)
     }
         
     @objc private func humankindAbleBtnTapped() {
-        delegate?.placeVCShouldHumankindAble(self, tag: selectedTag!)
+        delegate?.placeStoryVCShouldHumankindAble(self, tag: selectedTag!)
     }
     
     @objc private func placePerspectivesTapped() {
@@ -151,27 +178,50 @@ extension PlaceVC: TagListViewDelegate {
         }
         
         selectedTag = tagView.titleForNormal!
+        let concept = Concept.map[selectedTag!]
         UIView.animate(withDuration: 0.25) {
-            switch self.selectedTag! {
-            case addtag:
+            if self.selectedTag! == addtag {
+                self.clearOperation()
                 self.placePerspectivesTapped()
-            case Concept.Seasons.title, Concept.Trust.title:
-                self.individualAbleBtn.setTitle("Describe", for: .normal)
-                self.humankindAbleBtn.setTitle("Talks", for: .normal)
-                self.individualAbleBtn.isHidden = false
-                self.humankindAbleBtn.isHidden = false
-            case Concept.Scent.title:
-                self.individualAbleBtn.setTitle("Experience", for: .normal)
-                self.individualAbleBtn.isHidden = false
-                self.humankindAbleBtn.isHidden = true
-            default:
-                self.individualAbleBtn.setTitle("Compare", for: .normal)
-                self.humankindAbleBtn.setTitle("Search", for: .normal)
-                self.individualAbleBtn.isHidden = false
-                self.humankindAbleBtn.isHidden = false
+            } else if let concept = concept {
+                self.configOperation(forConcept: concept)
+            } else {
+                self.configOperationForCondition()
             }
+        }
+    }
+    
+    private func clearOperation() {
+        individualAbleBtn.isHidden = true
+        humankindAbleBtn.isHidden = true
+    }
+        
+    private func configOperationForCondition() {
+        let individualAble = IndividualAble.Compare
+        individualAbleBtn.setTitle(individualAble.rawValue, for: .normal)
+        individualAbleBtn.isHidden = false
+        
+        humankindAbleBtn.isHidden = !allowsEditing
+        if !humankindAbleBtn.isHidden {
+            humankindAbleBtn.setTitle(individualAble.humankindAble.rawValue, for: .normal)
+        }
+    }
+    
+    private func configOperation(forConcept concept: Concept) {
+        individualAbleBtn.isHidden = false
+        individualAbleBtn.setTitle(concept.individualAble.rawValue, for: .normal)
+        
+        humankindAbleBtn.isHidden = concept.isPrivate || !allowsEditing
+        if !humankindAbleBtn.isHidden {
+            humankindAbleBtn.setTitle(concept.individualAble.humankindAble.rawValue, for: .normal)
         }
     }
 }
 
-private let addtag = "add tag"
+private let addtag = "+"
+
+extension Concept {
+    var havingHumankindAble: Bool {
+        !isPrivate
+    }
+}

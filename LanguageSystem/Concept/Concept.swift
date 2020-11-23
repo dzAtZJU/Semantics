@@ -12,22 +12,16 @@ struct ConceptLink: Hashable {
 
 struct Concept {
     // MARK: Public
-    static var Seasons = Concept(title: "Seasons", isPrivate: false)
+    static var Seasons = Concept(title: "Seasons", isPrivate: false, individualAble: .Describe)
     
-    static var Scenery = Concept(title: "Scenery", isPrivate: false)
+    static var Scenery = Concept(title: "Scenery", isPrivate: false, individualAble: .Describe)
     
-    static let Period = Concept(title: "Period", isPrivate: false)
+    static let Period = Concept(title: "Period", isPrivate: false, individualAble: .Describe)
     
-    static let Trust = Concept(title: "Trust", isPrivate: false)
-    
-    // MARK: Resource
-    static let Bread = Concept(title: "Bread", isPrivate: false)
-    static let Coffee = Concept(title: "Coffee", isPrivate: false)
-    static let Fragrance = Concept(title: "Fragrance", isPrivate: false)
-    static let Forest = Concept(title: "Forest", isPrivate: false)
+    static let Trust = Concept(title: "Trust", isPrivate: false, individualAble: .Describe)
     
     // MARK: Private
-    static var Scent = Concept(title: "Scent", isPrivate: true)
+    static var Scent = Concept(title: "Scent", isPrivate: true, individualAble: .Experience)
     
     static func load() {
         Seasons.map[ConceptLink.Comparison] = [.Scenery]
@@ -59,12 +53,33 @@ struct Concept {
     }
     
     let title: String
+    
     let isPrivate: Bool
+    
+    let individualAble: IndividualAble
+    
     var map: [ConceptLink: [Concept]] = [:]
 }
 
-enum IndividualAbleType {
-    case compare
-    case phase
-    case concept
+enum IndividualAble: String {
+    case Compare = "Compare"
+    case Describe = "Describe"
+    case Experience = "Experience"
+    
+    var humankindAble: HumankindAble {
+        switch self {
+        case .Compare:
+            return .Search
+        case .Describe:
+            return .Talks
+        case .Experience:
+            return .None
+        }
+    }
+}
+
+enum HumankindAble: String {
+    case None = ""
+    case Talks = "Talks"
+    case Search = "Search"
 }

@@ -20,6 +20,8 @@ class ConditionFeedbackVC: UIViewController {
         }
     }
     
+    var allowsEditing = true
+    
     private lazy var conditionLabel: UILabel = {
         let tmp = UILabel()
         tmp.translatesAutoresizingMaskIntoConstraints = false
@@ -93,6 +95,10 @@ extension ConditionFeedbackVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        guard allowsEditing else {
+            return false
+        }
+        
         guard indexPath.section != 0 else {
             return false
         }

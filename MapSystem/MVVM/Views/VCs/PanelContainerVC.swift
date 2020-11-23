@@ -4,6 +4,10 @@ import FloatingPanel
 import RealmSwift
 
 protocol PanelContent: Reusable, UIViewController {
+    var allowsEditing: Bool {
+        get
+    }
+    
     var showBackBtn: Bool { get }
     
     var panelContentDelegate: PanelContentDelegate! { get set }

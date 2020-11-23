@@ -3,13 +3,13 @@ import Combine
 import FloatingPanel
 
 class DiscoverNextVC: UIViewController, PanelContent {
+    var allowsEditing = true
+    
     var prevPanelState:  FloatingPanelState?
     
     var panelContentDelegate: PanelContentDelegate!
     
     let showBackBtn = true
-    
-    static let pageMargin: CGFloat = 50
     
     private lazy var spinner = Spinner.create()
     
@@ -26,7 +26,6 @@ class DiscoverNextVC: UIViewController, PanelContent {
         layout.sectionInsetReference = .fromContentInset
         let tmp = UICollectionView(frame: .zero, collectionViewLayout: layout)
         tmp.translatesAutoresizingMaskIntoConstraints = false
-        tmp.contentInset = .init(horizontal: Self.pageMargin, vertical: 0)
         tmp.backgroundColor = .systemBackground
         tmp.dataSource = self
         tmp.delegate = self
@@ -55,9 +54,9 @@ class DiscoverNextVC: UIViewController, PanelContent {
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: searchButton.trailingAnchor, multiplier: 2).isActive = true
         
         view.addSubview(collectionView)
-        collectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.layoutMarginsGuide.topAnchor, multiplier: 1).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor).isActive = true
         collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 0)
         collectionViewHeightConstraint.isActive = true
         searchButton.topAnchor.constraint(equalToSystemSpacingBelow: collectionView.bottomAnchor, multiplier: 2).isActive = true
