@@ -128,8 +128,8 @@ class MapVM {
         RealmSpace.shared.queue.sync {
             let dataLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!))
             tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditionIDs: dataLayer.queryConditionIDs(forPlace: selectedAnnotation!.placeId!))
-            tmp.panelContentVMDelegate = self
         }
+        tmp.parent = self
         return tmp
     }
 }
@@ -143,7 +143,8 @@ extension MapVM {
                 RealmSpace.shared.realm(RealmSpace
                                             .partitionValue) { publicRealm in
                     let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).loadVisitedPlacesRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
-                        SemAnnotation(place: place, type: .visited)
+                        SemAnnotation(place: place, type: .visited, color: UIColor.random)
+                        //Int.random(in: 0..<3) % 3 == 0 ? .brown: .cyan
                     }
                     
                     DispatchQueue.main.async {
@@ -164,7 +165,7 @@ extension MapVM {
             completion(placeStory)
             DispatchQueue.main.async {
                 self.setSelectedAnnotationEvent((nil, .fromModel))
-                let newAnnotation = SemAnnotation(place: place, type: .visited)
+                let newAnnotation = SemAnnotation(place: place, type: .visited, color: .brown)
                 self.appendAnnotations([newAnnotation])
                 self.setSelectedAnnotationEvent((newAnnotation, .fromModel))
             }
@@ -190,11 +191,5 @@ extension MapVM {
         appendAnnotations([newAnno])
         boundingRegion = response.boundingRegion
         selectedAnnotationEvent = (newAnno, .fromModel)
-    }
-}
-
-extension MapVM: PanelContentVMDelegate {
-    var mapVM: MapVM {
-        self
     }
 }

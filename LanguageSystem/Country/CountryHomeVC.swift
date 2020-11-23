@@ -11,9 +11,6 @@
 //    
 //    var showBackBtn = false
 //    
-//    var panelContentVM: PanelContentVM!
-//    
-//    
 //    private let vm: CountryHomeVM
 //    
 //    private var dataSource: UICollectionViewDiffableDataSource

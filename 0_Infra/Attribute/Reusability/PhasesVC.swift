@@ -140,8 +140,6 @@ class PhasesVC: UIViewController, PanelContent {
     
     var showBackBtn = false
     
-    var panelContentVM: PanelContentVM!
-    
     init(seasonsVM seasonsVM_: SeasonsVM) {
         phasesVM = seasonsVM_
         super.init(nibName: nil, bundle: nil)
@@ -280,7 +278,7 @@ class PhasesVC: UIViewController, PanelContent {
     }
     
     @objc func closeBtnTapped() {
-        panelContentDelegate.panelContentVC.hideTop()
+        panelContentDelegate.panelContainerVC.hideTop()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

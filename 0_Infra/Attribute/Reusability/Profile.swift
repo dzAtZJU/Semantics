@@ -1,16 +1,15 @@
 import UIKit
 
 struct Profile {
-    static func createAvatarView() -> UIImageView {
+    static func createAvatarView(width: CGFloat) -> UIImageView {
         let tmp = UIImageView()
         tmp.contentMode = .scaleAspectFill
-        let height: CGFloat = 70
-        tmp.cornerRadius = height/2
+        tmp.cornerRadius = width/2
         
         tmp.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tmp.heightAnchor.constraint(equalToConstant: height),
+            tmp.heightAnchor.constraint(equalToConstant: width),
             tmp.widthAnchor.constraint(equalTo: tmp.heightAnchor)
         ])
         
@@ -29,19 +28,22 @@ struct Profile {
 }
 
 class AvatarWithNameView: UIStackView {
-    let avatarView = Profile.createAvatarView()
+    let avatarView: UIImageView
     
     lazy var nameLabel: UILabel = {
         let tmp = UILabel()
+        tmp.font = .preferredFont(forTextStyle: .title3)
         tmp.textAlignment = .center
         tmp.translatesAutoresizingMaskIntoConstraints = false
         return tmp
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(axis: NSLayoutConstraint.Axis, width: CGFloat) {
+        avatarView = Profile.createAvatarView(width: width)
         
-        axis = .vertical
+        super.init(frame: .zero)
+        self.axis = axis
+        spacing = Margin.defaultValue
         alignment = .center
         addArrangedSubviews([avatarView, nameLabel])
     }

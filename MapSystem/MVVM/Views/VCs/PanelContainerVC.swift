@@ -4,25 +4,13 @@ import FloatingPanel
 import RealmSwift
 
 protocol PanelContent: Reusable, UIViewController {
-    var panelContentDelegate: PanelContentDelegate! { get set }
-    
     var showBackBtn: Bool { get }
     
-    var topInset: CGFloat { get }
-    
-    var panelContentVM: PanelContentVM! { get }
+    var panelContentDelegate: PanelContentDelegate! { get set }
     
     var prevPanelState:  FloatingPanelState? {
         get
         set
-    }
-}
-
-extension PanelContent {
-    var topInset: CGFloat {
-        get {
-            0
-        }
     }
 }
 
@@ -31,7 +19,7 @@ protocol PanelContentDelegate {
         get
     }
     
-    var panelContentVC: PanelContentVC {
+    var panelContainerVC: PanelContainerVC {
         get
     }
     
@@ -42,25 +30,23 @@ protocol PanelContentDelegate {
     var map: MKMapView {
         get
     }
-    
-    func setSpinning(_ to: Bool)
 }
 
-protocol PanelContentVCDelegate {
-    func panelContentVC(_ panelContentVC: PanelContentVC,
+protocol PanelContainerVCDelegate {
+    func panelContentVC(_ panelContentVC: PanelContainerVC,
     didShow panelContent: PanelContent,
     animated: Bool)
     
-    func panelContentVC(_ panelContentVC: PanelContentVC,
+    func panelContentVC(_ panelContentVC: PanelContainerVC,
     willHide panelContent: PanelContent,
     animated: Bool)
     
-    func panelContentVCWillBack(_ panelContentVC: PanelContentVC)
+    func panelContentVCWillBack(_ panelContentVC: PanelContainerVC)
 }
 
-class PanelContentVC: UIViewController {
+class PanelContainerVC: UIViewController {
     static private var duration: Double = 0
-    var delegate: PanelContentVCDelegate!
+    var delegate: PanelContainerVCDelegate!
     
     var initialVC: UIViewController?
     var currentVC: UIViewController?
@@ -108,7 +94,7 @@ class PanelContentVC: UIViewController {
                 }
                 
                 self.addChild(vc)
-                vc.view.frame = self.view.bounds.inset(by: .init(top: vc.topInset ?? 0, left: 0, bottom: 0, right: 0))
+                vc.view.frame = self.view.bounds
                 vc.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 vc.view.transform = .init(translationX: 0, y: self.view.height)
                 self.view.addSubview(vc.view)
@@ -191,12 +177,12 @@ class PanelContentVC: UIViewController {
 }
 
 // MARK: Interaction
-extension PanelContentVC {
+extension PanelContainerVC {
     @objc private func backBtnTapped() {
         hideTop()
         delegate.panelContentVCWillBack(self)
     }
 }
 
-extension PanelContentVC: FloatingPanelControllerDelegate{
+extension PanelContainerVC: FloatingPanelControllerDelegate{
 }

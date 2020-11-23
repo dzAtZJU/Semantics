@@ -2,7 +2,7 @@ import UIKit
 
 class InterpretationBirdView: UIView {
     lazy var avatarWithNameView: AvatarWithNameView = {
-        let tmp = AvatarWithNameView()
+        let tmp = AvatarWithNameView(axis: .vertical, width: 60)
         tmp.translatesAutoresizingMaskIntoConstraints = false
         return tmp
     }()

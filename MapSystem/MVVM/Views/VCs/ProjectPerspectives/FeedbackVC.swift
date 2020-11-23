@@ -4,13 +4,7 @@ import FloatingPanel
 class FeedbackVC: UIPageViewController, PanelContent {
     var prevPanelState:  FloatingPanelState?
     
-    var panelContentVM: PanelContentVM! {
-        nil
-    }
-    
     let showBackBtn = true
-    
-    var topInset: CGFloat = 30
     
     var panelContentDelegate: PanelContentDelegate!
     

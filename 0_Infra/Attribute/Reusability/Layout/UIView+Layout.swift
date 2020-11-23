@@ -10,4 +10,12 @@ extension UIView {
             bottomAnchor.constraint(equalTo: superview!.layoutMarginsGuide.bottomAnchor)
         ])
     }
+    
+    func anchorTopLeading() {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            leadingAnchor.constraint(equalTo: superview!.layoutMarginsGuide.leadingAnchor),
+            topAnchor.constraint(equalTo: superview!.layoutMarginsGuide.topAnchor)
+        ])
+    }
 }

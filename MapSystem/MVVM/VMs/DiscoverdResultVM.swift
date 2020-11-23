@@ -37,8 +37,7 @@ struct PlaceConditionsVM {
     }
 }
 
-class DiscoverdResultVM: PanelContentVM {
-    var panelContentVMDelegate: PanelContentVMDelegate!
+class DiscoverdResultVM {
     var thePlaceId: String?
     
     var placeConditionsVM: PlaceConditionsVM?

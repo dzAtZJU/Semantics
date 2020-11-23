@@ -40,15 +40,13 @@ class ConditionVM {
     }
 }
 
-class DiscoverNextVM: PanelContentVM {
-    var thePlaceId: String? {
-        placeId
-    }
-    
-    var panelContentVMDelegate: PanelContentVMDelegate!
-    
+class DiscoverNextVM {
     let placeId: String
+    
     let conditionVMs: [ConditionVM]
+    
+    var parent: MapVM?
+    
     init(placeId placeId_: String, conditionIDs: [String]) {
         placeId = placeId_
         conditionVMs = conditionIDs.map {
@@ -72,10 +70,10 @@ class DiscoverNextVM: PanelContentVM {
         RealmSpace.shared.searchNext(query: query) { result in
             let places = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue)).queryPlaces(_ids: Array(result.places.map(\.placeId)))
             let annos = try! places.map { place throws -> SemAnnotation in
-                SemAnnotation(place: place, type: .inDiscovering)
+                SemAnnotation(place: place, type: .inDiscovering, color: .brown)
             }
             DispatchQueue.main.async {
-                self.panelContentVMDelegate.mapVM.appendAnnotations(annos)
+                self.parent?.appendAnnotations(annos)
             }
             completion(result)
         }

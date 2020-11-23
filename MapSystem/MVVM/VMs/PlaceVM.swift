@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import RealmSwift
 
-class PlaceVM: PanelContentVM {
+class PlaceVM {
     static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceVM) -> Void) {
         guard let placeID = placeID else {
             completion(PlaceVM(allowsCondition: allowsCondition))
@@ -17,8 +17,8 @@ class PlaceVM: PanelContentVM {
         }
     }
     
-    var panelContentVMDelegate: PanelContentVMDelegate!
-    
+    var parent: MapVM?
+        
     var thePlaceId: String?
     
     @Published private(set) var tags: [String]!
@@ -168,7 +168,7 @@ extension PlaceVM: TagsVCDelegate {
         }
         
         guard thePlaceId != nil else {
-            panelContentVMDelegate.mapVM.collectPlace {
+            parent?.collectPlace {
                 self.loadPlace(placeStory: $0)
                 action()
             }

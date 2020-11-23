@@ -15,6 +15,8 @@ protocol PlaceVCDelegate {
 class PlaceVC: UIViewController, PanelContent {
     var prevPanelState:  FloatingPanelState?
     
+    private lazy var profileView: AvatarWithNameView = AvatarWithNameView(axis: .horizontal, width: 50)
+    
     private lazy var stackView: UIStackView = {
         let tmp = UIStackView()
         tmp.translatesAutoresizingMaskIntoConstraints = false
@@ -65,7 +67,6 @@ class PlaceVC: UIViewController, PanelContent {
     }()
     
     private var selectedTag: String?
-    var panelContentVM: PanelContentVM!
     
     var vm: PlaceVM! {
         didSet {
@@ -98,6 +99,10 @@ class PlaceVC: UIViewController, PanelContent {
     override func loadView() {
         view = UIView()
         view.backgroundColor = .systemBackground
+        view.directionalLayoutMargins = NSDirectionalEdgeInsets(inset: Margin.defaultValue)
+        
+        view.addSubview(profileView)
+        profileView.anchorTopLeading()
         
         view.addSubview(stackView)
         stackView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 10).isActive = true
@@ -110,7 +115,14 @@ class PlaceVC: UIViewController, PanelContent {
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: tagsView.trailingAnchor, multiplier: 2).isActive = true
         
     }
-            
+        
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        profileView.nameLabel.text = "Mila"
+        profileView.avatarView.image = UIImage(named: "mila")
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         delegate?.placeWillDisappear(self)

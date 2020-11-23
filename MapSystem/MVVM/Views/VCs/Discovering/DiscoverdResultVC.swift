@@ -6,15 +6,9 @@ import FloatingPanel
 class DiscoverdResultVC: UIViewController, PanelContent {
     var prevPanelState:  FloatingPanelState?
     
-    var panelContentVM: PanelContentVM! {
-        nil
-    }
-    
     var panelContentDelegate: PanelContentDelegate!
        
     let showBackBtn = true
-       
-    let topInset = 0
     
     static let pageMargin: CGFloat = 50
     
@@ -140,10 +134,8 @@ extension DiscoverdResultVC {
     @objc private func dislikeBtnTapped(sender: UIButton) {
         let indexPath = (sender.superview!.superview! as! ConditionBackerCell).indexPath!
         
-        panelContentDelegate.setSpinning(true)
         vm.placeConditionsVM!.dislike(at: indexPath) {
             DispatchQueue.main.async {
-                self.panelContentDelegate.setSpinning(false)
                 SPAlert.present(title: "Disagreed", message: "These visitors will not be referred to regarding to \(self.vm.placeConditionsVM!.conditionTitle(at: indexPath))", preset: .dislike)
             }
         }

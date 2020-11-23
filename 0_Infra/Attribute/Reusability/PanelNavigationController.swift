@@ -8,8 +8,6 @@ class PanelNavigationController: UINavigationController, PanelContent {
         true
     }
     
-    var panelContentVM: PanelContentVM!
-    
     var prevPanelState: FloatingPanelState?
     
     override func viewDidAppear(_ animated: Bool) {

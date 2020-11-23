@@ -5,8 +5,6 @@ import FloatingPanel
 class SearchVC: UIViewController, PanelContent {
     var prevPanelState:  FloatingPanelState?
     
-    var panelContentVM: PanelContentVM! = nil
-    
     let showBackBtn = false
     var panelContentDelegate: PanelContentDelegate!
     

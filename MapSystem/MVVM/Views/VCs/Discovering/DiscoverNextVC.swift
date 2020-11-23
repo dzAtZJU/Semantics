@@ -1,11 +1,3 @@
-//
-//  DiscoverNextVC.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/9.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import Combine
 import FloatingPanel
@@ -13,15 +5,13 @@ import FloatingPanel
 class DiscoverNextVC: UIViewController, PanelContent {
     var prevPanelState:  FloatingPanelState?
     
-    var panelContentVM: PanelContentVM! {
-        vm
-    }
-    
     var panelContentDelegate: PanelContentDelegate!
     
-    let showBackBtn = false
+    let showBackBtn = true
     
     static let pageMargin: CGFloat = 50
+    
+    private lazy var spinner = Spinner.create()
     
     private lazy var searchButton: UIButton = {
         let tmp = UIButton(systemName: "magnifyingglass.circle")
@@ -45,6 +35,8 @@ class DiscoverNextVC: UIViewController, PanelContent {
         return tmp
     }()
     
+    private var collectionViewHeightConstraint: NSLayoutConstraint!
+    
     let vm: DiscoverNextVM
     init(vm vm_: DiscoverNextVM) {
         vm = vm_
@@ -60,21 +52,18 @@ class DiscoverNextVC: UIViewController, PanelContent {
         view.backgroundColor = .systemBackground
         
         view.addSubview(searchButton)
-        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: searchButton.trailingAnchor, multiplier: 2).isActive = true
         
         view.addSubview(collectionView)
-        collectionView.topAnchor.constraint(equalToSystemSpacingBelow: searchButton.bottomAnchor, multiplier: 1).isActive = true
+        collectionView.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 1).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.25) {
-            self.panelContentDelegate.panel.move(to: .half, animated: false)
-        }
-        super.viewDidAppear(animated)
+        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 0)
+        collectionViewHeightConstraint.isActive = true
+        searchButton.topAnchor.constraint(equalToSystemSpacingBelow: collectionView.bottomAnchor, multiplier: 2).isActive = true
+        
+        view.addSubview(spinner)
+        spinner.anchorCenterSuperview()
     }
     
     override func viewDidLayoutSubviews() {
@@ -82,6 +71,16 @@ class DiscoverNextVC: UIViewController, PanelContent {
         
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = .init(width: collectionView.bounds.inset(by: collectionView.adjustedContentInset).width, height: 50)
+        
+        collectionViewHeightConstraint.constant = layout.collectionViewContentSize.height
+        view.layoutIfNeeded()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0.25) {
+            self.panelContentDelegate.panel.move(to: .half, animated: false)
+        }
+        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -130,14 +129,13 @@ extension DiscoverNextVC: UICollectionViewDelegate, UICollectionViewDataSource {
 // MARK: Interation
 extension DiscoverNextVC {
     @objc private func searchBtnTapped() {
-        panelContentDelegate.setSpinning(true)
+        spinner.startAnimating()
         vm.runNextIteration { result in
             DispatchQueue.main.async {
                 let vm = DiscoverdResultVM(result: result)
-                vm.panelContentVMDelegate = self.vm.panelContentVMDelegate
                 let vc = DiscoverdResultVC(vm: vm)
                 vc.panelContentDelegate = self.panelContentDelegate
-                self.panelContentDelegate.setSpinning(false)
+                self.spinner.stopAnimating()
                 self.show(vc, sender: nil)
             }
         }

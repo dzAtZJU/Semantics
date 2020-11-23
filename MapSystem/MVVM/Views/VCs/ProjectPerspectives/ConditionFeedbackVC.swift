@@ -53,7 +53,7 @@ class ConditionFeedbackVC: UIViewController {
         view.backgroundColor = .systemBackground
         
         view.addSubview(conditionLabel)
-        conditionLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 1).isActive = true
+        conditionLabel.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2).isActive = true
         conditionLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2).isActive = true
         conditionLabel.text = conditionFeedbackVM.conditionTitle
         

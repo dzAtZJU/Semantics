@@ -35,14 +35,14 @@ class MapVC: UIViewController {
     internal lazy var panel: FloatingPanelController = {
         let tmp = FloatingPanelController(delegate: self)
         tmp.layout = SemFloatingPanelLayout()
-        tmp.set(contentViewController: panelContentVC)
+        tmp.set(contentViewController: panelContainerVC)
         tmp.contentMode = .fitToBounds
-        tmp.delegate = panelContentVC
+        tmp.delegate = panelContainerVC
         return tmp
     }()
     
-    lazy var panelContentVC: PanelContentVC = {
-        let tmp = PanelContentVC(initialVC: searchVC)
+    lazy var panelContainerVC: PanelContainerVC = {
+        let tmp = PanelContainerVC(initialVC: searchVC)
         tmp.view.backgroundColor = .systemBackground
         tmp.delegate = self
         return tmp
@@ -67,14 +67,6 @@ class MapVC: UIViewController {
         return tmp
     }
     
-    private lazy var spinner: UIActivityIndicatorView = {
-        let tmp = UIActivityIndicatorView()
-        tmp.style = .large
-        tmp.color = .systemPurple
-        tmp.hidesWhenStopped = true
-        return tmp
-    }()
-    
     private var centerToUserLocation = true
     
     private var annotationsToken: AnyCancellable?
@@ -97,7 +89,6 @@ class MapVC: UIViewController {
     override func loadView() {
         view = UIView()
         view.addSubview(map)
-        view.addSubview(spinner)
     }
     
     override func viewDidLoad() {
@@ -124,19 +115,19 @@ class MapVC: UIViewController {
                     self.map.selectAnnotation(newValue, animated: true)
                     self.panelContentFor(newValue) { panelContent in
                         DispatchQueue.main.async {
-                            self.panelContentVC.show(panelContent, sender: nil)
+                            self.panelContainerVC.show(panelContent, sender: nil)
                         }
                     }
                 } else {
                     self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
-                    self.panelContentVC.hideAll()
+                    self.panelContainerVC.hideAll()
                 }
             case .fromView:
-                self.panelContentVC.hideAll()
+                self.panelContainerVC.hideAll()
                 if let newValue = newEvent.0 {
                     self.panelContentFor(newValue) { panelContent in
                         DispatchQueue.main.async {
-                            self.panelContentVC.show(panelContent, sender: nil)
+                            self.panelContainerVC.show(panelContent, sender: nil)
                         }
                     }
                 }
@@ -153,15 +144,12 @@ class MapVC: UIViewController {
         map.addAnnotations(mapVM.annotion())
         map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
-        map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.pinAnnotationViewIdentifier)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         map.frame = view.bounds
-        spinner.center = view.center
-         
         if let tintColor = mapVM.tintColor, tintLayer == nil {
             tintLayer = CALayer()
             tintLayer!.backgroundColor = tintColor.withAlphaComponent(0.005).cgColor
@@ -199,7 +187,7 @@ extension MapVC: PlaceVCDelegate {
                 let vc = PhasesVC(seasonsVM: SeasonsVM(placeID: self.mapVM.selectedPlaceId!))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self
-                self.panelContentVC.show(vc, sender: nil)
+                self.panelContainerVC.show(vc, sender: nil)
             }
         case Concept.Scent.title, Concept.Trust.title:
             DispatchQueue.main.async {
@@ -207,14 +195,14 @@ extension MapVC: PlaceVCDelegate {
                 let vc = PanelNavigationController(rootViewController: ConceptVC(vm: vm))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self
-                self.panelContentVC.show(vc, sender: nil)
+                self.panelContainerVC.show(vc, sender: nil)
             }
         default:
             _ = FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
                 let vc = FeedbackVC(feedbackVM: vm)
                 vc.panelContentDelegate = self
                 DispatchQueue.main.async {
-                    self.panelContentVC.show(vc, sender: nil)
+                    self.panelContainerVC.show(vc, sender: nil)
                 }
             }
         }
@@ -231,7 +219,7 @@ extension MapVC: PlaceVCDelegate {
             }
         default:
             DispatchQueue.main.async {
-                self.panelContentVC.show(self.discoverNextVC, sender: nil)
+                self.panelContainerVC.show(self.discoverNextVC, sender: nil)
             }
         }
     }
@@ -251,7 +239,6 @@ extension MapVC: MKMapViewDelegate {
     
     static let annotationViewIdentifier = "annotationView"
     static let markAnnotationViewIdentifier = "markAnnotationView"
-    static let pinAnnotationViewIdentifier = "markAnnotationView"
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else {
             return nil
@@ -262,10 +249,8 @@ extension MapVC: MKMapViewDelegate {
         case .visited:
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation)
             view.canShowCallout = true
-            let size = CGSize(width: 14, height: 14)
-            view.image = UIGraphicsImageRenderer(size: size).image { context in
-                UIImage(systemName:"circle.fill")!.withTintColor(.brown).draw(in:CGRect(origin:.zero, size: size))
-            }
+            
+            view.image = AnnotationView.createPointImage(color: annotation.color)
             return view
         case .inSearching, .inDiscovering:
             let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
@@ -298,7 +283,7 @@ extension MapVC: MKMapViewDelegate {
     
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
         PlaceVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
-            vm.panelContentVMDelegate = self.mapVM
+            vm.parent = self.mapVM
             DispatchQueue.main.async {
                 self.placeVC.vm = vm
                 completion(self.placeVC)
@@ -314,16 +299,7 @@ extension MapVC: FloatingPanelControllerDelegate {
 
 // MARK: PanelContentDelegate
 extension MapVC: PanelContentDelegate {
-    func setSpinning(_ to: Bool) {
-        if to {
-            view.bringSubviewToFront(spinner)
-            spinner.startAnimating()
-            view.isUserInteractionEnabled = false
-        } else {
-            spinner.stopAnimating()
-            view.isUserInteractionEnabled = true
-        }
-    }
+    
 }
 
 
@@ -343,30 +319,17 @@ extension MapVC: MapVMAnnotationsModel {
     }
 }
 
-extension MapVC: PanelContentVCDelegate {
-    func panelContentVCWillBack(_ panelContentVC: PanelContentVC) {
+extension MapVC: PanelContainerVCDelegate {
+    func panelContentVCWillBack(_ panelContentVC: PanelContainerVC) {
         
     }
     
-    func panelContentVC(_ panelContentVC: PanelContentVC, didShow panelContent: PanelContent, animated: Bool) {
-        guard let placeId = panelContent.panelContentVM?.thePlaceId else {
-            return
-        }
-
-        let selectedAnnotation = mapVM.annotion {
-            $0.placeId == placeId
-        }.first!
-        mapVM.setSelectedAnnotationEvent((selectedAnnotation, .onlyMap))
+    func panelContentVC(_ panelContentVC: PanelContainerVC, didShow panelContent: PanelContent, animated: Bool) {
+        
     }
     
-    func panelContentVC(_ panelContentVC: PanelContentVC, willHide panelContent: PanelContent, animated: Bool) {
-//        guard let _ = panelContent.panelContentVM?.thePlaceId else {
-//            return
-//        }
-//
-//        mapVM.setSelectedAnnotationEvent((nil, .fromModel))
+    func panelContentVC(_ panelContentVC: PanelContainerVC, willHide panelContent: PanelContent, animated: Bool) {
+        
     }
 }
-
-
 
