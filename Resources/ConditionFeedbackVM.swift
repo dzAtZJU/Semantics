@@ -11,8 +11,8 @@ import RealmSwift
 
 class ConditionFeedbackVM {
     let conditionTitle: String
-    let privateDataLayer: SemWorldDataLayer
-    let publicDataLayer: SemWorldDataLayer
+    let privateDataLayer: Realm
+    let publicDataLayer: Realm
     
     let targetPlace: Place
     let rankByCondition: ConditionRank
@@ -20,8 +20,8 @@ class ConditionFeedbackVM {
         targetPlace = targetPlace_
         rankByCondition = rankByCondition_
         
-        publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
-        privateDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm( RealmSpace.queryCurrentUserID()!))
+        publicDataLayer = RealmSpace.main.publicRealm
+        privateDataLayer = RealmSpace.main.privatRealm
         conditionTitle = rankByCondition.conditionID
     }
     
@@ -73,7 +73,7 @@ class ConditionFeedbackVM {
         if atIndex < toIndex {
             toIndex -= 1
         }
-        try! privateDataLayer.realm.write {
+        try! privateDataLayer.write {
             self.rankByCondition.placeScore_List.remove(at: atIndex)
             self.rankByCondition.placeScore_List.insert(newPlaceScore, at: toIndex)
             if isOnlyOne {

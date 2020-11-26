@@ -1,10 +1,3 @@
-//
-//  DiscoverdResultVM.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/29.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
 import RealmSwift
 
 struct PlaceConditionsVM {
@@ -30,8 +23,8 @@ struct PlaceConditionsVM {
         let info = conditions[at.row]
         let conditionId = info.id
         let inds = info.backers.map(by: \.id)
-        RealmSpace.shared.async {
-            SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).dislike(inds: inds, forCondition: conditionId)
+        RealmSpace.userInitiated.async {
+            RealmSpace.userInitiated.privatRealm.dislike(inds: inds, forCondition: conditionId)
             completion()
         }
     }

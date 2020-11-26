@@ -72,7 +72,7 @@ class ConceptVM: AConceptVM {
         self.placeID = placeID
         self.concept = concept
                 
-        let privateLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!))
+        let privateLayer = RealmSpace.main.privatRealm
         interpretationInRealm = try! privateLayer.queryPlaceStory(placeID: placeID)!.perspectiveInterpretation_List.first { (item) throws-> Bool in
             item.perspectiveID == concept.title
         }!
@@ -111,7 +111,7 @@ class ConceptVM: AConceptVM {
             fatalError()
             }
         }()
-        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(concept.title, fileData: data, toPlace: placeID)
+        RealmSpace.main.privatRealm.replacePerspectiveFileData(concept.title, fileData: data, toPlace: placeID)
     }
 }
 

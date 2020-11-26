@@ -21,7 +21,7 @@ class Place: Object {
     
     convenience init(title: String, latitude: Double, longitude: Double) {
         self.init()
-        self.partitionKey = RealmSpace.partitionValue
+        self.partitionKey = RealmSpace.publicPartitionValue
         self._id = title
         self.title = title
         self.latitude = latitude
@@ -40,7 +40,7 @@ class Condition: Object {
     convenience init(id id_: String) {
         self.init()
         _id = id_
-        partitionKey = RealmSpace.partitionValue
+        partitionKey = RealmSpace.publicPartitionValue
     }
     
     override static func primaryKey() -> String? {
@@ -50,7 +50,7 @@ class Condition: Object {
 
 class Individual: Object {
     @objc dynamic var _id: String = ""
-    @objc dynamic var partitionKey: String = RealmSpace.queryCurrentUserID()!
+    @objc dynamic var partitionKey: String = RealmSpace.userID
     
     @objc dynamic var title = ""
     
@@ -59,6 +59,8 @@ class Individual: Object {
     let conditionRank_List = List<ConditionRank>()
     
     let blockedIndividuals = List<ConditionIndividuals>()
+    
+    let partner_List = List<String>()
     
     convenience init(id id_: String, title title_: String) {
         self.init()

@@ -14,14 +14,14 @@ class FeedbackVM {
     
     private var conditionRank_List: [ConditionRank]
     
-    private var dataLayer: SemWorldDataLayer!
+    private var dataLayer: Realm!
     
     init(placeId placeId_: String, completion: @escaping (FeedbackVM) -> Void) {
-        self.dataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!))
-        let publicDataLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.partitionValue))
+        self.dataLayer = RealmSpace.main.privatRealm
+        let publicDataLayer = RealmSpace.main.publicRealm
         
         self.targetPlace = publicDataLayer.queryPlace(_id: placeId_)
-        self.conditionRank_List = SemWorldDataLayer2(layer1: self.dataLayer).queryConditionRank_List(havingPlace: placeId_)
+        self.conditionRank_List = self.dataLayer.queryConditionRank_List(havingPlace: placeId_)
         
         let items = self.conditionRank_List.filter {
             !$0.placeScore_List.contains {
@@ -34,7 +34,7 @@ class FeedbackVM {
             return
         }
         
-        try! self.dataLayer.realm.write {
+        try! self.dataLayer.write {
             items.forEach {
                 $0.placeScore_List.insert(PlaceScore(placeID: self.targetPlace._id, score: 0), at: 0)
             }

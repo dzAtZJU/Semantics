@@ -34,6 +34,7 @@
 		892C6412248A0C2100208446 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6411248A0C2100208446 /* UIViewController+.swift */; };
 		892C6414248CCFE200208446 /* WordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6413248CCFE200208446 /* WordVC.swift */; };
 		892C6416248E1C1800208446 /* SubwordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6415248E1C1800208446 /* SubwordVC.swift */; };
+		893A704D256E393E00A24F26 /* PartnersMapVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A704C256E393E00A24F26 /* PartnersMapVM.swift */; };
 		894517BB24E91C2B006EF619 /* MapSysEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */; };
 		894517BD24E92A0D006EF619 /* MapSysCommunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BC24E92A0D006EF619 /* MapSysCommunication.swift */; };
 		8947A0FC256902C100B90BDA /* Trust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A0FB256902C100B90BDA /* Trust.swift */; };
@@ -217,6 +218,7 @@
 		892C6411248A0C2100208446 /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		892C6413248CCFE200208446 /* WordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordVC.swift; sourceTree = "<group>"; };
 		892C6415248E1C1800208446 /* SubwordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwordVC.swift; sourceTree = "<group>"; };
+		893A704C256E393E00A24F26 /* PartnersMapVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnersMapVM.swift; sourceTree = "<group>"; };
 		894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysEnvironment.swift; sourceTree = "<group>"; };
 		894517BC24E92A0D006EF619 /* MapSysCommunication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysCommunication.swift; sourceTree = "<group>"; };
 		8947A0FB256902C100B90BDA /* Trust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trust.swift; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 				89290D6624E52F1C00F0A862 /* MapVM.swift */,
 				899AE18524DC255D00C0EB17 /* MapVC.swift */,
 				8947A140256B508800B90BDA /* AnnotationView.swift */,
+				893A704C256E393E00A24F26 /* PartnersMapVM.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -1191,6 +1194,7 @@
 				8968C08524DF09A70093CBFC /* DiscoverNextVC.swift in Sources */,
 				89E8AF20255001BC0030E8B5 /* Cell.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
+				893A704D256E393E00A24F26 /* PartnersMapVM.swift in Sources */,
 				8947A119256A837500B90BDA /* IndividualOpinionView.swift in Sources */,
 				89E8AF16254FFF550030E8B5 /* ConceptVC.swift in Sources */,
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,

@@ -98,7 +98,8 @@ class PanelContainerVC: UIViewController {
                 }
                 
                 self.addChild(vc)
-                vc.view.frame = self.view.bounds
+                print("SafeArea: \(self.view.safeAreaInsets)")
+                vc.view.frame = self.view.bounds.inset(by: self.view.safeAreaInsets)
                 vc.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 vc.view.transform = .init(translationX: 0, y: self.view.height)
                 self.view.addSubview(vc.view)

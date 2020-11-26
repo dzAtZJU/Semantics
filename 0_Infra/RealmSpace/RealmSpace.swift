@@ -1,119 +1,88 @@
-//
-//  RealmSpace.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/12.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import RealmSwift
 import Combine
 
+// Current Approach: After app launch, (AsyncOpen)+(SyncOpen)*
+
 extension Notification.Name {
+    static let realmsPreloaded = Notification.Name("realmsPreloaded")
     static let clientReset = Notification.Name("clientReset")
 }
 
 class RealmSpace {
-    static let clientResetQueue = DispatchQueue(label: "Dedicate-For-ClientReset")
-    static func prepare() {
+    static func load() {
         app.syncManager.logLevel = .debug
         app.syncManager.errorHandler = realmSyncErrorHandler
         preloadRealms()
     }
     
-    static var signedInSubscriber: AnyCancellable? = NotificationCenter.default.publisher(for: .signedIn).sink { _ in
-        RealmSpace.signedInCurrentValueSubject!.value = 1
-        RealmSpace.signedInSubscriber = nil
-    }
-    static var signedInCurrentValueSubject: CurrentValueSubject? = CurrentValueSubject<Int, Never>(0)
+    static let userInitiated = RealmSpace(queue: DispatchQueue(label: "serial-for-realm", qos: .userInitiated))
     
-    static var can: AnyCancellable?
-    static func preloadRealms() {
-        _ = signedInSubscriber
+    static let main = RealmSpace(queue: DispatchQueue.main)
+    
+    static let publicPartitionValue = "Public18"
+    
+    private static let app = App(id: Environment.current.realmApp)
+    
+    private static func preloadRealms() {
+
         let loadAll = { (userId: String) -> Void in
-            RealmSpace.shared.realm(RealmSpace.partitionValue) { _ in}
-            RealmSpace.shared.realm(userId) { _ in}
-            NotificationCenter.default.post(name: .signedIn, object: nil)
+            let group = DispatchGroup()
+            group.enter()
+            RealmSpace.userInitiated.realm(publicPartitionValue) { _ in
+                group.leave()
+            }
+            group.enter()
+            RealmSpace.userInitiated.realm(userId) { _ in
+                group.leave()
+            }
+            group.notify(queue: .main) {
+                NotificationCenter.default.post(name: .realmsPreloaded, object: nil)
+            }
         }
-        if let userId = RealmSpace.queryCurrentUserID() {
+        if let userId = RealmSpace.userID {
             loadAll(userId)
         } else {
             RealmSpace.login(cred: Credentials.anonymous) { userId in
                 loadAll(userId)
-                NotificationCenter.default.post(name: .signedIn, object: nil)
             }
         }
     }
     
-    static func handleClientReset() {
-        RealmSpace.app.syncManager
-        //        Self.clientResetQueue.async {
-        //            let group = DispatchGroup()
-        //            if let dic = SemUserDefaults.getRealmPathDic() {
-        //                for (partitionValue, path) in dic {
-        //                    group.wait()
-        //                    group.enter()
-        //                    RealmSpace.shared.realm(partitionValue: partitionValue) { realm in
-        //                        if !FileManager.default.fileExists(atPath: path) {
-        //                            fatalError()
-        //                        }
-        //                        let config = Realm.Configuration(fileURL: URL(fileURLWithPath: path), readOnly: true)
-        //                        let oldRealm = try! Realm(configuration: config)
-        //                        let objs = oldRealm.objects(Object.self)
-        // for write performance: max 1MB per transcation
-        //                        try! realm.write {
-        //                            for obj in objs {
-        //                                realm.create(Object.self, value: obj, update: .modified)
-        //                            }
-        //                        }
-        //                        SemUserDefaults.clearRealmPath(partitionValue: partitionValue)
-        //                        try! FileManager.default.removeItem(atPath: path)
-        //                        group.leave()
-        //                    }
-        //                }
-        //            }
-        //            group.wait()
-        //            NotificationCenter.default.post(name: .clientReset, object: nil)
-        //        }
-    }
-    
-    static func invalidate(partitioinValue: String) {
-        if let realm = main.realms[partitionValue] {
-            realm.invalidate()
-            main.realms[partitionValue] = nil
-        }
-        if let realm = shared.realms[partitionValue] {
-            realm.invalidate()
-            shared.realms[partitionValue] = nil
-        }
-    }
-    
-    static let app = App(id: Environment.current.realmApp)
-    
-    static let shared = RealmSpace(queue: DispatchQueue(label: "Dedicated-For-Realm", qos: .userInitiated))
-    
-    static let main = RealmSpace(queue: DispatchQueue.main)
-    
-    private lazy var realms = [String: Realm]()
-    
-    private lazy var partition2Completions = [String: [(Realm)->Void]]()
-    
     let queue: DispatchQueue
-    init(queue queue_: DispatchQueue) {
-        queue = queue_
+    
+    init(queue: DispatchQueue) {
+        self.queue = queue
+    }
+    
+    var publicRealm: Realm {
+        realm(Self.publicPartitionValue)
+    }
+    
+    var privatRealm: Realm {
+        realm(Self.userID)
+    }
+    
+    func publicRealm(completion: @escaping (Realm) -> Void) {
+        realm(Self.publicPartitionValue, completion: completion)
+    }
+    
+    func privatRealm(completion: @escaping (Realm) -> Void) {
+        realm(Self.userID, completion: completion)
+    }
+    
+    func async(_ block: @escaping () -> Void) {
+        queue.async(execute: block)
     }
     
     func realm(_ partitionValue: String) -> Realm {
-        var config = Self.queryCurrentUser()!.configuration(partitionValue: partitionValue)
-        config.shouldCompactOnLaunch = determineCompact
+        var config = Self.user.configuration(partitionValue: partitionValue)
+        config.shouldCompactOnLaunch = Self.determineCompact
         return try! Realm(configuration: config, queue: queue)
     }
     
     func realm(_ partitionValue: String, completion: @escaping (Realm) -> Void) {
-        let user = Self.queryCurrentUser()!
-        
-        var config = user.configuration(partitionValue: partitionValue)
-        config.shouldCompactOnLaunch = determineCompact
+        var config = Self.user.configuration(partitionValue: partitionValue)
+        config.shouldCompactOnLaunch = Self.determineCompact
         Realm.asyncOpen(configuration: config, callbackQueue: queue) { (realm, error) in
             guard let realm = realm, error == nil else {
                 fatalError("[Open Realm] \(error!)")
@@ -122,36 +91,21 @@ class RealmSpace {
         }
     }
     
-    private func determineCompact(fileSize: Int, dataSize: Int) -> Bool {
+    private static func determineCompact(fileSize: Int, dataSize: Int) -> Bool {
         // Compact if the file is over 100MB in size and less than 50% 'used'
         let oneHundredMB = 100 * 1024 * 1024
         return (fileSize > oneHundredMB) && (Double(dataSize) / Double(fileSize)) < 0.5
     }
-    
-    static let partitionValue = "Public18"
 }
-// MARK: Threading
-extension RealmSpace {
-    func async(_ block: @escaping () -> Void) {
-        queue.async(execute: block)
-    }
-}
-
 
 // MARK: Account
 extension RealmSpace {
-    static var currentUser: User?
-    
-    static func queryCurrentUser() -> User? {
-        if currentUser == nil {
-            currentUser = app.currentUser
-        }
-        
-        return currentUser
+    static var user: User! {
+        app.currentUser
     }
     
-    static func queryCurrentUserID() -> String? {
-        queryCurrentUser()?.id
+    static var userID: String! {
+        user?.id
     }
     
     static func login(cred: Credentials, completion: @escaping (String) -> Void) {
@@ -160,8 +114,8 @@ extension RealmSpace {
             guard error == nil, let userId = user?.id else {
                 fatalError("\(error)")
             }
-            RealmSpace.shared.realm(userId) { privateRealm in
-                _ = SemWorldDataLayer(realm: privateRealm).queryOrCreateCurrentIndividual(userName: KeychainItem.currentUserName ?? String.random(ofLength: 6))
+            RealmSpace.userInitiated.realm(userId) { privateRealm in
+                _ = privateRealm.queryOrCreateCurrentIndividual(userName: KeychainItem.currentUserName ?? String.random(ofLength: 6))
                 completion(userId)
             }
         }
@@ -169,7 +123,6 @@ extension RealmSpace {
 }
 
 // MARK: Functions
-
 extension RealmSpace {
     struct SearchNextQuery {
         let placeId: String
@@ -250,7 +203,7 @@ extension RealmSpace {
     }
     
     func searchNext(query: SearchNextQuery, completion: @escaping (SearchNextResult) -> Void) {
-        let f: Functions.Function = Self.queryCurrentUser()!.functions[dynamicMember: "searchNext"]
+        let f: Functions.Function = Self.user.functions[dynamicMember: "searchNext"]
         let bt1 = Date().timeIntervalSince1970
         f([query.bson()]) { r, error in
             print("[Measure] f:searchNext \(Date().timeIntervalSince1970 - bt1)")
@@ -265,10 +218,43 @@ extension RealmSpace {
             }
         }
         
-        let dumb: Functions.Function = Self.queryCurrentUser()!.functions[dynamicMember: "dumb1"]
+        let dumb: Functions.Function = Self.user.functions[dynamicMember: "dumb1"]
         let btDumb = Date().timeIntervalSince1970
         dumb([]) { (_, _) in
             print("[Measure] f:dumb \(Date().timeIntervalSince1970 - btDumb)")
         }
     }
 }
+
+//static let clientResetQueue = DispatchQueue(label: "Dedicate-For-ClientReset")
+//static func handleClientReset() {
+//    RealmSpace.app.syncManager
+//            Self.clientResetQueue.async {
+//                let group = DispatchGroup()
+//                if let dic = SemUserDefaults.getRealmPathDic() {
+//                    for (partitionValue, path) in dic {
+//                        group.wait()
+//                        group.enter()
+//                        RealmSpace.shared.realm(partitionValue: partitionValue) { realm in
+//                            if !FileManager.default.fileExists(atPath: path) {
+//                                fatalError()
+//                            }
+//                            let config = Realm.Configuration(fileURL: URL(fileURLWithPath: path), readOnly: true)
+//                            let oldRealm = try! Realm(configuration: config)
+//                            let objs = oldRealm.objects(Object.self)
+//     for write performance: max 1MB per transcation
+//                            try! realm.write {
+//                                for obj in objs {
+//                                    realm.create(Object.self, value: obj, update: .modified)
+//                                }
+//                            }
+//                            SemUserDefaults.clearRealmPath(partitionValue: partitionValue)
+//                            try! FileManager.default.removeItem(atPath: path)
+//                            group.leave()
+//                        }
+//                    }
+//                }
+//                group.wait()
+//                NotificationCenter.default.post(name: .clientReset, object: nil)
+//            }
+//}

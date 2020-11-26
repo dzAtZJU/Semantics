@@ -71,7 +71,7 @@ class SeasonsVM {
     
     init(placeID placeID_: String) {
         placeID = placeID_
-        let privateLayer = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!))
+        let privateLayer = RealmSpace.main.privatRealm
         perspectiveInterpretation = try! privateLayer.queryPlaceStory(placeID: placeID)!.perspectiveInterpretation_List.first { (item) throws-> Bool in
             item.perspectiveID == Concept.Seasons.title
         }!
@@ -90,14 +90,14 @@ class SeasonsVM {
     func addADay(url: URL) {
         var newSeasonInterpretation = seasonInterpretation!
         newSeasonInterpretation.season2Days[season]!.append(url)
-        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(Concept.Seasons.title, fileData: try! JSONEncoder().encode(newSeasonInterpretation), toPlace: placeID)
+        RealmSpace.main.privatRealm.replacePerspectiveFileData(Concept.Seasons.title, fileData: try! JSONEncoder().encode(newSeasonInterpretation), toPlace: placeID)
     }
     
     func deleteADay() {
         var newSeasonInterpretation = seasonInterpretation!
         newSeasonInterpretation.season2Days[season]!.remove(at: dayIndexPath.day)
         updateDayIndexPathForDelete()
-        SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).replacePerspectiveFileData(Concept.Seasons.title, fileData: try! JSONEncoder().encode(newSeasonInterpretation), toPlace: placeID)
+        RealmSpace.main.privatRealm.replacePerspectiveFileData(Concept.Seasons.title, fileData: try! JSONEncoder().encode(newSeasonInterpretation), toPlace: placeID)
     }
     
     func updateDayIndexPathToNext() {

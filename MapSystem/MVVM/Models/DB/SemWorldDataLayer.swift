@@ -1,27 +1,14 @@
-//
-//  SemWorldDataLayer.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/8/10.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import Foundation
 import RealmSwift
 
-struct SemWorldDataLayer {
-    let realm: Realm
-}
-
 // MARK: Individual
-extension SemWorldDataLayer {
+extension Realm {
     func queryOrCreateCurrentIndividual(userName: String) -> Individual {
-        let userID = RealmSpace.queryCurrentUserID()!
-        var individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
+        var individual = object(ofType: Individual.self, forPrimaryKey: RealmSpace.userID)
         if individual == nil {
-            individual = Individual(id: userID, title: userName)
-            try! realm.write {
-                realm.add(individual!)
+            individual = Individual(id: RealmSpace.userID, title: userName)
+            try! write {
+                add(individual!)
             }
         }
         
@@ -29,14 +16,18 @@ extension SemWorldDataLayer {
     }
     
     func queryCurrentIndividual() -> Individual? {
-        let userID = RealmSpace.queryCurrentUserID()!
-        let individual = realm.object(ofType: Individual.self, forPrimaryKey: userID)
+        let userID = RealmSpace.userID
+        let individual = object(ofType: Individual.self, forPrimaryKey: userID)
         return individual
     }
     
+    func queryIndividual(_ userID: String) -> Individual? {
+        let individual = object(ofType: Individual.self, forPrimaryKey: userID)
+        return individual
+    }
     
     func queryAllIndividuals() -> Results<Individual> {
-        realm.objects(Individual.self)
+        objects(Individual.self)
     }
     
     func dislike(inds: [String], forCondition condition: String) {
@@ -46,7 +37,7 @@ extension SemWorldDataLayer {
         }
         if tmp == nil {
             tmp = ConditionIndividuals(conditionId: condition)
-            try! realm.write {
+            try! write {
                 ind.blockedIndividuals.append(tmp)
             }
             
@@ -55,7 +46,7 @@ extension SemWorldDataLayer {
             !tmp.individuals.contains($0)
         }
 
-        try! realm.write {
+        try! write {
             tmp.individuals.append(objectsIn: newOnes)
         }
         
@@ -64,9 +55,9 @@ extension SemWorldDataLayer {
 }
 
 // MARK: Places
-extension SemWorldDataLayer {
-    func loadVisitedPlacesRequire(publicConcept: Bool, privateConcept: Bool) -> [String] {
-        try! queryCurrentIndividual()!.placeStory_List.filter { (story: PlaceStory) throws in
+extension Realm {
+    func loadVisitedPlacesRequire(publicConcept: Bool, privateConcept: Bool, userID: String = RealmSpace.userID) -> [String] {
+        try! queryIndividual(userID)!.placeStory_List.filter { (story: PlaceStory) throws in
             if publicConcept {
                 return !story.conditionID_List.isEmpty || story.perspectiveInterpretation_List.contains {
                     !Concept.map[$0.perspectiveID]!.isPrivate
@@ -84,11 +75,11 @@ extension SemWorldDataLayer {
     }
     
     func queryPlace(_id: String) -> Place {
-        realm.object(ofType: Place.self, forPrimaryKey: _id)!
+        object(ofType: Place.self, forPrimaryKey: _id)!
     }
     
     func queryPlaces(_ids: [String]) -> Results<Place> {
-        realm.objects(Place.self).filter("_id in %@", _ids)
+        objects(Place.self).filter("_id in %@", _ids)
     }
     
     //TODO
@@ -97,8 +88,8 @@ extension SemWorldDataLayer {
 //            return place
         //        } else {
         let newPlace = Place(title: uniquePlace.title, latitude: uniquePlace.latitude, longitude: uniquePlace.longitude)
-        try! realm.write {
-            self.realm.add(newPlace, update: .modified)
+        try! write {
+            add(newPlace, update: .modified)
         }
         return newPlace
 //        }
@@ -111,7 +102,7 @@ extension SemWorldDataLayer {
         }
         
         let placeStory = PlaceStory(placeID: placeID)
-        try! realm.write {
+        try! write {
             ind.placeStory_List.append(placeStory)
         }
         return placeStory
@@ -119,7 +110,7 @@ extension SemWorldDataLayer {
 }
 
 // MARK: PlaceStory
-extension SemWorldDataLayer {
+extension Realm {
     func queryPlaceStory(placeID: String) -> PlaceStory? {
         queryCurrentIndividual()!.placeStory_List.first {
             $0.placeID == placeID
@@ -188,7 +179,7 @@ extension SemWorldDataLayer {
         let perspectiveInterpretation = try! placeStory.perspectiveInterpretation_List.first { (item) throws -> Bool in
             item.perspectiveID == perspectiveID
         }!
-        try! realm.write {
+        try! write {
             perspectiveInterpretation.fileData = fileData
         }
     }
@@ -221,7 +212,7 @@ extension SemWorldDataLayer {
 }
 
 // MARK: ConditionRank
-extension SemWorldDataLayer {
+extension Realm {
     func createConditionRank_IfNone(conditionID: String) {
         guard queryConditionRank(conditionID: conditionID) == nil else {
             return
@@ -284,10 +275,10 @@ extension SemWorldDataLayer {
 }
 
 // Condition
-extension SemWorldDataLayer {
+extension Realm {
     func createCondition_IfNone(id id_: String) {
-        try! realm.write {
-            realm.add(Condition(id: id_), update: .modified)
+        try! write {
+            add(Condition(id: id_), update: .modified)
         }
     }
 }

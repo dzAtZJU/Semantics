@@ -5,14 +5,15 @@ target 'Semantics' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  # Dosc: https://docs.mongodb.com/realm/
+  # Practices: https://docs.realm.io/sync/additional-resources/how-to-build-an-app-with-realm-sync
   # Error: https://docs.realm.io/sync/using-synced-realms/errors
-  # https://docs.mongodb.com/realm/mongodb
-  # https://docs.mongodb.com/realm/tutorial/ios-swift/
-  # https://docs.mongodb.com/realm/
-  # https://docs.realm.io/sync/
-  
   # Reference: https://docs.mongodb.com/realm-sdks/objc/latest
   # Changelog: https://github.com/realm/realm-cocoa/blob/v10.0.0-beta.4/CHANGELOG.md
+  
+  # https://docs.mongodb.com/realm/mongodb
+  # https://docs.mongodb.com/realm/tutorial/ios-swift/
+  
   pod 'RealmSwift', '>= 10.0.0-rc.1'
 
   pod 'Presentr'

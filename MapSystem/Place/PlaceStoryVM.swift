@@ -9,8 +9,8 @@ class PlaceStoryVM: APlaceStoryVM {
             return
         }
         
-        RealmSpace.shared.async {
-            let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).queryPlaceStory(placeID: placeID)!
+        RealmSpace.userInitiated.async {
+            let placeStory = RealmSpace.userInitiated.privatRealm.queryPlaceStory(placeID: placeID)!
             
             let vm = PlaceStoryVM(allowsCondition: allowsCondition, placeStory: placeStory)
             completion(vm)
@@ -33,7 +33,7 @@ class PlaceStoryVM: APlaceStoryVM {
         var tmp: [TagChoiceSection] = []
         if allowsCondition {
             var section = TagChoiceSection(allowsEditing: true, items: [])
-            let allConditions: [String] = SemWorldDataLayer(realm: RealmSpace.main.realm(RealmSpace.queryCurrentUserID()!)).queryPrivateConditions()
+            let allConditions: [String] = RealmSpace.main.privatRealm.queryPrivateConditions()
             let placeConditions = conditions ?? []
             let conditionChoices = allConditions.map {
                 TagChoice(tag: $0, isChosen: placeConditions.contains($0))
@@ -134,9 +134,9 @@ class PlaceStoryVM: APlaceStoryVM {
 extension PlaceStoryVM: TagsVCDelegate {
     func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_Sections: [TagChoiceSection]) {
         let action: () -> () = {
-            RealmSpace.shared.async {
-                let publicLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue))
-                let privateLayer = SemWorldDataLayer2(layer1: SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)))
+            RealmSpace.userInitiated.async {
+                let publicLayer = RealmSpace.userInitiated.publicRealm
+                let privateLayer = RealmSpace.userInitiated.privatRealm
                 tagChoice_Sections.forEach {
                     if $0.allowsEditing {
                         $0.items.forEach {

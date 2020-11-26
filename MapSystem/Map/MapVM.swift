@@ -59,14 +59,6 @@ class MapVM {
     init(circleOfTrust: CircleOfTrust) {
         self.circleOfTrust = circleOfTrust
         
-        signedInSubscriber = RealmSpace.signedInCurrentValueSubject!.sink { value in
-            guard value == 1 else {
-                return
-            }
-            self.loadVisitedPlaces()
-//            RealmSpace.signedInCurrentValueSubject = nil
-            self.signedInSubscriber = nil
-        }
         NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(searchFinished), name: .searchFinished ,object: nil)
     }
@@ -125,8 +117,8 @@ class MapVM {
     
     var discoverNextVM: DiscoverNextVM {
         var tmp: DiscoverNextVM!
-        RealmSpace.shared.queue.sync {
-            let dataLayer = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!))
+        RealmSpace.userInitiated.queue.sync {
+            let dataLayer = RealmSpace.userInitiated.privatRealm
             tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeId!, conditionIDs: dataLayer.queryConditionIDs(forPlace: selectedAnnotation!.placeId!))
         }
         tmp.parent = self
@@ -136,13 +128,12 @@ class MapVM {
 
 // MARK: Places
 extension MapVM {
-    func loadVisitedPlaces() {
+    func loadPlaces() {
         let trust = circleOfTrust
-        RealmSpace.shared.async {
-            RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!) { privateRealm in
-                RealmSpace.shared.realm(RealmSpace
-                                            .partitionValue) { publicRealm in
-                    let annos = try! SemWorldDataLayer(realm: publicRealm).queryPlaces(_ids: SemWorldDataLayer(realm: privateRealm).loadVisitedPlacesRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
+        RealmSpace.userInitiated.async {
+            RealmSpace.userInitiated.privatRealm { privateRealm in
+                RealmSpace.userInitiated.publicRealm { publicRealm in
+                    let annos = try! publicRealm.queryPlaces(_ids: privateRealm.loadVisitedPlacesRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
                         SemAnnotation(place: place, type: .visited, color: UIColor.random)
                         //Int.random(in: 0..<3) % 3 == 0 ? .brown: .cyan
                     }
@@ -157,10 +148,10 @@ extension MapVM {
     
     func collectPlace(completion: @escaping (PlaceStory) -> ()) {
         let uniquePlace = UniquePlace(annotation: self.selectedAnnotation!)
-        RealmSpace.shared.async {
-            let place = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.partitionValue)).queryOrCreatePlace(uniquePlace).freeze()
+        RealmSpace.userInitiated.async {
+            let place = RealmSpace.userInitiated.publicRealm.queryOrCreatePlace(uniquePlace).freeze()
             
-            let placeStory = SemWorldDataLayer(realm: RealmSpace.shared.realm(RealmSpace.queryCurrentUserID()!)).collectPlace(placeID: place._id)
+            let placeStory = RealmSpace.userInitiated.privatRealm.collectPlace(placeID: place._id)
             
             completion(placeStory)
             DispatchQueue.main.async {

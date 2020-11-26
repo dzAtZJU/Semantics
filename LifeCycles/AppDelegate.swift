@@ -1,13 +1,3 @@
-//
-//  AppDelegate.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/5/18.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
-// curl -v -H 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6Ik1ZUEZEQkRWNU0ifQ.eyJpc3MiOiJIVEc1UlBKNlFGIiwiaWF0IjoxNjAzMjAxOTAzLCJleHAiOjE2MTg3NTM5MDN9.5eifRpVQS4m0mlkXSLti8mhHwDfAqDrxn2o14bchqJY6bqYpd2ejWghjI1x4vLUWyM0tiflcQsvZurImNqXYdw' "https://api.music.apple.com/v1/catalog/us/songs/203709340"
-
 import UIKit
 import CoreData
 import CloudKit
@@ -20,13 +10,16 @@ import Sentry
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        Concept.load()
         SentrySDK.start { options in
             options.dsn = "https://65e39c9216234994b902b4ea809e7dae@o310831.ingest.sentry.io/5449834"
-            options.debug = true // Enabled debug when first installing is always helpful
+            options.debug = true
         }
         
-        RealmSpace.prepare()
+        RealmSpace.load()
+        
+        Concept.load()
+        
+        PartnersMapVM().loadPlaces()
         
         return true
     }

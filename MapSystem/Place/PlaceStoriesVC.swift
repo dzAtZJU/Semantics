@@ -17,7 +17,7 @@ class PlaceStoriesVC: UIPageViewController, PanelContent {
     private let vm: PlaceStoriesVM
     init(vm: PlaceStoriesVM) {
         self.vm = vm
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: NSNumber(floatLiteral: 10)])
         
         dataSource = self
     }
@@ -28,6 +28,7 @@ class PlaceStoriesVC: UIPageViewController, PanelContent {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         
         let vc = PlaceStoryVC(style: .Card)
         vc.vm = vm.firstPlaceStoryVM

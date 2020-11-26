@@ -128,7 +128,14 @@ class PlaceStoryVC: UIViewController, PanelContent {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .systemBackground
+        switch style {
+        case .Plain:
+            view.backgroundColor = .systemBackground
+        case .Card:
+            view.backgroundColor = .secondarySystemBackground
+            view.cornerRadius = 20
+        }
+        
         view.directionalLayoutMargins = NSDirectionalEdgeInsets(inset: Margin.defaultValue)
         
         view.addSubview(profileView)

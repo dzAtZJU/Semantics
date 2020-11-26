@@ -4,6 +4,10 @@ import CoreLocation
 import Combine
 import FloatingPanel
 
+protocol AMapVM {
+    func loadPlaces()
+}
+
 class MapVC: UIViewController {
     private var tintLayer: CALayer?
     
@@ -151,6 +155,10 @@ class MapVC: UIViewController {
         map.addAnnotations(mapVM.annotion())
         map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
+        
+        NotificationCenter.default.addObserver(forName: .realmsPreloaded, object: nil, queue: nil) { _ in
+            self.mapVM.loadPlaces()
+        }
     }
     
     override func viewDidLayoutSubviews() {
