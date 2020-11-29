@@ -22,7 +22,7 @@ target 'Semantics' do
   
   pod 'Sentry', :git => 'https://github.com/getsentry/sentry-cocoa.git', :tag => '6.0.0'
   
-  pod 'ResearchKit', '>= 2.0.0'
+  pod 'ResearchKit', :git => 'https://github.com/ResearchKit/ResearchKit', :branch => 'master'
   
 #  pod 'Jelly', '~> 2.2.2'
   

@@ -1,6 +1,7 @@
 import UIKit
 import Combine
 import FloatingPanel
+import SPAlert
 
 class DiscoverNextVC: UIViewController, PanelContent {
     var allowsEditing = true
@@ -128,16 +129,17 @@ extension DiscoverNextVC: UICollectionViewDelegate, UICollectionViewDataSource {
 // MARK: Interation
 extension DiscoverNextVC {
     @objc private func searchBtnTapped() {
-        spinner.startAnimating()
-        vm.runNextIteration { result in
-            DispatchQueue.main.async {
-                let vm = DiscoverdResultVM(result: result)
-                let vc = DiscoverdResultVC(vm: vm)
-                vc.panelContentDelegate = self.panelContentDelegate
-                self.spinner.stopAnimating()
-                self.show(vc, sender: nil)
-            }
-        }
+        SPAlert.present(message: "Coming Later")
+//        spinner.startAnimating()
+//        vm.runNextIteration { result in
+//            DispatchQueue.main.async {
+//                let vm = DiscoverdResultVM(result: result)
+//                let vc = DiscoverdResultVC(vm: vm)
+//                vc.panelContentDelegate = self.panelContentDelegate
+//                self.spinner.stopAnimating()
+//                self.show(vc, sender: nil)
+//            }
+//        }
     }
     
     @objc private func segmentedControlValueChanged(sender: UISegmentedControl) {

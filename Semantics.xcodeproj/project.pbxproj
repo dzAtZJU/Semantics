@@ -1496,6 +1496,7 @@
 				CODE_SIGN_ENTITLEMENTS = Configs/Semantics.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = HTG5RPJ6QF;
 				ENABLE_PREVIEWS = YES;
@@ -1523,6 +1524,7 @@
 				CODE_SIGN_ENTITLEMENTS = Configs/Semantics.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = HTG5RPJ6QF;
 				ENABLE_PREVIEWS = YES;
@@ -1655,6 +1657,7 @@
 				CODE_SIGN_ENTITLEMENTS = Configs/Semantics.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = HTG5RPJ6QF;
 				ENABLE_PREVIEWS = YES;

@@ -21,15 +21,27 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CKSharingSupported</key>
 	<true/>
 	<key>Configuration</key>
 	<string>$(CONFIGURATION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>none</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>none</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>none</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow access to your location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>none</string>
+	<key>NSMotionUsageDescription</key>
+	<string>show your location on map</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>none</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

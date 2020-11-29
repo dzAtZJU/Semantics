@@ -5,7 +5,7 @@ PODS:
   - Realm/Headers (10.0.0-rc.1)
   - RealmSwift (10.0.0-rc.1):
     - Realm (= 10.0.0-rc.1)
-  - ResearchKit (2.0.0)
+  - ResearchKit (2.1.0-beta)
   - Sentry (6.0.0):
     - Sentry/Core (= 6.0.0)
   - Sentry/Core (6.0.0)
@@ -14,7 +14,7 @@ PODS:
 DEPENDENCIES:
   - Presentr
   - RealmSwift (>= 10.0.0-rc.1)
-  - ResearchKit (>= 2.0.0)
+  - ResearchKit (from `https://github.com/ResearchKit/ResearchKit`, branch `master`)
   - Sentry (from `https://github.com/getsentry/sentry-cocoa.git`, tag `6.0.0`)
   - TagListView (~> 1.0)
 
@@ -23,15 +23,20 @@ SPEC REPOS:
     - Presentr
     - Realm
     - RealmSwift
-    - ResearchKit
     - TagListView
 
 EXTERNAL SOURCES:
+  ResearchKit:
+    :branch: master
+    :git: https://github.com/ResearchKit/ResearchKit
   Sentry:
     :git: https://github.com/getsentry/sentry-cocoa.git
     :tag: 6.0.0
 
 CHECKOUT OPTIONS:
+  ResearchKit:
+    :commit: 68f9d29b669dd3ac27b548f7c9c28342218cf72e
+    :git: https://github.com/ResearchKit/ResearchKit
   Sentry:
     :git: https://github.com/getsentry/sentry-cocoa.git
     :tag: 6.0.0
@@ -40,10 +45,10 @@ SPEC CHECKSUMS:
   Presentr: 7078d7eb5d1661ebeaae60c9e42a1e534de1b993
   Realm: b8faac708a4b5a9e98667ccd58404fcf60b354b7
   RealmSwift: 7f3831445e6f03dfb9312c4befba0f91fe7ccf3d
-  ResearchKit: 06020ff370f830138b5efd10bd3606acc4de49d6
+  ResearchKit: 449f96824c4e71c70a9278953c3b279f0fe10805
   Sentry: 9f6ac6d0412a09a8d610497f873ccbcf7abbe3f8
   TagListView: a1c236d17960a0cf64156725a76ce6d73ebce2be
 
-PODFILE CHECKSUM: 5edb4d77f8c9e3e2fedc51d404d0b06920126256
+PODFILE CHECKSUM: 2209b1cf3ff2910ef4e19be0d86c38161ab9c859
 
 COCOAPODS: 1.8.4

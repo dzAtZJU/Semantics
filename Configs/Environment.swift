@@ -5,15 +5,16 @@ enum Environment: String {
     case Prod = "Prod"
 
     static var current: Environment {
-        let configuration = Bundle.main.object(forInfoDictionaryKey: "Configuration") as! String
-        
-        if configuration.contains("Dev"){
-            return Environment.Dev
-        } else if configuration.contains("Prod") {
-            return Environment.Prod
-        } else {
-            fatalError("Configuration should either be dev or prod")
-        }
+        .Dev
+//        let configuration = Bundle.main.object(forInfoDictionaryKey: "Configuration") as! String
+//
+//        if configuration.contains("Dev"){
+//            return Environment.Dev
+//        } else if configuration.contains("Prod") {
+//            return Environment.Prod
+//        } else {
+//            fatalError("Configuration should either be dev or prod")
+//        }
     }
     
     var realmApp: String {

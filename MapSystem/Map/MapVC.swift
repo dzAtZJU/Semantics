@@ -285,7 +285,7 @@ extension MapVC: PlaceStoryVCDelegate {
 //                let v = TalksVC(vm: TalksVM(placeID: self.mapVM.selectedPlaceId!))
 //                let nv = UINavigationController(rootViewController: v)
 //                self.present(nv, animated: true, completion: nil)
-                fatalError()
+                SPAlert.present(message: "Coming Later")
             }
         default:
             DispatchQueue.main.async {
