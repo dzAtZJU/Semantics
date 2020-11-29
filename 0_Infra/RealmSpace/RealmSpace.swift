@@ -15,7 +15,7 @@ class RealmSpace {
         preloadRealms()
     }
     
-    static let userInitiated = RealmSpace(queue: DispatchQueue(label: "serial-for-realm", qos: .userInitiated))
+    static let userInitiated = RealmSpace(queue: DispatchQueue(label: "serial-for-realm", qos: .userInitiated, target: .global(qos: .userInitiated)))
     
     static let main = RealmSpace(queue: DispatchQueue.main)
     
@@ -23,19 +23,27 @@ class RealmSpace {
     
     private static let app = App(id: Environment.current.realmApp)
     
+    static var isPreloaded = false
+    
     private static func preloadRealms() {
-
         let loadAll = { (userId: String) -> Void in
             let group = DispatchGroup()
             group.enter()
+            let st0 = Date().timeIntervalSince1970
             RealmSpace.userInitiated.realm(publicPartitionValue) { _ in
+                let et = Date().timeIntervalSince1970
+                print("[Measure] open realm: \(et - st0)")
                 group.leave()
             }
             group.enter()
+            let st1 = Date().timeIntervalSince1970
             RealmSpace.userInitiated.realm(userId) { _ in
+                let et = Date().timeIntervalSince1970
+                print("[Measure] open realm: \(et - st1)")
                 group.leave()
             }
             group.notify(queue: .main) {
+                Self.isPreloaded = true
                 NotificationCenter.default.post(name: .realmsPreloaded, object: nil)
             }
         }

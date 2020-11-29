@@ -3,9 +3,31 @@ import MapKit
 import CoreLocation
 import Combine
 import FloatingPanel
+import Presentr
 
-protocol AMapVM {
-    func loadPlaces()
+class AMapVM: NSObject {
+    var mapView: MKMapView!
+    
+    let circleOfTrust: CircleOfTrust
+    
+    init(circleOfTrust: CircleOfTrust) {
+        self.circleOfTrust = circleOfTrust
+    }
+    
+    func loadPlaces() {
+        fatalError()
+    }
+    
+    func collectPlace(completion: @escaping (Place, PlaceStory) -> ()) {
+        let uniquePlace = UniquePlace(annotation: mapView.selectedAnnotations.first!)
+        RealmSpace.userInitiated.async {
+            let place = RealmSpace.userInitiated.publicRealm.queryOrCreatePlace(uniquePlace).freeze()
+            
+            let placeStory = RealmSpace.userInitiated.privatRealm.collectPlace(placeID: place._id)
+            
+            completion(place, placeStory)
+        }
+    }
 }
 
 class MapVC: UIViewController {
@@ -24,6 +46,12 @@ class MapVC: UIViewController {
         tmp.delegate = self
         return tmp
     }()
+    
+    private lazy var profileBtn = UIButton(systemName: "person.circle.fill", textStyle: .title2, primaryAction: UIAction(handler: { _ in
+        let vc = ProfileVC()
+        vc.view.widthAnchor.constraint(equalToConstant: self.view.width).isActive = true
+        self.customPresentViewController(vc.presentr, viewController: vc, animated: true, completion: nil)
+    }))
     
     private class SemFloatingPanelLayout: FloatingPanelLayout {
         var position: FloatingPanelPosition = .bottom
@@ -48,7 +76,6 @@ class MapVC: UIViewController {
     lazy var panelContainerVC: PanelContainerVC = {
         let tmp = PanelContainerVC(initialVC: searchVC)
         tmp.view.backgroundColor = .systemBackground
-        tmp.delegate = self
         return tmp
     }()
     
@@ -66,15 +93,25 @@ class MapVC: UIViewController {
     }()
     
     private lazy var placeStoriesVC: PlaceStoriesVC = {
-        let tmp = PlaceStoriesVC(vm: PlaceStoriesVM())
+        let tmp = PlaceStoriesVC()
         tmp.allowsEditing = false
         tmp.panelContentDelegate = self
+        tmp.placeStoryVCDelegate = self
         return tmp
     }()
     
     private var discoverNextVC: DiscoverNextVC {
-        let tmp = DiscoverNextVC(vm: mapVM.discoverNextVM)
+        let tmp = DiscoverNextVC(vm: discoverNextVM)
         tmp.panelContentDelegate = self
+        return tmp
+    }
+    
+    private var discoverNextVM: DiscoverNextVM {
+        var tmp: DiscoverNextVM!
+        RealmSpace.userInitiated.queue.sync {
+            let dataLayer = RealmSpace.userInitiated.privatRealm
+            tmp = DiscoverNextVM(placeId: selectedAnnotation!.placeID!, conditionIDs: dataLayer.queryConditionIDs(forPlace: selectedAnnotation!.placeID!))
+        }
         return tmp
     }
     
@@ -82,15 +119,37 @@ class MapVC: UIViewController {
     
     private var annotationsToken: AnyCancellable?
     private var boundingRegionToken: AnyCancellable?
-    private var selectedAnnotationToken: AnyCancellable?
-    private var selectedPlaceStateToken: AnyCancellable?
     
-    internal let mapVM: MapVM
-    init(vm vm_: MapVM) {
-        mapVM = vm_
+    internal let vm: AMapVM
+    
+    private var selectedAnnotation: SemAnnotation? {
+        map.selectedAnnotations.first as? SemAnnotation
+    }
+    
+    private var selectedPlaceID: String? {
+        selectedAnnotation?.placeID
+    }
+    
+    private lazy var locationManager: CLLocationManager = {
+        let tmp = CLLocationManager()
+        return tmp
+    }()
+    
+    init(vm: AMapVM) {
+        self.vm = vm
         super.init(nibName: nil, bundle: nil)
-        tabBarItem = mapVM.tabBarItem
-        mapVM.annotationsModel = self
+        vm.mapView = map
+        
+        tabBarItem = {
+            switch vm.circleOfTrust {
+            case .public:
+                let img = UIImage(systemName: "hand.point.up.braille.fill")?.withBaselineOffset(fromBottom: UIFont.systemFontSize/4)
+                return UITabBarItem(title: "Public", image: img, selectedImage: img)
+            case .private:
+                let img = UIImage(systemName: "heart.fill")
+                return UITabBarItem(title: "Wish List", image: img, selectedImage: img)
+            }
+        }()
     }
     
     required init?(coder: NSCoder) {
@@ -100,6 +159,11 @@ class MapVC: UIViewController {
     override func loadView() {
         view = UIView()
         view.addSubview(map)
+        
+        if vm.circleOfTrust == .private {
+            view.addSubview(profileBtn)
+            profileBtn.anchorTopLeading()
+        }
     }
     
     override func viewDidLoad() {
@@ -107,75 +171,32 @@ class MapVC: UIViewController {
         
         panel.addPanel(toParent: self)
         
-        selectedAnnotationToken = mapVM.$selectedAnnotationEvent.removeDuplicates(by: { (a, b) -> Bool in
-            a.0 == b.0
-        }).sink { newEvent in
-            guard !self.mapVM.selectedAnnotationEventLock else {
-                return
-            }
-            
-            switch newEvent.1 {
-            case .onlyMap:
-                if let newValue = newEvent.0 {
-                    self.map.selectAnnotation(newValue, animated: true)
-                } else {
-                    self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
-                }
-            case .fromModel:
-                if let newValue = newEvent.0 {
-                    self.map.selectAnnotation(newValue, animated: true)
-                    self.panelContentFor(newValue) { panelContent in
-                        DispatchQueue.main.async {
-                            self.panelContainerVC.show(panelContent, sender: nil)
-                        }
-                    }
-                } else {
-                    self.map.deselectAnnotation(self.map.selectedAnnotations.first, animated: true)
-                    self.panelContainerVC.hideAll()
-                }
-            case .fromView:
-                self.panelContainerVC.hideAll()
-                if let newValue = newEvent.0 {
-                    self.panelContentFor(newValue) { panelContent in
-                        DispatchQueue.main.async {
-                            self.panelContainerVC.show(panelContent, sender: nil)
-                        }
-                    }
-                }
-            }
-        }
-        
-        boundingRegionToken = mapVM.$boundingRegion.sink {
-            if $0 != nil {
-                self.map.region = $0!
-                print("map.region \(self.map.region)")
-            }
-        }
-        
-        map.addAnnotations(mapVM.annotion())
         map.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.annotationViewIdentifier)
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
         
-        NotificationCenter.default.addObserver(forName: .realmsPreloaded, object: nil, queue: nil) { _ in
-            self.mapVM.loadPlaces()
+        if RealmSpace.isPreloaded {
+            vm.loadPlaces()
+        } else {
+            NotificationCenter.default.addObserver(forName: .realmsPreloaded, object: nil, queue: nil) { _ in
+                self.vm.loadPlaces()
+            }
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         
-        map.frame = view.bounds
-        if let tintColor = mapVM.tintColor, tintLayer == nil {
-            tintLayer = CALayer()
-            tintLayer!.backgroundColor = tintColor.withAlphaComponent(0.005).cgColor
-            view.layer.addSublayer(tintLayer!)
+        NotificationCenter.default.addObserver(forName: .searchFinished, object: nil, queue: nil) {
+            let response = $0.object as! MKLocalSearch.Response
+            self.map.region = response.boundingRegion
+            
+            let newAnno = response.mapItems.map({
+                SemAnnotation(item: $0, type: .inSearching)
+            }).first!
+            self.map.addAndSelect(newAnno)
         }
-        tintLayer?.frame = view.bounds
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        mapVM.requestLocationAuthorization()
+        
+        locationManager.requestWhenInUseAuthorization()
     }
     
     deinit {
@@ -184,33 +205,30 @@ class MapVC: UIViewController {
         
         boundingRegionToken?.cancel()
         boundingRegionToken = nil
-        
-        selectedAnnotationToken?.cancel()
-        selectedAnnotationToken = nil
     }
 }
 
 // MARK: PlaceStoryDelegate
-extension MapVC: PlaceStoryDelegate {
+extension MapVC: PlaceStoryVCDelegate {
     func placeStoryVCShouldStartIndividualAble(_ placeVC: PlaceStoryVC, tag: String) {
         switch tag {
         case Concept.Seasons.title:
             DispatchQueue.main.async {
-                let vc = PhasesVC(seasonsVM: SeasonsVM(placeID: self.mapVM.selectedPlaceId!))
+                let vc = PhasesVC(seasonsVM: SeasonsVM(placeID: self.selectedPlaceID!))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self
                 self.panelContainerVC.show(vc, sender: nil)
             }
         case Concept.Scent.title, Concept.Trust.title:
             DispatchQueue.main.async {
-                let vm = ConceptVM(concept: Concept.map[tag]!, placeID: self.mapVM.selectedPlaceId!)
+                let vm = ConceptVM(concept: Concept.map[tag]!, placeID: self.selectedPlaceID!)
                 let vc = PanelNavigationController(rootViewController: ConceptVC(vm: vm))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self
                 self.panelContainerVC.show(vc, sender: nil)
             }
         default:
-            _ = FeedbackVM(placeId: self.mapVM.selectedPlaceId!) { vm in
+            _ = FeedbackVM(placeId: selectedPlaceID!) { vm in
                 let vc = FeedbackVC(feedbackVM: vm)
                 vc.panelContentDelegate = self
                 DispatchQueue.main.async {
@@ -258,13 +276,13 @@ extension MapVC: MKMapViewDelegate {
         
         let annotation = annotation as! SemAnnotation
         switch annotation.type {
-        case .visited:
+        case .visited, .inDiscovering:
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation)
             view.canShowCallout = true
             
             view.image = AnnotationView.createPointImage(color: annotation.color)
             return view
-        case .inSearching, .inDiscovering:
+        case .inSearching:
             let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
             view.displayPriority = .required
             view.canShowCallout = true
@@ -279,27 +297,33 @@ extension MapVC: MKMapViewDelegate {
             return
         }
         
-        mapVM.setSelectedAnnotationEvent((annotation, .fromView))
+        panelContainerVC.hideAll()
+        
+        self.panelContentFor(annotation) { panelContent in
+            DispatchQueue.main.async {                    self.panelContainerVC.show(panelContent, sender: nil)
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        guard let annotation = view.annotation as? SemAnnotation else {
-            return
-        }
+        panelContainerVC.hideAll()
         
-        if annotation.type == .inSearching {
-            mapVM.removeAnnotations(type: .inSearching)
+        if view is MKMarkerAnnotationView {
+            mapView.removeAnnotation(view.annotation!)
         }
-        mapVM.setSelectedAnnotationEvent((nil, .fromView))
     }
     
     func panelContentFor(_ annotation: SemAnnotation, completion: @escaping (PanelContent) -> Void) {
-        if mapVM.circleOfTrust == .private {
-            completion(placeStoriesVC)
+        if let anno = annotation as? PartnersAnnotation {
+            PlaceStoriesVM.new(placeID: anno.placeID!, partnersID: anno.partnerIDs) { vm in
+                self.placeStoriesVC.vm = vm
+                completion(self.placeStoriesVC)
+            }
         } else {
-            PlaceStoryVM.new(placeID: annotation.placeId, allowsCondition: mapVM.circleOfTrust == .public) { vm in
-                vm.parent = self.mapVM
-                DispatchQueue.main.async {
+            PlaceStoryVM.new(placeID: annotation.placeID, allowsCondition: vm.circleOfTrust == .public) { vm in
+                vm.parent = self.vm
+                RealmSpace.main.async {
+                    vm.partnerProfile = RealmSpace.main.privatRealm.queryCurrentIndividual()!.profile
                     self.placeStoryVC.vm = vm
                     completion(self.placeStoryVC)
                 }
@@ -315,37 +339,19 @@ extension MapVC: FloatingPanelControllerDelegate {
 
 // MARK: PanelContentDelegate
 extension MapVC: PanelContentDelegate {
+    var mapVM: AMapVM {
+        vm
+    }
     
 }
 
-
-extension MapVC: MapVMAnnotationsModel {
-    func addAnnotations(_ annos: [SemAnnotation]) {
-        self.map.addAnnotations(annos)
+extension MKMapView {
+    func addAndSelect(_ annotation: MKAnnotation) {
+        addAnnotation(annotation)
+        selectAnnotation(annotation, animated: true)
     }
     
-    func removeAnnotations(_ annos: [SemAnnotation]) {
-        self.map.removeAnnotations(annos)
-    }
-    
-    var annotations: [SemAnnotation] {
-        map.annotations.filter {
-            $0 is SemAnnotation
-            } as! [SemAnnotation]
+    var selectedAnnotation: MKAnnotation? {
+        selectedAnnotations.first
     }
 }
-
-extension MapVC: PanelContainerVCDelegate {
-    func panelContentVCWillBack(_ panelContentVC: PanelContainerVC) {
-        
-    }
-    
-    func panelContentVC(_ panelContentVC: PanelContainerVC, didShow panelContent: PanelContent, animated: Bool) {
-        
-    }
-    
-    func panelContentVC(_ panelContentVC: PanelContainerVC, willHide panelContent: PanelContent, animated: Bool) {
-        
-    }
-}
-

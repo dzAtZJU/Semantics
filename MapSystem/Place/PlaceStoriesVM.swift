@@ -2,45 +2,65 @@ import Foundation
 import RealmSwift
 
 class PlaceStoriesVM {
-    init() {
-        
+    static let queue = DispatchQueue.main//DispatchQueue(label: "queue-PlaceStoriesVM", qos: .userInitiated, target: DispatchQueue.global(qos: .userInitiated))
+    
+    static let realmSpace = RealmSpace(queue: queue)
+    
+    static func new(placeID: String, partnersID: [String], completion: @escaping (PlaceStoriesVM)->()) {
+        var result: [PlaceStory] = []
+        partnersID.forEach { id in
+            let realm = realmSpace.realm(id)
+            let placeStory = realm.queryPlaceStory(placeID: placeID)!
+            if id == RealmSpace.userID {
+                result.insert(placeStory, at: 0)
+            } else {
+                result.append(placeStory)
+            }
+        }
+        completion(PlaceStoriesVM(placeStories: result))
+    }
+    
+    let placeStories: [PlaceStory]
+    
+    init(placeStories: [PlaceStory]) {
+        self.placeStories = placeStories
     }
     
     var count: Int {
-        2
+        placeStories.count
     }
     
-    var firstPlaceStoryVM: APlaceStoryVM {
-        MockPlaceStoryVM.mock1
+    var firstPlaceStoryVM: PlaceStoryVM {
+        createVM(index: 0)
     }
     
-    func placeStoryVM(after vm: APlaceStoryVM) -> APlaceStoryVM? {
-        if vm === MockPlaceStoryVM.mock1 {
-            return MockPlaceStoryVM.mock2
-        } else if vm === MockPlaceStoryVM.mock2 {
-            return MockPlaceStoryVM.mock1
-        } else {
-            fatalError()
+    func placeStoryVM(after vm: PlaceStoryVM) -> PlaceStoryVM? {
+        let newIndex = vm.pageIndex + 1
+        guard newIndex != count else {
+            return nil
         }
+        
+        return createVM(index: newIndex)
     }
     
-    func placeStoryVM(before vm: APlaceStoryVM) -> APlaceStoryVM? {
-        if vm === MockPlaceStoryVM.mock1 {
-            return MockPlaceStoryVM.mock2
-        } else if vm === MockPlaceStoryVM.mock2 {
-            return MockPlaceStoryVM.mock1
-        } else {
-            fatalError()
+    func placeStoryVM(before vm: PlaceStoryVM) -> PlaceStoryVM? {
+        let newIndex = vm.pageIndex - 1
+        guard newIndex != -1 else {
+            return nil
         }
+        
+        return createVM(index: newIndex)
+    }
+    
+    private func createVM(index: Int) -> PlaceStoryVM {
+        let tmp = PlaceStoryVM(allowsCondition: false, placeStory: placeStories[index])
+        tmp.pageIndex = index
+        let owner = placeStories[index].owner.first!
+        tmp.partnerProfile = owner.profile
+        return tmp
     }
     
     func indexForPlaceStoryVM(_ vm: PlaceStoryVM) -> Int {
-        if vm === MockPlaceStoryVM.mock1 {
-            return 0
-        } else if vm === MockPlaceStoryVM.mock2 {
-            return 1
-        } else {
-            fatalError()
-        }
+        vm.pageIndex
     }
 }

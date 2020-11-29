@@ -8,8 +8,14 @@ class InterpretationBirdView: UIView {
     }()
     
     lazy var contentSourcesView: UIStackView = {
-        let contentSources = (0..<contentSourcesCountLimit).map { _ in
-            Profile.createContentSourceView()
+        let contentSources = (0..<contentSourcesCountLimit).map { (Int) -> UILabel in
+            let tmp = UILabel()
+            tmp.allowsDefaultTighteningForTruncation = true
+            tmp.font = UIFont.preferredFont(forTextStyle: .body)
+            
+            tmp.translatesAutoresizingMaskIntoConstraints = false
+            
+            return tmp
         }
         let stack = UIStackView(arrangedSubviews: contentSources, axis: .vertical)
         stack.translatesAutoresizingMaskIntoConstraints = false

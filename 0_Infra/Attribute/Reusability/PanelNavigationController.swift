@@ -6,7 +6,7 @@ class PanelNavigationController: UINavigationController, PanelContent {
     
     var panelContentDelegate: PanelContentDelegate!
     
-    let showBackBtn = true
+    let backItem = PanelContainerVC.BackItem(showBackBtn: true, action: nil)
     
     var prevPanelState: FloatingPanelState?
     

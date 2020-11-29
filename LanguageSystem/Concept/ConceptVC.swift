@@ -1,7 +1,6 @@
 import UIKit
 import Combine
 import FloatingPanel
-import NVActivityIndicatorView
 
 struct ConceptSection {
     let sectionInfo: ConceptSectionInfo

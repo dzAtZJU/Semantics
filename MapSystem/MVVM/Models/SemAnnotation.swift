@@ -7,17 +7,27 @@ enum AnnotationType {
     case inDiscovering
 }
 
+class PartnersAnnotation: SemAnnotation {
+    let partnerIDs: [String]
+    
+    init(place: Place, partnerIDs: [String]) {
+        self.partnerIDs = partnerIDs
+        super.init(place: place, type: .inDiscovering, color: .yellow)
+    }
+}
+
 class SemAnnotation: MKPointAnnotation {
+    let type: AnnotationType
+    
     let color: UIColor
     
-    var placeId: String?
-    
-    var type: AnnotationType
+    let placeID: String?
     
     init(place: Place, type: AnnotationType, color: UIColor) {
-        placeId = place._id
+        placeID = place._id
         self.type = type
         self.color = color
+        
         super.init()
         title = place.title
         coordinate = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
@@ -25,7 +35,9 @@ class SemAnnotation: MKPointAnnotation {
     
     init(item: MKMapItem, type: AnnotationType) {
         self.type = type
+        placeID = nil
         self.color = .brown
+        
         super.init()
         coordinate = item.placemark.coordinate
         title = item.name

@@ -5,18 +5,33 @@ class PlaceStoriesVC: UIPageViewController, PanelContent {
     //
     var allowsEditing = true
     
-    let showBackBtn = true
+    lazy var backItem = PanelContainerVC.BackItem(showBackBtn: true, action: {
+        self.panelContentDelegate.map.deselectAnnotation(nil, animated: true)
+    })
     
     var prevPanelState:  FloatingPanelState?
     
     var panelContentDelegate: PanelContentDelegate!
     //
     
+    var placeStoryVCDelegate: PlaceStoryVCDelegate?
+    
     private var pageIndex = 0
     
-    private let vm: PlaceStoriesVM
-    init(vm: PlaceStoriesVM) {
-        self.vm = vm
+    var vm: PlaceStoriesVM! {
+        didSet {
+            DispatchQueue.main.async {
+                let vc = PlaceStoryVC(style: .Card)
+                let newVM = self.vm.firstPlaceStoryVM
+                vc.vm = newVM
+                vc.allowsEditing = newVM.pageIndex == 0
+                vc.delegate = self.placeStoryVCDelegate
+                self.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
+            }
+        }
+    }
+    
+    init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: NSNumber(floatLiteral: 10)])
         
         dataSource = self
@@ -29,11 +44,6 @@ class PlaceStoriesVC: UIPageViewController, PanelContent {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
-        let vc = PlaceStoryVC(style: .Card)
-        vc.vm = vm.firstPlaceStoryVM
-        vc.allowsEditing = false
-        setViewControllers([vc], direction: .forward, animated: false, completion: nil)
     }
 }
 
@@ -42,10 +52,14 @@ extension PlaceStoriesVC: UIPageViewControllerDataSource {
         guard let vc = viewController as? PlaceStoryVC else {
             fatalError()
         }
+        guard let vm = vm.placeStoryVM(before: vc.vm as! PlaceStoryVM) else {
+            return nil
+        }
         
         let newVC = PlaceStoryVC(style: .Card)
-        newVC.vm = vm.placeStoryVM(before: vc.vm)
-        newVC.allowsEditing = false
+        newVC.vm = vm
+        newVC.allowsEditing =  vm.pageIndex == 0
+        newVC.delegate = placeStoryVCDelegate
         return newVC
     }
     
@@ -53,10 +67,14 @@ extension PlaceStoriesVC: UIPageViewControllerDataSource {
         guard let vc = viewController as? PlaceStoryVC else {
             fatalError()
         }
+        guard let vm = vm.placeStoryVM(after: vc.vm as! PlaceStoryVM) else {
+            return nil
+        }
         
         let newVC = PlaceStoryVC(style: .Card)
-        newVC.vm = vm.placeStoryVM(after: vc.vm)
-        newVC.allowsEditing = true
+        newVC.vm = vm
+        newVC.allowsEditing = vm.pageIndex == 0
+        newVC.delegate = placeStoryVCDelegate
         return newVC
     }
 }

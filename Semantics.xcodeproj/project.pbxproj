@@ -15,7 +15,7 @@
 		89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */; };
 		89290D4824E13B5600F0A862 /* apple-app-site-association in Resources */ = {isa = PBXBuildFile; fileRef = 89290D4724E13B5600F0A862 /* apple-app-site-association */; };
 		89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */; };
-		89290D4D24E185CA00F0A862 /* RealmObjs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4C24E185CA00F0A862 /* RealmObjs.swift */; };
+		89290D4D24E185CA00F0A862 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4C24E185CA00F0A862 /* RealmModel.swift */; };
 		89290D5024E2A71900F0A862 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D4F24E2A71900F0A862 /* LoginVC.swift */; };
 		89290D5224E2ADCB00F0A862 /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5124E2ADCB00F0A862 /* KeychainItem.swift */; };
 		89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89290D5824E3D62100F0A862 /* RealmSpace.swift */; };
@@ -35,6 +35,10 @@
 		892C6414248CCFE200208446 /* WordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6413248CCFE200208446 /* WordVC.swift */; };
 		892C6416248E1C1800208446 /* SubwordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892C6415248E1C1800208446 /* SubwordVC.swift */; };
 		893A704D256E393E00A24F26 /* PartnersMapVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A704C256E393E00A24F26 /* PartnersMapVM.swift */; };
+		893A70512570EA8000A24F26 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70502570EA8000A24F26 /* QRCode.swift */; };
+		893A705525723A5000A24F26 /* PageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A705425723A5000A24F26 /* PageVC.swift */; };
+		893A70592573549A00A24F26 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70582573549A00A24F26 /* ProfileVC.swift */; };
+		893A705F2573793500A24F26 /* RealmModel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A705E2573793500A24F26 /* RealmModel+.swift */; };
 		894517BB24E91C2B006EF619 /* MapSysEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */; };
 		894517BD24E92A0D006EF619 /* MapSysCommunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BC24E92A0D006EF619 /* MapSysCommunication.swift */; };
 		8947A0FC256902C100B90BDA /* Trust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A0FB256902C100B90BDA /* Trust.swift */; };
@@ -198,7 +202,7 @@
 		89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemWorldDataLayer.swift; sourceTree = "<group>"; };
 		89290D4724E13B5600F0A862 /* apple-app-site-association */ = {isa = PBXFileReference; lastKnownFileType = text; path = "apple-app-site-association"; sourceTree = "<group>"; };
 		89290D4A24E17E0400F0A862 /* SemWorld.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SemWorld.xcdatamodel; sourceTree = "<group>"; };
-		89290D4C24E185CA00F0A862 /* RealmObjs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjs.swift; sourceTree = "<group>"; };
+		89290D4C24E185CA00F0A862 /* RealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmModel.swift; sourceTree = "<group>"; };
 		89290D4F24E2A71900F0A862 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		89290D5124E2ADCB00F0A862 /* KeychainItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItem.swift; sourceTree = "<group>"; };
 		89290D5824E3D62100F0A862 /* RealmSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmSpace.swift; sourceTree = "<group>"; };
@@ -219,6 +223,10 @@
 		892C6413248CCFE200208446 /* WordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordVC.swift; sourceTree = "<group>"; };
 		892C6415248E1C1800208446 /* SubwordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubwordVC.swift; sourceTree = "<group>"; };
 		893A704C256E393E00A24F26 /* PartnersMapVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnersMapVM.swift; sourceTree = "<group>"; };
+		893A70502570EA8000A24F26 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		893A705425723A5000A24F26 /* PageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageVC.swift; sourceTree = "<group>"; };
+		893A70582573549A00A24F26 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
+		893A705E2573793500A24F26 /* RealmModel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RealmModel+.swift"; sourceTree = "<group>"; };
 		894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysEnvironment.swift; sourceTree = "<group>"; };
 		894517BC24E92A0D006EF619 /* MapSysCommunication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysCommunication.swift; sourceTree = "<group>"; };
 		8947A0FB256902C100B90BDA /* Trust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trust.swift; sourceTree = "<group>"; };
@@ -409,8 +417,11 @@
 		89290D4E24E2A6DA00F0A862 /* AccountSystem */ = {
 			isa = PBXGroup;
 			children = (
+				89E8AF3D255152FD0030E8B5 /* Profile.swift */,
 				89290D4F24E2A71900F0A862 /* LoginVC.swift */,
 				89290D5C24E403F900F0A862 /* AccountSysCommunication.swift */,
+				893A70502570EA8000A24F26 /* QRCode.swift */,
+				893A70582573549A00A24F26 /* ProfileVC.swift */,
 			);
 			path = AccountSystem;
 			sourceTree = "<group>";
@@ -912,8 +923,9 @@
 			children = (
 				89290D4924E17E0400F0A862 /* SemWorld.xcdatamodeld */,
 				89290D4524E10D4E00F0A862 /* SemWorldDataLayer.swift */,
-				89290D4C24E185CA00F0A862 /* RealmObjs.swift */,
+				89290D4C24E185CA00F0A862 /* RealmModel.swift */,
 				89618E7B253B2917000253E3 /* SemWorldDataLayer2.swift */,
+				893A705E2573793500A24F26 /* RealmModel+.swift */,
 			);
 			path = DB;
 			sourceTree = "<group>";
@@ -966,12 +978,12 @@
 				89BF91932549A9FE006E364A /* PhasesVC.swift */,
 				89E8AF4925527EEB0030E8B5 /* Collection-View */,
 				89E8AF25255002C20030E8B5 /* Memory-Model.swift */,
-				89E8AF3D255152FD0030E8B5 /* Profile.swift */,
 				89E8AF41255271A80030E8B5 /* Separator.swift */,
 				89E8AF5225554EAB0030E8B5 /* Adding.swift */,
 				8947A133256AE8D900B90BDA /* WebViewController.swift */,
 				8947A137256AEA8700B90BDA /* Spinner.swift */,
 				8947A13B256AEE6600B90BDA /* PanelNavigationController.swift */,
+				893A705425723A5000A24F26 /* PageVC.swift */,
 			);
 			path = Reusability;
 			sourceTree = "<group>";
@@ -1184,6 +1196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89A413DC24C6F201003FD435 /* TestVC.swift in Sources */,
+				893A705525723A5000A24F26 /* PageVC.swift in Sources */,
 				89B953AC24B8568200472692 /* SemStyle.swift in Sources */,
 				899CD0A024F2E390003C0040 /* BSON+.swift in Sources */,
 				89988AE124C2F7EB0005580B /* SectorDataLayer.swift in Sources */,
@@ -1200,12 +1213,14 @@
 				89290D6124E44CFA00F0A862 /* UIFont+.swift in Sources */,
 				895A4E2824EC383C0025ED20 /* SearchVC.swift in Sources */,
 				897A993324FDA634005613C9 /* SemUserDefaults.swift in Sources */,
+				893A705F2573793500A24F26 /* RealmModel+.swift in Sources */,
 				899AE17624DAB9D700C0EB17 /* CloudSync.swift in Sources */,
 				899AE17B24DAC2F000C0EB17 /* Bundle.swift in Sources */,
 				8947A156256BBC9900B90BDA /* PlaceStoriesVC.swift in Sources */,
 				89290D6C24E5313B00F0A862 /* SearchSuggestionsVC.swift in Sources */,
 				8947A10B256A63F800B90BDA /* PollView.swift in Sources */,
 				89E8AF4F255436290030E8B5 /* SeasonsVM.swift in Sources */,
+				893A70592573549A00A24F26 /* ProfileVC.swift in Sources */,
 				89A666D124D6BC4500851EDF /* WordVM.swift in Sources */,
 				899AE17324DAA14200C0EB17 /* CKContainer+CloudKitShare.swift in Sources */,
 				895A4E2624EC36970025ED20 /* PlaceStoryVC.swift in Sources */,
@@ -1244,6 +1259,7 @@
 				89988ADF24C2D9FE0005580B /* SemSectorsVC.swift in Sources */,
 				89BF918D25482C08006E364A /* CountryHomeVM.swift in Sources */,
 				89949D30253155FF0023C526 /* InfoSpace.swift in Sources */,
+				893A70512570EA8000A24F26 /* QRCode.swift in Sources */,
 				89A666D724D6EEE100851EDF /* FloatingContainerVC.swift in Sources */,
 				89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */,
 				8947A15A256BBCA900B90BDA /* PlaceStoriesVM.swift in Sources */,
@@ -1311,7 +1327,7 @@
 				89290D5F24E42B3E00F0A862 /* PanelContainerVC.swift in Sources */,
 				89988AE324C2FD8C0005580B /* OceanLayerDataLayer.swift in Sources */,
 				89290D4B24E17E0400F0A862 /* SemWorld.xcdatamodeld in Sources */,
-				89290D4D24E185CA00F0A862 /* RealmObjs.swift in Sources */,
+				89290D4D24E185CA00F0A862 /* RealmModel.swift in Sources */,
 				89A666D324D6BFF900851EDF /* Schema.swift in Sources */,
 				896344BF249F8F240060160B /* TextLoader.swift in Sources */,
 				8947A12B256AB69900B90BDA /* PortionSlider.swift in Sources */,

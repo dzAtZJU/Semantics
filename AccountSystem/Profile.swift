@@ -6,6 +6,7 @@ struct Profile {
         tmp.contentMode = .scaleAspectFill
         tmp.cornerRadius = width/2
         
+        tmp.backgroundColor = .secondarySystemFill
         tmp.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -16,18 +17,18 @@ struct Profile {
         return tmp
     }
     
-    static func createContentSourceView() -> UILabel {
-        let tmp = UILabel()
-        tmp.allowsDefaultTighteningForTruncation = true
-        tmp.font = UIFont.preferredFont(forTextStyle: .body)
-        
-        tmp.translatesAutoresizingMaskIntoConstraints = false
-        
-        return tmp
+    let name: String
+    let image: UIImage?
+    
+    init(name: String, image: UIImage?) {
+        self.name = name
+        self.image = image
     }
     
-    let name: String
-    let image: UIImage
+    init(name: String, imageData: Data?) {
+        let image = imageData != nil ? UIImage(data: imageData!) : nil
+        self.init(name: name, image: image)
+    }
 }
 
 class AvatarWithNameView: UIStackView {

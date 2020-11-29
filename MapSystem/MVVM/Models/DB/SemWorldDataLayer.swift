@@ -15,6 +15,20 @@ extension Realm {
         return individual!
     }
     
+    func modifyName(_ name: String?) {
+        let ind = queryCurrentIndividual()!
+        try! write {
+            ind.title = name
+        }
+    }
+
+    func modifyAvatar(_ avatar: Data?) {
+        let ind = queryCurrentIndividual()!
+        try! write {
+            ind.avatar = avatar
+        }
+    }
+    
     func queryCurrentIndividual() -> Individual? {
         let userID = RealmSpace.userID
         let individual = object(ofType: Individual.self, forPrimaryKey: userID)
@@ -28,6 +42,10 @@ extension Realm {
     
     func queryAllIndividuals() -> Results<Individual> {
         objects(Individual.self)
+    }
+    
+    func queryPartners() -> List<String> {
+        queryCurrentIndividual()!.partner_List
     }
     
     func dislike(inds: [String], forCondition condition: String) {

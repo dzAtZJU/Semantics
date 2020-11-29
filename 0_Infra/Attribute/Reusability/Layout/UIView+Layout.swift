@@ -18,4 +18,12 @@ extension UIView {
             topAnchor.constraint(equalTo: superview!.layoutMarginsGuide.topAnchor)
         ])
     }
+    
+    func anchorBottomCenter() {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: superview!.centerXAnchor),
+            bottomAnchor.constraint(equalTo: superview!.bottomAnchor)
+        ])
+    }
 }

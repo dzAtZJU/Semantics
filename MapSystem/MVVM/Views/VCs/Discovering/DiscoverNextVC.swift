@@ -9,7 +9,7 @@ class DiscoverNextVC: UIViewController, PanelContent {
     
     var panelContentDelegate: PanelContentDelegate!
     
-    let showBackBtn = true
+    let backItem = PanelContainerVC.BackItem(showBackBtn: true, action: nil)
     
     private lazy var spinner = Spinner.create()
     

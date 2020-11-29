@@ -52,7 +52,9 @@ class Individual: Object {
     @objc dynamic var _id: String = ""
     @objc dynamic var partitionKey: String = RealmSpace.userID
     
-    @objc dynamic var title = ""
+    @objc dynamic var title: String?
+    
+    @objc dynamic var avatar: Data?
     
     let placeStory_List = List<PlaceStory>()
     
@@ -78,8 +80,6 @@ class PlaceStory: EmbeddedObject {
     let owner = LinkingObjects(fromType: Individual.self, property: "placeStory_List")
     
     @objc dynamic var placeID = ""
-    
-    @objc dynamic var state = 1
     
     let conditionID_List = List<String>()
     

@@ -8,7 +8,9 @@ protocol PanelContent: Reusable, UIViewController {
         get
     }
     
-    var showBackBtn: Bool { get }
+    var backItem: PanelContainerVC.BackItem {
+        get
+    }
     
     var panelContentDelegate: PanelContentDelegate! { get set }
     
@@ -27,7 +29,7 @@ protocol PanelContentDelegate {
         get
     }
     
-    var mapVM: MapVM {
+    var mapVM: AMapVM {
         get
     }
     
@@ -36,25 +38,17 @@ protocol PanelContentDelegate {
     }
 }
 
-protocol PanelContainerVCDelegate {
-    func panelContentVC(_ panelContentVC: PanelContainerVC,
-    didShow panelContent: PanelContent,
-    animated: Bool)
-    
-    func panelContentVC(_ panelContentVC: PanelContainerVC,
-    willHide panelContent: PanelContent,
-    animated: Bool)
-    
-    func panelContentVCWillBack(_ panelContentVC: PanelContainerVC)
-}
-
 class PanelContainerVC: UIViewController {
-    static private var duration: Double = 0
-    var delegate: PanelContainerVCDelegate!
+    struct BackItem {
+        let showBackBtn: Bool
+        let action: (()->())?
+    }
     
-    var initialVC: UIViewController?
-    var currentVC: UIViewController?
-    init(initialVC initialVC_: UIViewController) {
+    static private var duration: Double = 0
+    
+    var initialVC: PanelContent?
+    var currentVC: PanelContent?
+    init(initialVC initialVC_: PanelContent) {
         initialVC = initialVC_
         super.init(nibName: nil, bundle: nil)
     }
@@ -93,12 +87,7 @@ class PanelContainerVC: UIViewController {
             }
             
             DispatchQueue.main.async {
-                if let top = self.children.last as? PanelContent {
-                    self.delegate.panelContentVC(self, willHide: top, animated: true)
-                }
-                
                 self.addChild(vc)
-                print("SafeArea: \(self.view.safeAreaInsets)")
                 vc.view.frame = self.view.bounds.inset(by: self.view.safeAreaInsets)
                 vc.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 vc.view.transform = .init(translationX: 0, y: self.view.height)
@@ -106,10 +95,10 @@ class PanelContainerVC: UIViewController {
                 self.view.addSubview(self.backBtn)
                 UIView.animate(withDuration: Self.duration, animations: {
                     vc.view.transform = .identity
-                    self.backBtn.isHidden = !vc.showBackBtn
+                    self.backBtn.isHidden = !vc.backItem.showBackBtn
                 }) { _ in
                     vc.didMove(toParent: self)
-                    if vc == self.initialVC {
+                    if vc.isEqual(self.initialVC) {
                         self.initialVC = nil
                         Self.duration = 0.25
                     }
@@ -156,15 +145,12 @@ class PanelContainerVC: UIViewController {
             UIView.animate(withDuration: Self.duration, animations: {
                 vc.view.transform = .init(translationX: 0, y: self.view.height)
                 if let vcWillShow = vcWillShow {
-                    self.backBtn.isHidden = !vcWillShow.showBackBtn
+                    self.backBtn.isHidden = !vcWillShow.backItem.showBackBtn
                 }
             }) { _ in
                 vc.view.removeFromSuperview()
                 vc.view.transform = .identity
                 vc.removeFromParent()
-                if let vcWillShow = vcWillShow {
-                    self.delegate.panelContentVC(self, didShow: vcWillShow, animated: true)
-                }
                 completion(false)
             }
         }
@@ -185,7 +171,7 @@ class PanelContainerVC: UIViewController {
 extension PanelContainerVC {
     @objc private func backBtnTapped() {
         hideTop()
-        delegate.panelContentVCWillBack(self)
+        (children.last as? PanelContent)?.backItem.action?()
     }
 }
 

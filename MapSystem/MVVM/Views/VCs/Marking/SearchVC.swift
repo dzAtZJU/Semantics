@@ -7,7 +7,7 @@ class SearchVC: UIViewController, PanelContent {
     
     var allowsEditing = true
     
-    let showBackBtn = false
+    let backItem = PanelContainerVC.BackItem(showBackBtn: false, action: nil)
     
     var panelContentDelegate: PanelContentDelegate!
     

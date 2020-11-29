@@ -45,7 +45,7 @@ class DiscoverNextVM {
     
     let conditionVMs: [ConditionVM]
     
-    var parent: MapVM?
+    var parent: AMapVM?
     
     init(placeId placeId_: String, conditionIDs: [String]) {
         placeId = placeId_
@@ -73,7 +73,7 @@ class DiscoverNextVM {
                 SemAnnotation(place: place, type: .inDiscovering, color: .brown)
             }
             DispatchQueue.main.async {
-                self.parent?.appendAnnotations(annos)
+                self.parent?.mapView.addAnnotations(annos)
             }
             completion(result)
         }

@@ -8,7 +8,7 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     
     var panelContentDelegate: PanelContentDelegate!
        
-    let showBackBtn = true
+    let backItem = PanelContainerVC.BackItem(showBackBtn: true, action: nil)
     
     var allowsEditing = true
     
@@ -64,32 +64,31 @@ class DiscoverdResultVC: UIViewController, PanelContent {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        panelContentDelegate.mapVM.selectedAnnotationEventLock = true
-        selectedAnnotationToken = panelContentDelegate.mapVM.$selectedAnnotationEvent.removeDuplicates(by: { (a, b) -> Bool in
-            a.0 == b.0
-        }).sink { newEvent in
-            switch newEvent.1 {
-            case .fromModel, .onlyMap:
-                if newEvent.0 == nil {
-                    self.panelContentDelegate.map.deselectAnnotation(nil, animated: true)
-                }
-            case .fromView:
-                if let type = newEvent.0?.type, type != .inDiscovering {
-                    break
-                }
-                self.vm.setPlaceId(newEvent.0?.placeId)
-                self.collectionView.reloadData()
-            }
-        }
-        UIView.animate(withDuration: 0.25) {
-            self.panelContentDelegate.panel.move(to: .tip, animated: false)
-        }
-        super.viewDidAppear(animated)
+//        panelContentDelegate.mapVM.selectedAnnotationEventLock = true
+//        selectedAnnotationToken = panelContentDelegate.mapVM.$selectedAnnotationEvent.removeDuplicates(by: { (a, b) -> Bool in
+//            a.0 == b.0
+//        }).sink { newEvent in
+//            switch newEvent.1 {
+//            case .fromModel, .onlyMap:
+//                if newEvent.0 == nil {
+//                    self.panelContentDelegate.map.deselectAnnotation(nil, animated: true)
+//                }
+//            case .fromView:
+//                if let type = newEvent.0?.type, type != .inDiscovering {
+//                    break
+//                }
+//                self.vm.setPlaceId(newEvent.0?.placeId)
+//                self.collectionView.reloadData()
+//            }
+//        }
+//        UIView.animate(withDuration: 0.25) {
+//            self.panelContentDelegate.panel.move(to: .tip, animated: false)
+//        }
+//        super.viewDidAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        panelContentDelegate.mapVM.removeAnnotations(type: .inDiscovering)
-        panelContentDelegate.mapVM.selectedAnnotationEventLock = false
+//        panelContentDelegate.mapVM.selectedAnnotationEventLock = false
         selectedAnnotationToken = nil
         super.viewWillDisappear(animated)
     }

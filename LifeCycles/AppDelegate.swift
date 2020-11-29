@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CoreDataAccessor {
         
         Concept.load()
         
-        PartnersMapVM().loadPlaces()
-        
         return true
     }
     

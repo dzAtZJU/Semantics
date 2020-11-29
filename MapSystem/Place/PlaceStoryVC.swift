@@ -16,7 +16,7 @@ protocol APlaceStoryVM: TagsVCDelegate {
     }
 }
 
-protocol PlaceStoryDelegate {
+protocol PlaceStoryVCDelegate {
     func placeStoryVCShouldStartIndividualAble(_ placeStoryVC: PlaceStoryVC, tag: String)
     
     func placeStoryVCShouldHumankindAble(_ placeStoryVC: PlaceStoryVC, tag: String)
@@ -31,6 +31,10 @@ class PlaceStoryVC: UIViewController, PanelContent {
     private let style: Style
     
     var allowsEditing = true
+    
+    lazy var backItem = PanelContainerVC.BackItem(showBackBtn: true, action: {
+        self.panelContentDelegate.map.deselectAnnotation(nil, animated: true)
+    })
     
     var prevPanelState:  FloatingPanelState?
     
@@ -113,9 +117,7 @@ class PlaceStoryVC: UIViewController, PanelContent {
     
     var panelContentDelegate: PanelContentDelegate!
     
-    let showBackBtn = true
-    
-    var delegate: PlaceStoryDelegate?
+    var delegate: PlaceStoryVCDelegate?
     
     init(style: Style) {
         self.style = style
@@ -225,7 +227,7 @@ extension PlaceStoryVC: TagListViewDelegate {
     }
 }
 
-private let addtag = "+"
+private let addtag = "Add Tag"
 
 extension Concept {
     var havingHumankindAble: Bool {

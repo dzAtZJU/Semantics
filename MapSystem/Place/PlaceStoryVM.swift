@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import RealmSwift
 
-class PlaceStoryVM: APlaceStoryVM {
+class PlaceStoryVM: APlaceStoryVM, APageInPageVC {
     static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceStoryVM) -> Void) {
         guard let placeID = placeID else {
             completion(PlaceStoryVM(allowsCondition: allowsCondition))
@@ -17,7 +17,9 @@ class PlaceStoryVM: APlaceStoryVM {
         }
     }
     
-    var parent: MapVM?
+    var pageIndex: Int!
+    
+    var parent: AMapVM?
         
     var thePlaceId: String?
     
@@ -76,13 +78,13 @@ class PlaceStoryVM: APlaceStoryVM {
         self.allowsCondition = allowsCondition
     }
     
-    private convenience init(allowsCondition: Bool, placeStory: PlaceStory) {
+    convenience init(allowsCondition: Bool, placeStory: PlaceStory) {
         self.init(allowsCondition: allowsCondition)
         
-        loadPlace(placeStory: placeStory)
+        loadPlaceStory(placeStory)
     }
     
-    private func loadPlace(placeStory: PlaceStory) {
+    private func loadPlaceStory(_ placeStory: PlaceStory) {
         thePlaceId = placeStory.placeID
         
         conceptsToken = placeStory.perspectiveInterpretation_List.observe {
@@ -174,8 +176,8 @@ extension PlaceStoryVM: TagsVCDelegate {
         }
         
         guard thePlaceId != nil else {
-            parent?.collectPlace {
-                self.loadPlace(placeStory: $0)
+            parent?.collectPlace { (place, placeStory) in
+                self.loadPlaceStory(placeStory)
                 action()
             }
             

@@ -4,7 +4,7 @@ import FloatingPanel
 class FeedbackVC: UIPageViewController, PanelContent {
     var allowsEditing = true
     
-    let showBackBtn = true
+    let backItem = PanelContainerVC.BackItem(showBackBtn: true, action: nil)
     
     var prevPanelState:  FloatingPanelState?
     

@@ -2,7 +2,6 @@ import UIKit
 import WebKit
 import FloatingPanel
 import Combine
-import NVActivityIndicatorView
 
 protocol Phase {}
 
@@ -138,7 +137,7 @@ class PhasesVC: UIViewController, PanelContent {
     
     var panelContentDelegate: PanelContentDelegate!
     
-    let showBackBtn = false
+    let backItem = PanelContainerVC.BackItem(showBackBtn: false, action: nil)
     
     var allowsEditing = true
     //
