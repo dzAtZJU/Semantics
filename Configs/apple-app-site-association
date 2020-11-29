@@ -1,0 +1,14 @@
+{
+    "applinks": {
+        "details": [
+            {
+                "appIDs": ["HTG5RPJ6QF.ind.paper.semantics.v3"],
+                "components": [
+                    {
+                      "/": "/invitation/*"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -4,7 +4,7 @@ import TagListView
 import Presentr
 import FloatingPanel
         
-protocol APlaceStoryVM: TagsVCDelegate {
+protocol APlaceStoryVM: TagsVCDelegate, HavingOwner {
     var partnerProfile: Profile! {
         get
     }
@@ -12,6 +12,10 @@ protocol APlaceStoryVM: TagsVCDelegate {
     var tagsPublisher: Published<[String]?>.Publisher { get }
     
     var tagChoice_Sections: [TagChoiceSection] {
+        get
+    }
+    
+    var ownerID: String! {
         get
     }
 }

@@ -5,7 +5,7 @@ import RealmSwift
 class PlaceStoryVM: APlaceStoryVM, APageInPageVC {
     static func new(placeID: String?, allowsCondition: Bool, completion: @escaping (PlaceStoryVM) -> Void) {
         guard let placeID = placeID else {
-            completion(PlaceStoryVM(allowsCondition: allowsCondition))
+            completion(PlaceStoryVM(allowsCondition: allowsCondition, ownerID: nil))
             return
         }
         
@@ -16,6 +16,8 @@ class PlaceStoryVM: APlaceStoryVM, APageInPageVC {
             completion(vm)
         }
     }
+    
+    let ownerID: String!
     
     var pageIndex: Int!
     
@@ -74,12 +76,13 @@ class PlaceStoryVM: APlaceStoryVM, APageInPageVC {
         }
     }
     
-    private init(allowsCondition: Bool) {
+    private init(allowsCondition: Bool, ownerID: String!) {
         self.allowsCondition = allowsCondition
+        self.ownerID = ownerID
     }
     
     convenience init(allowsCondition: Bool, placeStory: PlaceStory) {
-        self.init(allowsCondition: allowsCondition)
+        self.init(allowsCondition: allowsCondition, ownerID: placeStory.owner.first!._id)
         
         loadPlaceStory(placeStory)
     }
@@ -219,5 +222,9 @@ class MockPlaceStoryVM: APlaceStoryVM {
     
     func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_Sections: [TagChoiceSection]) {
         
+    }
+    
+    var ownerID: String! {
+        nil
     }
 }

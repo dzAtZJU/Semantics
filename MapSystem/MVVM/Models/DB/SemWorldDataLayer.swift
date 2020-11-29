@@ -130,9 +130,9 @@ extension Realm {
 // MARK: PlaceStory
 extension Realm {
     func queryPlaceStory(placeID: String) -> PlaceStory? {
-        queryCurrentIndividual()!.placeStory_List.first {
+        queryIndividual(configuration.syncConfiguration!.partitionValue!.stringValue!)!.placeStory_List.first {
             $0.placeID == placeID
-            }
+        }
     }
     
     func addCondition(_ conditionID: String, toPlace placeID: String) -> Bool {

@@ -60,18 +60,18 @@ extension AppDelegate {
     }
 }
 
-extension AppDelegate {
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
-            guard let url = userActivity.webpageURL else {
-                return false
-            }
-            print("userActivity \(url)")
-            return true
-        }
-        return false
-    }
-}
+//extension AppDelegate {
+//    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+//        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
+//            guard let url = userActivity.webpageURL else {
+//                return false
+//            }
+//            print("userActivity \(url)")
+//            return true
+//        }
+//        return false
+//    }
+//}
 
 // Notification
 extension AppDelegate {

@@ -1,11 +1,3 @@
-//
-//  SceneDelegate.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/5/18.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 import SwiftUI
 import CoreData
@@ -15,22 +7,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        let mapVC = MapVC(vm: MapVM(circleOfTrust: .public))
+        let wishVC = MapVC(vm: PartnersMapVM())
+        let tabVC = UITabBarController()
+        tabVC.setViewControllers([mapVC, wishVC], animated: false)
         
         let window = UIWindow(windowScene: scene as! UIWindowScene)
         self.window = window
-        
-        //        let firstSector = SectorDataLayer.shared.queryByDisplayOrder(0, operator: .equal) ?? Sector(context: appManagedObjectContext)
-        //        window.rootViewController = FloatContainerVC(rootVC: SemSectorsVC(firstSector: firstSector))
-        let mapVC = MapVC(vm: MapVM(circleOfTrust: .public))
-        let wishVC = MapVC(vm: PartnersMapVM(circleOfTrust: .private))
-        let tabVC = UITabBarController()
-        tabVC.setViewControllers([mapVC, wishVC], animated: false)
         window.rootViewController = tabVC
-        
-//        window.rootViewController = TalksVC(vm: ConceptVM(concept: Concept.Seasons))
-//        window.rootViewController = ConceptVC(vm: MockConceptVM())
-        
         window.makeKeyAndVisible()
+        
+        if let userActivity = connectionOptions.userActivities.first {
+            checkUserActivity(userActivity)
+        }
+    }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        checkUserActivity(userActivity)
+    }
+    
+    private func checkUserActivity(_ userActivity: NSUserActivity) {
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb, let incomingURL = userActivity.webpageURL, let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
+            let path = components.path!
+            let inviter = String(path.split(separator: "/")[1])
+            print("[UniversalLink] inviter: \(inviter)")
+            (self.window?.rootViewController as! UITabBarController).selectedIndex = 1
+            NotificationCenter.default.post(name: NSNotification.Name.inviteReceived, object: inviter)
+        }
     }
     
     func sceneWillEnterForeground(_ scene: UIScene) {

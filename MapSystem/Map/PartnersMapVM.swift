@@ -7,17 +7,21 @@ private struct UserIDAndPlaceIDs {
 }
 
 class PartnersMapVM: AMapVM {
+    init() {
+        super.init(circleOfTrust: .private)
+    }
+    
     override func collectPlace(completion: @escaping (Place, PlaceStory) -> ()) {
         super.collectPlace { (place, placeStory) in
             completion(place, placeStory)
             DispatchQueue.main.async {
-                self.mapView.removeAnnotations(self.mapView.annotations)
-                self.loadPlaces()
+                self.mapVC.map.removeAnnotations(self.mapVC.map.annotations)
+                self.loadPlaces {}
             }
         }
     }
     
-    override func loadPlaces() {
+    override func loadPlaces(completion: @escaping () -> ()) {
         RealmSpace.userInitiated.async {
             let partners = try! RealmSpace.userInitiated.privatRealm.queryPartners().map({ (id) throws -> String in
                 id
@@ -63,7 +67,8 @@ class PartnersMapVM: AMapVM {
                         }
                         
                         DispatchQueue.main.async {
-                            self.mapView.addAnnotations(newAnnos)
+                            self.mapVC.map.addAnnotations(newAnnos)
+                            completion()
                         }
                     }
                 }

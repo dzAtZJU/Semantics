@@ -4,9 +4,10 @@ import CoreLocation
 import Combine
 import FloatingPanel
 import Presentr
+import SPAlert
 
 class AMapVM: NSObject {
-    var mapView: MKMapView!
+    var mapVC: MapVC!
     
     let circleOfTrust: CircleOfTrust
     
@@ -14,12 +15,12 @@ class AMapVM: NSObject {
         self.circleOfTrust = circleOfTrust
     }
     
-    func loadPlaces() {
+    func loadPlaces(completion: @escaping () -> ()) {
         fatalError()
     }
     
     func collectPlace(completion: @escaping (Place, PlaceStory) -> ()) {
-        let uniquePlace = UniquePlace(annotation: mapView.selectedAnnotations.first!)
+        let uniquePlace = UniquePlace(annotation: mapVC.map.selectedAnnotations.first!)
         RealmSpace.userInitiated.async {
             let place = RealmSpace.userInitiated.publicRealm.queryOrCreatePlace(uniquePlace).freeze()
             
@@ -28,15 +29,26 @@ class AMapVM: NSObject {
             completion(place, placeStory)
         }
     }
+    
+    func addPartner(_ partnerID: String, completion: @escaping (Profile) ->  ()) {
+        RealmSpace.userInitiated.async {
+            RealmSpace.userInitiated.addPartner(partnerID) { profile in
+                self.loadPlaces {
+                    completion(profile)
+                }
+            }
+        }
+    }
 }
 
 class MapVC: UIViewController {
+    private lazy var spinner = Spinner.create()
+    
     private var tintLayer: CALayer?
     
     internal lazy var map: MKMapView = {
         let tmp = MKMapView()
         tmp.mapType = .mutedStandard
-        tmp.showsScale = true
         tmp.pointOfInterestFilter = .init(including: [.airport, .amusementPark, .aquarium, .bakery, .beach, .brewery, .cafe, .library, .movieTheater, .nationalPark, .nightlife, .park, .publicTransport, .university, .zoo])
         tmp.isRotateEnabled = false
         tmp.showsUserLocation = true
@@ -61,7 +73,7 @@ class MapVC: UIViewController {
         var anchors: [FloatingPanelState : FloatingPanelLayoutAnchoring] = [
             .full: FloatingPanelLayoutAnchor(absoluteInset: 16, edge: .top, referenceGuide: .safeArea),
             .half: FloatingPanelLayoutAnchor(fractionalInset: 0.7, edge: .bottom, referenceGuide: .safeArea),
-            .tip: FloatingPanelLayoutAnchor(fractionalInset: 0.3, edge: .bottom, referenceGuide: .safeArea)
+            .tip: FloatingPanelLayoutAnchor(fractionalInset: 0.2, edge: .bottom, referenceGuide: .safeArea)
         ]
     }
     internal lazy var panel: FloatingPanelController = {
@@ -138,7 +150,7 @@ class MapVC: UIViewController {
     init(vm: AMapVM) {
         self.vm = vm
         super.init(nibName: nil, bundle: nil)
-        vm.mapView = map
+        vm.mapVC = self
         
         tabBarItem = {
             switch vm.circleOfTrust {
@@ -164,6 +176,9 @@ class MapVC: UIViewController {
             view.addSubview(profileBtn)
             profileBtn.anchorTopLeading()
         }
+        
+        view.addSubview(spinner)
+        spinner.anchorCenterSuperview()
     }
     
     override func viewDidLoad() {
@@ -175,10 +190,10 @@ class MapVC: UIViewController {
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
         
         if RealmSpace.isPreloaded {
-            vm.loadPlaces()
+            self.loadPlaces()
         } else {
             NotificationCenter.default.addObserver(forName: .realmsPreloaded, object: nil, queue: nil) { _ in
-                self.vm.loadPlaces()
+                self.loadPlaces()
             }
         }
         
@@ -191,12 +206,37 @@ class MapVC: UIViewController {
             }).first!
             self.map.addAndSelect(newAnno)
         }
+        
+        if vm.circleOfTrust == .private {
+            NotificationCenter.default.addObserver(forName: .inviteReceived, object: nil, queue: nil) { notification in
+                guard let inviter = notification.object as? String, inviter != RealmSpace.userID else {
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.spinner.startAnimating(parent: self.view)
+                    self.vm.addPartner(inviter) { profile in
+                        DispatchQueue.main.async {
+                            self.spinner.stopAnimating()
+                            SPAlert.present(title: profile.name, message: "We are friends now", image: profile.image)
+                        }
+                    }
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         locationManager.requestWhenInUseAuthorization()
+    }
+    
+    private func loadPlaces() {
+        spinner.startAnimating()
+        vm.loadPlaces {
+            self.spinner.stopAnimating()
+        }
     }
     
     deinit {
@@ -221,7 +261,7 @@ extension MapVC: PlaceStoryVCDelegate {
             }
         case Concept.Scent.title, Concept.Trust.title:
             DispatchQueue.main.async {
-                let vm = ConceptVM(concept: Concept.map[tag]!, placeID: self.selectedPlaceID!)
+                let vm = ConceptVM(concept: Concept.map[tag]!, placeID: self.selectedPlaceID!, ownerID: placeVC.vm.ownerID)
                 let vc = PanelNavigationController(rootViewController: ConceptVC(vm: vm))
                 vc.prevPanelState = .tip
                 vc.panelContentDelegate = self

@@ -12,3 +12,10 @@ struct Spinner {
         return tmp
     }
 }
+
+extension NVActivityIndicatorView {
+    func startAnimating(parent: UIView) {
+        parent.addSubview(self)
+        self.startAnimating()
+    }
+}

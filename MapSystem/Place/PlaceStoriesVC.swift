@@ -21,11 +21,8 @@ class PlaceStoriesVC: UIPageViewController, PanelContent {
     var vm: PlaceStoriesVM! {
         didSet {
             DispatchQueue.main.async {
-                let vc = PlaceStoryVC(style: .Card)
                 let newVM = self.vm.firstPlaceStoryVM
-                vc.vm = newVM
-                vc.allowsEditing = newVM.pageIndex == 0
-                vc.delegate = self.placeStoryVCDelegate
+                let vc = self.createPlaceStoryVC(vm: newVM)
                 self.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
             }
         }
@@ -45,6 +42,14 @@ class PlaceStoriesVC: UIPageViewController, PanelContent {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
     }
+    
+    private func createPlaceStoryVC(vm: PlaceStoryVM) -> PlaceStoryVC {
+        let newVC = PlaceStoryVC(style: .Card)
+        newVC.vm = vm
+        newVC.allowsEditing = vm.ownerID == RealmSpace.userID
+        newVC.delegate = placeStoryVCDelegate
+        return newVC
+    }
 }
 
 extension PlaceStoriesVC: UIPageViewControllerDataSource {
@@ -56,11 +61,7 @@ extension PlaceStoriesVC: UIPageViewControllerDataSource {
             return nil
         }
         
-        let newVC = PlaceStoryVC(style: .Card)
-        newVC.vm = vm
-        newVC.allowsEditing =  vm.pageIndex == 0
-        newVC.delegate = placeStoryVCDelegate
-        return newVC
+        return createPlaceStoryVC(vm: vm)
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
@@ -71,10 +72,6 @@ extension PlaceStoriesVC: UIPageViewControllerDataSource {
             return nil
         }
         
-        let newVC = PlaceStoryVC(style: .Card)
-        newVC.vm = vm
-        newVC.allowsEditing = vm.pageIndex == 0
-        newVC.delegate = placeStoryVCDelegate
-        return newVC
+        return createPlaceStoryVC(vm: vm)
     }
 }

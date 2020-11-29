@@ -104,6 +104,29 @@ class RealmSpace {
         let oneHundredMB = 100 * 1024 * 1024
         return (fileSize > oneHundredMB) && (Double(dataSize) / Double(fileSize)) < 0.5
     }
+    
+    func addPartner(_ partnerID: String, completion: @escaping (Profile) -> ()) {
+        let selfRealm = self.privatRealm
+        let selfInd = selfRealm.queryCurrentIndividual()!
+        let selfID = selfInd._id
+        realm(partnerID) { realm in
+            let partnerRealm = realm.queryIndividual(partnerID)!
+            let partnerList = partnerRealm.partner_List
+            if !partnerList.contains(selfID) {
+                try! realm.write {
+                    partnerList.append(selfID)
+                }
+            }
+            
+            if !selfInd.partner_List.contains(partnerID) {
+                try! selfRealm.write {
+                    selfInd.partner_List.append(partnerID)
+                }
+            }
+            
+            completion(partnerRealm.profile)
+        }
+    }
 }
 
 // MARK: Account

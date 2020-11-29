@@ -46,7 +46,7 @@ enum HeaderType {
     case TitleWithAdding(String)
 }
 
-protocol AConceptVM {
+protocol AConceptVM: HavingOwner {
     var concept: Concept { get }
     
     var sectionsPublisher: Published<[ConceptSection]?>.Publisher { get }
@@ -171,11 +171,12 @@ class ConceptVC: UIViewController {
         <TitleSupplementaryView>(elementKind: TitleSupplementaryView.identifier) {
             supplementaryView, string, indexPath in
             let sectionInfo = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
-            guard case let HeaderType.Title(title) = sectionInfo.headerType else {
-                fatalError()
+            switch sectionInfo.headerType {
+            case let .Title(text):
+                fallthrough
+            case let .TitleWithAdding(text):
+                supplementaryView.label.text = text
             }
-
-            supplementaryView.label.text = title
         }
         let titleWithAddingHeaderRegistration = UICollectionView.SupplementaryRegistration
         <TitleWithAddingSupplementaryView>(elementKind: TitleWithAddingSupplementaryView.identifier) {
@@ -197,10 +198,14 @@ class ConceptVC: UIViewController {
         tmp.supplementaryViewProvider = {(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
             let sectionInfo = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
             switch sectionInfo.headerType {
+            case .TitleWithAdding:
+                if self.vm.allowsEditng {
+                    return collectionView.dequeueConfiguredReusableSupplementary(using: titleWithAddingHeaderRegistration, for: indexPath)
+                } else {
+                    fallthrough
+                }
             case .Title:
                 return collectionView.dequeueConfiguredReusableSupplementary(using: titleHeaderRegistration, for: indexPath)
-            case .TitleWithAdding:
-                return collectionView.dequeueConfiguredReusableSupplementary(using: titleWithAddingHeaderRegistration, for: indexPath)
             }
         }
         return tmp

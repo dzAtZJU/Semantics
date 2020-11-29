@@ -16,6 +16,13 @@ class ProfileVC: UIViewController {
         return tmp
     }()
     
+    lazy var shareBtn: UIButton = UIButton(systemName: "square.and.arrow.up", textStyle: .title2, primaryAction: UIAction(handler: { _ in
+        let items = [URL(string: "https://semantics-dev-wvrwg-uclmi.mongodbstitch.com/invitation/\(RealmSpace.userID!)")!]
+        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        self.present(ac, animated: true)
+    }))
+    
+    
     lazy var nameField: UITextField = {
         let tmp = UITextField()
         tmp.placeholder = "name"
@@ -51,6 +58,9 @@ class ProfileVC: UIViewController {
         stack.anchorBottomCenter()
         stackHeightConstraint = stack.heightAnchor.constraint(equalTo: view.heightAnchor)
         stackHeightConstraint.isActive = true
+        
+        view.addSubview(shareBtn)
+        shareBtn.anchorTopTrailing()
         
         view.addSubview(spinner)
         spinner.anchorCenterSuperview()

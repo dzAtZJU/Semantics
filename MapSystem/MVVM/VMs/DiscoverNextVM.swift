@@ -73,7 +73,7 @@ class DiscoverNextVM {
                 SemAnnotation(place: place, type: .inDiscovering, color: .brown)
             }
             DispatchQueue.main.async {
-                self.parent?.mapView.addAnnotations(annos)
+                self.parent?.mapVC.map.addAnnotations(annos)
             }
             completion(result)
         }

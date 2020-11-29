@@ -52,6 +52,8 @@ extension TrustInterpretation: FillingSection {
 }
 
 class ConceptVM: AConceptVM {
+    let ownerID: String!
+    
     let placeID: String
     
     let interpretationInRealm: PerspectiveInterpretation
@@ -68,11 +70,12 @@ class ConceptVM: AConceptVM {
         $sections
     }
     
-    init(concept: Concept, placeID: String) {
+    init(concept: Concept, placeID: String, ownerID: String!) {
         self.placeID = placeID
         self.concept = concept
+        self.ownerID = ownerID
                 
-        let privateLayer = RealmSpace.main.privatRealm
+        let privateLayer = RealmSpace.main.realm(ownerID)
         interpretationInRealm = try! privateLayer.queryPlaceStory(placeID: placeID)!.perspectiveInterpretation_List.first { (item) throws-> Bool in
             item.perspectiveID == concept.title
         }!
@@ -116,6 +119,10 @@ class ConceptVM: AConceptVM {
 }
 
 class MockConceptVM: AConceptVM {
+    var ownerID: String! {
+        nil
+    }
+    
     var concept: Concept = .Trust
     
     @Published var sections: [ConceptSection]!

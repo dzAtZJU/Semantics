@@ -39,6 +39,7 @@
 		893A705525723A5000A24F26 /* PageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A705425723A5000A24F26 /* PageVC.swift */; };
 		893A70592573549A00A24F26 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70582573549A00A24F26 /* ProfileVC.swift */; };
 		893A705F2573793500A24F26 /* RealmModel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A705E2573793500A24F26 /* RealmModel+.swift */; };
+		893A70672573C69D00A24F26 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70662573C69C00A24F26 /* Alert.swift */; };
 		894517BB24E91C2B006EF619 /* MapSysEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */; };
 		894517BD24E92A0D006EF619 /* MapSysCommunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BC24E92A0D006EF619 /* MapSysCommunication.swift */; };
 		8947A0FC256902C100B90BDA /* Trust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A0FB256902C100B90BDA /* Trust.swift */; };
@@ -227,6 +228,7 @@
 		893A705425723A5000A24F26 /* PageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageVC.swift; sourceTree = "<group>"; };
 		893A70582573549A00A24F26 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		893A705E2573793500A24F26 /* RealmModel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RealmModel+.swift"; sourceTree = "<group>"; };
+		893A70662573C69C00A24F26 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysEnvironment.swift; sourceTree = "<group>"; };
 		894517BC24E92A0D006EF619 /* MapSysCommunication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysCommunication.swift; sourceTree = "<group>"; };
 		8947A0FB256902C100B90BDA /* Trust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trust.swift; sourceTree = "<group>"; };
@@ -702,6 +704,7 @@
 		8991DADF24B5A77E00299595 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
+				89290D4724E13B5600F0A862 /* apple-app-site-association */,
 				8964219C2472BAC50081DC87 /* Semantics.entitlements */,
 				89642185247250650081DC87 /* Info.plist */,
 				8911386724C1984C00CBEBB5 /* Theme.swift */,
@@ -786,7 +789,6 @@
 				8947A14E256BBBBF00B90BDA /* Place */,
 				8947A13F256B505F00B90BDA /* Map */,
 				89290D6424E52EDF00F0A862 /* MVVM */,
-				89290D4724E13B5600F0A862 /* apple-app-site-association */,
 				894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */,
 			);
 			path = MapSystem;
@@ -984,6 +986,7 @@
 				8947A137256AEA8700B90BDA /* Spinner.swift */,
 				8947A13B256AEE6600B90BDA /* PanelNavigationController.swift */,
 				893A705425723A5000A24F26 /* PageVC.swift */,
+				893A70662573C69C00A24F26 /* Alert.swift */,
 			);
 			path = Reusability;
 			sourceTree = "<group>";
@@ -1313,6 +1316,7 @@
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
+				893A70672573C69D00A24F26 /* Alert.swift in Sources */,
 				89BF91942549A9FE006E364A /* PhasesVC.swift in Sources */,
 				89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */,
 				89A413E024C70AEB003FD435 /* Creature.swift in Sources */,

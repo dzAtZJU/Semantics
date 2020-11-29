@@ -21,11 +21,10 @@ class MapVM: AMapVM {
     override init(circleOfTrust: CircleOfTrust) {
         super.init(circleOfTrust: circleOfTrust)
     
-        NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)
-       
+        NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)  
     }
     
-    override func loadPlaces() {
+    override func loadPlaces(completion: @escaping () -> ()) {
         let trust = circleOfTrust
         RealmSpace.userInitiated.async {
             RealmSpace.userInitiated.privatRealm { privateRealm in
@@ -36,7 +35,8 @@ class MapVM: AMapVM {
                     }
                     
                     DispatchQueue.main.async {
-                        self.mapView.addAnnotations(annos)
+                        self.mapVC.map.addAnnotations(annos)
+                        completion()
                     }
                 }
             }
@@ -48,9 +48,9 @@ class MapVM: AMapVM {
             completion(place, placeStory)
             
             DispatchQueue.main.async {
-                self.mapView.deselectAnnotation(nil, animated: true)
+                self.mapVC.map.deselectAnnotation(nil, animated: true)
                 let newAnnotation = SemAnnotation(place: place, type: .visited, color: .brown)
-                self.mapView.addAndSelect(newAnnotation)
+                self.mapVC.map.addAndSelect(newAnnotation)
             }
         }
     }
@@ -65,7 +65,7 @@ class MapVM: AMapVM {
         guard let filter = filter else {
             return []
         }
-        return (mapView.annotations as! [SemAnnotation]).filter(filter)
+        return (self.mapVC.map.annotations as! [SemAnnotation]).filter(filter)
     }
     
     deinit {

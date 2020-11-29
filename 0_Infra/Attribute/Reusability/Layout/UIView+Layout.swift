@@ -19,6 +19,14 @@ extension UIView {
         ])
     }
     
+    func anchorTopTrailing() {
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            trailingAnchor.constraint(equalTo: superview!.layoutMarginsGuide.trailingAnchor),
+            topAnchor.constraint(equalTo: superview!.layoutMarginsGuide.topAnchor)
+        ])
+    }
+    
     func anchorBottomCenter() {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

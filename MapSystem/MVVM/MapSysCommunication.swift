@@ -10,4 +10,5 @@ import Foundation
 
 extension Notification.Name {
     static let searchFinished = Notification.Name("searchFinished")
+    static let inviteReceived = Notification.Name("inviteReceived")
 }
