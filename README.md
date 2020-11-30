@@ -7,7 +7,7 @@ This is an experimental map app:
     <img src="https://github.com/dzAtZJU/StaticAssets/blob/master/tag.PNG", width="230">
 </p>
 
-2. Allowing rank places according to a tag. And starting from a place, the client side allows searching(the server side is not implemented yet) new places by requiring each of the tags attached to be better or no worse.
+2. Allowing ranking places according to a tag. And starting from a place, the client side allows searching(the server side is not implemented yet) new places by requiring each of the tags attached to be better or no worse.
 <p float="left">
     <img src="https://github.com/dzAtZJU/StaticAssets/blob/master/compare.PNG", width="230">
     <img src="https://github.com/dzAtZJU/StaticAssets/blob/master/search.PNG", width="230">
