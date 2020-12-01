@@ -27,3 +27,6 @@ This is an experimental map app:
 </p>
 
 This experimental app reflects the scale and complexity I can handle currently.
+
+## Install
+https://testflight.apple.com/join/d7xcvliT
