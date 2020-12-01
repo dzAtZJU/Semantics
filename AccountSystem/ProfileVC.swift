@@ -10,7 +10,7 @@ class ProfileVC: UIViewController {
     }()
     
     lazy var avatarView: UIImageView = {
-        let tmp = Profile.createAvatarView(width: 80)
+        let tmp = Profile.createAvatarView(width: 80, strict: true)
         tmp.isUserInteractionEnabled = true
         tmp.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imgViewTapped)))
         return tmp

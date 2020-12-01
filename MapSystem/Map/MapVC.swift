@@ -15,7 +15,7 @@ class AMapVM: NSObject {
         self.circleOfTrust = circleOfTrust
     }
     
-    func loadPlaces(completion: @escaping () -> ()) {
+    func load(completion: @escaping () -> ()) {
         fatalError()
     }
     
@@ -27,16 +27,6 @@ class AMapVM: NSObject {
             let placeStory = RealmSpace.userInitiated.privatRealm.collectPlace(placeID: place._id)
             
             completion(place, placeStory)
-        }
-    }
-    
-    func addPartner(_ partnerID: String, completion: @escaping (Profile) ->  ()) {
-        RealmSpace.userInitiated.async {
-            RealmSpace.userInitiated.addPartner(partnerID) { profile in
-                self.loadPlaces {
-                    completion(profile)
-                }
-            }
         }
     }
 }
@@ -65,15 +55,21 @@ class MapVC: UIViewController {
         self.customPresentViewController(vc.presentr, viewController: vc, animated: true, completion: nil)
     }))
     
+    private lazy var locationBtn = UIButton(systemName: "location", textStyle: .title1, primaryAction: UIAction(handler: { _ in
+        if let coor = MapSysEnvironment.shared.userCurrentCoordinate {
+            self.map.centerCoordinate = coor
+        }
+    }))
+    
     private class SemFloatingPanelLayout: FloatingPanelLayout {
         var position: FloatingPanelPosition = .bottom
         
-        var initialState: FloatingPanelState = .tip
+        var initialState: FloatingPanelState = .hidden
         
         var anchors: [FloatingPanelState : FloatingPanelLayoutAnchoring] = [
             .full: FloatingPanelLayoutAnchor(absoluteInset: 16, edge: .top, referenceGuide: .safeArea),
             .half: FloatingPanelLayoutAnchor(fractionalInset: 0.7, edge: .bottom, referenceGuide: .safeArea),
-            .tip: FloatingPanelLayoutAnchor(fractionalInset: 0.2, edge: .bottom, referenceGuide: .safeArea)
+            .tip: FloatingPanelLayoutAnchor(fractionalInset: 0.3, edge: .bottom, referenceGuide: .safeArea)
         ]
     }
     internal lazy var panel: FloatingPanelController = {
@@ -86,14 +82,8 @@ class MapVC: UIViewController {
     }()
     
     lazy var panelContainerVC: PanelContainerVC = {
-        let tmp = PanelContainerVC(initialVC: searchVC)
+        let tmp = PanelContainerVC()
         tmp.view.backgroundColor = .systemBackground
-        return tmp
-    }()
-    
-    private lazy var searchVC: SearchVC = {
-        let tmp = SearchVC()
-        tmp.panelContentDelegate = self
         return tmp
     }()
     
@@ -130,7 +120,6 @@ class MapVC: UIViewController {
     private var centerToUserLocation = true
     
     private var annotationsToken: AnyCancellable?
-    private var boundingRegionToken: AnyCancellable?
     
     internal let vm: AMapVM
     
@@ -142,8 +131,42 @@ class MapVC: UIViewController {
         selectedAnnotation?.placeID
     }
     
+    var semAnnotations: [SemAnnotation] {
+        map.annotations.filter {
+            $0 is SemAnnotation
+        } as! [SemAnnotation]
+    }
+    
+    var partnersAnnotations: [PartnersAnnotation] {
+        map.annotations.filter {
+            $0 is PartnersAnnotation
+        } as! [PartnersAnnotation]
+    }
+    
     private lazy var locationManager: CLLocationManager = {
         let tmp = CLLocationManager()
+        return tmp
+    }()
+    
+    private lazy var searchSuggestionsController: SearchSuggestionsVC = {
+        let tmp = SearchSuggestionsVC()
+        tmp.searchDidFinish = {
+            self.searchController.searchBar.resignFirstResponder()
+        }
+        return tmp
+    }()
+    
+    private lazy var searchController: UISearchController = {
+        let tmp = UISearchController(searchResultsController: searchSuggestionsController)
+        tmp.searchResultsUpdater = searchSuggestionsController
+        tmp.searchBar.delegate = self
+        tmp.searchBar.returnKeyType = .done
+        tmp.obscuresBackgroundDuringPresentation = false
+        
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        definesPresentationContext = true
+        
         return tmp
     }()
     
@@ -151,6 +174,13 @@ class MapVC: UIViewController {
         self.vm = vm
         super.init(nibName: nil, bundle: nil)
         vm.mapVC = self
+        
+        navigationItem.searchController = searchController
+        
+        
+        navigationItem.largeTitleDisplayMode = .never
+        
+        navigationItem.hidesSearchBarWhenScrolling = true
         
         tabBarItem = {
             switch vm.circleOfTrust {
@@ -179,6 +209,12 @@ class MapVC: UIViewController {
         
         view.addSubview(spinner)
         spinner.anchorCenterSuperview()
+        
+        view.addSubview(locationBtn)
+        NSLayoutConstraint.activate([
+            locationBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            view.safeAreaLayoutGuide.bottomAnchor.constraint(equalToSystemSpacingBelow: locationBtn.bottomAnchor, multiplier: 3)
+        ])
     }
     
     override func viewDidLoad() {
@@ -190,14 +226,17 @@ class MapVC: UIViewController {
         map.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Self.markAnnotationViewIdentifier)
         
         if RealmSpace.isPreloaded {
-            self.loadPlaces()
+            self.load()
         } else {
+            spinner.startAnimating()
             NotificationCenter.default.addObserver(forName: .realmsPreloaded, object: nil, queue: nil) { _ in
-                self.loadPlaces()
+                self.load()
             }
         }
         
         NotificationCenter.default.addObserver(forName: .searchFinished, object: nil, queue: nil) {
+            self.searchController.isActive = false
+            
             let response = $0.object as! MKLocalSearch.Response
             self.map.region = response.boundingRegion
             
@@ -215,10 +254,12 @@ class MapVC: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.spinner.startAnimating(parent: self.view)
-                    self.vm.addPartner(inviter) { profile in
-                        DispatchQueue.main.async {
-                            self.spinner.stopAnimating()
-                            SPAlert.present(title: profile.name, message: "We are friends now", image: profile.image)
+                    RealmSpace.userInitiated.async {
+                        RealmSpace.userInitiated.addPartner(inviter) { profile in
+                            DispatchQueue.main.async {
+                                self.spinner.stopAnimating()
+                                SPAlert.present(title: profile.name, message: "We are friends now", image: profile.image)
+                            }
                         }
                     }
                 }
@@ -232,19 +273,13 @@ class MapVC: UIViewController {
         locationManager.requestWhenInUseAuthorization()
     }
     
-    private func loadPlaces() {
+    private func load() {
         spinner.startAnimating()
-        vm.loadPlaces {
-            self.spinner.stopAnimating()
+        vm.load {
+            DispatchQueue.main.async {
+                self.spinner.stopAnimating()
+            }
         }
-    }
-    
-    deinit {
-        annotationsToken?.cancel()
-        annotationsToken = nil
-        
-        boundingRegionToken?.cancel()
-        boundingRegionToken = nil
     }
 }
 
@@ -336,18 +371,24 @@ extension MapVC: MKMapViewDelegate {
         guard let annotation = view.annotation as? SemAnnotation else {
             return
         }
-        
-        panelContainerVC.hideAll()
-        
         self.panelContentFor(annotation) { panelContent in
-            DispatchQueue.main.async {                    self.panelContainerVC.show(panelContent, sender: nil)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.25) {
+                    self.panel.move(to: .tip, animated: false)
+                } completion: { _ in
+                    self.panelContainerVC.show(panelContent, sender: nil)
+                }
             }
         }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        panelContainerVC.hideAll()
-        
+        UIView.animate(withDuration: 0.25) {
+            self.panel.hide()
+        } completion: { _ in
+            self.panelContainerVC.hideAll()
+        }
+
         if view is MKMarkerAnnotationView {
             mapView.removeAnnotation(view.annotation!)
         }
@@ -363,7 +404,7 @@ extension MapVC: MKMapViewDelegate {
             PlaceStoryVM.new(placeID: annotation.placeID, allowsCondition: vm.circleOfTrust == .public) { vm in
                 vm.parent = self.vm
                 RealmSpace.main.async {
-                    vm.partnerProfile = RealmSpace.main.privatRealm.queryCurrentIndividual()!.profile
+//                    vm.partnerProfile = RealmSpace.main.privatRealm.queryCurrentIndividual()!.profile
                     self.placeStoryVC.vm = vm
                     completion(self.placeStoryVC)
                 }
@@ -373,9 +414,7 @@ extension MapVC: MKMapViewDelegate {
 }
 
 // MARK: FloatingPanelControllerDelegate
-extension MapVC: FloatingPanelControllerDelegate {
-    
-}
+extension MapVC: FloatingPanelControllerDelegate {}
 
 // MARK: PanelContentDelegate
 extension MapVC: PanelContentDelegate {
@@ -383,6 +422,12 @@ extension MapVC: PanelContentDelegate {
         vm
     }
     
+}
+
+extension MapVC: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.searchController.isActive = false
+    }
 }
 
 extension MKMapView {

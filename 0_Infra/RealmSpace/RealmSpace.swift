@@ -19,6 +19,10 @@ class RealmSpace {
     
     static let main = RealmSpace(queue: DispatchQueue.main)
     
+    static func create() -> RealmSpace {
+        return RealmSpace(queue: DispatchQueue(label: "queue\(UUID())-for-realm", qos: .userInitiated, target: DispatchQueue.global(qos: .userInitiated)))
+    }
+    
     static let publicPartitionValue = "Public18"
     
     private static let app = App(id: Environment.current.realmApp)

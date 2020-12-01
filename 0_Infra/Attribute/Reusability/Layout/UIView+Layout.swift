@@ -31,7 +31,7 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             centerXAnchor.constraint(equalTo: superview!.centerXAnchor),
-            bottomAnchor.constraint(equalTo: superview!.bottomAnchor)
+            bottomAnchor.constraint(equalTo: superview!.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }

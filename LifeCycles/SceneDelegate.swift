@@ -7,8 +7,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CoreDataAccessor {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let mapVC = MapVC(vm: MapVM(circleOfTrust: .public))
-        let wishVC = MapVC(vm: PartnersMapVM())
+        let mapVC = UINavigationController(rootViewController: MapVC(vm: MapVM(circleOfTrust: .public)))
+        mapVC.navigationBar.isTranslucent = true
+        
+        
+        let wishVC = UINavigationController(rootViewController: MapVC(vm: PartnersMapVM()))
         let tabVC = UITabBarController()
         tabVC.setViewControllers([mapVC, wishVC], animated: false)
         

@@ -40,6 +40,9 @@
 		893A70592573549A00A24F26 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70582573549A00A24F26 /* ProfileVC.swift */; };
 		893A705F2573793500A24F26 /* RealmModel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A705E2573793500A24F26 /* RealmModel+.swift */; };
 		893A70672573C69D00A24F26 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70662573C69C00A24F26 /* Alert.swift */; };
+		893A708025763FEB00A24F26 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A707F25763FEA00A24F26 /* Array+.swift */; };
+		893A708625764BA100A24F26 /* Realm+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A708525764BA000A24F26 /* Realm+.swift */; };
+		893A708A25766FE200A24F26 /* RealmSpace+Batch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A708925766FE200A24F26 /* RealmSpace+Batch.swift */; };
 		894517BB24E91C2B006EF619 /* MapSysEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */; };
 		894517BD24E92A0D006EF619 /* MapSysCommunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BC24E92A0D006EF619 /* MapSysCommunication.swift */; };
 		8947A0FC256902C100B90BDA /* Trust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A0FB256902C100B90BDA /* Trust.swift */; };
@@ -229,6 +232,9 @@
 		893A70582573549A00A24F26 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		893A705E2573793500A24F26 /* RealmModel+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RealmModel+.swift"; sourceTree = "<group>"; };
 		893A70662573C69C00A24F26 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		893A707F25763FEA00A24F26 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
+		893A708525764BA000A24F26 /* Realm+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+.swift"; sourceTree = "<group>"; };
+		893A708925766FE200A24F26 /* RealmSpace+Batch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RealmSpace+Batch.swift"; sourceTree = "<group>"; };
 		894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysEnvironment.swift; sourceTree = "<group>"; };
 		894517BC24E92A0D006EF619 /* MapSysCommunication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysCommunication.swift; sourceTree = "<group>"; };
 		8947A0FB256902C100B90BDA /* Trust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trust.swift; sourceTree = "<group>"; };
@@ -432,6 +438,8 @@
 			isa = PBXGroup;
 			children = (
 				89290D5824E3D62100F0A862 /* RealmSpace.swift */,
+				893A708525764BA000A24F26 /* Realm+.swift */,
+				893A708925766FE200A24F26 /* RealmSpace+Batch.swift */,
 			);
 			path = RealmSpace;
 			sourceTree = "<group>";
@@ -516,6 +524,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		893A707E25763FDE00A24F26 /* DS */ = {
+			isa = PBXGroup;
+			children = (
+				893A707F25763FEA00A24F26 /* Array+.swift */,
+			);
+			path = DS;
+			sourceTree = "<group>";
+		};
 		8947A0F9256902A000B90BDA /* Scent */ = {
 			isa = PBXGroup;
 			children = (
@@ -578,6 +594,7 @@
 		896234C4248F99030000ABCD /* 0_Infra */ = {
 			isa = PBXGroup;
 			children = (
+				893A707E25763FDE00A24F26 /* DS */,
 				89E8AF1D255001190030E8B5 /* Attribute */,
 				89C2889224A34308002081FE /* NetworkSpace.swift */,
 				89949D2E253155C00023C526 /* InfoIntegration */,
@@ -1208,6 +1225,7 @@
 				899C247624C9CAE100F8259B /* Sector+.swift in Sources */,
 				89B953AB24B70FCE00472692 /* SemGestureRecognizer.swift in Sources */,
 				8968C08524DF09A70093CBFC /* DiscoverNextVC.swift in Sources */,
+				893A708025763FEB00A24F26 /* Array+.swift in Sources */,
 				89E8AF20255001BC0030E8B5 /* Cell.swift in Sources */,
 				896344C324A1C5180060160B /* String+.swift in Sources */,
 				893A704D256E393E00A24F26 /* PartnersMapVM.swift in Sources */,
@@ -1316,8 +1334,10 @@
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */,
 				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
+				893A708A25766FE200A24F26 /* RealmSpace+Batch.swift in Sources */,
 				893A70672573C69D00A24F26 /* Alert.swift in Sources */,
 				89BF91942549A9FE006E364A /* PhasesVC.swift in Sources */,
+				893A708625764BA100A24F26 /* Realm+.swift in Sources */,
 				89290D4624E10D4E00F0A862 /* SemWorldDataLayer.swift in Sources */,
 				89A413E024C70AEB003FD435 /* Creature.swift in Sources */,
 				89E8AF2D255018480030E8B5 /* Concept.swift in Sources */,
@@ -1496,7 +1516,7 @@
 				CODE_SIGN_ENTITLEMENTS = Configs/Semantics.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = HTG5RPJ6QF;
 				ENABLE_PREVIEWS = YES;
@@ -1524,7 +1544,7 @@
 				CODE_SIGN_ENTITLEMENTS = Configs/Semantics.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = HTG5RPJ6QF;
 				ENABLE_PREVIEWS = YES;
@@ -1657,7 +1677,7 @@
 				CODE_SIGN_ENTITLEMENTS = Configs/Semantics.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = HTG5RPJ6QF;
 				ENABLE_PREVIEWS = YES;

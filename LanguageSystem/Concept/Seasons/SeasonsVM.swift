@@ -127,11 +127,6 @@ class SeasonsVM {
         dayIndexPath.phase = season.next
         dayIndexPath.day = 0
     }
-    
-    deinit {
-        fileDataToken?.invalidate()
-        fileDataToken = nil
-    }
 }
 
 extension SeasonsVM: PhasesVCDatasource  {

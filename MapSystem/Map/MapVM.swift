@@ -24,12 +24,12 @@ class MapVM: AMapVM {
         NotificationCenter.default.addObserver(self, selector: #selector(clientReset), name: .clientReset, object: nil)  
     }
     
-    override func loadPlaces(completion: @escaping () -> ()) {
+    override func load(completion: @escaping () -> ()) {
         let trust = circleOfTrust
         RealmSpace.userInitiated.async {
             RealmSpace.userInitiated.privatRealm { privateRealm in
                 RealmSpace.userInitiated.publicRealm { publicRealm in
-                    let annos = try! publicRealm.queryPlaces(_ids: privateRealm.loadVisitedPlacesRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
+                    let annos = try! publicRealm.queryPlaces(_ids: privateRealm.loadUserPlaceIDsRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
                         SemAnnotation(place: place, type: .visited, color: UIColor.random)
                         //Int.random(in: 0..<3) % 3 == 0 ? .brown: .cyan
                     }

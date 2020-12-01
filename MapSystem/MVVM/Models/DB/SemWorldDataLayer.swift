@@ -74,7 +74,7 @@ extension Realm {
 
 // MARK: Places
 extension Realm {
-    func loadVisitedPlacesRequire(publicConcept: Bool, privateConcept: Bool, userID: String = RealmSpace.userID) -> [String] {
+    func loadUserPlaceIDsRequire(publicConcept: Bool, privateConcept: Bool, userID: String = RealmSpace.userID) -> [String] {
         try! queryIndividual(userID)!.placeStory_List.filter { (story: PlaceStory) throws in
             if publicConcept {
                 return !story.conditionID_List.isEmpty || story.perspectiveInterpretation_List.contains {

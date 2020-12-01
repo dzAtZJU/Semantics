@@ -48,7 +48,7 @@ class PanelContainerVC: UIViewController {
     
     var initialVC: PanelContent?
     var currentVC: PanelContent?
-    init(initialVC initialVC_: PanelContent) {
+    init(initialVC initialVC_: PanelContent? = nil) {
         initialVC = initialVC_
         super.init(nibName: nil, bundle: nil)
     }
@@ -66,7 +66,7 @@ class PanelContainerVC: UIViewController {
         
         view.addSubview(backBtn)
         view.trailingAnchor.constraint(equalToSystemSpacingAfter: backBtn.trailingAnchor, multiplier: 2).isActive = true
-        backBtn.topAnchor.constraint(equalToSystemSpacingBelow: view.topAnchor, multiplier: 2).isActive = true
+        backBtn.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {

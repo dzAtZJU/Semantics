@@ -129,11 +129,6 @@ class PlaceStoryVM: APlaceStoryVM, APageInPageVC {
         }
         tags = tmp
     }
-        
-    deinit {
-        conceptsToken?.invalidate()
-        conditionsToken?.invalidate()
-    }
 }
 
 extension PlaceStoryVM: TagsVCDelegate {

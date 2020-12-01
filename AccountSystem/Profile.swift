@@ -1,7 +1,7 @@
 import UIKit
 
 struct Profile {
-    static func createAvatarView(width: CGFloat) -> UIImageView {
+    static func createAvatarView(width: CGFloat, strict: Bool = false) -> UIImageView {
         let tmp = UIImageView()
         tmp.contentMode = .scaleAspectFill
         tmp.cornerRadius = width/2
@@ -10,7 +10,7 @@ struct Profile {
         tmp.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tmp.heightAnchor.constraint(equalToConstant: width),
+            strict ? tmp.heightAnchor.constraint(equalToConstant: width): tmp.heightAnchor.constraint(lessThanOrEqualToConstant: width),            
             tmp.widthAnchor.constraint(equalTo: tmp.heightAnchor)
         ])
         

@@ -8,7 +8,7 @@ enum AnnotationType {
 }
 
 class PartnersAnnotation: SemAnnotation {
-    let partnerIDs: [String]
+    var partnerIDs: [String]
     
     init(place: Place, partnerIDs: [String]) {
         self.partnerIDs = partnerIDs

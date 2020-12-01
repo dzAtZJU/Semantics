@@ -4,10 +4,6 @@ import MapKit
 private let excludeCategories: [MKPointOfInterestCategory] = [.airport, .atm, .bank, .carRental, .evCharger, .fireStation, .gasStation, .hospital, .parking, .pharmacy, .police, .postOffice, .publicTransport]
 
 class SearchSuggestionsVC: UITableViewController {
-    lazy var searchUpdater: ((String) -> Void) = {
-        self.searchCompleter.queryFragment = $0
-    }
-    
     var searchDidFinish: (() -> Void)?
     
     private class SuggestionCell: UITableViewCell {
@@ -54,6 +50,12 @@ class SearchSuggestionsVC: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         searchCompleter.cancel()
         super.viewWillAppear(animated)
+    }
+}
+
+extension SearchSuggestionsVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        self.searchCompleter.queryFragment = searchController.searchBar.text!
     }
 }
 
