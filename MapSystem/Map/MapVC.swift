@@ -25,7 +25,6 @@ class AMapVM: NSObject {
             let place = RealmSpace.userInitiated.publicRealm.queryOrCreatePlace(uniquePlace).freeze()
             
             let placeStory = RealmSpace.userInitiated.privatRealm.collectPlace(placeID: place._id)
-            
             completion(place, placeStory)
         }
     }
@@ -234,10 +233,10 @@ class MapVC: UIViewController {
             }
         }
         
-        NotificationCenter.default.addObserver(forName: .searchFinished, object: nil, queue: nil) {
+        NotificationCenter.default.addObserver(forName: .searchFinished, object: searchSuggestionsController, queue: nil) {
             self.searchController.isActive = false
             
-            let response = $0.object as! MKLocalSearch.Response
+            let response = $0.userInfo!["response"] as! MKLocalSearch.Response
             self.map.region = response.boundingRegion
             
             let newAnno = response.mapItems.map({
@@ -283,7 +282,6 @@ class MapVC: UIViewController {
     }
 }
 
-// MARK: PlaceStoryDelegate
 extension MapVC: PlaceStoryVCDelegate {
     func placeStoryVCShouldStartIndividualAble(_ placeVC: PlaceStoryVC, tag: String) {
         switch tag {
@@ -330,7 +328,6 @@ extension MapVC: PlaceStoryVCDelegate {
     }
 }
 
-// MARK: MKMapViewDelegate
 extension MapVC: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         guard centerToUserLocation else {
@@ -355,7 +352,16 @@ extension MapVC: MKMapViewDelegate {
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.annotationViewIdentifier, for: annotation)
             view.canShowCallout = true
             
-            view.image = AnnotationView.createPointImage(color: annotation.color)
+            if let partnersAnnotation = annotation as? PartnersAnnotation {
+                var colors = Theme.annotationColors
+                if partnersAnnotation.partnerIDs.contains(RealmSpace.userID!) {
+                    colors[0] = Theme.selfAnnotationColor
+                }
+                view.image = UIImage.createPointImage(colors: Array(colors[0..<min(4, partnersAnnotation.partnerIDs.count)]))
+            } else {
+                view.image = UIImage.createPointImage(colors: [Theme.selfAnnotationColor])
+            }
+            
             return view
         case .inSearching:
             let view =  mapView.dequeueReusableAnnotationView(withIdentifier: Self.markAnnotationViewIdentifier, for: annotation) as! MKMarkerAnnotationView
@@ -413,10 +419,8 @@ extension MapVC: MKMapViewDelegate {
     }
 }
 
-// MARK: FloatingPanelControllerDelegate
 extension MapVC: FloatingPanelControllerDelegate {}
 
-// MARK: PanelContentDelegate
 extension MapVC: PanelContentDelegate {
     var mapVM: AMapVM {
         vm
@@ -438,5 +442,10 @@ extension MKMapView {
     
     var selectedAnnotation: MKAnnotation? {
         selectedAnnotations.first
+    }
+    
+    func reload(_ annotation: MKAnnotation) {
+        removeAnnotation(annotation)
+        addAnnotation(annotation)
     }
 }

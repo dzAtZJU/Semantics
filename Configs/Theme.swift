@@ -1,15 +1,7 @@
-//
-//  Theme.swift
-//  Semantics
-//
-//  Created by Zhou Wei Ran on 2020/7/17.
-//  Copyright © 2020 Paper Scratch. All rights reserved.
-//
-
 import UIKit
 
 struct Theme {
-    private static let colors: [UIColor] = {
+    static let colors: [UIColor] = {
         [UIColor(named: "p0")!,
         UIColor(named: "p1")!,
         UIColor(named: "p2")!,
@@ -23,4 +15,8 @@ struct Theme {
         
         return [colors[proximity].cgColor, colors[proximity+1].cgColor]
     }
+    
+    static let selfAnnotationColor = UIColor.systemTeal
+    
+    static let annotationColors: [UIColor] = [.systemOrange, .systemIndigo, .systemPink, .systemFill]
 }

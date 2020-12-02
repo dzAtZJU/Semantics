@@ -18,7 +18,16 @@ class PartnersMapVM: AMapVM {
         observePartners_List()
     }
     
+    override func collectPlace(completion: @escaping (Place, PlaceStory) -> ()) {
+        super.collectPlace { _,_  in
+            DispatchQueue.main.async {
+                self.mapVC.map.deselectAnnotation(nil, animated: true)
+            }
+        }
+    }
+    
     private func observePartners_List() {
+        batchObservePartners([RealmSpace.userID!])
         RealmSpace.userInitiated.async { [weak self] in
             self?.partnersToken = RealmSpace.userInitiated.privatRealm.queryPartners().observe(on: RealmSpace.userInitiated.queue) { [weak self] in
                 guard let self = self else {
@@ -113,16 +122,8 @@ class PartnersMapVM: AMapVM {
         self.mapVC.partnersAnnotations.forEach { anno in
             if let newUsers = placeID2UserIDs[anno.placeID!] {
                 anno.partnerIDs.append(contentsOf: newUsers)
-            }
-        }
-    }
-    
-    override func collectPlace(completion: @escaping (Place, PlaceStory) -> ()) {
-        super.collectPlace { (place, placeStory) in
-            completion(place, placeStory)
-            DispatchQueue.main.async {
-                self.mapVC.map.removeAnnotations(self.mapVC.map.annotations)
-                self.load {}
+                print("editAnnotations: \(anno.placeID!) -> \(anno.partnerIDs.count)")
+                self.mapVC.map.reload(anno)
             }
         }
     }

@@ -10,23 +10,24 @@ enum AnnotationType {
 class PartnersAnnotation: SemAnnotation {
     var partnerIDs: [String]
     
+    var sectionsCount: Int {
+        min(partnerIDs.count, 4)
+    }
+    
     init(place: Place, partnerIDs: [String]) {
         self.partnerIDs = partnerIDs
-        super.init(place: place, type: .inDiscovering, color: .yellow)
+        super.init(place: place, type: .inDiscovering)
     }
 }
 
 class SemAnnotation: MKPointAnnotation {
     let type: AnnotationType
     
-    let color: UIColor
-    
     let placeID: String?
     
-    init(place: Place, type: AnnotationType, color: UIColor) {
+    init(place: Place, type: AnnotationType) {
         placeID = place._id
         self.type = type
-        self.color = color
         
         super.init()
         title = place.title
@@ -36,7 +37,6 @@ class SemAnnotation: MKPointAnnotation {
     init(item: MKMapItem, type: AnnotationType) {
         self.type = type
         placeID = nil
-        self.color = .brown
         
         super.init()
         coordinate = item.placemark.coordinate

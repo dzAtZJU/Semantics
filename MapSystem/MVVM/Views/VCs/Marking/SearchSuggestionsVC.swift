@@ -112,7 +112,7 @@ extension SearchSuggestionsVC {
             }
             
             self.searchDidFinish?()
-            NotificationCenter.default.post(name: NSNotification.Name.searchFinished, object: response)
+            NotificationCenter.default.post(name: .searchFinished, object: self, userInfo: ["response" : response])
         }
     }
 }

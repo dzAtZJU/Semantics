@@ -43,6 +43,8 @@
 		893A708025763FEB00A24F26 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A707F25763FEA00A24F26 /* Array+.swift */; };
 		893A708625764BA100A24F26 /* Realm+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A708525764BA000A24F26 /* Realm+.swift */; };
 		893A708A25766FE200A24F26 /* RealmSpace+Batch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A708925766FE200A24F26 /* RealmSpace+Batch.swift */; };
+		893A708F2577616C00A24F26 /* CGGradient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A708E2577616A00A24F26 /* CGGradient+.swift */; };
+		893A70A42577AEC300A24F26 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A70A32577AEC100A24F26 /* UIImage+.swift */; };
 		894517BB24E91C2B006EF619 /* MapSysEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */; };
 		894517BD24E92A0D006EF619 /* MapSysCommunication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894517BC24E92A0D006EF619 /* MapSysCommunication.swift */; };
 		8947A0FC256902C100B90BDA /* Trust.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A0FB256902C100B90BDA /* Trust.swift */; };
@@ -56,7 +58,6 @@
 		8947A134256AE8D900B90BDA /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A133256AE8D900B90BDA /* WebViewController.swift */; };
 		8947A138256AEA8700B90BDA /* Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A137256AEA8700B90BDA /* Spinner.swift */; };
 		8947A13C256AEE6600B90BDA /* PanelNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A13B256AEE6600B90BDA /* PanelNavigationController.swift */; };
-		8947A141256B508800B90BDA /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A140256B508800B90BDA /* AnnotationView.swift */; };
 		8947A147256B670100B90BDA /* Margin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A146256B670100B90BDA /* Margin.swift */; };
 		8947A156256BBC9900B90BDA /* PlaceStoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A155256BBC9900B90BDA /* PlaceStoriesVC.swift */; };
 		8947A15A256BBCA900B90BDA /* PlaceStoriesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947A159256BBCA900B90BDA /* PlaceStoriesVM.swift */; };
@@ -69,7 +70,6 @@
 		89618E7825398FD1000253E3 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E7725398FD1000253E3 /* UIView+.swift */; };
 		89618E7C253B2917000253E3 /* SemWorldDataLayer2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89618E7B253B2917000253E3 /* SemWorldDataLayer2.swift */; };
 		896234C6248F99330000ABCD /* Graphiccontent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C5248F99330000ABCD /* Graphiccontent.swift */; };
-		896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896234C7248FA7A20000ABCD /* Concurrency.swift */; };
 		8962350D24920CF40000ABCD /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8962350C24920CF40000ABCD /* NetworkExtension.framework */; };
 		896344B224936E210060160B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 896344B124936E210060160B /* Kingfisher */; };
 		896344B424936E210060160B /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 896344B324936E210060160B /* KingfisherSwiftUI */; };
@@ -235,6 +235,8 @@
 		893A707F25763FEA00A24F26 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		893A708525764BA000A24F26 /* Realm+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+.swift"; sourceTree = "<group>"; };
 		893A708925766FE200A24F26 /* RealmSpace+Batch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RealmSpace+Batch.swift"; sourceTree = "<group>"; };
+		893A708E2577616A00A24F26 /* CGGradient+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGGradient+.swift"; sourceTree = "<group>"; };
+		893A70A32577AEC100A24F26 /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		894517BA24E91C2B006EF619 /* MapSysEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysEnvironment.swift; sourceTree = "<group>"; };
 		894517BC24E92A0D006EF619 /* MapSysCommunication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSysCommunication.swift; sourceTree = "<group>"; };
 		8947A0FB256902C100B90BDA /* Trust.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trust.swift; sourceTree = "<group>"; };
@@ -248,7 +250,6 @@
 		8947A133256AE8D900B90BDA /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		8947A137256AEA8700B90BDA /* Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spinner.swift; sourceTree = "<group>"; };
 		8947A13B256AEE6600B90BDA /* PanelNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelNavigationController.swift; sourceTree = "<group>"; };
-		8947A140256B508800B90BDA /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		8947A146256B670100B90BDA /* Margin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Margin.swift; sourceTree = "<group>"; };
 		8947A155256BBC9900B90BDA /* PlaceStoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceStoriesVC.swift; sourceTree = "<group>"; };
 		8947A159256BBCA900B90BDA /* PlaceStoriesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceStoriesVM.swift; sourceTree = "<group>"; };
@@ -261,7 +262,6 @@
 		89618E7725398FD1000253E3 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		89618E7B253B2917000253E3 /* SemWorldDataLayer2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemWorldDataLayer2.swift; sourceTree = "<group>"; };
 		896234C5248F99330000ABCD /* Graphiccontent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphiccontent.swift; sourceTree = "<group>"; };
-		896234C7248FA7A20000ABCD /* Concurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concurrency.swift; sourceTree = "<group>"; };
 		8962350C24920CF40000ABCD /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
 		896344B7249DD7F90060160B /* WordsGraphVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsGraphVC.swift; sourceTree = "<group>"; };
 		896344BA249F36FD0060160B /* CoreDataLayer1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLayer1.swift; sourceTree = "<group>"; };
@@ -532,6 +532,43 @@
 			path = DS;
 			sourceTree = "<group>";
 		};
+		893A708D2577614F00A24F26 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				893A708E2577616A00A24F26 /* CGGradient+.swift */,
+				893A70A32577AEC100A24F26 /* UIImage+.swift */,
+			);
+			path = Drawing;
+			sourceTree = "<group>";
+		};
+		893A70962577622800A24F26 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				89618E7725398FD1000253E3 /* UIView+.swift */,
+				893A708D2577614F00A24F26 /* Drawing */,
+			);
+			path = Rendering;
+			sourceTree = "<group>";
+		};
+		893A709B2577626900A24F26 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				89C2889224A34308002081FE /* NetworkSpace.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		893A709E2577629200A24F26 /* Cloud */ = {
+			isa = PBXGroup;
+			children = (
+				89290D5524E3D60800F0A862 /* RealmSpace */,
+				899AE16D24DAA14200C0EB17 /* CKSharing */,
+				899AE18124DAD57A00C0EB17 /* CloudKitSpace */,
+				899AE17424DAB9BE00C0EB17 /* CloudSync */,
+			);
+			path = Cloud;
+			sourceTree = "<group>";
+		};
 		8947A0F9256902A000B90BDA /* Scent */ = {
 			isa = PBXGroup;
 			children = (
@@ -574,7 +611,6 @@
 			children = (
 				89290D6624E52F1C00F0A862 /* MapVM.swift */,
 				899AE18524DC255D00C0EB17 /* MapVC.swift */,
-				8947A140256B508800B90BDA /* AnnotationView.swift */,
 				893A704C256E393E00A24F26 /* PartnersMapVM.swift */,
 			);
 			path = Map;
@@ -594,21 +630,14 @@
 		896234C4248F99030000ABCD /* 0_Infra */ = {
 			isa = PBXGroup;
 			children = (
+				893A709B2577626900A24F26 /* Networking */,
+				893A70962577622800A24F26 /* Rendering */,
 				893A707E25763FDE00A24F26 /* DS */,
 				89E8AF1D255001190030E8B5 /* Attribute */,
-				89C2889224A34308002081FE /* NetworkSpace.swift */,
 				89949D2E253155C00023C526 /* InfoIntegration */,
 				897A993124FDA5E8005613C9 /* Persistence */,
 				8924A17D24E932B900718680 /* ErrorHandle */,
-				89290D5524E3D60800F0A862 /* RealmSpace */,
-				899AE18124DAD57A00C0EB17 /* CloudKitSpace */,
-				899AE17E24DACAE000C0EB17 /* CoreDataSpace */,
-				899AE17424DAB9BE00C0EB17 /* CloudSync */,
-				899AE16D24DAA14200C0EB17 /* CKSharing */,
 				892C63D3248669FF00208446 /* Utils */,
-				896234C5248F99330000ABCD /* Graphiccontent.swift */,
-				896234C7248FA7A20000ABCD /* Concurrency.swift */,
-				89618E7725398FD1000253E3 /* UIView+.swift */,
 			);
 			path = 0_Infra;
 			sourceTree = "<group>";
@@ -711,6 +740,8 @@
 		897A993124FDA5E8005613C9 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				893A709E2577629200A24F26 /* Cloud */,
+				899AE17E24DACAE000C0EB17 /* CoreDataSpace */,
 				899AE17724DABA7C00C0EB17 /* Files */,
 				89290D5124E2ADCB00F0A862 /* KeychainItem.swift */,
 				897A993224FDA634005613C9 /* SemUserDefaults.swift */,
@@ -952,6 +983,7 @@
 		89E8AF0C254FBFC80030E8B5 /* Performance */ = {
 			isa = PBXGroup;
 			children = (
+				896234C5248F99330000ABCD /* Graphiccontent.swift */,
 				89E8AF0D254FC0830030E8B5 /* Reuse.swift */,
 			);
 			path = Performance;
@@ -1247,7 +1279,6 @@
 				895A4E2624EC36970025ED20 /* PlaceStoryVC.swift in Sources */,
 				8991DADE24B45BE100299595 /* SearchResultsVC.swift in Sources */,
 				896344BB249F36FD0060160B /* CoreDataLayer1.swift in Sources */,
-				8947A141256B508800B90BDA /* AnnotationView.swift in Sources */,
 				8947A100256902D100B90BDA /* Scent.swift in Sources */,
 				8989C5C324E6CEF500FA3FAE /* FeedbackVM.swift in Sources */,
 				8968C08924E0024A0093CBFC /* LabelSupplementaryView.swift in Sources */,
@@ -1284,6 +1315,7 @@
 				89A666D724D6EEE100851EDF /* FloatingContainerVC.swift in Sources */,
 				89290D5924E3D62100F0A862 /* RealmSpace.swift in Sources */,
 				8947A15A256BBCA900B90BDA /* PlaceStoriesVM.swift in Sources */,
+				893A70A42577AEC300A24F26 /* UIImage+.swift in Sources */,
 				89A413D724C6F041003FD435 /* Bubble.swift in Sources */,
 				89BF91852548160F006E364A /* CountryHomeVC.swift in Sources */,
 				8964217A247250590081DC87 /* Semantics.xcdatamodeld in Sources */,
@@ -1310,6 +1342,7 @@
 				89A666DB24D847EB00851EDF /* UIButton+.swift in Sources */,
 				89E8AF3E255152FD0030E8B5 /* Profile.swift in Sources */,
 				89E8AF0E254FC0830030E8B5 /* Reuse.swift in Sources */,
+				893A708F2577616C00A24F26 /* CGGradient+.swift in Sources */,
 				892C6416248E1C1800208446 /* SubwordVC.swift in Sources */,
 				892C6414248CCFE200208446 /* WordVC.swift in Sources */,
 				896344BD249F570A0060160B /* CoreDataLayer2.swift in Sources */,
@@ -1333,7 +1366,6 @@
 				89290D6324E4E02F00F0A862 /* UILabel+.swift in Sources */,
 				896344C1249F94870060160B /* NSManagedObjectLayer.swift in Sources */,
 				895A4E2E24EDA4550025ED20 /* UniquePlace.swift in Sources */,
-				896234C8248FA7A20000ABCD /* Concurrency.swift in Sources */,
 				893A708A25766FE200A24F26 /* RealmSpace+Batch.swift in Sources */,
 				893A70672573C69D00A24F26 /* Alert.swift in Sources */,
 				89BF91942549A9FE006E364A /* PhasesVC.swift in Sources */,

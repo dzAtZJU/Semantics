@@ -30,7 +30,7 @@ class MapVM: AMapVM {
             RealmSpace.userInitiated.privatRealm { privateRealm in
                 RealmSpace.userInitiated.publicRealm { publicRealm in
                     let annos = try! publicRealm.queryPlaces(_ids: privateRealm.loadUserPlaceIDsRequire(publicConcept: trust == .public, privateConcept: trust == .private)).map { place throws in
-                        SemAnnotation(place: place, type: .visited, color: UIColor.random)
+                        SemAnnotation(place: place, type: .visited)
                         //Int.random(in: 0..<3) % 3 == 0 ? .brown: .cyan
                     }
                     
@@ -49,7 +49,7 @@ class MapVM: AMapVM {
             
             DispatchQueue.main.async {
                 self.mapVC.map.deselectAnnotation(nil, animated: true)
-                let newAnnotation = SemAnnotation(place: place, type: .visited, color: .brown)
+                let newAnnotation = SemAnnotation(place: place, type: .visited)
                 self.mapVC.map.addAndSelect(newAnnotation)
             }
         }

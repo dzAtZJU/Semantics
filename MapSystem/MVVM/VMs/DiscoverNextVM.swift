@@ -70,7 +70,7 @@ class DiscoverNextVM {
         RealmSpace.userInitiated.searchNext(query: query) { result in
             let places = RealmSpace.userInitiated.publicRealm.queryPlaces(_ids: Array(result.places.map(\.placeId)))
             let annos = try! places.map { place throws -> SemAnnotation in
-                SemAnnotation(place: place, type: .inDiscovering, color: .brown)
+                SemAnnotation(place: place, type: .inDiscovering)
             }
             DispatchQueue.main.async {
                 self.parent?.mapVC.map.addAnnotations(annos)

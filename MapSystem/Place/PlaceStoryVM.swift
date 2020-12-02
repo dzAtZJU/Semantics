@@ -133,7 +133,7 @@ class PlaceStoryVM: APlaceStoryVM, APageInPageVC {
 
 extension PlaceStoryVM: TagsVCDelegate {
     func tagsVCDidFinishChoose(_ tagsVC: TagsVC, tagChoice_Sections: [TagChoiceSection]) {
-        let action: () -> () = {
+        let action: (String) -> () = { placeID in
             RealmSpace.userInitiated.async {
                 let publicLayer = RealmSpace.userInitiated.publicRealm
                 let privateLayer = RealmSpace.userInitiated.privatRealm
@@ -142,9 +142,9 @@ extension PlaceStoryVM: TagsVCDelegate {
                         $0.items.forEach {
                             if $0.isChosen {
                                 publicLayer.createCondition_IfNone(id: $0.tag)
-                                privateLayer.projectCondition($0.tag, on: self.thePlaceId!)
+                                privateLayer.projectCondition($0.tag, on: placeID)
                             } else {
-                                privateLayer.withdrawCondition($0.tag, from: self.thePlaceId!)
+                                privateLayer.withdrawCondition($0.tag, from: placeID)
                             }
                         }
                     } else {
@@ -163,9 +163,9 @@ extension PlaceStoryVM: TagsVCDelegate {
                                         fatalError()
                                     }
                                 }()
-                                privateLayer.projectPerspective($0.tag, fileData: fileData, on: self.thePlaceId!)
+                                privateLayer.projectPerspective($0.tag, fileData: fileData, on: placeID)
                             } else {
-                                privateLayer.withdrawPerspective($0.tag, from: self.thePlaceId!)
+                                privateLayer.withdrawPerspective($0.tag, from: placeID)
                             }
                         }
                     }
@@ -173,16 +173,14 @@ extension PlaceStoryVM: TagsVCDelegate {
             }
         }
         
-        guard thePlaceId != nil else {
+        guard let placeID = thePlaceId else {
             parent?.collectPlace { (place, placeStory) in
-                self.loadPlaceStory(placeStory)
-                action()
+                action(place._id)
             }
-            
             return
         }
         
-        action()
+        action(placeID)
     }
 }
 
