@@ -185,10 +185,10 @@ class MapVC: UIViewController {
             switch vm.circleOfTrust {
             case .public:
                 let img = UIImage(systemName: "hand.point.up.braille.fill")?.withBaselineOffset(fromBottom: UIFont.systemFontSize/4)
-                return UITabBarItem(title: "Public", image: img, selectedImage: img)
+                return UITabBarItem(title: "自己的", image: img, selectedImage: img)
             case .private:
                 let img = UIImage(systemName: "heart.fill")
-                return UITabBarItem(title: "Wish List", image: img, selectedImage: img)
+                return UITabBarItem(title: "好友圈", image: img, selectedImage: img)
             }
         }()
     }

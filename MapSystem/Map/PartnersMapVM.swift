@@ -19,7 +19,8 @@ class PartnersMapVM: AMapVM {
     }
     
     override func collectPlace(completion: @escaping (Place, PlaceStory) -> ()) {
-        super.collectPlace { _,_  in
+        super.collectPlace { place, story  in
+            completion(place, story)
             DispatchQueue.main.async {
                 self.mapVC.map.deselectAnnotation(nil, animated: true)
             }
