@@ -21,9 +21,14 @@ This is an experimental map app:
     <img src="https://github.com/dzAtZJU/StaticAssets/blob/master/trust.PNG", width="230">
 </p>
 
-4. Allowing adding friends by universal link then seeing friends’ tagged places.
+4. Enabling to add friends by universal link then seeing friends’ tagged places.
 <p float="left">
     <img src="https://github.com/dzAtZJU/StaticAssets/blob/master/friend.PNG", width="230">
+</p>
+
+5. Enabling to upload photos to cover building blocks on the map. (support sharing with friends)
+<p float="left">
+    <img src="https://github.com/dzAtZJU/StaticAssets/blob/master/tile_map.PNG", width="230">
 </p>
 
 This experimental app reflects the scale and complexity I can handle currently.
