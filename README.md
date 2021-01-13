@@ -36,5 +36,8 @@ This experimental app reflects the scale and complexity I can handle currently.
 ## Install
 https://testflight.apple.com/join/d7xcvliT
 
+## In Field Monitoring
+https://sentry.io/organizations/paper-scratch/issues/?project=5449834
+
 ## Project Management
 https://app.asana.com/0/1199710700465829/calendar
