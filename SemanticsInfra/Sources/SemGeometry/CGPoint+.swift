@@ -1,8 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by Zhou Wei Ran on 2021/1/3.
-//
+import Metron
+import CoreGraphics
 
-import Foundation
+public func /(lhs: CGPoint, rhs: CGFloat) -> CGPoint {
+    return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+}

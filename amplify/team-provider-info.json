@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-semantics-dev-180317-authRole",
+      "UnauthRoleArn": "arn:aws:iam::688547045177:role/amplify-semantics-dev-180317-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::688547045177:role/amplify-semantics-dev-180317-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-semantics-dev-180317-deployment",
+      "UnauthRoleName": "amplify-semantics-dev-180317-unauthRole",
+      "StackName": "amplify-semantics-dev-180317",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:688547045177:stack/amplify-semantics-dev-180317/1694b770-4e74-11eb-b2af-0a36958102b6",
+      "AmplifyAppId": "dlf2ahuc38lyk"
+    },
+    "categories": {
+      "auth": {
+        "semantics76ddad27": {}
+      }
+    }
+  }
+}
