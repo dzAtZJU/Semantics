@@ -31,9 +31,6 @@
 		8908943525A8716F00BA37A7 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 8908943325A8716E00BA37A7 /* awsconfiguration.json */; };
 		8908943625A8716F00BA37A7 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 8908943425A8716F00BA37A7 /* amplifyconfiguration.json */; };
 		8908943A25A872C200BA37A7 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8908943925A872C000BA37A7 /* TestAppDelegate.swift */; };
-		8908BF3E2598B1AC0056D751 /* SotoS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 8908BF3D2598B1AC0056D751 /* SotoS3 */; };
-		8908BF402598B1AC0056D751 /* SotoSES in Frameworks */ = {isa = PBXBuildFile; productRef = 8908BF3F2598B1AC0056D751 /* SotoSES */; };
-		8908BF422598B1AC0056D751 /* SotoIAM in Frameworks */ = {isa = PBXBuildFile; productRef = 8908BF412598B1AC0056D751 /* SotoIAM */; };
 		890DDC532595E3D50072BC66 /* Word+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890DDC2E2595E3D50072BC66 /* Word+.swift */; };
 		890DDC542595E3D50072BC66 /* SectorDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890DDC2F2595E3D50072BC66 /* SectorDataLayer.swift */; };
 		890DDC552595E3D50072BC66 /* OceanLayerDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890DDC302595E3D50072BC66 /* OceanLayerDataLayer.swift */; };
@@ -431,7 +428,6 @@
 				894A71F925A9F7F70051C85E /* Numerics in Frameworks */,
 				899EA9E32599DF820090614F /* MapboxStatic in Frameworks */,
 				89A95DCE250CDBA3006EBD07 /* SPAlert in Frameworks */,
-				8908BF402598B1AC0056D751 /* SotoSES in Frameworks */,
 				8911386624C1672000CBEBB5 /* SwifterSwift in Frameworks */,
 				8968C08324DF087A0093CBFC /* FloatingPanel in Frameworks */,
 				8908909A25A3499100BA37A7 /* SemLog in Frameworks */,
@@ -445,9 +441,7 @@
 				899EA9EF259B1D3C0090614F /* SemNetworking in Frameworks */,
 				899EA9FA259BA44B0090614F /* Metron in Frameworks */,
 				8962350D24920CF40000ABCD /* NetworkExtension.framework in Frameworks */,
-				8908BF3E2598B1AC0056D751 /* SotoS3 in Frameworks */,
 				8908902F25A1DEA300BA37A7 /* SemGeometry in Frameworks */,
-				8908BF422598B1AC0056D751 /* SotoIAM in Frameworks */,
 				24BAB471865F11248BAF621E /* Pods_Semantics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1264,9 +1258,6 @@
 				8968C08224DF087A0093CBFC /* FloatingPanel */,
 				89A95DCD250CDBA3006EBD07 /* SPAlert */,
 				89E8AF6325572EFF0030E8B5 /* NVActivityIndicatorView */,
-				8908BF3D2598B1AC0056D751 /* SotoS3 */,
-				8908BF3F2598B1AC0056D751 /* SotoSES */,
-				8908BF412598B1AC0056D751 /* SotoIAM */,
 				899EA9E22599DF820090614F /* MapboxStatic */,
 				899EA9EE259B1D3C0090614F /* SemNetworking */,
 				899EA9F9259BA44B0090614F /* Metron */,
@@ -1336,7 +1327,6 @@
 				8968C08124DF087A0093CBFC /* XCRemoteSwiftPackageReference "FloatingPanel" */,
 				89A95DCC250CDBA3006EBD07 /* XCRemoteSwiftPackageReference "SPAlert" */,
 				89E8AF6225572EFF0030E8B5 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
-				8908BF3C2598B1AC0056D751 /* XCRemoteSwiftPackageReference "soto" */,
 				899EA9E12599DF820090614F /* XCRemoteSwiftPackageReference "MapboxStatic.swift" */,
 				899EA9F8259BA44B0090614F /* XCRemoteSwiftPackageReference "metron" */,
 				8908909225A3345600BA37A7 /* XCRemoteSwiftPackageReference "Swinject" */,
@@ -1997,14 +1987,6 @@
 				minimumVersion = 2.7.1;
 			};
 		};
-		8908BF3C2598B1AC0056D751 /* XCRemoteSwiftPackageReference "soto" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/soto-project/soto.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		8911386424C1672000CBEBB5 /* XCRemoteSwiftPackageReference "SwifterSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwifterSwift/SwifterSwift.git";
@@ -2096,21 +2078,6 @@
 		890890DD25A44BB300BA37A7 /* SemDS */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SemDS;
-		};
-		8908BF3D2598B1AC0056D751 /* SotoS3 */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8908BF3C2598B1AC0056D751 /* XCRemoteSwiftPackageReference "soto" */;
-			productName = SotoS3;
-		};
-		8908BF3F2598B1AC0056D751 /* SotoSES */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8908BF3C2598B1AC0056D751 /* XCRemoteSwiftPackageReference "soto" */;
-			productName = SotoSES;
-		};
-		8908BF412598B1AC0056D751 /* SotoIAM */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8908BF3C2598B1AC0056D751 /* XCRemoteSwiftPackageReference "soto" */;
-			productName = SotoIAM;
 		};
 		8911386524C1672000CBEBB5 /* SwifterSwift */ = {
 			isa = XCSwiftPackageProductDependency;

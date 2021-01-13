@@ -39,7 +39,7 @@ target 'Semantics' do
     
     # https://docs.mongodb.com/realm/mongodb
     # https://docs.mongodb.com/realm/tutorial/ios-swift/
-    pod 'SemRealm', :path => '/Users/zhouweiran/SemRealm'
+    pod 'SemRealm', :git => 'https://github.com/dzAtZJU/SemRealm.git', :branch => 'master'
     
     pod 'Presentr'
     
@@ -55,7 +55,7 @@ target 'Semantics' do
     #  pod 'Iconic', :git => 'https://github.com/home-assistant/Iconic.git'
     
     # http://reactivex.io/documentation/operators.html
-    pod 'libpng', '~> 1.6'    
+    # pod 'libpng', '~> 1.6'
     pod 'R.swift'
     
     # Integration: https://docs.amplify.aws/lib/project-setup/create-application/q/platform/ios
@@ -72,16 +72,4 @@ target 'SemanticsTests' do
     pod 'Nimble'
     pod 'AmplifyPlugins/AWSS3StoragePlugin'
     pod 'AmplifyPlugins/AWSCognitoAuthPlugin'
-end
-
-
-
-target 'GDAL' do
-    project 'GDAL-Demo/GDAL-Demo'
-    pod 'libpng', '~> 1.6'
-end
-
-target 'Demo-GDAL' do
-    project 'GDAL-Demo/GDAL-Demo'
-    pod 'libpng', '~> 1.6'
 end
