@@ -41,3 +41,6 @@ https://sentry.io/organizations/paper-scratch/issues/?project=5449834
 
 ## Project Management
 https://app.asana.com/0/1199710700465829/calendar
+
+## Curent State
+Exercise profiling techniques
