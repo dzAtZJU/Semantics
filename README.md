@@ -43,4 +43,4 @@ https://sentry.io/organizations/paper-scratch/issues/?project=5449834
 https://app.asana.com/0/1199710700465829/calendar
 
 ## Curent State
-Exercise performance practices
+A diversion to visualze some simple semantics structures
